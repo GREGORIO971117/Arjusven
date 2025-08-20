@@ -1,0 +1,72 @@
+
+
+{
+  "ticketNumber": "1523062",
+  "title": "OXXO GAS CUAUHTEMOC SUR 3663",
+  "subTitle": "7. (Incidencia / Ticket)",
+  "serviceRequest": {
+    "assignmentDate": "n/a",
+    "resolution": "n/a",
+    "currentStatus": "n/a",
+    "essName": "n/a",
+    "caseNumber": "n/a",
+    "affiliateCode": "n/a",
+    "affiliation": "n/a",
+    "atpvAffiliate": "n/a",
+    "atpvID": "n/a",
+    "serviceReason": "n/a"
+  },
+  "contactInfo": {
+    "relatedContract": "n/a",
+    "client": "n/a",
+    "contactPerson": {
+      "creator": "n/a",
+      "supervisor": "n/a"
+    },
+    "serviceType": "n/a",
+    "fieldTechnician": "n/a",
+    "sla": "n/a"
+  },
+  "serviceDetails": {
+    "onSiteReason": "n/a",
+    "observations": "n/a",
+    "address": "n/a"
+  },
+  "bottomInfo": {
+    "encomiendaGuide": "n/a",
+    "guideSendDate": "n/a"
+  },
+  "additionalData": {
+    "ciudad": "SANTA CATARINA",
+    "cantidadTPV": "1",
+    "modeloEntra": "Vx520 TRIO CTLS (Eth + GPRS + Dial / NFC)",
+    "marcaEntra": "VERIFONE",
+    "serieLogicaEntra": "288-805-659",
+    "serieFisicaEntra": "288-805-659",
+    "versionBrowser": "11.13",
+    "tipoComunicacion": "GPRS",
+    "simEntra": "8952020313592908567F",
+    "ptidEntra": "NO APLICA",
+    "eliminadorEntra": "NO APLICA",
+    "eliminadorSale": "NO APLICA",
+    "estado": "NUEVO LEON",
+    "ordenDeServicio": "SI",
+    "modeloSale": "NO APLICA",
+    "marcaSale": "NO APLICA",
+    "serieLogicaSale": "NO APLICA",
+    "serieFisicaSale": "NO APLICA",
+    "versionBrowserSale": "NO APLICA",
+    "tipoComunicacionSale": "NO APLICA",
+    "simSale": "NO APLICA",
+    "ptidSale": "NO APLICA",
+    "plaza": "MONTERREY",
+    "tecnico": "ALBERTO PALOMARES",
+    "cerroPuntoClave": "SPENCER CRUZ",
+    "atencionEnPunto": "SPENCER CRUZ",
+    "firmaEnEstacion": "JOSE MARTINEZ",
+    "tarjetaTag": "n/a",
+    "serieStock": "n/a",
+    "simStock": "n/a",
+    "modeloStock": "n/a"
+  }
+}

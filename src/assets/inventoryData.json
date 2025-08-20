@@ -1,0 +1,18 @@
+{
+  "fechaInicioPrevista": "invalid:user:manager",
+  "responsable": "invalid:user:manager",
+  "codigoEmail": "project_1249135457",
+  "numeroSerie": "001-008-152",
+  "titulo": "001-008-152",
+  "descripcion": "Fecha de Actualización 04/05/2024",
+  "fechaActualizacion": "04/05/2024",
+  "equipo": "VX690",
+  "numeroIncidencia": "332629",
+  "estado": "DAÑADO",
+  "cliente": "332629 SERVICIO OBISPADO 8706",
+  "plaza": "Piedras Negras",
+  "guias": "N/A",
+  "tecnicoCampo": "MENDOZA, IVAN",
+  "fechaFinPrevista": "Fecha fin prevista",
+  "fechaFin": "Fecha Fin"
+}
