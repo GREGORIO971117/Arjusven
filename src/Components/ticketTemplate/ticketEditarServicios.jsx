@@ -43,11 +43,13 @@ const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave
         </div>
         <div className="input-group">
           <label>Situación Actual</label>
-          <input
-            type="text"
+          <select
             value={editableData.serviceRequest.currentStatus}
             onChange={(e) => handleInputChange('serviceRequest', 'currentStatus', e.target.value)}
-          />
+          >
+            <option value="Abierto">Abierto</option>
+            <option value="Cerrado">Cerrado</option>
+          </select>
         </div>
         <div className="input-group">
           <label>Nombre de ESS</label>

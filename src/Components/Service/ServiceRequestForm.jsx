@@ -5,6 +5,7 @@ import './Form.css';
 function ServiceRequestForm() {
   const [file, setFile] = useState(null);
   const [jsonData, setJsonData] = useState([]);
+  const [showModal, setShowModal] = useState(false); // Nuevo estado para el modal
   
   useEffect(() => {
     if (jsonData.length > 0) {
@@ -27,6 +28,7 @@ function ServiceRequestForm() {
       "Nombre Afiliado": item.__EMPTY_12,
       "Detalle": item.__EMPTY_13,
       "Observaciones": item.__EMPTY_14,
+      "currentStatus": "Abierto"
     }));
     
     // Guardamos los datos con los nuevos encabezados en localStorage.
@@ -36,6 +38,10 @@ function ServiceRequestForm() {
       JsonDataNew.splice(0,2);
       localStorage.setItem('excelData', JSON.stringify(JsonDataNew));
       console.log('Datos con nuevos encabezados guardados en localStorage:', JsonDataNew);
+      setShowModal(true); // Mostrar el modal al tener éxito
+      setTimeout(() => {
+        setShowModal(false); // Ocultar el modal automáticamente después de 3 segundos
+      }, 3000);
     } catch (error) {
       console.error('Error al guardar en localStorage:', error);
     }
@@ -62,37 +68,28 @@ function ServiceRequestForm() {
     reader.readAsBinaryString(excelFile);
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   return (
-    
     <div>
       <label htmlFor="file-upload" className="custom-file-upload">
         Seleccionar Archivo de Excel
       </label>
       <input id="file-upload" type="file" accept=".xlsx, .xls" onChange={handleFileChange} />
-      
-      {jsonData.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              {Object.keys(jsonData[0]).map((header, index) => (
-                <th key={index}>{header}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {jsonData.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {Object.values(row).map((value, valueIndex) => (
-                  <td key={valueIndex}>{value}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <span className="close-button" onClick={handleCloseModal}>&times;</span>
+            <div className="modal-icon">✅</div>
+            <h2>¡Archivo cargado con éxito!</h2>
+            <p>Los datos han sido procesados y guardados correctamente.</p>
+          </div>
+        </div>
       )}
     </div>
-
-    
   )
 }
 

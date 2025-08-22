@@ -1,141 +1,79 @@
 import React, { useState, useEffect } from 'react';
-import TicketTemplate from './TicketTemplate';
 import ServiceRequestForm from '../Service/ServiceRequestForm';
-import ticketsData from '../../assets/ticketsData.json';
-import './TicketPage.css';
-
-// Clave para localStorage
-const LOCAL_STORAGE_KEY = 'ticketsList';
+import TicketList from '../Service/ticketList';
 
 function TicketPage() {
-  const [ticketsList, setTicketsList] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [currentStatusFilter, setCurrentStatusFilter] = useState(null);
-  const [selectedTicket, setSelectedTicket] = useState(null);
-  const [isAddingNew, setIsAddingNew] = useState(false);
+  const [ticketsData, setTicketsData] = useState([]);
+  const [filter, setFilter] = useState('all');
 
   useEffect(() => {
-    // Intenta cargar desde localStorage
-    const savedTickets = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-    if (savedTickets) {
-      setTicketsList(savedTickets);
-    } else {
-      // Si no hay datos, usa los del JSON de prueba y los guarda
-      setTicketsList(ticketsData);
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(ticketsData));
-    }
-    setLoading(false);
+    loadTickets();
   }, []);
 
-  const addNewTicket = (newTicket) => {
-    // 1. Añade el nuevo ticket al estado
-    const updatedList = [newTicket, ...ticketsList];
-    setTicketsList(updatedList);
-    
-    // 2. Guarda la lista actualizada en localStorage
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedList));
-
-    // 3. Vuelve a la vista de la lista de tickets
-    setIsAddingNew(false);
-    setCurrentStatusFilter("abierta");
-    setSelectedTicket(null);
+  const loadTickets = () => {
+    try {
+      const storedData = localStorage.getItem('excelData');
+      if (storedData) {
+        const parsedData = JSON.parse(storedData);
+        setTicketsData(parsedData);
+      }
+    } catch (error) {
+      console.error("Error al cargar los datos de localStorage:", error);
+    }
   };
 
-  const handleAddTicket = () => {
-    setIsAddingNew(true);
+  const handleFilterChange = (newFilter) => {
+    setFilter(newFilter);
   };
 
-  const handleFilterChange = (status) => {
-    setCurrentStatusFilter(status);
-    setSelectedTicket(null);
-    setIsAddingNew(false);
-  };
-
-  const handleTicketSelect = (ticket) => {
-    setSelectedTicket(ticket);
-    setIsAddingNew(false);
-  };
+  // Función para actualizar los datos, llamada desde los componentes hijos
+  const updateTicketData = (updatedTicket, index) => {
+  const newTicketsData = [...ticketsData];
+  newTicketsData[index] = updatedTicket;
   
-  const handleBackToList = () => {
-    setSelectedTicket(null);
-  };
+  // Guarda los cambios en el estado y en localStorage
+  setTicketsData(newTicketsData);
+  localStorage.setItem('excelData', JSON.stringify(newTicketsData));
+};
 
-  const filteredTickets = ticketsList.filter(ticket => {
-    if (currentStatusFilter === 'all') {
-      return true;
+  const filteredTickets = ticketsData.filter(ticket => {
+    if (filter === 'open') {
+      return ticket.currentStatus === 'Abierto';
     }
-    if (ticket.serviceRequest && ticket.serviceRequest.currentStatus) {
-      return ticket.serviceRequest.currentStatus === currentStatusFilter;
+    if (filter === 'closed') {
+      return ticket.currentStatus === 'Cerrado';
     }
-    return false;
+    return true;
   });
 
-  if (loading) {
-    return <div>Cargando...</div>;
-  }
-
-  if (isAddingNew) {
-    return (
-      <>
-        <button onClick={() => setIsAddingNew(false)} className="back-button">Volver</button>
-        <ServiceRequestForm addNewTicket={addNewTicket} />
-      </>
-    );
-  }
-  
-  if (selectedTicket) {
-    return (
-      <div>
-        <button onClick={handleBackToList} className="back-button">Volver a la lista</button>
-        <TicketTemplate data={selectedTicket} />
-      </div>
-    );
-  }
-
   return (
-    <div>
-      <div className="button-group">
-        <button 
-          onClick={() => handleFilterChange('abierta')} 
-          className={`filter-button ${currentStatusFilter === 'abierta' ? 'active' : ''}`}
+    <div className="ticket-page-container">
+      <h1>Gestión de Tickets de Servicio</h1>
+      <p>Sube un archivo de Excel para ver los tickets generados.</p>
+      <ServiceRequestForm />
+
+      <div className="ticket-filter-buttons">
+        <button
+          onClick={() => handleFilterChange('all')}
+          className={filter === 'all' ? 'active' : ''}
         >
-          Tickets Abiertos
+          Todos ({ticketsData.length})
         </button>
-        <button 
-          onClick={() => handleFilterChange('cerrada')} 
-          className={`filter-button ${currentStatusFilter === 'cerrada' ? 'active' : ''}`}
+        <button
+          onClick={() => handleFilterChange('open')}
+          className={filter === 'open' ? 'active' : ''}
         >
-          Tickets Cerrados
+          Abiertos ({ticketsData.filter(t => t.currentStatus === 'Abierto').length})
         </button>
-        <button 
-          onClick={() => handleFilterChange('all')} 
-          className={`filter-button ${currentStatusFilter === 'all' ? 'active' : ''}`}
+        <button
+          onClick={() => handleFilterChange('closed')}
+          className={filter === 'closed' ? 'active' : ''}
         >
-          Todos los Tickets
+          Cerrados ({ticketsData.filter(t => t.currentStatus === 'Cerrado').length})
         </button>
       </div>
 
-      {currentStatusFilter && (
-        <div className="ticket-list-container">
-          <button onClick={handleAddTicket} className="add-button">
-            Agregar Ticket
-          </button>
-          
-          {filteredTickets.length === 0 ? (
-            <div>No hay tickets con el estado seleccionado.</div>
-          ) : (
-            filteredTickets.map((ticket, index) => (
-              <button 
-                key={index}
-                onClick={() => handleTicketSelect(ticket)}
-                className="ticket-item-button"
-              >
-                <strong>{ticket.ticketNumber || ticket.serviceRequest.caseNumber}</strong> - {ticket.title || ticket.contactInfo.client}
-              </button>
-            ))
-          )}
-        </div>
-      )}
+      <TicketList tickets={filteredTickets} onUpdateTicket={updateTicketData} />
     </div>
   );
 }

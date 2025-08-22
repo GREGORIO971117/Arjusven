@@ -56,7 +56,10 @@ function RenderSolicitudDeServicio({ editableData }) {
         </div>
         <div className="info-column">
           <p><strong>Persona de contacto</strong></p>
-          <p>{editableData.contactInfo.contactPerson.creator}</p>
+          <p>{editableData.contactInfo.client}</p>
+        </div>
+        <div className="info-column">
+          <p><strong>Supervisor</strong></p>
           <p>{editableData.contactInfo.contactPerson.supervisor}</p>
         </div>
         <div className="info-column">
@@ -71,6 +74,10 @@ function RenderSolicitudDeServicio({ editableData }) {
           <p><strong>SLA</strong></p>
           <p>{editableData.contactInfo.sla}</p>
         </div>
+      </div>
+      <div className="full-width-section">
+        <p><strong>Motivo del Servicio</strong></p>
+        <p>{editableData.serviceDetails.onSiteReason}</p>
       </div>
       <div className="full-width-section">
         <p><strong>Motivo real del Servicio en sitio</strong></p>
@@ -94,11 +101,7 @@ function RenderSolicitudDeServicio({ editableData }) {
           <p>{editableData.bottomInfo.guideSendDate}</p>
         </div>
       </div>
-      <div className="button-container">
-        <button className="edit-button" onClick={() => handleTabChange('editar')}>
-          Editar datos
-        </button>
-      </div>
+      
     </>
   );
 }

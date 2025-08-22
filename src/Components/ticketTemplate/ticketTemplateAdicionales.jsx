@@ -125,11 +125,6 @@ const renderDatosAdicionales = ({editableData}) => (
         <p><strong>Modelo de Stock</strong></p>
         <p>{editableData.additionalData.modeloStock}</p>
       </div>
-      <div className="button-container">
-        <button className="edit-button" onClick={() => handleTabChange('editar')}>
-          Editar datos
-        </button>
-      </div>
     </>
   );
 

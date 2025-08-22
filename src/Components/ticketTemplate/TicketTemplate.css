@@ -234,7 +234,7 @@ body {
   transform: translateY(-2px);
 }
 
-/* Responsividad para pantallas más pequeñas */
+
 @media (max-width: 768px) {
   .ticket-container {
     margin: 10px;
