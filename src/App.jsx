@@ -16,9 +16,11 @@ function App() {
 
   return (
     <>
-      <NavBar links={links}/>
       <Routes>
         <Route path="/" element={<Login />} />
+      </Routes>
+      <NavBar links={links}/>
+      <Routes>
         <Route path="/Home" element={<Home />} />
         <Route path="/Ticket" element={<TicketPage />} />
         <Route path="/Inventario" element={<Inventario />} />

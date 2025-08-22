@@ -1,82 +1,261 @@
-.ticket-container {
-  width: 90%;
-  max-width: 1200px;
-  margin: 20px auto;
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #34495e;
+  --accent-color: #2980b9;
+  --text-color: #ecf0f1;
+  --light-text-color: #bdc3c7;
+  --background-color: #f4f7f6;
+  --section-background: #ffffff;
+  --border-color: #e0e0e0;
+  --button-hover-color: #3498db;
+  --save-button-color: #27ae60;
+  --save-button-hover-color: #2ecc71;
+  --cancel-button-color: #c0392b;
+  --cancel-button-hover-color: #e74c3c;
+  --edit-button-color: #f39c12;
+  --edit-button-hover-color: #f1c40f;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-color);
+  color: var(--primary-color);
+  margin: 0;
   padding: 20px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  font-family: Arial, sans-serif;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.ticket-container {
+  max-width: 900px;
+  margin: 20px auto;
+  background-color: var(--section-background);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
 }
 
 .ticket-header {
-  border-bottom: 2px solid #000;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  padding: 30px 40px;
+  text-align: center;
 }
 
 .ticket-header h1 {
-  font-size: 1.5rem;
   margin: 0;
-  color: #333;
+  font-size: 2em;
+  font-weight: 600;
 }
 
 .ticket-header p {
-  font-size: 0.9rem;
-  color: #666;
   margin: 5px 0 0;
+  font-size: 1em;
+  color: var(--light-text-color);
 }
 
 .ticket-tabs {
   display: flex;
-  border-bottom: 1px solid #ccc;
+  justify-content: center;
+  border-bottom: 2px solid var(--border-color);
+  background-color: #fcfcfc;
 }
 
 .tab-button {
-  padding: 10px 20px;
+  padding: 15px 25px;
+  font-size: 1em;
+  font-weight: 500;
   border: none;
   background-color: transparent;
   cursor: pointer;
-  font-weight: bold;
-  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+  color: var(--secondary-color);
+  position: relative;
 }
 
 .tab-button.active {
-  border-bottom-color: #007bff;
-  color: #007bff;
+  color: var(--accent-color);
+  font-weight: 700;
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--accent-color);
+}
+
+.tab-button:hover:not(.active) {
+  background-color: #f0f0f0;
+}
+
+.ticket-content {
+  padding: 30px 40px;
 }
 
 .info-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  padding: 20px 0;
-  border-bottom: 1px solid #eee;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  background-color: #fafafa;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
 }
 
 .info-column {
-  display: flex;
-  flex-direction: column;
+  flex: 1 1 calc(33.333% - 20px);
+  margin: 10px;
+  min-width: 250px;
+  border-left: 3px solid var(--accent-color);
+  padding-left: 15px;
+}
+
+.info-column strong {
+  color: var(--primary-color);
 }
 
 .info-column p {
   margin: 0;
-  font-size: 0.9rem;
-  color: #555;
+  font-size: 0.95em;
+  color: var(--secondary-color);
+}
+
+.info-column p:last-child {
+  font-size: 1.1em;
+  font-weight: 500;
 }
 
 .full-width-section {
-  padding: 20px 0;
-  border-bottom: 1px solid #eee;
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 15px 20px;
+  background-color: #fafafa;
+  border-radius: 8px;
+  border-left: 3px solid var(--accent-color);
 }
 
-.bottom-info {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  padding: 20px 0;
+.full-width-section p {
+  margin: 5px 0;
 }
 
-strong {
-  color: #333;
+.form-section {
+  padding: 20px;
+  background-color: #fafafa;
+  border-radius: 8px;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+}
+
+.form-section h3 {
+  color: var(--primary-color);
+  margin-top: 0;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: var(--secondary-color);
+  font-size: 0.9em;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  font-size: 1em;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 5px rgba(41, 128, 185, 0.3);
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.button-container button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1em;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.save-button {
+  background-color: var(--save-button-color);
+  color: var(--text-color);
+}
+
+.save-button:hover {
+  background-color: var(--save-button-hover-color);
+  transform: translateY(-2px);
+}
+
+.cancel-button {
+  background-color: var(--cancel-button-color);
+  color: var(--text-color);
+}
+
+.cancel-button:hover {
+  background-color: var(--cancel-button-hover-color);
+  transform: translateY(-2px);
+}
+
+.edit-button {
+  background-color: var(--edit-button-color);
+  color: var(--text-color);
+}
+
+.edit-button:hover {
+  background-color: var(--edit-button-hover-color);
+  transform: translateY(-2px);
+}
+
+/* Responsividad para pantallas más pequeñas */
+@media (max-width: 768px) {
+  .ticket-container {
+    margin: 10px;
+  }
+
+  .ticket-header {
+    padding: 20px;
+  }
+
+  .ticket-header h1 {
+    font-size: 1.5em;
+  }
+
+  .ticket-content {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .info-column {
+    flex: 1 1 100%;
+    margin: 5px 0;
+  }
 }
