@@ -75,6 +75,7 @@ function TicketTemplate({ data, onUpdateTicket, index, onGoBack }) {
       </div>
 
       <div className="ticket-content">
+        
         {activeTab === 'solicitud' && <RenderSolicitudDeServicio editableData={editableData} onEdit={() => handleTabChange('editar')} />}
         {activeTab === 'adicionales' && <RenderSolicitudDeAdicionales editableData={editableData} onEdit={() => handleTabChange('editar')} />}
         {activeTab === 'editarServicio' && (<RenderEditarDatosServicio editableData={editableData} handleInputChange={handleInputChange} handleSave={handleSave} handleCancel={handleCancel}/>)}

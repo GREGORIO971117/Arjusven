@@ -28,7 +28,7 @@ function ServiceRequestForm() {
       "Nombre Afiliado": item.__EMPTY_12,
       "Detalle": item.__EMPTY_13,
       "Observaciones": item.__EMPTY_14,
-      "currentStatus": "Abierto"
+      "currentStatus": "Cerrado"
     }));
     
     

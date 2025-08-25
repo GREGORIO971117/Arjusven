@@ -1,5 +1,6 @@
 import React from 'react';
 import TicketTemplate from './TicketTemplate';
+import TicketListTemplate from './ticketListTemplate'
 
 function TicketList({ tickets, onUpdateTicket }) {
   if (tickets.length === 0) {
@@ -9,7 +10,7 @@ function TicketList({ tickets, onUpdateTicket }) {
   return (
     <div className="ticket-list-container">
       {tickets.map((ticket, index) => (
-        <TicketTemplate
+        <TicketListTemplate
           key={index} data={{
             ticketNumber: ticket.Incidencia,
             title: "Solicitud de Servicio",
@@ -80,10 +81,12 @@ function TicketList({ tickets, onUpdateTicket }) {
               modeloStock: "N/A",
             }
           }}
-          
+
+          ticketData={ticket}
           onUpdateTicket={onUpdateTicket} // Pasa la función como prop
           index={index} // Pasa el índice para identificar el ticket
         />
+      
       ))}
     </div>
   );

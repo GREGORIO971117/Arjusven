@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ServiceRequestForm from '../Service/ServiceRequestForm';
 import TicketList from './ticketList';
-import TicketSummary from './ticketSummary';
 
 function TicketPage() {
   const [activeTab, setActiveTab] = useState('all');
@@ -73,11 +72,8 @@ function TicketPage() {
       </div>
 
       <div className='ticket-content'>
-
         <TicketList tickets={filteredTickets} onUpdateTicket={updateTicketData} />
       </div>
-
-
     </div>
   );
 }
