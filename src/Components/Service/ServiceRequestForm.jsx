@@ -5,7 +5,7 @@ import './Form.css';
 function ServiceRequestForm() {
   const [file, setFile] = useState(null);
   const [jsonData, setJsonData] = useState([]);
-  const [showModal, setShowModal] = useState(false); // Nuevo estado para el modal
+  const [showModal, setShowModal] = useState(false); 
   
   useEffect(() => {
     if (jsonData.length > 0) {
@@ -30,6 +30,7 @@ function ServiceRequestForm() {
       "Observaciones": item.__EMPTY_14,
       "currentStatus": "Abierto"
     }));
+    
     
     // Guardamos los datos con los nuevos encabezados en localStorage.
     try {

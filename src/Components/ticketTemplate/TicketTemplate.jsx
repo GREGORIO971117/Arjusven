@@ -5,7 +5,7 @@ import RenderSolicitudDeAdicionales from './ticketTemplateAdicionales'; // Corre
 import RenderEditarDatosServicio from './ticketEditarServicios';
 import RenderEditarDatosAdicionales from './ticketEditarAdicionales';
 
-function TicketTemplate({ data, onSave }) {
+function TicketTemplate({ data, onUpdateTicket, index, onGoBack }) {
   const [activeTab, setActiveTab] = useState('solicitud');
   const [editableData, setEditableData] = useState(data);
 
@@ -37,6 +37,7 @@ function TicketTemplate({ data, onSave }) {
   const handleCancel = () => {
     setEditableData(data);
     handleTabChange('solicitud');
+    onGoBack();
   };
 
   return (
@@ -76,25 +77,14 @@ function TicketTemplate({ data, onSave }) {
       <div className="ticket-content">
         {activeTab === 'solicitud' && <RenderSolicitudDeServicio editableData={editableData} onEdit={() => handleTabChange('editar')} />}
         {activeTab === 'adicionales' && <RenderSolicitudDeAdicionales editableData={editableData} onEdit={() => handleTabChange('editar')} />}
-        {activeTab === 'editarServicio' && (
-          <RenderEditarDatosServicio
-            editableData={editableData}
-            handleInputChange={handleInputChange}
-            handleSave={handleSave}
-            handleCancel={handleCancel}
-          />
-        )}
-        {activeTab === 'editarAdicionales' && (
-          <RenderEditarDatosAdicionales
-            editableData={editableData}
-            handleInputChange={handleInputChange}
-            handleSave={handleSave}
-            handleCancel={handleCancel}
-          />
-        )}
+        {activeTab === 'editarServicio' && (<RenderEditarDatosServicio editableData={editableData} handleInputChange={handleInputChange} handleSave={handleSave} handleCancel={handleCancel}/>)}
+        {activeTab === 'editarAdicionales' && (<RenderEditarDatosAdicionales editableData={editableData} handleInputChange={handleInputChange} handleSave={handleSave} handleCancel={handleCancel} />)}
       </div>
     </div>
   );
+
+
+  
 }
 
 export default TicketTemplate;
