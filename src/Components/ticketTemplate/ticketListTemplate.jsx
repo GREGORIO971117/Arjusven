@@ -1,13 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Card, CardContent, Typography, Box, useTheme } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LabelImportantIcon from '@mui/icons-material/LabelImportant';
 
-function CustomTicketCard({ ticketData }) {
+function CustomTicketCard({ ticketData, onSelectTicket }) {  // 👈 recibe la función desde TicketList
   const theme = useTheme();
-  const ticketRoute = `/ticket/${ticketData.index}`;
 
   const statusColors = {
     Abierto: theme.palette.warning.main,
@@ -23,17 +21,17 @@ function CustomTicketCard({ ticketData }) {
 
   return (
     <Card
-      component={Link}
-      to={ticketRoute}
+      onClick={() => onSelectTicket(ticketData)}   // 👈 ahora selecciona el ticket en lugar de navegar
       sx={{
         m: 1,
+        cursor: 'pointer',
         textDecoration: 'none',
         color: 'inherit',
         borderRadius: '12px',
-        boxShadow: theme.shadows[3], // Sombra más visible en estado normal
+        boxShadow: theme.shadows[3],
         transition: 'transform 0.3s, box-shadow 0.3s',
         '&:hover': {
-          boxShadow: theme.shadows[8], // Sombra aún más pronunciada al pasar el mouse
+          boxShadow: theme.shadows[8],
           transform: 'translateY(-3px)',
         },
       }}

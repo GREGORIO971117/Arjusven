@@ -1,5 +1,5 @@
 import React from 'react';
-import TicketListTemplate from './ticketListTemplate';
+import TicketTemplate from './TicketTemplate';
 
 function TicketList({ tickets, onUpdateTicket, onSelectTicket, selectedTicket }) {
   if (tickets.length === 0) {
@@ -15,7 +15,7 @@ function TicketList({ tickets, onUpdateTicket, onSelectTicket, selectedTicket })
           onClick={() => onSelectTicket(ticket)}  
           style={{ cursor: 'pointer' }}
         >
-          <TicketListTemplate
+          <TicketTemplate
             data={{
               ticketNumber: ticket.Incidencia,
               title: "Solicitud de Servicio",
