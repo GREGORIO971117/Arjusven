@@ -6,6 +6,8 @@ function ServiceRequestForm() {
   const [file, setFile] = useState(null);
   const [jsonData, setJsonData] = useState([]);
   const [showModal, setShowModal] = useState(false); 
+  const Fecha = new Date().toLocaleDateString();
+  const Super=["Gregorio","David","Eduardo"];
   
   useEffect(() => {
     if (jsonData.length > 0) {
@@ -28,7 +30,9 @@ function ServiceRequestForm() {
       "Nombre Afiliado": item.__EMPTY_12,
       "Detalle": item.__EMPTY_13,
       "Observaciones": item.__EMPTY_14,
-      "currentStatus": "Cerrado"
+      "currentStatus": "Abierto",
+      "currentDate":Fecha,
+      "supervisor":Super[0],
     }));
     
     

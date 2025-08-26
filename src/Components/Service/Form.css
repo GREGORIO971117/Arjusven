@@ -14,7 +14,6 @@ input[type="file"] {
   display: none;
 }
 
-/* Estilos para el modal */
 .modal-overlay {
   position: fixed;
   top: 0;
