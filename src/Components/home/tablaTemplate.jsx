@@ -32,10 +32,12 @@ function tablaTemplate() {
 
     // Efecto para filtrar los tickets según las selecciones del usuario
     useEffect(() => {
+        
         let filteredByDate = ticketsData;
         
         if (startDate && endDate) {
             filteredByDate = ticketsData.filter(t => {
+
                 // Se parsea la fecha de la cadena "DD/MM/YYYY" para crear un objeto Date válido
                 const [day, month, year] = t.currentDate.split('/');
                 const ticketDate = new Date(`${year}-${month}-${day}`); 
@@ -64,8 +66,10 @@ function tablaTemplate() {
     const closedTickets = supervisorTickets.filter(t => t.currentStatus === 'Cerrado').length;
     
     const chartData = [
+
         { name: 'Abiertos', value: openTickets, color: '#FF9800' },
         { name: 'Cerrados', value: closedTickets, color: '#4CAF50' },
+
     ];
 
     const cardStyle = {

@@ -1,29 +1,108 @@
-.ticket-content-flex {
-  display: flex; /* Habilita el flexbox */
-  gap: 20px; /* Agrega espacio entre las columnas */
-  width: 100%; /* Asegura que ocupe todo el ancho disponible */
+.ticket-template-container {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #fcfcfc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    font-family: Arial, sans-serif;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
-.ticket-list-column {
-  flex: 1; /* Le asigna una "flex-grow" de 1, haciendo que ocupe 1/3 del espacio */
-  max-width: 33.33%; /* Limita el ancho máximo al 33.33% */
-  overflow-y: auto; /* Permite el scroll si la lista es muy larga */
+.ticket-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-.ticket-template-column {
-  flex: 2; /* Le asigna una "flex-grow" de 2, haciendo que ocupe 2/3 del espacio */
-  max-width: 66.66%; /* Limita el ancho máximo al 66.66% */
-  /* Opcional: añade padding para que el contenido no toque los bordes */
-  padding: 10px; 
+.ticket-title {
+    font-size: 1.5rem;
+    color: #333;
+    margin: 0;
 }
 
-/* Reglas opcionales para pantallas pequeñas */
-@media (max-width: 768px) {
-  .ticket-content-flex {
-    flex-direction: column; /* Cambia a una columna en pantallas pequeñas */
-  }
-  .ticket-list-column,
-  .ticket-template-column {
-    max-width: 100%; /* Ocupan todo el ancho en pantallas pequeñas */
-  }
+.ticket-actions .edit-button,
+.ticket-actions .back-button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.ticket-actions .edit-button {
+    background-color: #007bff;
+    color: #fff;
+    margin-left: 10px;
+}
+
+.ticket-actions .edit-button:hover {
+    background-color: #0056b3;
+}
+
+.ticket-actions .back-button {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.ticket-actions .back-button:hover {
+    background-color: #5a6268;
+}
+
+.ticket-tabs {
+    display: flex;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 20px;
+}
+
+.ticket-tabs .tab-button {
+    padding: 10px 15px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #555;
+    border-bottom: 3px solid transparent;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.ticket-tabs .tab-button.active {
+    border-bottom: 3px solid #007bff;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.ticket-content {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.info-section {
+    display: flex;
+    flex-wrap: wrap; /* Allows columns to wrap on smaller screens */
+    gap: 40px;
+    margin-bottom: 20px;
+}
+
+.info-column {
+    flex: 1 1 45%; /* Flex-basis of 45% allows for two columns on larger screens */
+    min-width: 250px; /* Ensures columns don't get too narrow */
+}
+
+.info-column p,
+.full-width-section p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+.info-column p strong,
+.full-width-section p strong {
+    color: #000;
+}
+
+.full-width-section {
+    margin-bottom: 20px;
 }

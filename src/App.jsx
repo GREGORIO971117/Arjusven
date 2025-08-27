@@ -4,7 +4,6 @@ import Login from './Components/login/Login';
 import NavBar from './Components/navBar/NavBar';
 import Inventario from './Components/inventario/Inventario';
 import TicketPage from './Components/ticketTemplate/TicketPage'; 
-
 import { Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -22,7 +21,7 @@ function App() {
       <NavBar links={links}/>
       <Routes>
         <Route path="/Home" element={<Home />} />
-        <Route path="/Ticket" element={<TicketPage />} />
+        <Route path="/Ticket" element={<TicketPage/>} />
         <Route path="/Inventario" element={<Inventario />} />
         <Route path="*" element={<h1>404: Página no encontrada</h1>} />
       </Routes>

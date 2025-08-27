@@ -1,99 +1,28 @@
 import React from 'react';
-import TicketListTemplate from './ticketListTemplate';
+import './TicketList.css'; 
 
-function TicketList({ tickets, onUpdateTicket, onSelectTicket, selectedTicket }) {
-  if (tickets.length === 0) {
-    return <div>No hay tickets disponibles para esta clasificación.</div>;
-  }
-
-  return (
-    <div className="ticket-list-container">
-      {tickets.map((ticket, index) => (
-        <div
-          key={index}
-          className={`ticket-list-item ${selectedTicket?.Incidencia === ticket.Incidencia ? 'active' : ''}`}
-          onClick={() => onSelectTicket(ticket)}  
-          style={{ cursor: 'pointer' }}
-        >
-          <TicketListTemplate
-            data={{
-              ticketNumber: ticket.Incidencia,
-              title: "Solicitud de Servicio",
-              subTitle: "Detalles del caso",
-              serviceRequest: {
-                assignmentDate: "N/A",
-                resolution: "N/A",
-                currentStatus: "Abierto",
-                essName: "N/A",
-                caseNumber: ticket.Incidencia,
-                affiliateCode: ticket.Afiliado,
-                affiliation: ticket["Afiliado ATPV"],
-                atpvAffiliate: ticket["Afiliado ATPV"],
-                atpvID: ticket["ID ATPV "],
-                serviceReason: ticket.Detalle,
-              },
-              contactInfo: {
-                relatedContract: "N/A",
-                client: ticket["Nombre Afiliado"],
-                contactPerson: {
-                  creator: "N/A",
-                  supervisor: "N/A",
-                },
-                serviceType: ticket["Aplicación , Prioridad "],
-                fieldTechnician: "N/A",
-                sla: "N/A",
-              },
-              serviceDetails: {
-                onSiteReason: ticket.Detalle,
-                observations: ticket.Observaciones,
-                address: "N/A",
-              },
-              bottomInfo: {
-                encomiendaGuide: ticket["Insumo a enviar"],
-                guideSendDate: "N/A",
-              },
-              additionalData: {
-                ciudad: "N/A",
-                cantidadTPV: "N/A",
-                modeloEntra: "N/A",
-                marcaEntra: "N/A",
-                serieLogicaEntra: "N/A",
-                serieFisicaEntra: ticket["Serie reportada"],
-                versionBrowser: "N/A",
-                tipoComunicacion: "N/A",
-                simEntra: "N/A",
-                ptidEntra: "N/A",
-                eliminadorEntra: "N/A",
-                eliminadorSale: "N/A",
-                estado: "N/A",
-                ordenDeServicio: "N/A",
-                modeloSale: ticket["Modelo Reportado"],
-                marcaSale: "N/A",
-                serieLogicaSale: "N/A",
-                serieFisicaSale: "N/A",
-                versionBrowserSale: "N/A",
-                tipoComunicacionSale: "N/A",
-                simSale: "N/A",
-                ptidSale: "N/A",
-                plaza: "N/A",
-                tecnico: "N/A",
-                cerroPuntoClave: "N/A",
-                atencionEnPunto: "N/A",
-                firmaEnEstacion: "N/A",
-                tarjetaTag: "N/A",
-                serieStock: "N/A",
-                simStock: "N/A",
-                modeloStock: "N/A",
-              }
-            }}
-            ticketData={ticket}
-            onUpdateTicket={onUpdateTicket}
-            index={index}
-          />
+const TicketList = ({ tickets, onSelectTicket }) => {
+    return (
+        <div className="ticket-list">
+            <h2>Tickets Subidos</h2>
+            {tickets.length === 0 ? (
+                <p>No hay tickets para mostrar.</p>
+            ) : (
+                <ul>
+                    {tickets.map((ticket, index) => (
+                        <li key={index} className="ticket-item" onClick={() => onSelectTicket(ticket)}>
+                            <div className="ticket-info">
+                                <strong>No de Caso: {ticket.Incidencia}</strong>
+                            </div>
+                            <div className="ticket-info">
+                                <strong>Nombre de ESS: {ticket["Nombre Afiliado"]}</strong>   
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
-      ))}
-    </div>
-  );
-}
+    );
+};
 
 export default TicketList;

@@ -1,121 +1,96 @@
 import React, { useState } from 'react';
+import RenderDatosServicio from './RenderDataServicios';
+import RenderDatosAdicionales from './RenderDataAdicionales';
+import RenderEditarDatosServicio from './EditDataServicios';
+import RenderEditarDatosAdicionales from './EditDataAdicionales';
+import getFormattedTicketData from './Utils';
 import './TicketTemplate.css';
-import RenderSolicitudDeServicio from './ticketTemplateServicios';
-import RenderSolicitudDeAdicionales from './ticketTemplateAdicionales';
-import RenderEditarDatosServicio from './ticketEditarServicios';
-import RenderEditarDatosAdicionales from './ticketEditarAdicionales';
 
-function TicketTemplate({ data, onUpdateTicket, index, onGoBack }) {
-  const [activeTab, setActiveTab] = useState('solicitud');
-  const [editableData, setEditableData] = useState(data);
-
-  if (!data) {
-    return <div>No se ha proporcionado información de ticket.</div>;
-  }
-
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-  };
+const TicketTemplate = ({ data, onUpdateTicket, onGoBack }) => {
+  const [activeTab, setActiveTab] = useState('servicio');
+  const [isEditing, setIsEditing] = useState(false);
+  const [editableData, setEditableData] = useState(getFormattedTicketData(data));
 
   const handleInputChange = (section, field, value) => {
     setEditableData(prevData => ({
       ...prevData,
       [section]: {
         ...prevData[section],
-        [field]: value
-      }
+        [field]: value,
+      },
     }));
   };
 
   const handleSave = () => {
-    if (onUpdateTicket) {
-      onUpdateTicket(editableData);
-    }
-    handleTabChange('solicitud');
+  const updatedTicket = {
+   ...data,
+   ...editableData.serviceRequest,
+   ...editableData.contactInfo,
+   ...editableData.serviceDetails,
+   ...editableData.bottomInfo,
+   ...editableData.additionalData,
   };
+  updatedTicket.Incidencia = data.Incidencia;
+
+  onUpdateTicket(updatedTicket);
+  setIsEditing(false);
+ };
+console.log(data);
 
   const handleCancel = () => {
-    setEditableData(data);
-    handleTabChange('solicitud');
-    if (onGoBack) onGoBack();
+    setIsEditing(false);
+    setEditableData(getFormattedTicketData(data));
+  };
+
+  const renderContent = () => {
+    if (isEditing) {
+      if (activeTab === 'servicio') {
+        return <RenderEditarDatosServicio editableData={editableData} handleInputChange={handleInputChange} handleSave={handleSave} handleCancel={handleCancel} />;
+      }
+      if (activeTab === 'adicionales') {
+        return <RenderEditarDatosAdicionales editableData={editableData} handleInputChange={handleInputChange} handleSave={handleSave} handleCancel={handleCancel} />;
+      }
+    } else {
+      if (activeTab === 'servicio') {
+        return <RenderDatosServicio editableData={editableData} />;
+      }
+      if (activeTab === 'adicionales') {
+        return <RenderDatosAdicionales editableData={editableData} />;
+      }
+    }
+    return null;
   };
 
   return (
-    <div className="ticket-container">
+    <div className="ticket-template-container">
       <div className="ticket-header">
-        <h1>{editableData.ticketNumber} {editableData.title}</h1>
-        <p>{editableData.subTitle}</p>
+        <h2 className="ticket-title">{data['Nombre de ESS']}</h2>
+        <div className="ticket-actions">
+          <button onClick={onGoBack} className="back-button">← Regresar</button>
+          {!isEditing && (
+            <button onClick={() => setIsEditing(true)} className="edit-button">Editar</button>
+          )}
+        </div>
       </div>
-
       <div className="ticket-tabs">
         <button
-          type="button"
-          className={`tab-button ${activeTab === 'solicitud' ? 'active' : ''}`}
-          onClick={() => handleTabChange('solicitud')}
+          className={`tab-button ${activeTab === 'servicio' ? 'active' : ''}`}
+          onClick={() => setActiveTab('servicio')}
         >
           Solicitud de Servicio
         </button>
-
         <button
-          type="button"
           className={`tab-button ${activeTab === 'adicionales' ? 'active' : ''}`}
-          onClick={() => handleTabChange('adicionales')}
+          onClick={() => setActiveTab('adicionales')}
         >
           Datos Adicionales
         </button>
-
-        <button
-          type="button"
-          className={`tab-button ${activeTab === 'editarServicio' ? 'active' : ''}`}
-          onClick={() => handleTabChange('editarServicio')}
-        >
-          Editar datos de Servicio
-        </button>
-
-        <button
-          type="button"
-          className={`tab-button ${activeTab === 'editarAdicionales' ? 'active' : ''}`}
-          onClick={() => handleTabChange('editarAdicionales')}
-        >
-          Editar datos adicionales
-        </button>
       </div>
-
       <div className="ticket-content">
-        {activeTab === 'solicitud' && (
-          <RenderSolicitudDeServicio
-            editableData={editableData}
-            onEdit={() => handleTabChange('editarServicio')}
-          />
-        )}
-
-        {activeTab === 'adicionales' && (
-          <RenderSolicitudDeAdicionales
-            editableData={editableData}
-            onEdit={() => handleTabChange('editarAdicionales')}
-          />
-        )}
-
-        {activeTab === 'editarServicio' && (
-          <RenderEditarDatosServicio
-            editableData={editableData}
-            handleInputChange={handleInputChange}
-            handleSave={handleSave}
-            handleCancel={handleCancel}
-          />
-        )}
-
-        {activeTab === 'editarAdicionales' && (
-          <RenderEditarDatosAdicionales
-            editableData={editableData}
-            handleInputChange={handleInputChange}
-            handleSave={handleSave}
-            handleCancel={handleCancel}
-          />
-        )}
+        {renderContent()}
       </div>
     </div>
   );
-}
+};
 
 export default TicketTemplate;
