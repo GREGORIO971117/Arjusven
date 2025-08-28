@@ -22,24 +22,29 @@ const TicketTemplate = ({ data, onUpdateTicket, onGoBack }) => {
   };
 
   const handleSave = () => {
-  const updatedTicket = {
-   ...data,
-   ...editableData.serviceRequest,
-   ...editableData.contactInfo,
-   ...editableData.serviceDetails,
-   ...editableData.bottomInfo,
-   ...editableData.additionalData,
-  };
-  updatedTicket.Incidencia = data.Incidencia;
+    const updatedTicket = {
+      ...data,
+      ...editableData.serviceRequest,
+      ...editableData.contactInfo,
+      ...editableData.serviceDetails,
+      ...editableData.bottomInfo,
+      ...editableData.additionalData,
+    };
 
-  onUpdateTicket(updatedTicket);
-  setIsEditing(false);
- };
-console.log(data);
+    updatedTicket.Incidencia = data.Incidencia;
+
+    onUpdateTicket(updatedTicket);
+    setIsEditing(false);
+  };
 
   const handleCancel = () => {
     setIsEditing(false);
     setEditableData(getFormattedTicketData(data));
+  };
+
+  const handleDownload = () => {
+    // La lógica para generar y descargar el archivo de Word va aquí
+    alert('La función de descarga está pendiente de implementación.');
   };
 
   const renderContent = () => {
@@ -70,6 +75,7 @@ console.log(data);
           {!isEditing && (
             <button onClick={() => setIsEditing(true)} className="edit-button">Editar</button>
           )}
+          <button onClick={handleDownload} className="download-button">Descargar</button>
         </div>
       </div>
       <div className="ticket-tabs">
@@ -85,6 +91,7 @@ console.log(data);
         >
           Datos Adicionales
         </button>
+
       </div>
       <div className="ticket-content">
         {renderContent()}

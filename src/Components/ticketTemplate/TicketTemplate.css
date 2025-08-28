@@ -24,7 +24,8 @@
 }
 
 .ticket-actions .edit-button,
-.ticket-actions .back-button {
+.ticket-actions .back-button,
+.ticket-actions .download-button {
     padding: 8px 15px;
     border: none;
     border-radius: 5px;

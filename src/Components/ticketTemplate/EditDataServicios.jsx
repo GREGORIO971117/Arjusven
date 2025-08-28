@@ -54,89 +54,45 @@ const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave
               onChange={(e) => handleInputChange('serviceRequest', 'affiliateCode', e.target.value)}
             />
           </label>
+
           <label>
-            <strong>Afiliación</strong>
-            <input
-              type="text"
-              value={editableData.serviceRequest?.affiliation || ''}
-              onChange={(e) => handleInputChange('serviceRequest', 'affiliation', e.target.value)}
-            />
-          </label>
-          <label>
-            <strong>Afiliado ATPV</strong>
-            <input
-              type="text"
-              value={editableData.serviceRequest?.atpvAffiliate || ''}
-              onChange={(e) => handleInputChange('serviceRequest', 'atpvAffiliate', e.target.value)}
-            />
-          </label>
-          <label>
-            <strong>ID ATPV</strong>
+            <strong>Supervisor</strong>
             <input
               type="text"
               value={editableData.serviceRequest?.atpvID || ''}
               onChange={(e) => handleInputChange('serviceRequest', 'atpvID', e.target.value)}
             />
           </label>
-        </div>
-        <div className="info-column">
-          <label>
-            <strong>Contrato relacionado</strong>
-            <input
-              type="text"
-              value={editableData.contactInfo?.relatedContract || ''}
-              onChange={(e) => handleInputChange('contactInfo', 'relatedContract', e.target.value)}
-            />
-          </label>
-          <label>
-            <strong>Cliente</strong>
-            <input
-              type="text"
-              value={editableData.contactInfo?.client || ''}
-              onChange={(e) => handleInputChange('contactInfo', 'client', e.target.value)}
-            />
-          </label>
-          <label>
-            <strong>Persona de contacto (Creador)</strong>
-            <input
-              type="text"
-              value={editableData.contactInfo?.contactPerson?.creator || ''}
-              onChange={(e) => handleInputChange('contactInfo', 'contactPerson.creator', e.target.value)}
-            />
-          </label>
-          <label>
-            <strong>Persona de contacto (Supervisor)</strong>
-            <input
-              type="text"
-              value={editableData.contactInfo?.contactPerson?.supervisor || ''}
-              onChange={(e) => handleInputChange('contactInfo', 'contactPerson.supervisor', e.target.value)}
-            />
-          </label>
+
           <label>
             <strong>Tipo de Servicio</strong>
             <input
               type="text"
-              value={editableData.contactInfo?.serviceType || ''}
-              onChange={(e) => handleInputChange('contactInfo', 'serviceType', e.target.value)}
+              value={editableData.serviceRequest?.atpvID || ''}
+              onChange={(e) => handleInputChange('serviceRequest', 'atpvID', e.target.value)}
             />
           </label>
+
           <label>
             <strong>Técnico de Campo</strong>
             <input
               type="text"
-              value={editableData.contactInfo?.fieldTechnician || ''}
-              onChange={(e) => handleInputChange('contactInfo', 'fieldTechnician', e.target.value)}
+              value={editableData.serviceRequest?.atpvID || ''}
+              onChange={(e) => handleInputChange('serviceRequest', 'atpvID', e.target.value)}
             />
           </label>
+
           <label>
             <strong>SLA</strong>
             <input
               type="text"
-              value={editableData.contactInfo?.sla || ''}
-              onChange={(e) => handleInputChange('contactInfo', 'sla', e.target.value)}
+              value={editableData.serviceRequest?.atpvID || ''}
+              onChange={(e) => handleInputChange('serviceRequest', 'atpvID', e.target.value)}
             />
           </label>
+
         </div>
+       
       </div>
       <div className="full-width-section">
         <label>
@@ -155,6 +111,9 @@ const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave
             onChange={(e) => handleInputChange('serviceDetails', 'onSiteReason', e.target.value)}
           />
         </label>
+
+    
+
         <label>
           <strong>Observaciones ARJUSVEN</strong>
           <textarea
@@ -170,6 +129,9 @@ const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave
           />
         </label>
       </div>
+
+
+
       <div className="full-width-section">
         <label>
           <strong>Guía de Encomienda</strong>

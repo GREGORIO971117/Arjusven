@@ -7,7 +7,7 @@ function ServiceRequestForm() {
   const [jsonData, setJsonData] = useState([]);
   const [showModal, setShowModal] = useState(false); 
   const Fecha = new Date().toLocaleDateString();
-  const Super=["Gregorio","David","Eduardo"];
+  const Super=["Sin asignar","David","Eduardo"];
   
   useEffect(() => {
     if (jsonData.length > 0) {
@@ -34,7 +34,6 @@ function ServiceRequestForm() {
       "currentDate":Fecha,
       "supervisor":Super[0],
     }));
-    
     
     // Guardamos los datos con los nuevos encabezados en localStorage.
     try {

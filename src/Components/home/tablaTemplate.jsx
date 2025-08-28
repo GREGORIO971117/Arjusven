@@ -12,7 +12,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 function tablaTemplate() {
     const [ticketsData, setTicketsData] = useState([]);
     const [supervisorTickets, setSupervisorTickets] = useState([]);
-    const nameSup = ["Gregorio", "David", "Eduardo"];
+    const nameSup = ["Sin asignar", "David", "Eduardo"];
     const [selectedSupervisor, setSelectedSupervisor] = useState(nameSup[0]);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);

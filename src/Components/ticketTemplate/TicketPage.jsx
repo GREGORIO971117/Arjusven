@@ -18,7 +18,6 @@ function TicketPage() {
             if (storedData) {
                 const parsedData = JSON.parse(storedData);
                 if (Array.isArray(parsedData)) {
-                    // Update keys for better readability
                     const formattedData = parsedData.map(item => ({
                         ...item,
                         "No de Caso": item.Incidencia,
@@ -60,7 +59,7 @@ function TicketPage() {
                     {selectedTicket ? (
                         <TicketTemplate
                             data={selectedTicket}
-                            onUpdateTicket={updateTicketData} // <-- Asegúrate de que esta línea esté presente
+                            onUpdateTicket={updateTicketData}
                             onGoBack={() => setSelectedTicket(null)}
                         />
                     ) : (

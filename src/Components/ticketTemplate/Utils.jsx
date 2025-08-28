@@ -1,33 +1,37 @@
+
 const getFormattedTicketData = (data) => {
+  
+  
   if (!data) return {};
+
 
   return {
     serviceRequest: {
-      assignmentDate: data['Fecha de Asignación'],
+      assignmentDate: Fecha,
       resolution: data['Resolución'],
       currentStatus: data['Situación Actual'],
       essName: data['Nombre de ESS'],
-      caseNumber: data['No de Caso'],
-      affiliateCode: data['Código de Afiliado'],
-      affiliation: data['Afiliación'],
+      caseNumber: data['Incidencia'],
+      affiliateCode: data['Afiliado'],
+      affiliation: data['Nombre Afiliado'],
       atpvAffiliate: data['Afiliado ATPV'],
       atpvID: data['ID ATPV'],
-      serviceReason: data['Motivo del Servicio'],
+      serviceReason: data['Aplicación, Prioridad'],
     },
     contactInfo: {
       relatedContract: data['Contrato relacionado'],
       client: data['Cliente'],
       contactPerson: {
         creator: data['Creador'],
-        supervisor: data['Supervisor'],
+        supervisor:data['Supervisor'],
       },
       serviceType: data['TIPO DE SERVICIO'],
       fieldTechnician: data['Técnico de Campo'],
       sla: data['SLA'],
     },
     serviceDetails: {
-      onSiteReason: data['Motivo real del Servicio en sitio'],
-      observations: data['Observaciones ARJUSVEN'],
+      onSiteReason: data['Detalle'],
+      observations: data['Observaciones'],
       address: data['Dirección'],
     },
     bottomInfo: {

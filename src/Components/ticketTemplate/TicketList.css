@@ -13,28 +13,35 @@
     margin-bottom: 15px;
     font-size: 1.2rem;
     color: #333;
+    text-align: left;
 }
 
 .ticket-item {
-    background-color: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 5px;
+    display: flex; /* Esto hace que los hijos del elemento se alineen en una fila */
+    justify-content: space-between; /* Distribuye el espacio entre los elementos */
+    align-items: center; /* Centra los elementos verticalmente */
     padding: 10px;
-    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.3s ease;
+    text-align:left;
 }
+
 
 .ticket-item:hover {
     background-color: #f0f0f0;
 }
 
 .ticket-info {
-    font-size: 0.9rem;
-    color: #555;
-    margin-bottom: 5px;
+    display: flex; /* Convierte el contenedor en un flexbox para alinear sus propios hijos */
+    flex-direction: row; /* Asegura que los hijos estén en fila */
+    gap: 20px; /* Agrega espacio entre los elementos 'strong' */
 }
-
 .ticket-info strong {
     color: #000;
 }
+
+
+
+/* TicketList.css */
+
