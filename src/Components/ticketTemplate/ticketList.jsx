@@ -14,7 +14,6 @@ const TicketList = ({ tickets, onSelectTicket }) => {
         const ticketsCopy = [...tickets];
         
         // Ordenamos la copia por la fecha.
-        // Asumimos que la fecha está en un formato que se puede comparar (ej. "DD/MM/YYYY").
         const sorted = ticketsCopy.sort((a, b) => {
             const dateA = a['Fecha de Asignación'] ? new Date(a['Fecha de Asignación'].split('/').reverse().join('-')) : new Date(0);
             const dateB = b['Fecha de Asignación'] ? new Date(b['Fecha de Asignación'].split('/').reverse().join('-')) : new Date(0);
@@ -22,7 +21,6 @@ const TicketList = ({ tickets, onSelectTicket }) => {
         });
         
         setSortedTickets(sorted);
-        // Regresamos a la primera página cada vez que la lista se reordena.
         setCurrentPage(1);
     }, [tickets]); // Este efecto se ejecuta cada vez que el array de tickets cambie.
 
@@ -57,8 +55,8 @@ const TicketList = ({ tickets, onSelectTicket }) => {
                         {currentTickets.map((ticket, index) => (
                             <li key={ticket.Incidencia} className="ticket-item" onClick={() => onSelectTicket(ticket)}>
                                 <div className="ticket-info">
-                                    <strong>No de Caso: {ticket.Incidencia}</strong>
-                                    <strong>Nombre de ESS: {ticket["Nombre Afiliado"]}</strong>   
+                                    <strong>{ticket.Incidencia}</strong>
+                                    <strong>Estación: {ticket["Nombre Afiliado"]}</strong>   
                                 </div>
                             </li>
                         ))}

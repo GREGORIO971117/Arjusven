@@ -12,20 +12,20 @@ const getFormattedTicketData = (data) => {
     }
   }
 
-  console.log("putos datos",storedData);
-
   // Buscar el ticket correspondiente en los datos de excelData si es necesario
   const foundTicket = excelData.find(t => t.Incidencia === data.Incidencia);
 
   // Usar los datos del ticket encontrado o los datos pasados por prop
   const supervisor = (foundTicket && foundTicket.supervisor) || data['Supervisor'];
   const assignmentDate = (foundTicket && foundTicket.currentDate) || new Date().toLocaleDateString();
+  const idMerchant = (foundTicket&& foundTicket.idMerchant) || data['ID Merchant'];
+  const currentStatus=(foundTicket&& foundTicket.currentStatus) || data['currentStatus'];
 
   return {
     serviceRequest: {
       assignmentDate: assignmentDate,
       resolution: data['Resolución'],
-      currentStatus: data['Situación Actual'],
+      currentStatus: currentStatus,
       essName: data['Nombre de ESS'],
       caseNumber: data['Incidencia'],
       affiliateCode: data['Afiliado'],
@@ -33,6 +33,7 @@ const getFormattedTicketData = (data) => {
       atpvAffiliate: data['Afiliado ATPV'],
       atpvID: data['ID ATPV'],
       serviceReason: data['Aplicación, Prioridad'],
+      idMerchant:idMerchant,
     },
     contactInfo: {
       relatedContract: data['Contrato relacionado'],
