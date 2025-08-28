@@ -1,13 +1,29 @@
 
 const getFormattedTicketData = (data) => {
-  
-  
   if (!data) return {};
 
+  const storedData = localStorage.getItem('excelData');
+  let excelData = [];
+  if (storedData) {
+    try {
+      excelData = JSON.parse(storedData);
+    } catch (error) {
+      console.error("Error al parsear los datos de localStorage:", error);
+    }
+  }
+
+  console.log("putos datos",storedData);
+
+  // Buscar el ticket correspondiente en los datos de excelData si es necesario
+  const foundTicket = excelData.find(t => t.Incidencia === data.Incidencia);
+
+  // Usar los datos del ticket encontrado o los datos pasados por prop
+  const supervisor = (foundTicket && foundTicket.supervisor) || data['Supervisor'];
+  const assignmentDate = (foundTicket && foundTicket.currentDate) || new Date().toLocaleDateString();
 
   return {
     serviceRequest: {
-      assignmentDate: Fecha,
+      assignmentDate: assignmentDate,
       resolution: data['Resolución'],
       currentStatus: data['Situación Actual'],
       essName: data['Nombre de ESS'],
@@ -23,7 +39,7 @@ const getFormattedTicketData = (data) => {
       client: data['Cliente'],
       contactPerson: {
         creator: data['Creador'],
-        supervisor:data['Supervisor'],
+        supervisor: supervisor,
       },
       serviceType: data['TIPO DE SERVICIO'],
       fieldTechnician: data['Técnico de Campo'],
