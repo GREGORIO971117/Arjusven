@@ -6,7 +6,7 @@ import RenderEditarDatosAdicionales from './EditDataAdicionales';
 import getFormattedTicketData from './Utils';
 import './TicketTemplate.css';
 
-const TicketTemplate = ({ data, onUpdateTicket, onGoBack }) => {
+const TicketTemplate = ({ data, onUpdateTicket, onGoBack,handleDelete}) => {
   const [activeTab, setActiveTab] = useState('servicio');
   const [isEditing, setIsEditing] = useState(false);
   const [editableData, setEditableData] = useState(getFormattedTicketData(data));
@@ -21,6 +21,7 @@ const TicketTemplate = ({ data, onUpdateTicket, onGoBack }) => {
     }));
   };
 
+
   const handleSave = () => {
     const updatedTicket = {
       ...data,
@@ -30,7 +31,7 @@ const TicketTemplate = ({ data, onUpdateTicket, onGoBack }) => {
       ...editableData.bottomInfo,
       ...editableData.additionalData,
     };
-
+    
     updatedTicket.Incidencia = data.Incidencia;
 
     onUpdateTicket(updatedTicket);
@@ -50,7 +51,7 @@ const TicketTemplate = ({ data, onUpdateTicket, onGoBack }) => {
   const renderContent = () => {
     if (isEditing) {
       if (activeTab === 'servicio') {
-        return <RenderEditarDatosServicio editableData={editableData} handleInputChange={handleInputChange} handleSave={handleSave} handleCancel={handleCancel} />;
+        return <RenderEditarDatosServicio editableData={editableData} handleInputChange={handleInputChange} handleSave={handleSave} handleCancel={handleCancel} handleDelete={handleDelete} />;
       }
       if (activeTab === 'adicionales') {
         return <RenderEditarDatosAdicionales editableData={editableData} handleInputChange={handleInputChange} handleSave={handleSave} handleCancel={handleCancel} />;

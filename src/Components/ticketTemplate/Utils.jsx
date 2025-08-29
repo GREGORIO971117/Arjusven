@@ -16,9 +16,9 @@ const getFormattedTicketData = (data) => {
   const foundTicket = excelData.find(t => t.Incidencia === data.Incidencia);
 
   // Usar los datos del ticket encontrado o los datos pasados por prop
-  const supervisor = (foundTicket && foundTicket.supervisor) || data['Supervisor'];
+  const supervisor = (foundTicket && foundTicket.supervisor) || data['supervisor'];
   const assignmentDate = (foundTicket && foundTicket.currentDate) || new Date().toLocaleDateString();
-  const idMerchant = (foundTicket&& foundTicket.idMerchant) || data['ID Merchant'];
+  const idMerchant = (foundTicket&& foundTicket.idMerchant) || data['IDMerchant'];
   const currentStatus=(foundTicket&& foundTicket.currentStatus) || data['currentStatus'];
 
   return {

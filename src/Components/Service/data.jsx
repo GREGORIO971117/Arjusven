@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
-import {v4 as uuidv4} from 'uuid';
 import './Form.css';
 
 function ServiceRequestForm() {
@@ -26,7 +25,7 @@ function ServiceRequestForm() {
       "Serie reportada": item.__EMPTY_7,
       "Afiliado": item.__EMPTY_8,
       "Afiliado ATPV": item.__EMPTY_9,
-      "IDMerchant": item.__EMPTY_10,
+      "ID Merchant": item.__EMPTY_10,
       "ID ATPV ": item.__EMPTY_11,
       "Nombre Afiliado": item.__EMPTY_12,
       "Detalle": item.__EMPTY_13,
@@ -37,18 +36,18 @@ function ServiceRequestForm() {
     }));
 
     try {
-      // Obtener los datos existentes de localStorage o inicializar un array vacío.
+      // 1. Obtener los datos existentes de localStorage o inicializar un array vacío.
       const existingData = JSON.parse(localStorage.getItem('excelData')) || [];
-      
-      // Eliminar las primeras tres filas solo de los nuevos datos del Excel.
-      const newDataToStore = JsonDataNew.slice(3); // Usar slice para no modificar el array original
-      
-      // Combinar los datos existentes con los nuevos datos filtrados.
-      const updatedData = [...existingData, ...newDataToStore];
-      console.log(updatedData);
 
+      // 2. Combinar los datos existentes con los nuevos datos.
+      const updatedData = [...existingData, ...JsonDataNew];
 
-      // Guardar los datos actualizados de nuevo en localStorage.
+      // 3. Eliminar los primeros tres elementos.
+      JsonDataNew.splice(0, 0);
+      JsonDataNew.splice(0, 1);
+      JsonDataNew.splice(0, 2);
+
+      // 4. Guardar los datos actualizados de nuevo en localStorage.
       localStorage.setItem('excelData', JSON.stringify(updatedData));
       console.log('Datos acumulados guardados en localStorage:', updatedData);
       setShowModal(true);
@@ -67,6 +66,7 @@ function ServiceRequestForm() {
       convertExcelToJson(selectedFile);
     }
   };
+
   const convertExcelToJson = (excelFile) => {
     const reader = new FileReader();
     reader.onload = (event) => {

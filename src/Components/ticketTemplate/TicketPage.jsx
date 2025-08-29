@@ -40,6 +40,23 @@ function TicketPage() {
         setSelectedTicket(updatedTicket);
     };
 
+   const handleDelete = () => {
+        if (!selectedTicket) return;
+
+        // Filtra el array, creando una nueva lista sin el ticket seleccionado
+        const updatedTickets = ticketsData.filter(t => t.Incidencia !== selectedTicket.Incidencia);
+        
+        // Actualiza el estado de la aplicación
+        setTicketsData(updatedTickets);
+        
+        // Guarda el nuevo array en localStorage
+        localStorage.setItem('excelData', JSON.stringify(updatedTickets));
+        
+        // Limpia el ticket seleccionado para que el panel de detalles desaparezca
+        setSelectedTicket(null);
+    };
+
+
     return (
         <div className="ticket-page-container">
             <h1>Gestión de Tickets de Servicio</h1>
@@ -61,6 +78,8 @@ function TicketPage() {
                             data={selectedTicket}
                             onUpdateTicket={updateTicketData}
                             onGoBack={() => setSelectedTicket(null)}
+                            handleDelete={handleDelete}
+
                         />
                     ) : (
                         <div className="no-selection-message">
@@ -68,6 +87,8 @@ function TicketPage() {
                         </div>
                     )}
                 </div>
+
+                
             </div>
         </div>
     );

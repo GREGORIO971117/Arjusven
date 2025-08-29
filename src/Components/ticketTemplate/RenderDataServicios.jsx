@@ -3,13 +3,15 @@ import './TicketTemplate.css';
 
 const RenderDatosServicio = ({ editableData }) => (
     <>
+                    <h2><strong>{editableData.serviceRequest?.caseNumber}-{editableData.serviceRequest?.affiliation}</strong></h2>
+
         <div className="info-section">
             <div className="info-column">
                 <p><strong>Fecha de Asignación</strong>{editableData.serviceRequest?.assignmentDate}</p>
                 <p><strong>Resolución</strong>: {editableData.serviceRequest?.resolution}</p>
                 <p><strong>Situación Actual</strong>: {editableData.serviceRequest?.currentStatus}</p>
                 <p><strong>Nombre de ESS</strong>: {editableData.serviceRequest?.affiliation}</p>
-                <p><strong>No de Caso</strong>: {editableData.serviceRequest?.caseNumber}</p>
+                <p><strong>Incidencia</strong>: {editableData.serviceRequest?.caseNumber}</p>
                 <p><strong>Código de Afiliado</strong>: {editableData.serviceRequest?.affiliateCode}</p>
                 
             </div>
