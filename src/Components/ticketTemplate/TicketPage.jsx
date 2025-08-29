@@ -69,6 +69,7 @@ function TicketPage() {
                     <TicketList
                         tickets={ticketsData}
                         onSelectTicket={setSelectedTicket}
+                        onUpdateTickets={setTicketsData} 
                     />
                 </div>
 

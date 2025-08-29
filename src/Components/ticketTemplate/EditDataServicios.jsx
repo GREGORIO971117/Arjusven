@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './TicketTemplate.css';
 import './EditDataServicios.css';
 
-
 const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave, handleCancel, handleDelete }) => {
     const [showModal, setShowModal] = useState(false);
 
@@ -26,7 +25,7 @@ const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave
                     <label>
                         <strong>Fecha de Asignación</strong>
                         <input
-                            type="text"
+                            type="date"
                             value={editableData.serviceRequest?.assignmentDate || ''}
                             onChange={(e) => handleInputChange('serviceRequest', 'assignmentDate', e.target.value)}
                         />
@@ -41,11 +40,13 @@ const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave
                     </label>
                     <label>
                         <strong>Situación Actual</strong>
-                        <input
-                            type="text"
+                        <select
                             value={editableData.serviceRequest?.currentStatus || ''}
                             onChange={(e) => handleInputChange('serviceRequest', 'currentStatus', e.target.value)}
-                        />
+                        >
+                            <option value="Abierto">Abierto</option>
+                            <option value="Cerrado">Cerrado</option>
+                        </select>
                     </label>
                     <label>
                         <strong>Nombre de ESS</strong>
@@ -70,16 +71,19 @@ const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave
                             value={editableData.serviceRequest?.affiliateCode || ''}
                             onChange={(e) => handleInputChange('serviceRequest', 'affiliateCode', e.target.value)}
                         />
-                    </label>
+                    </label>                    
+
                     <label>
-  <strong>Supervisor</strong>
-  <input
-    type="text"
-    value={editableData.contactInfo?.contactPerson?.supervisor || ''}
- 
-   onChange={(e) => handleInputChange('contactInfo', 'contactPerson', { ...editableData.contactInfo?.contactPerson, supervisor: e.target.value })}
-  />
-</label>
+                        <strong>Supervisor</strong>
+                        <select
+                            value={editableData.contactInfo?.contactPerson?.supervisor || ''}
+                            onChange={(e) => handleInputChange('contactInfo', 'contactPerson', { ...editableData.contactInfo?.contactPerson, supervisor: e.target.value })}
+                        >
+                          <option value="David">David</option>
+                          <option value="Eduardo">Eduardo</option>
+                          <option value="DavErnestoid">Ernesto</option>
+                          </select>
+                    </label>
                     <label>
                         <strong>Tipo de Servicio</strong>
                         <input
@@ -150,7 +154,7 @@ const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave
                 <label>
                     <strong>Fecha de envío de guía</strong>
                     <input
-                        type="text"
+                        type="date"
                         value={editableData.bottomInfo?.guideSendDate || ''}
                         onChange={(e) => handleInputChange('bottomInfo', 'guideSendDate', e.target.value)}
                     />
