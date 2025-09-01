@@ -3,19 +3,37 @@ import './TicketTemplate.css';
 import './EditDataServicios.css';
 
 const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave, handleCancel, handleDelete }) => {
-    const [showModal, setShowModal] = useState(false);
-
-    const openModal = () => {
-        setShowModal(true);
+    // Estado para el modal de guardar
+        const [showSaveModal, setShowSaveModal] = useState(false);
+        // Estado para el modal de eliminar
+        const [showDeleteModal, setShowDeleteModal] = useState(false);
+    
+    // Funciones para manejar el modal de guardar
+    const openSaveModal = () => {
+        setShowSaveModal(true);
     };
 
-    const closeModal = () => {
-        setShowModal(false);
+    const closeSaveModal = () => {
+        setShowSaveModal(false);
+    };
+
+    const handleConfirmSave = () => {
+        handleSave();
+        closeSaveModal();
+    };
+
+    // Funciones para manejar el modal de eliminar
+    const openDeleteModal = () => {
+        setShowDeleteModal(true);
+    };
+
+    const closeDeleteModal = () => {
+        setShowDeleteModal(false);
     };
 
     const handleConfirmDelete = () => {
         handleDelete();
-        closeModal();
+        closeDeleteModal();
     };
 
     return (
@@ -161,19 +179,32 @@ const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave
                 </label>
             </div>
             <div className="button-container">
-                <button className="delete-button" onClick={openModal}>Eliminar</button>
-                <button className="save-button" onClick={handleSave}>Guardar</button>
+                <button className="delete-button" onClick={openDeleteModal}>Eliminar</button>
+                <button className="save-button" onClick={openSaveModal}>Guardar</button>
                 <button className="cancel-button" onClick={handleCancel}>Cancelar</button>
             </div>
 
-            {showModal && (
+            {showSaveModal && (
+                <div className="modal-overlay">
+                    <div className="modal">
+                        <h3>Confirmar cambios</h3>
+                        <p>¿Estás seguro de que deseas guardar cambios?</p>
+                        <div className="modal-buttons">
+                            <button className="confirm-save-button" onClick={handleConfirmSave}>Sí, Guardar</button>
+                            <button className="cancel-save-button" onClick={closeSaveModal}>No, cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showDeleteModal && (
                 <div className="modal-overlay">
                     <div className="modal">
                         <h3>Confirmar Eliminación</h3>
                         <p>¿Estás seguro de que deseas eliminar este ticket?</p>
                         <div className="modal-buttons">
                             <button className="confirm-delete-button" onClick={handleConfirmDelete}>Sí, eliminar</button>
-                            <button className="cancel-delete-button" onClick={closeModal}>No, cancelar</button>
+                            <button className="cancel-delete-button" onClick={closeDeleteModal}>No, cancelar</button>
                         </div>
                     </div>
                 </div>
