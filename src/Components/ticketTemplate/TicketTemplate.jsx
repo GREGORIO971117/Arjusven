@@ -20,8 +20,7 @@ const TicketTemplate = ({ data, onUpdateTicket, onGoBack,handleDelete}) => {
       },
     }));
   };
-
-
+  
   const handleSave = () => {
     const updatedTicket = {
       ...data,

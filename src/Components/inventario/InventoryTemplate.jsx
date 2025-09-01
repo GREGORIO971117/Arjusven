@@ -1,22 +1,53 @@
 import React from 'react';
+import RenderEditDataInventory from './RenderEditDataInventory';
 import './InventoryTemplate.css';
 
-function InventoryTemplate({ data }) {
+function InventoryTemplate({ data, isEditing, onEdit, onSave, onCancel }) {
+    // Si no hay datos, muestra un mensaje
     if (!data) {
-        return <div className="no-data-message">No se ha proporcionado información de inventario.</div>;
+        return (
+            <div className="no-data-message">
+                No se ha proporcionado información de inventario.
+            </div>
+        );
     }
 
+    // Renderiza el componente de edición si isEditing es verdadero
+    if (isEditing) {
+        return (
+            <div className="ticket-template-container">
+                <div className="ticket-header">
+                    <h1 className="template-title">Editando: {data.numeroSerie}</h1>
+                    <div className="template-actions">
+                        {/* Se pasan las funciones de guardar y cancelar como props */}
+                        <button className="save-button" onClick={onSave}>Guardar</button>
+                        <button className="cancel-button" onClick={onCancel}>Cancelar</button>
+                    </div>
+                </div>
+                <div className="ticket-content">
+                    {/* Renderiza el formulario de edición */}
+                    <RenderEditDataInventory data={data} />
+                </div>
+            </div>
+        );
+    }
+
+    // Renderiza la vista de solo lectura si no se está editando
     return (
         <div className="template-container">
             <div className="template-header">
-                <h1 className="template-title">Inventario TPV</h1>
+                <h1 className="template-title">{data.plaza}</h1>
                 <p className="template-subtitle">
                     <strong>Número de Serie:</strong> {data.numeroSerie}
                 </p>
+                <div className="template-actions">
+                    {/* Se pasa la función onEdit como prop */}
+                    <button className="edit-button" onClick={onEdit}>Editar</button>
+                </div>
             </div>
-            
+
             <div className="template-content two-column-layout">
-                {/* Primera Columna */}
+                {/* Primera Columna (Read-only) */}
                 <div className="column">
                     <div className="section-title">Información General</div>
                     <div className="info-item">
@@ -49,7 +80,7 @@ function InventoryTemplate({ data }) {
                     </div>
                 </div>
 
-                {/* Segunda Columna */}
+                {/* Segunda Columna (Read-only) */}
                 <div className="column">
                     <div className="section-title">Detalles del Inventario</div>
                     <div className="info-item">

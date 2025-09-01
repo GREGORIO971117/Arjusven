@@ -132,7 +132,7 @@ const TicketList = ({tickets, onSelectTicket, onUpdateTickets}) => {
                             >
                                 <div className="ticket-info">
                                     <strong>{ticket.Incidencia}</strong>
-                                    <strong>{ticket["Nombre Afiliado"]}</strong>
+                                    {ticket["Nombre Afiliado"]}
                                 </div>
                             </li>
                         ))}

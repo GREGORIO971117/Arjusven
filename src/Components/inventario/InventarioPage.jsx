@@ -1,4 +1,3 @@
-// En InventarioPage.jsx
 import React, { useState, useEffect } from 'react';
 import InventoryTemplate from './InventoryTemplate';
 import DataInventario from '../../assets/inventoryData.json';
@@ -9,7 +8,7 @@ import RenderEditarDatosInventario from './RenderEditDataInventory'; // Asegúra
 function InventarioPage() {
     const [inventarioData, setInventarioData] = useState([]);
     const [selectedInventario, setSelectedInventario] = useState(null);
-    const [isEditing, setIsEditing] = useState(false); // Nuevo estado para controlar la edición
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         loadInventario();
@@ -29,21 +28,17 @@ function InventarioPage() {
     };
 
     const handleSave = (updatedData) => {
-        // Lógica para guardar los datos actualizados
-        // Aquí puedes guardar en localStorage o una API
         console.log("Guardando datos:", updatedData);
-        // Actualiza el estado principal con los datos editados
         setInventarioData(prevData =>
             prevData.map(item =>
                 item["No. Serie"] === updatedData["No. Serie"] ? updatedData : item
             )
         );
         setSelectedInventario(updatedData);
-        setIsEditing(false); // Sale del modo de edición
+        setIsEditing(false);
     };
 
     const handleCancel = () => {
-        // Simplemente sale del modo de edición sin guardar
         setIsEditing(false);
     };
 
@@ -56,7 +51,7 @@ function InventarioPage() {
                         inventario={inventarioData}
                         onSelectInventario={item => {
                             setSelectedInventario(item);
-                            setIsEditing(false); // Restablece el estado de edición al seleccionar un nuevo ítem
+                            setIsEditing(false); 
                         }}
                     />
                 </div>
@@ -71,7 +66,7 @@ function InventarioPage() {
                         ) : (
                             <InventoryTemplate
                                 data={selectedInventario}
-                                edit={() => setIsEditing(true)} // Activa el modo de edición
+                                edit={() => setIsEditing(true)}
                                 onGoBack={() => setSelectedInventario(null)}
                             />
                         )
