@@ -1,7 +1,7 @@
 import React from 'react';
-import './InventoryTemplate.css';
+import './TemplateInventory.css';
 
-function InventoryTemplate({ data }) {
+const InventoryDataTemplate = ({ data }) => {
     if (!data) {
         return <div className="no-data-message">No se ha proporcionado información de inventario.</div>;
     }
@@ -9,20 +9,12 @@ function InventoryTemplate({ data }) {
     return (
         <div className="template-container">
             <div className="template-header">
-                <h1 className="template-title">Inventario TPV</h1>
-                <p className="template-subtitle">
-                    <strong>Número de Serie:</strong> {data.numeroSerie}
-                </p>
+                <h1 className="template-title">{data.numeroSerie}</h1>
+                <p className="template-subtitle">Cliente: {data.cliente}</p>
             </div>
-            
             <div className="template-content two-column-layout">
-                {/* Primera Columna */}
                 <div className="column">
                     <div className="section-title">Información General</div>
-                    <div className="info-item">
-                        <strong>Fecha inicio prevista:</strong>
-                        <span>{data.fechaInicioPrevista}</span>
-                    </div>
                     <div className="info-item">
                         <strong>Responsable:</strong>
                         <span>{data.responsable}</span>
@@ -40,16 +32,11 @@ function InventoryTemplate({ data }) {
                         <span>{data.descripcion}</span>
                     </div>
                     <div className="info-item">
-                        <strong>Fecha de Actualización:</strong>
-                        <span>{data.fechaActualizacion}</span>
-                    </div>
-                    <div className="info-item">
                         <strong>Equipo:</strong>
                         <span>{data.equipo}</span>
                     </div>
                 </div>
 
-                {/* Segunda Columna */}
                 <div className="column">
                     <div className="section-title">Detalles del Inventario</div>
                     <div className="info-item">
@@ -57,16 +44,12 @@ function InventoryTemplate({ data }) {
                         <span>{data.numeroSerie}</span>
                     </div>
                     <div className="info-item">
-                        <strong>Nº última incidencia:</strong>
-                        <span>{data.numeroIncidencia}</span>
-                    </div>
-                    <div className="info-item">
                         <strong>Estado:</strong>
                         <span>{data.estado}</span>
                     </div>
                     <div className="info-item">
-                        <strong>Cliente:</strong>
-                        <span>{data.cliente}</span>
+                        <strong>Nº última incidencia:</strong>
+                        <span>{data.numeroIncidencia}</span>
                     </div>
                     <div className="info-item">
                         <strong>Plaza:</strong>
@@ -84,7 +67,15 @@ function InventoryTemplate({ data }) {
             </div>
             
             <div className="template-footer">
-                <div className="section-title">Fechas</div>
+                 <div className="section-title">Fechas</div>
+                 <div className="info-item">
+                    <strong>Fecha de Actualización:</strong>
+                    <span>{data.fechaActualizacion}</span>
+                </div>
+                <div className="info-item">
+                    <strong>Fecha inicio prevista:</strong>
+                    <span>{data.fechaInicioPrevista}</span>
+                </div>
                 <div className="info-item">
                     <strong>Fecha fin prevista:</strong>
                     <span>{data.fechaFinPrevista}</span>
@@ -96,6 +87,6 @@ function InventoryTemplate({ data }) {
             </div>
         </div>
     );
-}
+};
 
-export default InventoryTemplate;
+export default InventoryDataTemplate;

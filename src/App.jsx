@@ -2,7 +2,7 @@ import './App.css';
 import Home from './Components/home/Home';
 import Login from './Components/login/Login';
 import NavBar from './Components/navBar/NavBar';
-import Inventario from './Components/inventario/Inventario';
+import Inventario from './Components/inventario/InventarioPage';
 import TicketPage from './Components/ticketTemplate/TicketPage'; 
 import { Routes, Route } from 'react-router-dom';
 
