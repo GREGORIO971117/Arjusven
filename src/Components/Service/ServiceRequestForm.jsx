@@ -47,7 +47,6 @@ function ServiceRequestForm() {
       const updatedData = [...existingData, ...newDataToStore];
       console.log(updatedData);
 
-
       // Guardar los datos actualizados de nuevo en localStorage.
       localStorage.setItem('excelData', JSON.stringify(updatedData));
       console.log('Datos acumulados guardados en localStorage:', updatedData);
@@ -67,6 +66,7 @@ function ServiceRequestForm() {
       convertExcelToJson(selectedFile);
     }
   };
+  
   const convertExcelToJson = (excelFile) => {
     const reader = new FileReader();
     reader.onload = (event) => {

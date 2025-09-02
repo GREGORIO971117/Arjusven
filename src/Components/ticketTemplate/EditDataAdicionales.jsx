@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './TicketTemplate.css';
 import './EditDataServicios.css';
 
 

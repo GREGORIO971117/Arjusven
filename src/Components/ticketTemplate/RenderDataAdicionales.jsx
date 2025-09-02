@@ -1,5 +1,5 @@
 import React from 'react';
-import './TicketTemplate.css';
+import styles from './RenderDataServicios.module.css';
 
 const RenderDatosAdicionales = ({ editableData }) => (
   <>
@@ -17,10 +17,11 @@ const RenderDatosAdicionales = ({ editableData }) => (
         <p><strong>PTID entra</strong>: {editableData.additionalData?.ptidEntra}</p>
         <p><strong>Eliminador Entra</strong>: {editableData.additionalData?.eliminadorEntra}</p>
         <p><strong>Eliminador Sale</strong>: {editableData.additionalData?.eliminadorSale}</p>
-      </div>
-      <div className="info-column">
         <p><strong>Estado</strong>: {editableData.additionalData?.estado}</p>
         <p><strong>Orden de Servicio</strong>: {editableData.additionalData?.ordenDeServicio}</p>
+
+      </div>
+      <div className="info-column">
         <p><strong>Modelo Sale</strong>: {editableData.additionalData?.modeloSale}</p>
         <p><strong>Marca Sale</strong>: {editableData.additionalData?.marcaSale}</p>
         <p><strong>Serie Lógica sale</strong>: {editableData.additionalData?.serieLogicaSale}</p>

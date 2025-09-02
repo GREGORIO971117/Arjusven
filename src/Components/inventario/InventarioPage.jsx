@@ -3,12 +3,11 @@ import InventoryTemplate from './InventoryTemplate';
 import DataInventario from '../../assets/inventoryData.json';
 import InventoryList from './InventoryList';
 import './InventoryPage.css';
-import RenderEditarDatosInventario from './RenderEditDataInventory'; // Asegúrate de que este componente exista
 
 function InventarioPage() {
     const [inventarioData, setInventarioData] = useState([]);
     const [selectedInventario, setSelectedInventario] = useState(null);
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useState(false); 
 
     useEffect(() => {
         loadInventario();
@@ -27,13 +26,12 @@ function InventarioPage() {
         }
     };
 
+    const handleEdit = () => {
+        setIsEditing(true);
+    };
+
     const handleSave = (updatedData) => {
-        console.log("Guardando datos:", updatedData);
-        setInventarioData(prevData =>
-            prevData.map(item =>
-                item["No. Serie"] === updatedData["No. Serie"] ? updatedData : item
-            )
-        );
+        console.log("Saving data...", updatedData);
         setSelectedInventario(updatedData);
         setIsEditing(false);
     };
@@ -42,34 +40,33 @@ function InventarioPage() {
         setIsEditing(false);
     };
 
+    const handleGoBack = () => {
+        setSelectedInventario(null);
+        setIsEditing(false); 
+    };
     return (
         <div className='ticket-page-container'>
-            <h1>Gestión de Inventario</h1>
             <div className='ticket-content-flex'>
                 <div className="ticket-list-column">
                     <InventoryList
                         inventario={inventarioData}
                         onSelectInventario={item => {
                             setSelectedInventario(item);
-                            setIsEditing(false); 
+                            setIsEditing(false);
                         }}
                     />
                 </div>
+
                 <div className="ticket-template-column">
                     {selectedInventario ? (
-                        isEditing ? (
-                            <RenderEditarDatosInventario
-                                editableData={selectedInventario}
-                                handleSave={handleSave}
-                                handleCancel={handleCancel}
-                            />
-                        ) : (
-                            <InventoryTemplate
-                                data={selectedInventario}
-                                edit={() => setIsEditing(true)}
-                                onGoBack={() => setSelectedInventario(null)}
-                            />
-                        )
+                        <InventoryTemplate
+                            data={selectedInventario}
+                            isEditing={isEditing}
+                            onEdit={handleEdit}
+                            onSave={handleSave}
+                            onCancel={handleCancel}
+                            onGoBack={handleGoBack}
+                        />
                     ) : (
                         <div className="no-selection-message">
                             Selecciona un elemento para ver sus detalles.

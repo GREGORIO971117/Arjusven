@@ -1,7 +1,7 @@
 import React from 'react';
 import './TemplateInventory.css';
 
-const InventoryDataTemplate = ({ data }) => {
+const InventoryDataTemplate = ({ data, isEditing,onEdit }) => {
     if (!data) {
         return <div className="no-data-message">No se ha proporcionado información de inventario.</div>;
     }
@@ -11,10 +11,15 @@ const InventoryDataTemplate = ({ data }) => {
             <div className="template-header">
                 <h1 className="template-title">{data.numeroSerie}</h1>
                 <p className="template-subtitle">Cliente: {data.cliente}</p>
+                <div className="ticket-actions">
+                    {/* El botón "Editar" se muestra solo si NO estamos editando */}
+                    {!isEditing && (
+                    <button onClick={onEdit} className="edit-button">Editar</button>
+                    )}
+                </div>
             </div>
             <div className="template-content two-column-layout">
                 <div className="column">
-                    <div className="section-title">Información General</div>
                     <div className="info-item">
                         <strong>Responsable:</strong>
                         <span>{data.responsable}</span>
@@ -35,10 +40,13 @@ const InventoryDataTemplate = ({ data }) => {
                         <strong>Equipo:</strong>
                         <span>{data.equipo}</span>
                     </div>
+                    <div className="info-item">
+                        <strong>Cliente:</strong>
+                        <span>{data.cliente}</span>
+                    </div>
                 </div>
 
                 <div className="column">
-                    <div className="section-title">Detalles del Inventario</div>
                     <div className="info-item">
                         <strong>Nº de Serie:</strong>
                         <span>{data.numeroSerie}</span>
@@ -66,8 +74,7 @@ const InventoryDataTemplate = ({ data }) => {
                 </div>
             </div>
             
-            <div className="template-footer">
-                 <div className="section-title">Fechas</div>
+            <div className="column">
                  <div className="info-item">
                     <strong>Fecha de Actualización:</strong>
                     <span>{data.fechaActualizacion}</span>

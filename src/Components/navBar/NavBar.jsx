@@ -17,22 +17,6 @@ function NavBar(props) {
             <div className="logos">
                 <img src={logo} alt="Logo de empresa" />
             </div>
-
-            <div className="search-bar-container">
-                <form onSubmit={handleSearch}>
-                    <input
-                        type="text"
-                        placeholder="Buscar..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="search-input"
-                    />
-                    <button type="submit" className="search-button">
-                        <i className="fa fa-search"></i> {/* Icono de lupa, requiere Font Awesome */}
-                    </button>
-                </form>
-            </div>
-
             <div className="navigation">
                 {links.map(link => (
                     <div key={link.id}>

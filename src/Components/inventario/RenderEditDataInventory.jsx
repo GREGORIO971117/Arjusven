@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import './TemplateInventory.css';
 
-const RenderEditDataInventory = ({ editableData, handleSave, handleCancel }) => {
-    const [editedData, setEditedData] = useState(editableData);
+const RenderEditDataInventory = ({ data, onSave, onCancel }) => {
+    // Inicializa el estado con los datos o un objeto vacío para evitar errores
+    const [editedData, setEditedData] = useState(data || {});
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -17,15 +18,6 @@ const RenderEditDataInventory = ({ editableData, handleSave, handleCancel }) => 
             <h3>Editar Inventario</h3>
             <div className="info-section">
                 <div className="info-column">
-                    <label>
-                        <strong>Fecha inicio prevista</strong>
-                        <input
-                            type="text"
-                            name="fechaInicioPrevista"
-                            value={editedData.fechaInicioPrevista || ''}
-                            onChange={handleInputChange}
-                        />
-                    </label>
                     <label>
                         <strong>Responsable</strong>
                         <input
@@ -71,15 +63,6 @@ const RenderEditDataInventory = ({ editableData, handleSave, handleCancel }) => 
                         />
                     </label>
                     <label>
-                        <strong>Fecha de Actualización</strong>
-                        <input
-                            type="text"
-                            name="fechaActualizacion"
-                            value={editedData.fechaActualizacion || ''}
-                            onChange={handleInputChange}
-                        />
-                    </label>
-                    <label>
                         <strong>Equipo</strong>
                         <input
                             type="text"
@@ -88,8 +71,6 @@ const RenderEditDataInventory = ({ editableData, handleSave, handleCancel }) => 
                             onChange={handleInputChange}
                         />
                     </label>
-                </div>
-                <div className="info-column">
                     <label>
                         <strong>Nº última incidencia</strong>
                         <input
@@ -100,14 +81,25 @@ const RenderEditDataInventory = ({ editableData, handleSave, handleCancel }) => 
                         />
                     </label>
                     <label>
-                        <strong>Estado</strong>
-                        <input
-                            type="text"
-                            name="estado"
-                            value={editedData.estado || ''}
-                            onChange={handleInputChange}
-                        />
-                    </label>
+                    <strong>Estado:</strong>
+                    <select
+                        name="estado"
+                        value={editedData.estado || ''}
+                        onChange={handleInputChange}
+                    >
+                        <option value="dañado">Dañado</option>
+                        <option value="instalado">Instalado</option>
+                        <option value="stock">Stock</option>
+                        <option value="devuelto a PC">Devuelto a PC</option>
+                        <option value="robado">Robado</option>
+                        <option value="para instalar">Para instalar</option>
+                        <option value="almacen tijuana">Almacen tijuana</option>
+                    </select>
+                </label>
+                </div>
+                <div className="info-column">
+                    
+                    
                     <label>
                         <strong>Cliente</strong>
                         <input
@@ -145,18 +137,36 @@ const RenderEditDataInventory = ({ editableData, handleSave, handleCancel }) => 
                         />
                     </label>
                     <label>
-                        <strong>Fecha fin prevista</strong>
+                        <strong>Fecha Actualización</strong>
                         <input
-                            type="text"
-                            name="fechaFinPrevista"
+                            type="date"
+                            name="fechaFin"
+                            value={editedData.fechaActualizacion || ''}
+                            onChange={handleInputChange}
+                        />
+                    </label>
+                    <label>
+                        <strong>Fecha Inicio prevista:</strong>
+                        <input
+                            type="date"
+                            name="fechaFin"
+                            value={editedData.fechaInicioPrevista || ''}
+                            onChange={handleInputChange}
+                        />
+                    </label>
+                    <label>
+                        <strong>Fecha fin prevista:</strong>
+                        <input
+                            type="date"
+                            name="fechaFin"
                             value={editedData.fechaFinPrevista || ''}
                             onChange={handleInputChange}
                         />
                     </label>
                     <label>
-                        <strong>Fecha Fin</strong>
+                        <strong>Fecha Fin:</strong>
                         <input
-                            type="text"
+                            type="date"
                             name="fechaFin"
                             value={editedData.fechaFin || ''}
                             onChange={handleInputChange}
@@ -165,8 +175,8 @@ const RenderEditDataInventory = ({ editableData, handleSave, handleCancel }) => 
                 </div>
             </div>
             <div className="button-container">
-                <button className="save-button" onClick={() => handleSave(editedData)}>Guardar</button>
-                <button className="cancel-button" onClick={handleCancel}>Cancelar</button>
+                <button className="save-button" onClick={() => onSave(editedData)}>Guardar</button>
+                <button className="cancel-button" onClick={onCancel}>Cancelar</button>
             </div>
         </div>
     );

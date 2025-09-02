@@ -126,5 +126,18 @@
 }
 
 .delete-button:hover {
-  background-color: #d32f2f; /* Un rojo más oscuro al pasar el ratón */
+  background-color: #d32f2f; 
+}
+
+.ticket-tabs {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 20px;
+}
+
+.ticket-actions {
+    display: flex;
+    gap: 10px; 
 }

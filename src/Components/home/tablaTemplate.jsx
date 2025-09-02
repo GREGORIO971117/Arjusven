@@ -9,7 +9,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-function tablaTemplate() {
+function tablaTemplate({loadTickets}) {
     const [ticketsData, setTicketsData] = useState([]);
     const [supervisorTickets, setSupervisorTickets] = useState([]);
     const nameSup = ["Sin asignar", "David", "Eduardo"];
@@ -99,10 +99,14 @@ function tablaTemplate() {
     };
 
     return (
+
+
         <Box sx={{ p: 4 }}>
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', mb: 4 }}>
                 <Typography variant="h4" sx={{ mb: 2, textAlign: 'center', color: '#333' }}>
                     {getTitle()}
+                    
+
                 </Typography>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -112,7 +116,7 @@ function tablaTemplate() {
                             onChange={(newValue) => setStartDate(newValue)}
                             renderInput={(params) => <TextField {...params} />}
                         />
-                        <Typography variant="body1">a</Typography>
+                        <Typography variant="body1"></Typography>
                         <DatePicker
                             label="Fecha de fin"
                             value={endDate}

@@ -72,7 +72,6 @@ const InventoryList = ({ onSelectInventario }) => {
 
     return (
         <div className="ticket-list">
-            <h2>Inventario</h2>
             
             <div className="filter-buttons">
                 <button 

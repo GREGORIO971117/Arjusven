@@ -87,7 +87,6 @@ const TicketList = ({tickets, onSelectTicket, onUpdateTickets}) => {
 
     return (
         <div className="ticket-list">
-            <h2>Tickets Subidos</h2>
             
             <div className="filter-buttons">
                 <button 

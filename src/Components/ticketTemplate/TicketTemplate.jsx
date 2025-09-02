@@ -70,13 +70,7 @@ const TicketTemplate = ({ data, onUpdateTicket, onGoBack,handleDelete}) => {
     <div className="ticket-template-container">
       <div className="ticket-header">
         <h2 className="ticket-title">{data['Nombre de ESS']}</h2>
-        <div className="ticket-actions">
-          <button onClick={onGoBack} className="back-button">← Regresar</button>
-          {!isEditing && (
-            <button onClick={() => setIsEditing(true)} className="edit-button">Editar</button>
-          )}
-          <button onClick={handleDownload} className="download-button">Descargar</button>
-        </div>
+        
       </div>
       <div className="ticket-tabs">
         <button
@@ -91,6 +85,14 @@ const TicketTemplate = ({ data, onUpdateTicket, onGoBack,handleDelete}) => {
         >
           Datos Adicionales
         </button>
+
+            <div className="ticket-actions">
+              <button onClick={onGoBack} className="back-button">← Regresar</button>
+              {!isEditing && (
+                <button onClick={() => setIsEditing(true)} className="edit-button">Editar</button>
+              )}
+              <button onClick={handleDownload} className="download-button">Descargar</button>
+            </div>
 
       </div>
       <div className="ticket-content">

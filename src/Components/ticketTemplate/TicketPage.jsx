@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import ServiceRequestForm from '../Service/ServiceRequestForm';
 import TicketList from '../ticketTemplate/ticketList';
 import TicketTemplate from './TicketTemplate';
 import './TicketPage.css'
@@ -59,11 +58,7 @@ function TicketPage() {
 
     return (
         <div className="ticket-page-container">
-            <h1>Gestión de Tickets de Servicio</h1>
-            <p>Sube un archivo de Excel para ver los tickets generados.</p>
-
-            <ServiceRequestForm onNewTicket={loadTickets} />
-
+            
             <div className='ticket-content-flex'>
                 <div className="ticket-list-column">
                     <TicketList
@@ -80,7 +75,6 @@ function TicketPage() {
                             onUpdateTicket={updateTicketData}
                             onGoBack={() => setSelectedTicket(null)}
                             handleDelete={handleDelete}
-
                         />
                     ) : (
                         <div className="no-selection-message">

@@ -58,13 +58,15 @@
 /* Estilo para cada par de etiqueta-valor */
 .info-item {
     display: flex;
-    flex-direction: column;
+    flex-direction: row; /* 👈 CORRECTO: Muestra los elementos en fila */
+    align-items: baseline; /* Alinea el texto en la misma línea base */
+    gap: 5px; /* Espacio entre el texto y el valor */
 }
 
 .info-item strong {
     font-size: 0.9rem;
     color: #222;
-    margin-bottom: 3px;
+    margin-bottom: 0; /* No es necesario si se usa Flexbox */
 }
 
 .info-item span {
@@ -85,4 +87,65 @@
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     background-color: #f9f9f9;
+}
+
+/* Estilo para los inputs y textareas dentro del formulario */
+input[type="text"],
+input[type="date"],
+textarea,
+select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #555;
+    transition: border-color 0.2s ease-in-out;
+    box-sizing: border-box;
+    margin-top: 5px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #007bff; /* Color de enfoque azul */
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Estilos para los botones de acción */
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.save-button,
+.cancel-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.save-button {
+    background-color: #28a745;
+    color: white;
+}
+
+.save-button:hover {
+    background-color: #218838;
+}
+
+.cancel-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.cancel-button:hover {
+    background-color: #c82333;
 }
