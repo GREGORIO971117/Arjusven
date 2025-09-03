@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import './TicketList.css';
+import '../ticketTemplate/TicketList.css';
 
-const RenderFiltro = ({ repeatedTickets, handleDeleteRepeated, filterStatus, setFilterStatus, setShowFilterPanel, onApplyFilters }) => {
+const RenderFiltro = ({ filterStatus, setShowFilterPanel, onApplyFilters }) => {
     // Estados locales para los nuevos filtros
     const [dateRange, setDateRange] = useState({ start: '', end: '' });
     const [estadoMexico, setEstadoMexico] = useState('');
     const [tecnico, setTecnico] = useState('');
-    const [supervisor, setSupervisor] = useState('');
-    const [idMerchant, setIdMerchant] = useState('');
+    const [cliente, setCliente] = useState('');
+    const [plaza, setPlaza] = useState('');
 
     const handleApplyFilters = () => {
         // Llama a la función del componente padre con los nuevos valores
@@ -61,58 +61,39 @@ const RenderFiltro = ({ repeatedTickets, handleDeleteRepeated, filterStatus, set
                 </div>
 
                 <div className="filter-group">
-                    <label htmlFor="supervisor">Supervisor:</label>
+                    <label htmlFor="cliente">Cliente:</label>
                     <input 
                         type="text" 
-                        id="supervisor" 
-                        placeholder="Nombre del supervisor" 
-                        value={supervisor} 
-                        onChange={(e) => setSupervisor(e.target.value)} 
+                        id="cliente" 
+                        placeholder="Nombre del cliente" 
+                        value={cliente} 
+                        onChange={(e) => setCliente(e.target.value)} 
                     />
                 </div>
                 
                 <div className="filter-group">
-                    <label htmlFor="id-merchant">ID Merchant:</label>
+                    <label htmlFor="plaza">Plaza:</label>
                     <input 
                         type="text" 
-                        id="id-merchant" 
-                        placeholder="ID del comerciante" 
-                        value={idMerchant} 
-                        onChange={(e) => setIdMerchant(e.target.value)} 
+                        id="plaza" 
+                        placeholder="Plaza" 
+                        value={plaza} 
+                        onChange={(e) => setPlaza(e.target.value)} 
                     />
                 </div>
-                
-                {/* Botones de estado (Todos, Abiertos, Cerrados) */}
-                <div className="filter-buttons">
-                    <button 
-                        className={filterStatus === 'Todos' ? 'active' : ''}
-                        onClick={() => setFilterStatus('Todos')}>
-                        Todos
-                    </button>
-                    <button 
-                        className={filterStatus === 'Abierto' ? 'active' : ''}
-                        onClick={() => setFilterStatus('Abierto')}>
-                        Abiertos
-                    </button>
-                    <button 
-                        className={filterStatus === 'Cerrado' ? 'active' : ''}
-                        onClick={() => setFilterStatus('Cerrado')}>
-                        Cerrados
-                    </button>
-                    
-                    <div className="repeated-filter-container">
-                        <button 
-                            className={filterStatus === 'Repetidos' ? 'active' : ''}
-                            onClick={() => setFilterStatus('Repetidos')}>
-                            Repetidos
-                        </button>
-                        {filterStatus === 'Repetidos' && repeatedTickets.length > 0 && (
-                            <button className="delete-repeated-button" onClick={handleDeleteRepeated}>
-                                Eliminar Repetidos ({repeatedTickets.length})
-                            </button>
-                        )}
+
+                <div className='filter-group'>
+                    <label htmlFor="estado">Estado:</label>
+                <select name="estado">
+                        <option value="dañado">Dañado</option>
+                        <option value="instalado">Instalado</option>
+                        <option value="stock">Stock</option>
+                        <option value="devuelto a PC">Devuelto a PC</option>
+                        <option value="robado">Robado</option>
+                        <option value="para instalar">Para instalar</option>
+                        <option value="almacen tijuana">Almacen tijuana</option>
+                    </select>
                     </div>
-                </div>
 
                 {/* Botones de acción */}
                 <div className="action-buttons">

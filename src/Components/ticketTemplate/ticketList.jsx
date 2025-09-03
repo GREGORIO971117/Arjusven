@@ -102,6 +102,7 @@ const TicketList = ({tickets, onSelectTicket, onUpdateTickets}) => {
     return (
         <div className="ticket-list">
             <div className="filter-button-container">
+                
                 <input
                     type="text"
                     placeholder="Buscar ticket..."

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './InventarioList.css'; 
 import DataInventario from '../../assets/inventoryData.json';
+import RenderFiltro from './RenderFiltro';
 
 const InventoryList = ({ onSelectInventario }) => {
     
@@ -10,6 +10,11 @@ const InventoryList = ({ onSelectInventario }) => {
     const [filterStatus, setFilterStatus] = useState('Todos');
     const [selectedInventarioId, setSelectedInventarioId] = useState(null);
     const [sortedInventario, setSortedInventario] = useState([]);
+    
+    // State to control the filter modal's visibility
+    const [showFilterPanel, setShowFilterPanel] = useState(false); 
+    // State for search query
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         loadInventario();
@@ -30,7 +35,6 @@ const InventoryList = ({ onSelectInventario }) => {
 
     useEffect(() => {
         const inventarioCopy = [...inventarioData];
-        // Aquí se puede añadir una lógica de ordenamiento si es necesaria
         const sorted = inventarioCopy.sort((a, b) => {
             if (a["No. Serie"] < b["No. Serie"]) return -1;
             if (a["No. Serie"] > b["No. Serie"]) return 1;
@@ -41,11 +45,12 @@ const InventoryList = ({ onSelectInventario }) => {
         setCurrentPage(1);
     }, [inventarioData]);
 
+    // Added search query to the filtering logic
     const filteredInventario = sortedInventario.filter(item => {
-        if (filterStatus === 'Todos') {
-            return true;
-        }
-        return item.Estado === filterStatus;
+        const matchesStatus = filterStatus === 'Todos' || item.Estado === filterStatus;
+        const matchesSearch = item["No. Serie"].toLowerCase().includes(searchQuery.toLowerCase()) ||
+                              item.modelo.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesStatus && matchesSearch;
     });
 
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -70,25 +75,39 @@ const InventoryList = ({ onSelectInventario }) => {
         onSelectInventario(item); 
     };
 
+    const handleApplyFilters = ({ status }) => {
+        setFilterStatus(status);
+        setShowFilterPanel(false);
+    };
+
     return (
         <div className="ticket-list">
             
             <div className="filter-button-container">
                 <div className="search-container">
-                            <input
-                                type="text"
-                                placeholder="Buscar ticket..."
-                                //value={searchQuery}
-                                //onChange={(e) => setSearchQuery(e.target.value)}
-                                className="search-input"
-                            />
-                        </div>
+                    <input
+                        type="text"
+                        placeholder="Buscar inventario..." // Changed placeholder
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="search-input"
+                    />
+                </div>
                 <button
                     className="filter-toggle-button"
                     onClick={() => setShowFilterPanel(true)}>
                     Filtro
                 </button>
             </div>
+
+            {/* Conditionally render the modal */}
+            {showFilterPanel && (
+                <RenderFiltro 
+                    filterStatus={filterStatus}
+                    setFilterStatus={(status) => handleApplyFilters({ status })}
+                    setShowFilterPanel={setShowFilterPanel}
+                />
+            )}
 
             {inventarioData.length === 0 ? (
                 <p>No hay inventario para mostrar.</p>
