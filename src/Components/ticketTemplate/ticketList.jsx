@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import RenderFiltro from './RenderFiltro';
 import './TicketList.css';
 
 const TicketList = ({tickets, onSelectTicket, onUpdateTickets}) => {
@@ -101,58 +102,28 @@ const TicketList = ({tickets, onSelectTicket, onUpdateTickets}) => {
     return (
         <div className="ticket-list">
             <div className="filter-button-container">
-                <div className="search-container">
-                            <input
-                                type="text"
-                                placeholder="Buscar ticket..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="search-input"
-                            />
-                        </div>
-                <button
+                <input
+                    type="text"
+                    placeholder="Buscar ticket..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="search-input"
+                />
+                <button 
                     className="filter-toggle-button"
                     onClick={() => setShowFilterPanel(true)}>
                     Filtro
                 </button>
             </div>
+
             {showFilterPanel && (
-                <div className="filter-panel-overlay">
-                    <div className="filter-panel">
-                        <h2>Opciones de Filtro</h2>
-                        
-                        <div className="filter-buttons">
-                            <button 
-                                className={filterStatus === 'Todos' ? 'active' : ''}
-                                onClick={() => setFilterStatus('Todos')}>
-                                Todos
-                            </button>
-                            <button 
-                                className={filterStatus === 'Abierto' ? 'active' : ''}
-                                onClick={() => setFilterStatus('Abierto')}>
-                                Abiertos
-                            </button>
-                            <button 
-                                className={filterStatus === 'Cerrado' ? 'active' : ''}
-                                onClick={() => setFilterStatus('Cerrado')}>
-                                Cerrados
-                            </button>
-                            <div className="repeated-filter-container">
-                                <button 
-                                    className={filterStatus === 'Repetidos' ? 'active' : ''}
-                                    onClick={() => setFilterStatus('Repetidos')}>
-                                    Repetidos
-                                </button>
-                                {filterStatus === 'Repetidos' && repeatedTickets.length > 0 && (
-                                    <button className="delete-repeated-button" onClick={handleDeleteRepeated}>
-                                        Eliminar Repetidos ({repeatedTickets.length})
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                        <button className="close-filter-button" onClick={() => setShowFilterPanel(false)}>Cerrar</button>
-                    </div>
-                </div>
+                <RenderFiltro
+                    handleDeleteRepeated={handleDeleteRepeated}
+                    repeatedTickets={repeatedTickets}
+                    filterStatus={filterStatus}
+                    setFilterStatus={setFilterStatus}
+                    setShowFilterPanel={setShowFilterPanel}
+                />
             )}
             {tickets.length === 0 ? (
                 <p>No hay tickets para mostrar.</p>

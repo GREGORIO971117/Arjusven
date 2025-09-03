@@ -1,55 +1,116 @@
+/* ==========================================================================
+   Estilos principales del componente
+   ========================================================================== */
 .ticket-list {
-    border: 1px solid #ccc;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    background-color: #f9f9f9;
-    height: 100%;
-    overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .ticket-list h2 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 1.2rem;
-    color: #333;
-    text-align: left;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  color: #333;
+  text-align: left;
+  padding: 10px;
 }
 
+/* ==========================================================================
+   Controles de filtro y búsqueda
+   ========================================================================== */
+.controls-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  .controls-container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.filter-select-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.search-container {
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* ==========================================================================
+   Estilos de los tickets
+   ========================================================================== */
 .ticket-item {
-    display: flex; /* Esto hace que los hijos del elemento se alineen en una fila */
-    justify-content: space-between; /* Distribuye el espacio entre los elementos */
-    align-items: center; /* Centra los elementos verticalmente */
-    padding: 0;
-    border-bottom: 1px solid #ccc;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-align:left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-left 0.3s ease, padding-left 0.3s ease;
+  text-align: left;
 }
-
 
 .ticket-item:hover {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0;
+}
+
+.ticket-item.selected {
+  background-color: #e6f7ff;
+  border-left: 5px solid #007bff;
+  padding-left: 15px;
 }
 
 .ticket-info {
-    display: flex; /* Convierte el contenedor en un flexbox para alinear sus propios hijos */
-    flex-direction: row; /* Asegura que los hijos estén en fila */
-    gap: 20px; /* Agrega espacio entre los elementos 'strong' */
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
 }
+
 .ticket-info strong {
-    color: #000;
+  color: #000;
 }
 
+/* ==========================================================================
+   Botones y controles
+   ========================================================================== */
+.delete-repeated-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
+.delete-repeated-button:hover {
+  background-color: #c82333;
+}
 
-/* TicketList.css */
-
-/* Estilos para los botones de filtro */
 .filter-buttons {
   display: flex;
   gap: 10px;
-  margin-bottom: 15px; /* Espacio antes de la lista */
+  margin-bottom: 15px;
 }
 
 .filter-buttons button {
@@ -58,11 +119,11 @@
   font-weight: bold;
   cursor: pointer;
   border: 1px solid #ccc;
-  border-radius: 5px; /* Bordes redondeados sutiles */
+  border-radius: 5px;
   background-color: #fff;
   color: #333;
   transition: all 0.2s ease-in-out;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Sombra sutil */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .filter-buttons button:hover {
@@ -80,7 +141,7 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-  margin-top: 15px; 
+  margin-top: 15px;
 }
 
 .pagination-controls button {
@@ -94,7 +155,7 @@
   transition: all 0.2s ease-in-out;
 }
 
-.pagination-controls button:hover {
+.pagination-controls button:hover:not(:disabled) {
   background-color: #f0f0f0;
 }
 
@@ -108,134 +169,74 @@
   font-size: 0.9rem;
   color: #555;
 }
-.ticket-item.selected {
-  background-color: #e6f7ff; /* Un color de fondo azul claro */
-  border-left: 5px solid #007bff; /* Una barra lateral azul para resaltarlo */
-  padding-left: 15px; /* Ajusta el padding para que la barra se vea bien */
-}
 
-.filter-button-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 20px;
-}
-
-.filter-toggle-button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
-
-.filter-toggle-button:hover {
-    background-color: #218838;
-}
-
-/* Estilos para la capa de fondo semitransparente del modal */
+/* ==========================================================================
+   Estilos de modal (si se usan)
+   ========================================================================== */
 .filter-panel-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
-/* Estilos para el panel del modal */
 .filter-panel {
-    background-color: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    width: 90%;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .filter-panel h2 {
-    margin-top: 0;
-    color: #333;
-    font-size: 24px;
-    text-align: center;
+  margin-top: 0;
+  color: #333;
+  font-size: 24px;
+  text-align: center;
 }
 
-/* Estilos para el contenedor de búsqueda */
-.search-container {
-    width: 100%;
-}
-
-.search-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-/* Estilos para los botones de filtro dentro del modal */
-.filter-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.filter-buttons button {
-    background-color: #f0f0f0;
-    color: #333;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.filter-buttons button:hover {
-    background-color: #e0e0e0;
-}
-
-.filter-buttons button.active {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-}
-
-/* Estilos para el botón de eliminar repetidos */
-.delete-repeated-button {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.delete-repeated-button:hover {
-    background-color: #c82333;
-}
-
-/* Estilos para el botón de cerrar el modal */
 .close-filter-button {
-    background-color: #6c757d;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 20px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
 }
 
 .close-filter-button:hover {
-    background-color: #5a6268;
+  background-color: #5a6268;
+}
+.filter-button-container {
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+    margin-bottom: 20px;
+}
+
+.search-input {
+    flex-grow: 1; 
+}
+
+.filter-toggle-button{
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
 }
