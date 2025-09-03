@@ -3,10 +3,10 @@ import './InventarioList.css';
 import DataInventario from '../../assets/inventoryData.json';
 
 const InventoryList = ({ onSelectInventario }) => {
+    
     const [inventarioData, setInventarioData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 15;
-
     const [filterStatus, setFilterStatus] = useState('Todos');
     const [selectedInventarioId, setSelectedInventarioId] = useState(null);
     const [sortedInventario, setSortedInventario] = useState([]);
@@ -73,21 +73,20 @@ const InventoryList = ({ onSelectInventario }) => {
     return (
         <div className="ticket-list">
             
-            <div className="filter-buttons">
-                <button 
-                    className={filterStatus === 'Todos' ? 'active' : ''}
-                    onClick={() => setFilterStatus('Todos')}>
-                    Todos
-                </button>
-                <button 
-                    className={filterStatus === 'Disponible' ? 'active' : ''}
-                    onClick={() => setFilterStatus('Disponible')}>
-                    Disponibles
-                </button>
-                <button 
-                    className={filterStatus === 'Asignado' ? 'active' : ''}
-                    onClick={() => setFilterStatus('Asignado')}>
-                    Asignados
+            <div className="filter-button-container">
+                <div className="search-container">
+                            <input
+                                type="text"
+                                placeholder="Buscar ticket..."
+                                //value={searchQuery}
+                                //onChange={(e) => setSearchQuery(e.target.value)}
+                                className="search-input"
+                            />
+                        </div>
+                <button
+                    className="filter-toggle-button"
+                    onClick={() => setShowFilterPanel(true)}>
+                    Filtro
                 </button>
             </div>
 

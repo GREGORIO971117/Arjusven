@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import './TicketList.css'; 
+import './TicketList.css';
 
 const TicketList = ({tickets, onSelectTicket, onUpdateTickets}) => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 15;
 
+    const [showFilterPanel, setShowFilterPanel] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
     const [filterStatus, setFilterStatus] = useState('Todos');
     const [selectedTicketId, setSelectedTicketId] = useState(null);
-
     const [sortedTickets, setSortedTickets] = useState([]);
+    const [filteredTickets, setFilteredTickets] = useState([]);
     const [repeatedTickets, setRepeatedTickets] = useState([]);
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentTickets = filteredTickets.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredTickets.length / itemsPerPage);
 
     useEffect(() => {
         const ticketsCopy = [...tickets];
@@ -21,52 +28,42 @@ const TicketList = ({tickets, onSelectTicket, onUpdateTickets}) => {
         });
 
         setSortedTickets(sorted);
-        setCurrentPage(1);
 
-        // Logic to identify and store repeated tickets
         const counts = {};
         tickets.forEach(ticket => {
             counts[ticket.Incidencia] = (counts[ticket.Incidencia] || 0) + 1;
         });
         const duplicates = tickets.filter(ticket => counts[ticket.Incidencia] > 1);
         setRepeatedTickets(duplicates);
+
+        setCurrentPage(1);
+
     }, [tickets]);
 
-    const filteredTickets = sortedTickets.filter(ticket => {
-        if (filterStatus === 'Todos') {
-            return true;
+    useEffect(() => {
+        let filtered = [...sortedTickets];
+
+        // Apply search filter
+        if (searchQuery) {
+            filtered = filtered.filter(ticket => 
+                ticket.Incidencia.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                ticket["Nombre Afiliado"].toLowerCase().includes(searchQuery.toLowerCase())
+            );
         }
+
+        // Apply status filter
         if (filterStatus === 'Repetidos') {
             const counts = {};
-            sortedTickets.forEach(t => {
+            filtered.forEach(t => {
                 counts[t.Incidencia] = (counts[t.Incidencia] || 0) + 1;
             });
-            return counts[ticket.Incidencia] > 1;
+            filtered = filtered.filter(t => counts[t.Incidencia] > 1);
+        } else if (filterStatus !== 'Todos') {
+            filtered = filtered.filter(ticket => ticket["Situación Actual"] === filterStatus);
         }
-        return ticket.currentStatus === filterStatus;
-    });
 
-   const handleDeleteRepeated = () => {
-        const uniqueTickets = [];
-        const seenIncidencias = new Set();
-    
-        sortedTickets.forEach(ticket => {
-            if (!seenIncidencias.has(ticket.Incidencia)) {
-                uniqueTickets.push(ticket);
-                seenIncidencias.add(ticket.Incidencia);
-            }
-        });
-        
-        // Se llama al prop para actualizar el estado en el padre
-        onUpdateTickets(uniqueTickets);
-        localStorage.setItem('excelData', JSON.stringify(uniqueTickets)); // Se guarda en localStorage
-        setFilterStatus('Todos'); // Opcionalmente, se restablece el filtro
-    };
-
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentTickets = filteredTickets.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(filteredTickets.length / itemsPerPage);
+        setFilteredTickets(filtered);
+    }, [sortedTickets, filterStatus, searchQuery]);
 
     const handleNextPage = () => {
         if (currentPage < totalPages) {
@@ -85,39 +82,78 @@ const TicketList = ({tickets, onSelectTicket, onUpdateTickets}) => {
         onSelectTicket(ticket);
     };
 
+    const handleDeleteRepeated = () => {
+        const uniqueIncidencias = new Set();
+        const ticketsToDelete = new Set();
+        
+        sortedTickets.forEach(ticket => {
+            if (uniqueIncidencias.has(ticket.Incidencia)) {
+                ticketsToDelete.add(ticket.Incidencia);
+            } else {
+                uniqueIncidencias.add(ticket.Incidencia);
+            }
+        });
+
+        const updatedTickets = sortedTickets.filter(ticket => !ticketsToDelete.has(ticket.Incidencia));
+        onUpdateTickets(updatedTickets);
+    };
+
     return (
         <div className="ticket-list">
-            
-            <div className="filter-buttons">
-                <button 
-                    className={filterStatus === 'Todos' ? 'active' : ''}
-                    onClick={() => setFilterStatus('Todos')}>
-                    Todos
+            <div className="filter-button-container">
+                <div className="search-container">
+                            <input
+                                type="text"
+                                placeholder="Buscar ticket..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="search-input"
+                            />
+                        </div>
+                <button
+                    className="filter-toggle-button"
+                    onClick={() => setShowFilterPanel(true)}>
+                    Filtro
                 </button>
-                <button 
-                    className={filterStatus === 'Abierto' ? 'active' : ''}
-                    onClick={() => setFilterStatus('Abierto')}>
-                    Abiertos
-                </button>
-                <button 
-                    className={filterStatus === 'Cerrado' ? 'active' : ''}
-                    onClick={() => setFilterStatus('Cerrado')}>
-                    Cerrados
-                </button>
-                <div className="repeated-filter-container">
-                    <button 
-                        className={filterStatus === 'Repetidos' ? 'active' : ''}
-                        onClick={() => setFilterStatus('Repetidos')}>
-                        Repetidos
-                    </button>
-                    {filterStatus === 'Repetidos' && repeatedTickets.length > 0 && (
-                        <button className="delete-repeated-button" onClick={handleDeleteRepeated}>
-                            Eliminar Repetidos ({repeatedTickets.length})
-                        </button>
-                    )}
-                </div>
             </div>
-
+            {showFilterPanel && (
+                <div className="filter-panel-overlay">
+                    <div className="filter-panel">
+                        <h2>Opciones de Filtro</h2>
+                        
+                        <div className="filter-buttons">
+                            <button 
+                                className={filterStatus === 'Todos' ? 'active' : ''}
+                                onClick={() => setFilterStatus('Todos')}>
+                                Todos
+                            </button>
+                            <button 
+                                className={filterStatus === 'Abierto' ? 'active' : ''}
+                                onClick={() => setFilterStatus('Abierto')}>
+                                Abiertos
+                            </button>
+                            <button 
+                                className={filterStatus === 'Cerrado' ? 'active' : ''}
+                                onClick={() => setFilterStatus('Cerrado')}>
+                                Cerrados
+                            </button>
+                            <div className="repeated-filter-container">
+                                <button 
+                                    className={filterStatus === 'Repetidos' ? 'active' : ''}
+                                    onClick={() => setFilterStatus('Repetidos')}>
+                                    Repetidos
+                                </button>
+                                {filterStatus === 'Repetidos' && repeatedTickets.length > 0 && (
+                                    <button className="delete-repeated-button" onClick={handleDeleteRepeated}>
+                                        Eliminar Repetidos ({repeatedTickets.length})
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                        <button className="close-filter-button" onClick={() => setShowFilterPanel(false)}>Cerrar</button>
+                    </div>
+                </div>
+            )}
             {tickets.length === 0 ? (
                 <p>No hay tickets para mostrar.</p>
             ) : (
