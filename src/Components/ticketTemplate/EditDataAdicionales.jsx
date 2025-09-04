@@ -1,41 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './EditDataServicios.css';
 
-
 const RenderEditarDatosAdicionales = ({ editableData, handleInputChange, handleSave, handleCancel, handleDelete }) => {
-    // Estado para el modal de guardar
-    const [showSaveModal, setShowSaveModal] = useState(false);
-    // Estado para el modal de eliminar
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-    // Funciones para manejar el modal de guardar
-    const openSaveModal = () => {
-        setShowSaveModal(true);
-    };
-
-    const closeSaveModal = () => {
-        setShowSaveModal(false);
-    };
-
-    const handleConfirmSave = () => {
-        handleSave();
-        closeSaveModal();
-    };
-
-    // Funciones para manejar el modal de eliminar
-    const openDeleteModal = () => {
-        setShowDeleteModal(true);
-    };
-
-    const closeDeleteModal = () => {
-        setShowDeleteModal(false);
-    };
-
-    const handleConfirmDelete = () => {
-        handleDelete();
-        closeDeleteModal();
-    };
-
     return (
         <div className="edit-form-container">
             <div className="info-section">
@@ -136,9 +102,7 @@ const RenderEditarDatosAdicionales = ({ editableData, handleInputChange, handleS
                             onChange={(e) => handleInputChange('additionalData', 'eliminadorSale', e.target.value)}
                         />
                     </label>
-                </div>
-                <div className="info-column">
-                    <label>
+                     <label>
                         <strong>Estado</strong>
                         <input
                             type="text"
@@ -154,6 +118,9 @@ const RenderEditarDatosAdicionales = ({ editableData, handleInputChange, handleS
                             onChange={(e) => handleInputChange('additionalData', 'ordenDeServicio', e.target.value)}
                         />
                     </label>
+                </div>
+                <div className="info-column">
+                   
                     <label>
                         <strong>Modelo Sale</strong>
                         <input
@@ -296,36 +263,10 @@ const RenderEditarDatosAdicionales = ({ editableData, handleInputChange, handleS
                 </label>
             </div>
             <div className="button-container">
-                <button className="delete-button" onClick={openDeleteModal}>Eliminar</button>
-                <button className="save-button" onClick={openSaveModal}>Guardar</button>
+                <button className="delete-button" onClick={handleDelete}>Eliminar</button>
+                <button className="save-button" onClick={handleSave}>Guardar</button>
                 <button className="cancel-button" onClick={handleCancel}>Cancelar</button>
             </div>
-
-            {showSaveModal && (
-                <div className="modal-overlay">
-                    <div className="modal">
-                        <h3>Confirmar cambios</h3>
-                        <p>¿Estás seguro de que deseas guardar cambios?</p>
-                        <div className="modal-buttons">
-                            <button className="confirm-save-button" onClick={handleConfirmSave}>Sí, Guardar</button>
-                            <button className="cancel-save-button" onClick={closeSaveModal}>No, cancelar</button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {showDeleteModal && (
-                <div className="modal-overlay">
-                    <div className="modal">
-                        <h3>Confirmar Eliminación</h3>
-                        <p>¿Estás seguro de que deseas eliminar este ticket?</p>
-                        <div className="modal-buttons">
-                            <button className="confirm-delete-button" onClick={handleConfirmDelete}>Sí, eliminar</button>
-                            <button className="cancel-delete-button" onClick={closeDeleteModal}>No, cancelar</button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

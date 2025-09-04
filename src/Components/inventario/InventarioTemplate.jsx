@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import RenderDatosServicio from './RenderDataServicios';
 import RenderDatosAdicionales from './RenderDataAdicionales';
-import RenderEditarDatosServicio from './EditDataServicios';
+import RenderEditarDatosServicio from './EditInventario';
 import RenderEditarDatosAdicionales from './EditDataAdicionales';
 import { getFormattedTicketData } from './Utils';
-import './TicketTemplate.css';
+import './InventarioTemplate.css';
 
-const TicketTemplate = ({ data, onUpdateTicket, onGoBack, handleDelete }) => {
+const InventarioTemplate = ({ data, onUpdateTicket, onGoBack, handleDelete }) => {
   const [activeTab, setActiveTab] = useState('servicio');
   const [isEditing, setIsEditing] = useState(false);
   const [editableData, setEditableData] = useState(getFormattedTicketData(data));
@@ -89,4 +89,4 @@ const TicketTemplate = ({ data, onUpdateTicket, onGoBack, handleDelete }) => {
   );
 };
 
-export default TicketTemplate;
+export default InventarioTemplate;

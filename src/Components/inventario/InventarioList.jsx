@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import RenderFiltro from './RenderFiltro';
-import './TicketList.css';
+import './InventarioList.css';
 
-const TicketList = ({tickets, onSelectTicket, onUpdateTickets}) => {
+const InventarioList = ({tickets, onSelectTicket, onUpdateTickets}) => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 15;
@@ -163,4 +163,4 @@ const TicketList = ({tickets, onSelectTicket, onUpdateTickets}) => {
     );
 };
 
-export default TicketList;
+export default InventarioList;

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import './TicketList.css';
+import data from '../../assets/datos.json';
 
 const RenderFiltro = ({ repeatedTickets, handleDeleteRepeated, filterStatus, setFilterStatus, setShowFilterPanel, onApplyFilters }) => {
     // Estados locales para los nuevos filtros
+    const options=data[0];
     const [dateRange, setDateRange] = useState({ start: '', end: '' });
     const [estadoMexico, setEstadoMexico] = useState('');
     const [tecnico, setTecnico] = useState('');
-    const [supervisor, setSupervisor] = useState('');
     const [idMerchant, setIdMerchant] = useState('');
 
     const handleApplyFilters = () => {
@@ -40,35 +41,48 @@ const RenderFiltro = ({ repeatedTickets, handleDeleteRepeated, filterStatus, set
 
                 <div className="filter-group">
                     <label htmlFor="estado-mexico">Estado de México:</label>
-                    <input 
+                    <select
                         type="text" 
                         id="estado-mexico" 
                         placeholder="Ej. Puebla" 
                         value={estadoMexico} 
                         onChange={(e) => setEstadoMexico(e.target.value)} 
-                    />
+                    >
+
+                        <option value="">Selecciona una estado</option>
+                        {options.estadosMex.map(estados=>(
+                            <option key={estados} value={estados}>{estados}</option>
+                        ))}
+                    </select>
+
                 </div>
 
                 <div className="filter-group">
                     <label htmlFor="tecnico">Técnico:</label>
-                    <input 
+                    <select
                         type="text" 
                         id="tecnico" 
                         placeholder="Nombre del técnico" 
                         value={tecnico} 
                         onChange={(e) => setTecnico(e.target.value)} 
-                    />
+                    >
+                        <option value="">Selecciona un técnico</option>
+                        {options.tecnicos.map(tecnicos=>(
+                            <option key={tecnicos} value={tecnicos}>{tecnicos}</option>
+                        ))}
+                    </select>
                 </div>
 
                 <div className="filter-group">
-                    <label htmlFor="supervisor">Supervisor:</label>
-                    <input 
-                        type="text" 
-                        id="supervisor" 
-                        placeholder="Nombre del supervisor" 
-                        value={supervisor} 
-                        onChange={(e) => setSupervisor(e.target.value)} 
-                    />
+                    <label htmlFor="supervisor">Supervisor</label>
+                        <select>
+                            <option value="">Selecciona un supervisor</option>
+                            {options.supervisores.map(supervisor=>(
+                                <option key={supervisor} value={supervisor}>{supervisor}</option>
+                            ))}
+
+                        </select>
+                    
                 </div>
                 
                 <div className="filter-group">

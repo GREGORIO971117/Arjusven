@@ -1,0 +1,92 @@
+[{
+    "supervisores":[
+        "David",
+        "Ernesto",
+        "Eduardo"
+    ],
+    "SLA":[
+        "LOCAL",
+        "FORANEA",
+        "MIGRACIÓN",
+        "INSTALACIÓN",
+        "CRITICA",
+        "ALTA",
+        "MEDIA",
+        "BAJA"
+    ],
+    "tipoServicio":[
+        "Mantenimiento Correctivo",
+        "Mantenimiento Preventivo",
+        "Mantenimiento Evolutivo",
+        "Instalación",
+        "Migración",
+        "Entrenamiento",
+        "Soporte Remoto",
+        "Retiro de terminal",
+        "Suministro de rollos"
+    ],
+    "sitaucionActual":[
+        "Abierto",
+        "Cerrado"
+    ],
+    "estado":[
+        "Dañado",
+        "Instalado",
+        "Stock",
+        "Devuelto a PC",
+        "Robado",
+        "Para instalar",
+        "Almacen Tijuana"
+    ],
+    "tecnicos":[
+        "Tecnico1",
+        "Tecnico2",
+        "Tecnico3"
+    ],
+  "estadosMex": [
+    "Aguascalientes",
+    "Baja California",
+    "Baja California Sur",
+    "Campeche",
+    "Chiapas",
+    "Chihuahua",
+    "Ciudad de México",
+    "Coahuila de Zaragoza",
+    "Colima",
+    "Durango",
+    "Estado de México",
+    "Guanajuato",
+    "Guerrero",
+    "Hidalgo",
+    "Jalisco",
+    "Michoacán de Ocampo",
+    "Morelos",
+    "Nayarit",
+    "Nuevo León",
+    "Oaxaca",
+    "Puebla",
+    "Querétaro",
+    "Quintana Roo",
+    "San Luis Potosí",
+    "Sinaloa",
+    "Sonora",
+    "Tabasco",
+    "Tamaulipas",
+    "Tlaxcala",
+    "Veracruz de Ignacio de la Llave",
+    "Yucatán",
+    "Zacatecas"],
+    
+    "equipos":[
+        "N910", 
+        "VX690",
+        "VX520 C", 
+        "VX520 CTLS", 
+        "V240M", 
+        "BATERIA", 
+        "ELIMINADOR", 
+        "BASE DE CARGA", 
+        "SIM TELCEL", 
+        "SIM ATT"
+    ]
+}]

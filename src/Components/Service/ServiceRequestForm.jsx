@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
-import {v4 as uuidv4} from 'uuid';
 import './Form.css';
 
 function ServiceRequestForm() {
@@ -20,10 +19,10 @@ function ServiceRequestForm() {
     const JsonDataNew = jsonData.map(item => ({
       "Incidencia": item.__EMPTY_2,
       "Aplicación , Prioridad ": item.__EMPTY_3,
-      "Modelo Reportado": item.__EMPTY_4,
+      "Modelo": item.__EMPTY_4,
       "Teléfono": item.__EMPTY_5,
       "Insumo a enviar": item.__EMPTY_6,
-      "Serie reportada": item.__EMPTY_7,
+      "seriereportada": item.__EMPTY_7,
       "Afiliado": item.__EMPTY_8,
       "Afiliado ATPV": item.__EMPTY_9,
       "IDMerchant": item.__EMPTY_10,
@@ -34,6 +33,9 @@ function ServiceRequestForm() {
       "currentStatus": "Abierto",
       "currentDate": Fecha,
       "supervisor": Super[0],
+      "TipoServicio":"Sin asignar",
+      "Tecnico":"Sin asignar",
+      "SLA":"Sin asignar",
     }));
 
     try {

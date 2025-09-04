@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import '../ticketTemplate/TicketList.css';
+import './TicketList.css';
+import data from '../../assets/datos.json';
 
-const RenderFiltro = ({ filterStatus, setShowFilterPanel, onApplyFilters }) => {
+const RenderFiltro = ({ repeatedTickets, handleDeleteRepeated, filterStatus, setFilterStatus, setShowFilterPanel, onApplyFilters }) => {
     // Estados locales para los nuevos filtros
+    const options=data[0];
     const [dateRange, setDateRange] = useState({ start: '', end: '' });
     const [estadoMexico, setEstadoMexico] = useState('');
     const [tecnico, setTecnico] = useState('');
-    const [cliente, setCliente] = useState('');
-    const [plaza, setPlaza] = useState('');
+    const [idMerchant, setIdMerchant] = useState('');
 
     const handleApplyFilters = () => {
         // Llama a la función del componente padre con los nuevos valores
@@ -40,60 +41,92 @@ const RenderFiltro = ({ filterStatus, setShowFilterPanel, onApplyFilters }) => {
 
                 <div className="filter-group">
                     <label htmlFor="estado-mexico">Estado de México:</label>
-                    <input 
+                    <select
                         type="text" 
                         id="estado-mexico" 
                         placeholder="Ej. Puebla" 
                         value={estadoMexico} 
                         onChange={(e) => setEstadoMexico(e.target.value)} 
-                    />
+                    >
+
+                        <option value="">Selecciona una estado</option>
+                        {options.estadosMex.map(estados=>(
+                            <option key={estados} value={estados}>{estados}</option>
+                        ))}
+                    </select>
+
                 </div>
 
                 <div className="filter-group">
                     <label htmlFor="tecnico">Técnico:</label>
-                    <input 
+                    <select
                         type="text" 
                         id="tecnico" 
                         placeholder="Nombre del técnico" 
                         value={tecnico} 
                         onChange={(e) => setTecnico(e.target.value)} 
-                    />
+                    >
+                        <option value="">Selecciona un técnico</option>
+                        {options.tecnicos.map(tecnicos=>(
+                            <option key={tecnicos} value={tecnicos}>{tecnicos}</option>
+                        ))}
+                    </select>
                 </div>
 
                 <div className="filter-group">
-                    <label htmlFor="cliente">Cliente:</label>
-                    <input 
-                        type="text" 
-                        id="cliente" 
-                        placeholder="Nombre del cliente" 
-                        value={cliente} 
-                        onChange={(e) => setCliente(e.target.value)} 
-                    />
+                    <label htmlFor="supervisor">Supervisor</label>
+                        <select>
+                            <option value="">Selecciona un supervisor</option>
+                            {options.supervisores.map(supervisor=>(
+                                <option key={supervisor} value={supervisor}>{supervisor}</option>
+                            ))}
+
+                        </select>
+                    
                 </div>
                 
                 <div className="filter-group">
-                    <label htmlFor="plaza">Plaza:</label>
+                    <label htmlFor="id-merchant">ID Merchant:</label>
                     <input 
                         type="text" 
-                        id="plaza" 
-                        placeholder="Plaza" 
-                        value={plaza} 
-                        onChange={(e) => setPlaza(e.target.value)} 
+                        id="id-merchant" 
+                        placeholder="ID del comerciante" 
+                        value={idMerchant} 
+                        onChange={(e) => setIdMerchant(e.target.value)} 
                     />
                 </div>
-
-                <div className='filter-group'>
-                    <label htmlFor="estado">Estado:</label>
-                <select name="estado">
-                        <option value="dañado">Dañado</option>
-                        <option value="instalado">Instalado</option>
-                        <option value="stock">Stock</option>
-                        <option value="devuelto a PC">Devuelto a PC</option>
-                        <option value="robado">Robado</option>
-                        <option value="para instalar">Para instalar</option>
-                        <option value="almacen tijuana">Almacen tijuana</option>
-                    </select>
+                
+                {/* Botones de estado (Todos, Abiertos, Cerrados) */}
+                <div className="filter-buttons">
+                    <button 
+                        className={filterStatus === 'Todos' ? 'active' : ''}
+                        onClick={() => setFilterStatus('Todos')}>
+                        Todos
+                    </button>
+                    <button 
+                        className={filterStatus === 'Abierto' ? 'active' : ''}
+                        onClick={() => setFilterStatus('Abierto')}>
+                        Abiertos
+                    </button>
+                    <button 
+                        className={filterStatus === 'Cerrado' ? 'active' : ''}
+                        onClick={() => setFilterStatus('Cerrado')}>
+                        Cerrados
+                    </button>
+                    
+                    <div className="repeated-filter-container">
+                        <button 
+                            className={filterStatus === 'Repetidos' ? 'active' : ''}
+                            onClick={() => setFilterStatus('Repetidos')}>
+                            Repetidos
+                        </button>
+                        {filterStatus === 'Repetidos' && repeatedTickets.length > 0 && (
+                            <button className="delete-repeated-button" onClick={handleDeleteRepeated}>
+                                Eliminar Repetidos ({repeatedTickets.length})
+                            </button>
+                        )}
                     </div>
+                </div>
 
                 {/* Botones de acción */}
                 <div className="action-buttons">
