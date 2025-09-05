@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './EditDataServicios.css';
+import data from '../../assets/datos.json';
+
 
 const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave, handleCancel, handleDelete }) => {
     // Estado para el modal de guardar
@@ -7,6 +9,7 @@ const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave
     // Estado para el modal de eliminar
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     
+    const options=data;
     // Funciones para manejar el modal de guardar
     const openSaveModal = () => {
         setShowSaveModal(true);
@@ -61,8 +64,10 @@ const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave
                             value={editableData.serviceRequest?.currentStatus || ''}
                             onChange={(e) => handleInputChange('serviceRequest', 'currentStatus', e.target.value)}
                         >
-                            <option value="Abierto">Abierto</option>
-                            <option value="Cerrado">Cerrado</option>
+                            <option value="">Selecciona una situación</option>
+                            {options.situacion.map(situacion=>(
+                                <option key={situacion} value={situacion}>{situacion}</option>
+                            ))}
                         </select>
                     </label>
                     <label className="info-item">
@@ -98,34 +103,51 @@ const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave
                             value={editableData.contactInfo?.contactPerson?.supervisor || ''}
                             onChange={(e) => handleInputChange('contactInfo', 'contactPerson', { ...editableData.contactInfo?.contactPerson, supervisor: e.target.value })}
                         >
-                            <option value="David">David</option>
-                            <option value="Eduardo">Eduardo</option>
-                            <option value="Ernesto">Ernesto</option>
+                           <option value="">Selecciona un supervisor</option>
+                           {options.supervisores.map(supervisores=>(
+                            <option key={supervisores} value={supervisores}>{supervisores}</option>
+                           ))}
                         </select>
                     </label>
                     <label className="info-item">
                         <strong>Tipo de Servicio</strong>
-                        <input
+                        <select
                             type="text"
                             value={editableData.contactInfo?.serviceType || ''}
                             onChange={(e) => handleInputChange('contactInfo', 'serviceType', e.target.value)}
-                        />
+                        >
+                            <option value="">Selecciona un tipo de servicio</option>
+                            {options.servicio.map(servicio=>(
+                                <option key={servicio} value={servicio}>{servicio}</option>
+                            ))}
+                        </select>
                     </label>
+
                     <label className="info-item">
                         <strong>Técnico de Campo</strong>
-                        <input
+                        <select
                             type="text"
                             value={editableData.contactInfo?.fieldTechnician || ''}
                             onChange={(e) => handleInputChange('contactInfo', 'fieldTechnician', e.target.value)}
-                        />
+                        >
+                            <option value="">Selecciona un técnico</option>
+                            {options.tecnicos.map(tecnico=>(
+                                <option key={tecnico} value={tecnico}>{tecnico}</option>
+                            ))}
+                        </select>
                     </label>
                     <label className="info-item">
                         <strong>SLA</strong>
-                        <input
+                        <select
                             type="text"
                             value={editableData.contactInfo?.sla || ''}
                             onChange={(e) => handleInputChange('contactInfo', 'sla', e.target.value)}
-                        />
+                        >
+                            <option value="">Selecciona un SLA</option>
+                            {options.sla.map(sla=>(
+                                <option key={sla} value={sla}>{sla}</option>
+                            ))}
+                        </select>
                     </label>
                     <label className="info-item">
                         <strong>Guía de Encomienda</strong>

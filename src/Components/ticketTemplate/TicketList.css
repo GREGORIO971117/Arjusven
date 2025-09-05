@@ -205,7 +205,8 @@
   text-align: center;
 }
 
-.close-filter-button {
+.close-filter-button,
+.apply-filter-button {
   background-color: #6c757d;
   color: white;
   border: none;
@@ -213,7 +214,7 @@
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 20px;
+  margin: 10px;
 }
 
 .close-filter-button:hover {

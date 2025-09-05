@@ -136,8 +136,6 @@ const RenderEditarDatosAdicionales = ({ editableData, handleInputChange, handleS
                             onChange={(e) => handleInputChange('additionalData', 'eliminadorSale', e.target.value)}
                         />
                     </label>
-                </div>
-                <div className="info-column">
                     <label>
                         <strong>Estado</strong>
                         <input
@@ -154,6 +152,9 @@ const RenderEditarDatosAdicionales = ({ editableData, handleInputChange, handleS
                             onChange={(e) => handleInputChange('additionalData', 'ordenDeServicio', e.target.value)}
                         />
                     </label>
+                </div>
+                <div className="info-column">
+                    
                     <label>
                         <strong>Modelo Sale</strong>
                         <input

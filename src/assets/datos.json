@@ -1,0 +1,72 @@
+{
+    "supervisores": [
+        "David",
+        "Ernesto",
+        "Eduardo"
+    ],
+    "estadosMx": [
+        "Aguascalientes",
+        "Baja California",
+        "Baja California Sur",
+        "Campeche",
+        "Chiapas",
+        "Chihuahua",
+        "Ciudad de México",
+        "Coahuila de Zaragoza",
+        "Colima",
+        "Durango",
+        "Estado de México",
+        "Guanajuato",
+        "Guerrero",
+        "Hidalgo",
+        "Jalisco",
+        "Michoacán de Ocampo",
+        "Morelos",
+        "Nayarit",
+        "Nuevo León",
+        "Oaxaca",
+        "Puebla",
+        "Querétaro",
+        "Quintana Roo",
+        "San Luis Potosí",
+        "Sinaloa",
+        "Sonora",
+        "Tabasco",
+        "Tamaulipas",
+        "Tlaxcala",
+        "Veracruz de Ignacio de la Llave",
+        "Yucatán",
+        "Zacatecas"
+    ],
+    "tecnicos": [
+        "Tecnico1",
+        "Tecnico2",
+        "Tecnico3"
+    ],
+    "servicio": [
+        "Sin categoria",
+        "Mantenimiento Correctivo",
+        "Mantenimiento Preventivo",
+        "Mantenimiento Evolutivo",
+        "Instalación",
+        "Migración",
+        "Entrenamiento",
+        "Soporte Remotor",
+        "Retiro de terminal",
+        "Suministro de rollos"
+    ],
+    "sla": [
+        "Local",
+        "Foranea",
+        "Migración",
+        "Instalación",
+        "Crítica",
+        "Alta",
+        "Media",
+        "Baja"
+    ],
+    "situacion":[
+        "Abierto",
+        "Cerrado"
+    ]
+}
