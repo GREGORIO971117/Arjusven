@@ -68,5 +68,27 @@
     "situacion":[
         "Abierto",
         "Cerrado"
+    ],
+    "estado":[
+        "Dañado",
+        "Instalado",
+        "Stock",
+        "Devuelto a PC",
+        "Robado",
+        "Para instalar",
+        "Almacen Tijuana"
+    ],
+    "equipos":[
+        "N910",
+        "VX690",
+        "VX520 C",
+        "VX520 CTLS",
+        "V240M",
+        "BATERIA",
+        "ELIMINADOR",
+        "BASE DE CARGA",
+        "SIM TELCEL",
+        "SIM ATT"
     ]
+    
 }

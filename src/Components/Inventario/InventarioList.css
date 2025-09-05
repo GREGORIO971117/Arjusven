@@ -1,0 +1,503 @@
+/* ==========================================================================
+   Estilos de Controles y Formularios
+   ========================================================================== */
+.form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #dcdfe6;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #34495e;
+    box-sizing: border-box;
+    transition: all 0.2s ease-in-out;
+}
+
+.form-input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    outline: none;
+}
+
+textarea.form-input {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.infoItem label {
+    font-weight: 600;
+    color: #444;
+}
+
+.infoItem input,
+.infoItem textarea {
+    flex-grow: 1;
+}
+
+/* ==========================================================================
+   Estilos de Botones de Acciones
+   ========================================================================== */
+.action-button {
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.action-button:hover {
+    transform: translateY(-2px);
+}
+
+.save-button {
+    background-color: #3498db;
+    color: #fff;
+}
+
+.save-button:hover {
+    background-color: #2980b9;
+}
+
+.cancel-button {
+    background-color: #ecf0f1;
+    color: #34495e;
+}
+
+.cancel-button:hover {
+    background-color: #bdc3c7;
+    color: #2c3e50;
+}
+
+/* Aquí se colocarían los demás estilos de botones (eliminar, editar, etc.) */
+
+/* ==========================================================================
+   Resto de tus estilos consolidados
+   (Incluyendo todos los estilos de modales, listas, etc.)
+   ========================================================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal,
+.filter-panel {
+    background-color: #ffffff;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    max-width: 450px;
+    width: 90%;
+    transition: transform 0.3s ease-in-out;
+}
+
+.modal h3,
+.filter-panel h2 {
+    margin-top: 0;
+    color: #2c3e50;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.modal p {
+    color: #7f8c8d;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.ticket-template-container {
+    border: 1px solid #e0e6ed;
+    border-radius: 12px;
+    padding: 2rem;
+    background-color: #fefefe;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.ticket-content-flex {
+    display: flex;
+    gap: 2rem;
+    height: calc(100vh - 200px);
+}
+
+.ticket-list-column {
+    flex: 1;
+    min-width: 300px;
+    border: 1px solid #e0e6ed;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.ticket-template-column {
+    flex: 2;
+}
+
+.no-selection-message {
+    text-align: center;
+    padding: 2rem;
+    border: 2px dashed #bdc3c7;
+    border-radius: 12px;
+    color: #95a5a6;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-style: italic;
+    font-size: 1.1rem;
+}
+
+.ticket-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.ticket-title,
+.title {
+    font-size: 1.7rem;
+    color: #34495e;
+    margin: 0;
+    font-weight: 600;
+}
+
+.infoSection,
+.info-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.infoColumn,
+.info-column {
+    flex: 1 1 45%;
+    min-width: 250px;
+}
+
+.infoItem {
+    display: flex;
+    flex-direction: row; 
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem; 
+}
+
+.infoItem strong,
+.info-column p strong,
+.full-width-section p strong,
+.ticket-info strong {
+    color: #444;
+    font-weight: 600;
+}
+
+.infoItem span,
+.info-column p,
+.full-width-section p {
+    color: #777;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.fullWidthSection,
+.full-width-section {
+    margin-bottom: 2rem;
+}
+
+.ticket-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    border-bottom: 1px solid #ecf0f1;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-align: left;
+}
+
+.ticket-item:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.ticket-item.selected {
+    background-color: #eaf6ff;
+    border-left: 5px solid #3498db;
+    padding-left: 1.25rem;
+}
+
+.ticket-info {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+}
+
+.controls-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+    .controls-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.filter-select-container,
+.filter-button-container {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.search-container {
+    width: 100%;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #dcdfe6;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    outline: none;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.filter-buttons button,
+.filter-toggle-button {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid #dcdfe6;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #555;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.filter-buttons button:hover {
+    background-color: #f1f4f7;
+    border-color: #c9d5e3;
+}
+
+.filter-buttons button.active {
+    background-color: #3498db;
+    color: #fff;
+    border-color: #3498db;
+    box-shadow: 0 2px 5px rgba(52, 152, 219, 0.25);
+}
+
+.filter-toggle-button {
+    border: none;
+    background-color: #3498db;
+    color: white;
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.pagination-controls button {
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    border: 1px solid #e0e6ed;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+    background-color: #f1f4f7;
+    transform: translateY(-1px);
+}
+
+.pagination-controls button:disabled {
+    background-color: #f5f7fa;
+    color: #bdc3c7;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.pagination-controls span {
+    font-size: 0.95rem;
+    color: #7f8c8d;
+}
+
+.button-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+.delete-button,
+.delete-repeated-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.delete-button:hover,
+.delete-repeated-button:hover {
+    background-color: #c0392b;
+    transform: translateY(-2px);
+}
+
+.confirm-delete-button {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.confirm-delete-button:hover {
+    background-color: #c0392b;
+}
+
+.cancel-delete-button {
+    background-color: #ecf0f1;
+    color: #34495e;
+}
+
+.cancel-delete-button:hover {
+    background-color: #bdc3c7;
+    color: #2c3e50;
+}
+
+.edit-button,
+.ticket-actions .edit-button,
+.close-filter-button,
+.apply-filter-button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.edit-button:hover,
+.ticket-actions .edit-button:hover,
+.apply-filter-button:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+.ticket-actions .back-button {
+    background-color: #95a5a6;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.ticket-actions .back-button:hover {
+    background-color: #7f8c8d;
+    transform: translateY(-2px);
+}
+
+.ticket-actions .download-button {
+    background-color: #2ecc71;
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.ticket-actions .download-button:hover {
+    background-color: #27ae60;
+    transform: translateY(-2px);
+}
+
+.ticket-tabs {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1.5rem;
+    border-bottom: 2px solid #e0e6ed;
+    margin-bottom: 2rem;
+}
+
+.ticket-tabs .tab-button {
+    padding: 1rem 0;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 1.05rem;
+    color: #7f8c8d;
+    border-bottom: 3px solid transparent;
+    transition: border-color 0.2s, color 0.2s;
+    font-weight: 500;
+}
+
+.ticket-tabs .tab-button:hover {
+    color: #34495e;
+}
+
+.ticket-tabs .tab-button.active {
+    border-bottom: 3px solid #3498db;
+    color: #3498db;
+    font-weight: 600;
+}

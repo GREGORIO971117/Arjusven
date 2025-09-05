@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './RenderDataServicios.module.css';
 
 const RenderDatosAdicionales = ({ editableData }) => (
     <>

@@ -1,39 +1,25 @@
-import React, { useState } from 'react';
-import './EditDataServicios.css';
+import React from 'react';
 
-
-const RenderEditarDatosAdicionales = ({ editableData, handleInputChange, handleSave, handleCancel, handleDelete }) => {
-    // Estado para el modal de guardar
-    const [showSaveModal, setShowSaveModal] = useState(false);
-    // Estado para el modal de eliminar
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-    // Funciones para manejar el modal de guardar
-    const openSaveModal = () => {
-        setShowSaveModal(true);
-    };
-
-    const closeSaveModal = () => {
-        setShowSaveModal(false);
-    };
+const RenderEditarDatosAdicionales = ({
+    editableData,
+    handleInputChange,
+    handleSave,
+    handleCancel,
+    handleDelete,
+    showSaveModal,
+    setShowSaveModal,
+    showDeleteModal,
+    setShowDeleteModal,
+}) => {
 
     const handleConfirmSave = () => {
         handleSave();
-        closeSaveModal();
-    };
-
-    // Funciones para manejar el modal de eliminar
-    const openDeleteModal = () => {
-        setShowDeleteModal(true);
-    };
-
-    const closeDeleteModal = () => {
-        setShowDeleteModal(false);
+        setShowSaveModal(false);
     };
 
     const handleConfirmDelete = () => {
         handleDelete();
-        closeDeleteModal();
+        setShowDeleteModal(false);
     };
 
     return (
@@ -154,7 +140,6 @@ const RenderEditarDatosAdicionales = ({ editableData, handleInputChange, handleS
                     </label>
                 </div>
                 <div className="info-column">
-                    
                     <label>
                         <strong>Modelo Sale</strong>
                         <input
@@ -297,8 +282,8 @@ const RenderEditarDatosAdicionales = ({ editableData, handleInputChange, handleS
                 </label>
             </div>
             <div className="button-container">
-                <button className="delete-button" onClick={openDeleteModal}>Eliminar</button>
-                <button className="save-button" onClick={openSaveModal}>Guardar</button>
+                <button className="delete-button" onClick={() => setShowDeleteModal(true)}>Eliminar</button>
+                <button className="save-button" onClick={() => setShowSaveModal(true)}>Guardar</button>
                 <button className="cancel-button" onClick={handleCancel}>Cancelar</button>
             </div>
 
@@ -309,7 +294,7 @@ const RenderEditarDatosAdicionales = ({ editableData, handleInputChange, handleS
                         <p>¿Estás seguro de que deseas guardar cambios?</p>
                         <div className="modal-buttons">
                             <button className="confirm-save-button" onClick={handleConfirmSave}>Sí, Guardar</button>
-                            <button className="cancel-save-button" onClick={closeSaveModal}>No, cancelar</button>
+                            <button className="cancel-save-button" onClick={() => setShowSaveModal(false)}>No, cancelar</button>
                         </div>
                     </div>
                 </div>
@@ -322,7 +307,7 @@ const RenderEditarDatosAdicionales = ({ editableData, handleInputChange, handleS
                         <p>¿Estás seguro de que deseas eliminar este ticket?</p>
                         <div className="modal-buttons">
                             <button className="confirm-delete-button" onClick={handleConfirmDelete}>Sí, eliminar</button>
-                            <button className="cancel-delete-button" onClick={closeDeleteModal}>No, cancelar</button>
+                            <button className="cancel-delete-button" onClick={() => setShowDeleteModal(false)}>No, cancelar</button>
                         </div>
                     </div>
                 </div>

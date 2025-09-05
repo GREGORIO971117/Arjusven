@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
-import './EditDataServicios.css';
-import data from '../../assets/datos.json';
 
-
-const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave, handleCancel, handleDelete }) => {
+const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave, handleCancel, handleDelete, options }) => {
     // Estado para el modal de guardar
     const [showSaveModal, setShowSaveModal] = useState(false);
     // Estado para el modal de eliminar
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     
-    const options=data;
     // Funciones para manejar el modal de guardar
     const openSaveModal = () => {
         setShowSaveModal(true);
@@ -65,7 +61,7 @@ const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave
                             onChange={(e) => handleInputChange('serviceRequest', 'currentStatus', e.target.value)}
                         >
                             <option value="">Selecciona una situación</option>
-                            {options.situacion.map(situacion=>(
+                            {options.situacion.map(situacion => (
                                 <option key={situacion} value={situacion}>{situacion}</option>
                             ))}
                         </select>
@@ -103,10 +99,10 @@ const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave
                             value={editableData.contactInfo?.contactPerson?.supervisor || ''}
                             onChange={(e) => handleInputChange('contactInfo', 'contactPerson', { ...editableData.contactInfo?.contactPerson, supervisor: e.target.value })}
                         >
-                           <option value="">Selecciona un supervisor</option>
-                           {options.supervisores.map(supervisores=>(
-                            <option key={supervisores} value={supervisores}>{supervisores}</option>
-                           ))}
+                            <option value="">Selecciona un supervisor</option>
+                            {options.supervisores.map(supervisores => (
+                                <option key={supervisores} value={supervisores}>{supervisores}</option>
+                            ))}
                         </select>
                     </label>
                     <label className="info-item">
@@ -117,12 +113,11 @@ const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave
                             onChange={(e) => handleInputChange('contactInfo', 'serviceType', e.target.value)}
                         >
                             <option value="">Selecciona un tipo de servicio</option>
-                            {options.servicio.map(servicio=>(
+                            {options.servicio.map(servicio => (
                                 <option key={servicio} value={servicio}>{servicio}</option>
                             ))}
                         </select>
                     </label>
-
                     <label className="info-item">
                         <strong>Técnico de Campo</strong>
                         <select
@@ -131,7 +126,7 @@ const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave
                             onChange={(e) => handleInputChange('contactInfo', 'fieldTechnician', e.target.value)}
                         >
                             <option value="">Selecciona un técnico</option>
-                            {options.tecnicos.map(tecnico=>(
+                            {options.tecnicos.map(tecnico => (
                                 <option key={tecnico} value={tecnico}>{tecnico}</option>
                             ))}
                         </select>
@@ -144,7 +139,7 @@ const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave
                             onChange={(e) => handleInputChange('contactInfo', 'sla', e.target.value)}
                         >
                             <option value="">Selecciona un SLA</option>
-                            {options.sla.map(sla=>(
+                            {options.sla.map(sla => (
                                 <option key={sla} value={sla}>{sla}</option>
                             ))}
                         </select>
@@ -170,19 +165,19 @@ const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave
 
             <div className="full-width-section">
                 <label className="info-item">
-    <strong>Motivo del Servicio</strong>
-    <textarea
-        value={editableData.serviceDetails?.onSiteReason || ''}
-        onChange={(e) => handleInputChange('serviceDetails', 'onSiteReason', e.target.value)}
-    />
-</label>
-<label className="info-item">
-    <strong>Motivo real del Servicio en sitio</strong>
-    <textarea
-        value={editableData.serviceRequest?.serviceReason || ''}
-        onChange={(e) => handleInputChange('serviceRequest', 'serviceReason', e.target.value)}
-    />
-</label>
+                    <strong>Motivo del Servicio</strong>
+                    <textarea
+                        value={editableData.serviceDetails?.onSiteReason || ''}
+                        onChange={(e) => handleInputChange('serviceDetails', 'onSiteReason', e.target.value)}
+                    />
+                </label>
+                <label className="info-item">
+                    <strong>Motivo real del Servicio en sitio</strong>
+                    <textarea
+                        value={editableData.serviceRequest?.serviceReason || ''}
+                        onChange={(e) => handleInputChange('serviceRequest', 'serviceReason', e.target.value)}
+                    />
+                </label>
                 <label className="info-item">
                     <strong>Observaciones ARJUSVEN</strong>
                     <textarea

@@ -1,31 +1,11 @@
-
 const getFormattedTicketData = (data) => {
   if (!data) return {};
 
-  const storedData = localStorage.getItem('excelData');
-  let excelData = [];
-  if (storedData) {
-    try {
-      excelData = JSON.parse(storedData);
-    } catch (error) {
-      console.error("Error al parsear los datos de localStorage:", error);
-    }
-  }
-
-  // Buscar el ticket correspondiente en los datos de excelData si es necesario
-  const foundTicket = excelData.find(t => t.Incidencia === data.Incidencia);
-
-  // Usar los datos del ticket encontrado o los datos pasados por prop
-  const supervisor = (foundTicket && foundTicket.supervisor) || data['supervisor'];
-  const assignmentDate = (foundTicket && foundTicket.currentDate) || new Date().toLocaleDateString();
-  const idMerchant = (foundTicket&& foundTicket.idMerchant) || data['IDMerchant'];
-  const currentStatus=(foundTicket&& foundTicket.currentStatus) || data['currentStatus'];
-
   return {
     serviceRequest: {
-      assignmentDate: assignmentDate,
+      assignmentDate: data['assignmentDate'],
       resolution: data['Resolución'],
-      currentStatus: currentStatus,
+      currentStatus: data['currentStatus'],
       essName: data['Nombre de ESS'],
       caseNumber: data['Incidencia'],
       affiliateCode: data['Afiliado'],
@@ -33,14 +13,14 @@ const getFormattedTicketData = (data) => {
       atpvAffiliate: data['Afiliado ATPV'],
       atpvID: data['ID ATPV'],
       serviceReason: data['Aplicación, Prioridad'],
-      idMerchant:idMerchant,
+      idMerchant: data['idMerchant'],
     },
     contactInfo: {
       relatedContract: data['Contrato relacionado'],
       client: data['Cliente'],
       contactPerson: {
         creator: data['Creador'],
-        supervisor: supervisor,
+        supervisor: data['supervisor'],
       },
       serviceType: data['TIPO DE SERVICIO'],
       fieldTechnician: data['Técnico de Campo'],

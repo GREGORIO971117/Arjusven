@@ -1,70 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import RenderFiltro from './RenderFiltro';
-import './TicketList.css';
 
-const TicketList = ({tickets, onSelectTicket, onUpdateTickets}) => {
-    const [currentPage, setCurrentPage] = useState(1);
+const TicketList = ({ 
+    tickets, 
+    onSelectTicket, 
+    filterStatus,
+    setFilterStatus,
+    showFilterPanel,
+    setShowFilterPanel,
+    handleDeleteRepeated,
+    repeatedTickets,
+    searchQuery,
+    setSearchQuery,
+    onApplyFilters
+}) => {
     const itemsPerPage = 15;
+    const [currentPage, setCurrentPage] = useState(1);
 
-    const [showFilterPanel, setShowFilterPanel] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [filterStatus, setFilterStatus] = useState('Todos');
-    const [selectedTicketId, setSelectedTicketId] = useState(null);
-    const [sortedTickets, setSortedTickets] = useState([]);
-    const [filteredTickets, setFilteredTickets] = useState([]);
-    const [repeatedTickets, setRepeatedTickets] = useState([]);
+    // This component no longer needs to manage its own filtered/sorted state
+    // It receives the already-filtered and sorted list from the parent.
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentTickets = filteredTickets.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(filteredTickets.length / itemsPerPage);
+    const currentTickets = tickets.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(tickets.length / itemsPerPage);
 
     useEffect(() => {
-        const ticketsCopy = [...tickets];
-        
-        const sorted = ticketsCopy.sort((a, b) => {
-            const dateA = a['Fecha de Asignación'] ? new Date(a['Fecha de Asignación'].split('/').reverse().join('-')) : new Date(0);
-            const dateB = b['Fecha de Asignación'] ? new Date(b['Fecha de Asignación'].split('/').reverse().join('-')) : new Date(0);
-            return dateB - dateA;
-        });
-
-        setSortedTickets(sorted);
-
-        const counts = {};
-        tickets.forEach(ticket => {
-            counts[ticket.Incidencia] = (counts[ticket.Incidencia] || 0) + 1;
-        });
-        const duplicates = tickets.filter(ticket => counts[ticket.Incidencia] > 1);
-        setRepeatedTickets(duplicates);
-
+        // Reset to the first page when the ticket list changes (e.g., after filtering)
         setCurrentPage(1);
-
     }, [tickets]);
-
-    useEffect(() => {
-        let filtered = [...sortedTickets];
-
-        // Apply search filter
-        if (searchQuery) {
-            filtered = filtered.filter(ticket => 
-                ticket.Incidencia.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                ticket["Nombre Afiliado"].toLowerCase().includes(searchQuery.toLowerCase())
-            );
-        }
-
-        // Apply status filter
-        if (filterStatus === 'Repetidos') {
-            const counts = {};
-            filtered.forEach(t => {
-                counts[t.Incidencia] = (counts[t.Incidencia] || 0) + 1;
-            });
-            filtered = filtered.filter(t => counts[t.Incidencia] > 1);
-        } else if (filterStatus !== 'Todos') {
-            filtered = filtered.filter(ticket => ticket["Situación Actual"] === filterStatus);
-        }
-
-        setFilteredTickets(filtered);
-    }, [sortedTickets, filterStatus, searchQuery]);
 
     const handleNextPage = () => {
         if (currentPage < totalPages) {
@@ -79,24 +43,8 @@ const TicketList = ({tickets, onSelectTicket, onUpdateTickets}) => {
     };
 
     const handleTicketClick = (ticket) => {
-        setSelectedTicketId(ticket.Incidencia);
+        // The selectedTicketId state is now managed by the parent component, so we pass the data up.
         onSelectTicket(ticket);
-    };
-
-    const handleDeleteRepeated = () => {
-        const uniqueIncidencias = new Set();
-        const ticketsToDelete = new Set();
-        
-        sortedTickets.forEach(ticket => {
-            if (uniqueIncidencias.has(ticket.Incidencia)) {
-                ticketsToDelete.add(ticket.Incidencia);
-            } else {
-                uniqueIncidencias.add(ticket.Incidencia);
-            }
-        });
-
-        const updatedTickets = sortedTickets.filter(ticket => !ticketsToDelete.has(ticket.Incidencia));
-        onUpdateTickets(updatedTickets);
     };
 
     return (
@@ -123,8 +71,10 @@ const TicketList = ({tickets, onSelectTicket, onUpdateTickets}) => {
                     filterStatus={filterStatus}
                     setFilterStatus={setFilterStatus}
                     setShowFilterPanel={setShowFilterPanel}
+                    onApplyFilters={onApplyFilters} // This new prop tells the parent to apply filters
                 />
             )}
+            
             {tickets.length === 0 ? (
                 <p>No hay tickets para mostrar.</p>
             ) : (
@@ -133,7 +83,7 @@ const TicketList = ({tickets, onSelectTicket, onUpdateTickets}) => {
                         {currentTickets.map(ticket => (
                             <li
                                 key={ticket.Incidencia}
-                                className={`ticket-item ${ticket.Incidencia === selectedTicketId ? 'selected' : ''}`}
+                                className={`ticket-item ${ticket.Incidencia === (onSelectTicket.selectedTicket ? onSelectTicket.selectedTicket.Incidencia : null) ? 'selected' : ''}`}
                                 onClick={() => handleTicketClick(ticket)}
                             >
                                 <div className="ticket-info">

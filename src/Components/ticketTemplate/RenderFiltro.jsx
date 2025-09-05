@@ -1,17 +1,16 @@
 import React from 'react';
-import './TicketList.css';
-import data from '../../assets/datos.json';
 
 const RenderFiltro = ({
     repeatedTickets,
     handleDeleteRepeated,
     filterStatus,
     setFilterStatus,
-    setShowFilterPanel
+    setShowFilterPanel,
+    filterOptions // New prop for filter options
 }) => {
+    // We now receive filter options from the parent component instead of importing them locally.
+    const options = filterOptions; 
 
-    const options = data;
-    
     return (
         <div className="filter-panel-overlay">
             <div className="filter-panel">
@@ -23,8 +22,8 @@ const RenderFiltro = ({
                         <label htmlFor="supervisor">Supervisor:</label>
                         <select>
                             <option value="">Selecciona un supervisor</option>
-                            {options.supervisores.map(supervisores=>(
-                                <option key={supervisores} value={supervisores}>{supervisores}</option>
+                            {options.supervisores.map(supervisor => (
+                                <option key={supervisor} value={supervisor}>{supervisor}</option>
                             ))}
                         </select>
                     </div>
@@ -33,8 +32,8 @@ const RenderFiltro = ({
                         <label htmlFor="estadosMx">Estado de la República:</label>
                         <select>
                             <option value="">Selecciona un estado</option>
-                            {options.estadosMx.map(estados=>(
-                                <option key={estados} value={estados}>{estados}</option>
+                            {options.estadosMx.map(estado => (
+                                <option key={estado} value={estado}>{estado}</option>
                             ))}
                         </select>
                     </div>
@@ -42,8 +41,8 @@ const RenderFiltro = ({
                         <label htmlFor="technician">Técnico de Campo:</label>
                         <select>
                             <option value="">Selecciona un técnico</option>
-                            {options.tecnicos.map(tecnicos=>(
-                                <option key={tecnicos} value={tecnicos}>{tecnicos}</option>
+                            {options.tecnicos.map(tecnico => (
+                                <option key={tecnico} value={tecnico}>{tecnico}</option>
                             ))}
                         </select>
                     </div>
@@ -51,7 +50,7 @@ const RenderFiltro = ({
                         <label htmlFor="serviceType">Tipo de Servicio:</label>
                         <select>
                             <option value="">Selecciona un servicio</option>
-                            {options.servicio.map(servicio=>(
+                            {options.servicio.map(servicio => (
                                 <option key={servicio} value={servicio}>{servicio}</option>
                             ))}
                         </select>
@@ -60,7 +59,7 @@ const RenderFiltro = ({
                         <label htmlFor="sla">SLA:</label>
                         <select>
                             <option value="">Selecciona un SLA</option>
-                            {options.sla.map(sla=>(
+                            {options.sla.map(sla => (
                                 <option key={sla} value={sla}>{sla}</option>
                             ))}
                         </select>
