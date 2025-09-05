@@ -1,232 +1,272 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import './ticketList.css';
 
-const RenderEditarDatosServicio = ({ editableData, handleInputChange, handleSave, handleCancel, handleDelete, options }) => {
-    // Estado para el modal de guardar
-    const [showSaveModal, setShowSaveModal] = useState(false);
-    // Estado para el modal de eliminar
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-    
-    // Funciones para manejar el modal de guardar
-    const openSaveModal = () => {
-        setShowSaveModal(true);
-    };
+function RenderEditDatosInventario({ data, onSave, onCancelEdit,datosEstaticos }) {
+  const [formData, setFormData] = useState({});
 
-    const closeSaveModal = () => {
-        setShowSaveModal(false);
-    };
+  useEffect(() => {
+    if (data) {
+      setFormData(data);
+    }
+  }, [data]);
 
-    const handleConfirmSave = () => {
-        handleSave();
-        closeSaveModal();
-    };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value
+    }));
+  };
 
-    // Funciones para manejar el modal de eliminar
-    const openDeleteModal = () => {
-        setShowDeleteModal(true);
-    };
+  const handleSave = () => {
+    if (onSave) {
+      onSave(formData);
+    }
+  };
 
-    const closeDeleteModal = () => {
-        setShowDeleteModal(false);
-    };
+  const handleCancel = () => {
+    if (onCancelEdit) {
+      onCancelEdit();
+    }
+  };
 
-    const handleConfirmDelete = () => {
-        handleDelete();
-        closeDeleteModal();
-    };
+  if (!formData.ticketNumber) {
+    return <div>Cargando datos...</div>;
+  }
 
-    return (
-        <div className="edit-form-container">
-            <div className="info-section">
-                <div className="info-column">
-                    <label className="info-item">
-                        <strong>Fecha de Asignación</strong>
-                        <input
-                            type="date"
-                            value={editableData.serviceRequest?.assignmentDate || ''}
-                            onChange={(e) => handleInputChange('serviceRequest', 'assignmentDate', e.target.value)}
-                        />
-                    </label>
-                    <label className="info-item">
-                        <strong>Fecha de resolución</strong>
-                        <input
-                            type="date"
-                            value={editableData.serviceRequest?.resolution || ''}
-                            onChange={(e) => handleInputChange('serviceRequest', 'resolution', e.target.value)}
-                        />
-                    </label>
-                    <label className="info-item">
-                        <strong>Situación Actual</strong>
-                        <select
-                            value={editableData.serviceRequest?.currentStatus || ''}
-                            onChange={(e) => handleInputChange('serviceRequest', 'currentStatus', e.target.value)}
-                        >
-                            <option value="">Selecciona una situación</option>
-                            {options.situacion.map(situacion => (
-                                <option key={situacion} value={situacion}>{situacion}</option>
-                            ))}
-                        </select>
-                    </label>
-                    <label className="info-item">
-                        <strong>Nombre de ESS</strong>
-                        <input
-                            type="text"
-                            value={editableData.serviceRequest?.affiliation || ''}
-                            onChange={(e) => handleInputChange('serviceRequest', 'affiliation', e.target.value)}
-                        />
-                    </label>
-                    <label className="info-item">
-                        <strong>No de Caso</strong>
-                        <input
-                            type="text"
-                            value={editableData.serviceRequest?.caseNumber || ''}
-                            onChange={(e) => handleInputChange('serviceRequest', 'caseNumber', e.target.value)}
-                        />
-                    </label>
-                    <label className="info-item">
-                        <strong>Código de Afiliado</strong>
-                        <input
-                            type="text"
-                            value={editableData.serviceRequest?.affiliateCode || ''}
-                            onChange={(e) => handleInputChange('serviceRequest', 'affiliateCode', e.target.value)}
-                        />
-                    </label>
-                </div>
-                
-                <div className="info-column">
-                    <label className="info-item">
-                        <strong>Supervisor</strong>
-                        <select
-                            value={editableData.contactInfo?.contactPerson?.supervisor || ''}
-                            onChange={(e) => handleInputChange('contactInfo', 'contactPerson', { ...editableData.contactInfo?.contactPerson, supervisor: e.target.value })}
-                        >
-                            <option value="">Selecciona un supervisor</option>
-                            {options.supervisores.map(supervisores => (
-                                <option key={supervisores} value={supervisores}>{supervisores}</option>
-                            ))}
-                        </select>
-                    </label>
-                    <label className="info-item">
-                        <strong>Tipo de Servicio</strong>
-                        <select
-                            type="text"
-                            value={editableData.contactInfo?.serviceType || ''}
-                            onChange={(e) => handleInputChange('contactInfo', 'serviceType', e.target.value)}
-                        >
-                            <option value="">Selecciona un tipo de servicio</option>
-                            {options.servicio.map(servicio => (
-                                <option key={servicio} value={servicio}>{servicio}</option>
-                            ))}
-                        </select>
-                    </label>
-                    <label className="info-item">
-                        <strong>Técnico de Campo</strong>
-                        <select
-                            type="text"
-                            value={editableData.contactInfo?.fieldTechnician || ''}
-                            onChange={(e) => handleInputChange('contactInfo', 'fieldTechnician', e.target.value)}
-                        >
-                            <option value="">Selecciona un técnico</option>
-                            {options.tecnicos.map(tecnico => (
-                                <option key={tecnico} value={tecnico}>{tecnico}</option>
-                            ))}
-                        </select>
-                    </label>
-                    <label className="info-item">
-                        <strong>SLA</strong>
-                        <select
-                            type="text"
-                            value={editableData.contactInfo?.sla || ''}
-                            onChange={(e) => handleInputChange('contactInfo', 'sla', e.target.value)}
-                        >
-                            <option value="">Selecciona un SLA</option>
-                            {options.sla.map(sla => (
-                                <option key={sla} value={sla}>{sla}</option>
-                            ))}
-                        </select>
-                    </label>
-                    <label className="info-item">
-                        <strong>Guía de Encomienda</strong>
-                        <input
-                            type="text"
-                            value={editableData.bottomInfo?.encomiendaGuide || ''}
-                            onChange={(e) => handleInputChange('bottomInfo', 'encomiendaGuide', e.target.value)}
-                        />
-                    </label>
-                    <label className="info-item">
-                        <strong>Fecha de envío de guía</strong>
-                        <input
-                            type="date"
-                            value={editableData.bottomInfo?.guideSendDate || ''}
-                            onChange={(e) => handleInputChange('bottomInfo', 'guideSendDate', e.target.value)}
-                        />
-                    </label>
-                </div>
+  return (
+    <div className="inventario-template-container">
+      <div className="inventario-details-card">
+        <h2 className="title">Editar Artículo de Inventario</h2>
+
+        {/* Sección de campos de edición en dos columnas */}
+        <div className="infoSection">
+          <div className="infoColumn">
+            {/* Campo de Título */}
+            <div className="infoItem">
+              <label htmlFor="ticketNumber"><strong>Título:</strong></label>
+              <input
+                type="text"
+                id="ticketNumber"
+                name="ticketNumber"
+                value={formData.ticketNumber || ''}
+                onChange={handleChange}
+                className="form-input"
+              />
             </div>
-
-            <div className="full-width-section">
-                <label className="info-item">
-                    <strong>Motivo del Servicio</strong>
-                    <textarea
-                        value={editableData.serviceDetails?.onSiteReason || ''}
-                        onChange={(e) => handleInputChange('serviceDetails', 'onSiteReason', e.target.value)}
-                    />
-                </label>
-                <label className="info-item">
-                    <strong>Motivo real del Servicio en sitio</strong>
-                    <textarea
-                        value={editableData.serviceRequest?.serviceReason || ''}
-                        onChange={(e) => handleInputChange('serviceRequest', 'serviceReason', e.target.value)}
-                    />
-                </label>
-                <label className="info-item">
-                    <strong>Observaciones ARJUSVEN</strong>
-                    <textarea
-                        value={editableData.serviceDetails?.observations || ''}
-                        onChange={(e) => handleInputChange('serviceDetails', 'observations', e.target.value)}
-                    />
-                </label>
-                <label className="info-item">
-                    <strong>Dirección</strong>
-                    <textarea
-                        value={editableData.serviceDetails?.address || ''}
-                        onChange={(e) => handleInputChange('serviceDetails', 'address', e.target.value)}
-                    />
-                </label>
+            {/* Campo de Número de Serie */}
+            <div className="infoItem">
+              <label htmlFor="numeroSerie"><strong>Número de Serie:</strong></label>
+              <input
+                type="text"
+                id="numeroSerie"
+                name="numeroSerie"
+                value={formData.numeroSerie || ''}
+                onChange={handleChange}
+                className="form-input"
+              />
             </div>
-
-            <div className="button-container">
-                <button className="delete-button" onClick={openDeleteModal}>Eliminar</button>
-                <button className="save-button" onClick={openSaveModal}>Guardar</button>
-                <button className="cancel-button" onClick={handleCancel}>Cancelar</button>
+            {/* Campo de Estado */}
+            <div className="infoItem">
+              <label htmlFor="estado"><strong>Estado:</strong></label>
+              <select
+                id="estado"
+                name="estado"
+                value={formData.estado || ''}
+                onChange={handleChange}
+                className="form-input"
+              >
+                <option value="">Selecciona un estado</option>
+                {datosEstaticos.estado.map(estado => (
+                  <option key={estado} value={estado}>{estado}</option>
+                ))}
+              </select>
             </div>
-
-            {showSaveModal && (
-                <div className="modal-overlay">
-                    <div className="modal">
-                        <h3>Confirmar cambios</h3>
-                        <p>¿Estás seguro de que deseas guardar cambios?</p>
-                        <div className="modal-buttons">
-                            <button className="confirm-save-button" onClick={handleConfirmSave}>Sí, Guardar</button>
-                            <button className="cancel-save-button" onClick={closeSaveModal}>No, cancelar</button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {showDeleteModal && (
-                <div className="modal-overlay">
-                    <div className="modal">
-                        <h3>Confirmar Eliminación</h3>
-                        <p>¿Estás seguro de que deseas eliminar este ticket?</p>
-                        <div className="modal-buttons">
-                            <button className="confirm-delete-button" onClick={handleConfirmDelete}>Sí, eliminar</button>
-                            <button className="cancel-delete-button" onClick={closeDeleteModal}>No, cancelar</button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {/* Campo de Equipo */}
+            <div className="infoItem">
+              <label htmlFor="equipo"><strong>Equipo:</strong></label>
+              <select
+                id="equipo"
+                name="equipo"
+                value={formData.equipo || ''}
+                onChange={handleChange}
+                className="form-input"
+              >
+                <option value="">Selecciona un equipo</option>
+                {datosEstaticos.equipos.map(equipo => (
+                  <option key={equipo} value={equipo}>{equipo}</option>
+                ))}
+              </select>
+            </div>
+            {/* Campo de Responsable */}
+            <div className="infoItem">
+              <label htmlFor="responsable"><strong>Responsable:</strong></label>
+              <input
+                type="text"
+                id="responsable"
+                name="responsable"
+                value={formData.responsable || ''}
+                onChange={handleChange}
+                className="form-input"
+              />
+            </div>
+            {/* Campo de Cliente */}
+            <div className="infoItem">
+              <label htmlFor="cliente"><strong>Cliente:</strong></label>
+              <input
+                type="text"
+                id="cliente"
+                name="cliente"
+                value={formData.cliente || ''}
+                onChange={handleChange}
+                className="form-input"
+              />
+            </div>
+            {/* Campo de Plaza */}
+            <div className="infoItem">
+              <label htmlFor="plaza"><strong>Plaza:</strong></label>
+              <input
+                type="text"
+                id="plaza"
+                name="plaza"
+                value={formData.plaza || ''}
+                onChange={handleChange}
+                className="form-input"
+              />
+            </div>
+          </div>
+          
+          <div className="infoColumn">
+            {/* Campo de Técnico de Campo */}
+            <div className="infoItem">
+              <label htmlFor="tecnicoCampo"><strong>Técnico de Campo:</strong></label>
+              <select
+                id="tecnicoCampo"
+                name="tecnicoCampo"
+                value={formData.tecnicoCampo || ''}
+                onChange={handleChange}
+                className="form-input"
+              >
+                <option value="">Selecciona el tecnico</option>
+                {datosEstaticos.tecnicos.map(tecnico => (
+                  <option key={tecnico} value={tecnico}>{tecnico}</option>
+                ))}
+              </select>
+            </div>
+            {/* Campo de Número de Incidencia */}
+            <div className="infoItem">
+              <label htmlFor="numeroIncidencia"><strong>Número de Incidencia:</strong></label>
+              <input
+                type="text"
+                id="numeroIncidencia"
+                name="numeroIncidencia"
+                value={formData.numeroIncidencia || ''}
+                onChange={handleChange}
+                className="form-input"
+              />
+            </div>
+            {/* Campo de Código de Email */}
+            <div className="infoItem">
+              <label htmlFor="codigoEmail"><strong>Código de Email:</strong></label>
+              <input
+                type="text"
+                id="codigoEmail"
+                name="codigoEmail"
+                value={formData.codigoEmail || ''}
+                onChange={handleChange}
+                className="form-input"
+              />
+            </div>
+            {/* Campo de Guías */}
+            <div className="infoItem">
+              <label htmlFor="guias"><strong>Guías:</strong></label>
+              <input
+                type="text"
+                id="guias"
+                name="guias"
+                value={formData.guias || ''}
+                onChange={handleChange}
+                className="form-input"
+              />
+            </div>
+            {/* Campo de Fecha de Inicio Prevista */}
+            <div className="infoItem">
+              <label htmlFor="fechaInicioPrevista"><strong>Fecha de Inicio Prevista:</strong></label>
+              <input
+                type="date"
+                id="fechaInicioPrevista"
+                name="fechaInicioPrevista"
+                value={formData.fechaInicioPrevista || ''}
+                onChange={handleChange}
+                className="form-input"
+              />
+            </div>
+            {/* Campo de Fecha de Fin Prevista */}
+            <div className="infoItem">
+              <label htmlFor="fechaFinPrevista"><strong>Fecha de Fin Prevista:</strong></label>
+              <input
+                type="date"
+                id="fechaFinPrevista"
+                name="fechaFinPrevista"
+                value={formData.fechaFinPrevista || ''}
+                onChange={handleChange}
+                className="form-input"
+              />
+            </div>
+            {/* Campo de Fecha de Fin */}
+            <div className="infoItem">
+              <label htmlFor="fechaFin"><strong>Fecha de Fin:</strong></label>
+              <input
+                type="date"
+                id="fechaFin"
+                name="fechaFin"
+                value={formData.fechaFin || ''}
+                onChange={handleChange}
+                className="form-input"
+              />
+            </div>
+            {/* Campo de Última Actualización */}
+            <div className="infoItem">
+              <label htmlFor="fechaActualizacion"><strong>Última Actualización:</strong></label>
+              <input
+                type="date"
+                id="fechaActualizacion"
+                name="fechaActualizacion"
+                value={formData.fechaActualizacion || ''}
+                onChange={handleChange}
+                className="form-input"
+              />
+            </div>
+          </div>
         </div>
-    );
-};
 
-export default RenderEditarDatosServicio;
+        {/* Sección de descripción de ancho completo */}
+        <div className="fullWidthSection">
+          <div className="infoItem">
+            <label htmlFor="descripcion"><strong>Descripción:</strong></label>
+            <textarea
+              id="descripcion"
+              name="descripcion"
+              value={formData.descripcion || ''}
+              onChange={handleChange}
+              rows="4"
+              className="form-input"
+            />
+          </div>
+        </div>
+
+        <div className="button-container">
+          <button onClick={handleSave} className="action-button save-button">
+            Guardar Cambios
+          </button>
+          <button className="cancel-button" onClick={handleCancel}>Cancelar</button>
+        </div>
+        
+
+
+      </div>
+    </div>
+  );
+}
+
+export default RenderEditDatosInventario;

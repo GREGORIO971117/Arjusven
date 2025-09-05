@@ -3,19 +3,12 @@ import RenderDatosServicio from './RenderDataServicios';
 import RenderDatosAdicionales from './RenderDataAdicionales';
 import RenderEditarDatosServicio from './EditDataServicios';
 import RenderEditarDatosAdicionales from './EditDataAdicionales';
+import datosEstaticos from '../../assets/datos.json';
 
-const TicketTemplate = ({
-  data,
-  editableData,
-  isEditing,
-  setIsEditing,
-  handleInputChange,
-  handleSave,
-  handleCancel,
-  handleDelete,
-  onGoBack,
-}) => {
+const TicketTemplate = ({data,onGoBack,}) => {
   const [activeTab, setActiveTab] = useState('servicio');
+  const [isEditing, setIsEditing] = useState(false);
+  
 
   const handleDownload = () => {
     // This logic would interact with a backend endpoint to generate and download the file
@@ -28,21 +21,18 @@ const TicketTemplate = ({
       if (activeTab === 'servicio') {
         return (
           <RenderEditarDatosServicio
-            editableData={editableData}
-            handleInputChange={handleInputChange}
-            handleSave={handleSave}
-            handleCancel={handleCancel}
-            handleDelete={handleDelete}
+            data={data}
+            datosEstaticos={datosEstaticos}
+            onCancelEdit={() => setIsEditing(false)}
           />
         );
       }
       if (activeTab === 'adicionales') {
         return (
           <RenderEditarDatosAdicionales
-            editableData={editableData}
-            handleInputChange={handleInputChange}
-            handleSave={handleSave}
-            handleCancel={handleCancel}
+            data={data}
+            datosEstaticos={datosEstaticos}
+            onCancelEdit={() => setIsEditing(false)}
           />
         );
       }

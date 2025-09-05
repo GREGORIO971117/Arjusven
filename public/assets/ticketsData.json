@@ -13,7 +13,8 @@
       "affiliation": "926824001",
       "atpvAffiliate": "2209",
       "atpvID": "1538 KEY E",
-      "serviceReason": "Falla de comunicación."
+      "serviceReason": "Falla de comunicación.",
+      "idMerchant":"123456"
     },
     "contactInfo": {
       "relatedContract": "C00012",

@@ -6,8 +6,6 @@ const InventarioList = ({ Inventario, onSelectTicket }) => {
     onSelectTicket(ticket);
   };
 
-
-
   return (
     <div className="ticket-list">
       <div className="filter-button-container">

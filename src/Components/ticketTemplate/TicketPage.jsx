@@ -7,77 +7,25 @@ function TicketPage() {
     const [selectedTicket, setSelectedTicket] = useState(null);
 
     // URL base de tu API, debes cambiarla
-    const API_URL = '/api/tickets'; 
+    const API_URL = '/assets/ticketsData.json'; 
 
     useEffect(() => {
-        // Cargar los tickets del servidor al montar el componente
-        loadTickets();
-    }, []);
-
-    const loadTickets = async () => {
-        try {
+        const loadInventario = async () => {
+          try {
             const response = await fetch(API_URL);
             if (!response.ok) {
-                throw new Error('Error al cargar los tickets del servidor');
+              throw new Error('Error al cargar los datos del inventario');
             }
             const data = await response.json();
-            
-            // Si la data viene del servidor, puede que no necesites reformatear
-            // Asumiendo que tu backend ya te devuelve los datos limpios:
             setTicketsData(data);
-        } catch (error) {
+          } catch (error) {
             console.error('Error al cargar los datos:', error);
-            // Manejo de errores en la UI, como mostrar un mensaje
-        }
-    };
+          }
+        };
+    
+        loadInventario();
+      }, []);
 
-    const updateTicketData = async (updatedTicket) => {
-        try {
-            const response = await fetch(`${API_URL}/${updatedTicket.Incidencia}`, {
-                method: 'PUT', // o 'PATCH'
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedTicket),
-            });
-
-            if (!response.ok) {
-                throw new Error('Error al actualizar el ticket en el servidor');
-            }
-
-            // Actualiza el estado localmente después de una respuesta exitosa
-            const newTicketsData = ticketsData.map(t =>
-                t.Incidencia === updatedTicket.Incidencia ? updatedTicket : t
-            );
-            setTicketsData(newTicketsData);
-            setSelectedTicket(updatedTicket);
-
-        } catch (error) {
-            console.error('Error al actualizar el ticket:', error);
-        }
-    };
-
-    const handleDelete = async () => {
-        if (!selectedTicket) return;
-
-        try {
-            const response = await fetch(`${API_URL}/${selectedTicket.Incidencia}`, {
-                method: 'DELETE',
-            });
-
-            if (!response.ok) {
-                throw new Error('Error al eliminar el ticket del servidor');
-            }
-
-            // Actualiza el estado localmente
-            const updatedTickets = ticketsData.filter(t => t.Incidencia !== selectedTicket.Incidencia);
-            setTicketsData(updatedTickets);
-            setSelectedTicket(null); // Oculta el panel de detalles
-            
-        } catch (error) {
-            console.error('Error al eliminar el ticket:', error);
-        }
-    };
 
     return (
         <div className="ticket-page-container">
@@ -94,9 +42,7 @@ function TicketPage() {
                     {selectedTicket ? (
                         <TicketTemplate
                             data={selectedTicket}
-                            onUpdateTicket={updateTicketData}
                             onGoBack={() => setSelectedTicket(null)}
-                            handleDelete={handleDelete}
                         />
                     ) : (
                         <div className="no-selection-message">

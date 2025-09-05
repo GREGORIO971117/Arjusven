@@ -13,6 +13,12 @@ function InventarioTemplate({ data, onGoBack }) {
 
   return (
     <>
+
+
+    {!isEdit && (
+
+            <button onClick={() => setIsEdit(true)} className="edit-button">Editar</button>
+        )}
       {isEdit ? (
         <RenderEditDatosInventario
           data={data}
@@ -31,11 +37,7 @@ function InventarioTemplate({ data, onGoBack }) {
       )}
 
 
-      {!isEdit && (
-
-            <button onClick={() => setIsEdit(true)} className="edit-button">Editar</button>
-
-        )}
+      
     </>
   );
 }
