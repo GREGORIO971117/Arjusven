@@ -34,237 +34,75 @@ function RenderEditDatosInventario({ data, onSave, onCancelEdit, datosEstaticos 
     return <div>Cargando datos...</div>;
   }
 
+  function FormItem({ label, name, value, onChange, type = 'text', options }) {
   return (
-    <div className="inventario-template-container">
-      <div className="inventario-details-card">
-        <h2 className="title">Editar Artículo de Inventario</h2>
-        
-        {/* Sección de campos de edición en dos columnas */}
-        <div className="infoSection">
-          <div className="infoColumn">
-            {/* Campo de Título */}
-            <div className="infoItem">
-              <label htmlFor="titulo"><strong>Título:</strong></label>
-              <input
-                type="text"
-                id="titulo"
-                name="titulo"
-                value={formData.titulo || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Número de Serie */}
-            <div className="infoItem">
-              <label htmlFor="numeroSerie"><strong>Número de Serie:</strong></label>
-              <input
-                type="text"
-                id="numeroSerie"
-                name="numeroSerie"
-                value={formData.numeroSerie || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Estado */}
-            <div className="infoItem">
-              <label htmlFor="estado"><strong>Estado:</strong></label>
-              <select
-                id="estado"
-                name="estado"
-                value={formData.estado || ''}
-                onChange={handleChange}
-                className="form-input"
-              >
-                <option value="">Selecciona un estado</option>
-                {datosEstaticos.estado.map(estado => (
-                  <option key={estado} value={estado}>{estado}</option>
-                ))}
-              </select>
-            </div>
-            {/* Campo de Equipo */}
-            <div className="infoItem">
-              <label htmlFor="equipo"><strong>Equipo:</strong></label>
-              <select
-                id="equipo"
-                name="equipo"
-                value={formData.equipo || ''}
-                onChange={handleChange}
-                className="form-input"
-              >
-                <option value="">Selecciona un equipo</option>
-                {datosEstaticos.equipos.map(equipo => (
-                  <option key={equipo} value={equipo}>{equipo}</option>
-                ))}
-              </select>
-            </div>
-            {/* Campo de Responsable */}
-            <div className="infoItem">
-              <label htmlFor="responsable"><strong>Responsable:</strong></label>
-              <input
-                type="text"
-                id="responsable"
-                name="responsable"
-                value={formData.responsable || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Cliente */}
-            <div className="infoItem">
-              <label htmlFor="cliente"><strong>Cliente:</strong></label>
-              <input
-                type="text"
-                id="cliente"
-                name="cliente"
-                value={formData.cliente || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Plaza */}
-            <div className="infoItem">
-              <label htmlFor="plaza"><strong>Plaza:</strong></label>
-              <input
-                type="text"
-                id="plaza"
-                name="plaza"
-                value={formData.plaza || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-          </div>
-          
-          <div className="infoColumn">
-            {/* Campo de Técnico de Campo */}
-            <div className="infoItem">
-              <label htmlFor="tecnicoCampo"><strong>Técnico de Campo:</strong></label>
-              <select
-                id="tecnicoCampo"
-                name="tecnicoCampo"
-                value={formData.tecnicoCampo || ''}
-                onChange={handleChange}
-                className="form-input"
-              >
-                <option value="">Selecciona el tecnico</option>
-                {datosEstaticos.tecnicos.map(tecnico => (
-                  <option key={tecnico} value={tecnico}>{tecnico}</option>
-                ))}
-              </select>
-            </div>
-            {/* Campo de Número de Incidencia */}
-            <div className="infoItem">
-              <label htmlFor="numeroIncidencia"><strong>Número de Incidencia:</strong></label>
-              <input
-                type="text"
-                id="numeroIncidencia"
-                name="numeroIncidencia"
-                value={formData.numeroIncidencia || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Código de Email */}
-            <div className="infoItem">
-              <label htmlFor="codigoEmail"><strong>Código de Email:</strong></label>
-              <input
-                type="text"
-                id="codigoEmail"
-                name="codigoEmail"
-                value={formData.codigoEmail || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Guías */}
-            <div className="infoItem">
-              <label htmlFor="guias"><strong>Guías:</strong></label>
-              <input
-                type="text"
-                id="guias"
-                name="guias"
-                value={formData.guias || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Fecha de Inicio Prevista */}
-            <div className="infoItem">
-              <label htmlFor="fechaInicioPrevista"><strong>Fecha de Inicio Prevista:</strong></label>
-              <input
-                type="date"
-                id="fechaInicioPrevista"
-                name="fechaInicioPrevista"
-                value={formData.fechaInicioPrevista || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Fecha de Fin Prevista */}
-            <div className="infoItem">
-              <label htmlFor="fechaFinPrevista"><strong>Fecha de Fin Prevista:</strong></label>
-              <input
-                type="date"
-                id="fechaFinPrevista"
-                name="fechaFinPrevista"
-                value={formData.fechaFinPrevista || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Fecha de Fin */}
-            <div className="infoItem">
-              <label htmlFor="fechaFin"><strong>Fecha de Fin:</strong></label>
-              <input
-                type="date"
-                id="fechaFin"
-                name="fechaFin"
-                value={formData.fechaFin || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Última Actualización */}
-            <div className="infoItem">
-              <label htmlFor="fechaActualizacion"><strong>Última Actualización:</strong></label>
-              <input
-                type="date"
-                id="fechaActualizacion"
-                name="fechaActualizacion"
-                value={formData.fechaActualizacion || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-          </div>
-        </div>
-        
-        {/* Sección de descripción de ancho completo */}
-        <div className="fullWidthSection">
-          <div className="infoItem">
-            <label htmlFor="descripcion"><strong>Descripción:</strong></label>
-            <textarea
-              id="descripcion"
-              name="descripcion"
-              value={formData.descripcion || ''}
-              onChange={handleChange}
-              rows="4"
-              className="form-input"
-            />
-          </div>
-        </div>
-
-        <div className="button-container">
-          <button onClick={handleSave} className="action-button save-button">
-            Guardar Cambios
-          </button>
-          <button onClick={handleCancel} className="action-button cancel-button">
-            Cancelar 
-          </button>
-        </div>
-      </div>
+    <div className="formItem">
+      <label htmlFor={name}><strong>{label}:</strong></label>
+      {type === 'select' ? (
+        <select
+          id={name}
+          name={name}
+          value={value || ''}
+          onChange={onChange}
+          className="form-input"
+        >
+          <option value="">Selecciona una opción</option>
+          {options.map(opt => (
+            <option key={opt} value={opt}>{opt}</option>
+          ))}
+        </select>
+      ) : type === 'textarea' ? (
+        <textarea
+          id={name}
+          name={name}
+          value={value || ''}
+          onChange={onChange}
+          rows="4"
+          className="form-input"
+        />
+      ) : (
+        <input
+          type={type}
+          id={name}
+          name={name}
+          value={value || ''}
+          onChange={onChange}
+          className="form-input"
+        />
+      )}
     </div>
+  );
+}
+  return (
+    <>
+    <h2>{formData.titulo}</h2>
+    <div className="formGrid">
+      <FormItem label="Título" name="titulo" value={formData.titulo} onChange={handleChange} />
+      <FormItem label="Número de Serie" name="numeroSerie" value={formData.numeroSerie} onChange={handleChange} />
+      <FormItem label="Estado" name="estado" value={formData.estado} onChange={handleChange} type="select" options={datosEstaticos.estado} />
+      <FormItem label="Equipo" name="equipo" value={formData.equipo} onChange={handleChange} type="select" options={datosEstaticos.equipos} />
+      <FormItem label="Responsable" name="responsable" value={formData.responsable} onChange={handleChange} />
+      <FormItem label="Cliente" name="cliente" value={formData.cliente} onChange={handleChange} />
+      <FormItem label="Plaza" name="plaza" value={formData.plaza} onChange={handleChange} />
+      <FormItem label="Técnico de Campo" name="tecnicoCampo" value={formData.tecnicoCampo} onChange={handleChange} type="select" options={datosEstaticos.tecnicos} />
+      <FormItem label="Número de Incidencia" name="numeroIncidencia" value={formData.numeroIncidencia} onChange={handleChange} />
+      <FormItem label="Código de Email" name="codigoEmail" value={formData.codigoEmail} onChange={handleChange} />
+      <FormItem label="Guías" name="guias" value={formData.guias} onChange={handleChange} />
+      <FormItem label="Fecha de Inicio Prevista" name="fechaInicioPrevista" value={formData.fechaInicioPrevista} onChange={handleChange} type="date" />
+      <FormItem label="Fecha de Fin Prevista" name="fechaFinPrevista" value={formData.fechaFinPrevista} onChange={handleChange} type="date" />
+      <FormItem label="Fecha de Fin" name="fechaFin" value={formData.fechaFin} onChange={handleChange} type="date" />
+      <FormItem label="Última Actualización" name="fechaActualizacion" value={formData.fechaActualizacion} onChange={handleChange} type="date" />
+    </div>
+
+    <div className="fullWidthSection">
+      <FormItem label="Descripción" name="descripcion" value={formData.descripcion} onChange={handleChange} type="textarea" />
+    </div>
+
+    <div className="formActionsCompact">
+        <button className="action-button save-button">Guardar cambios</button>
+        <button className="action-button cancel-button" onClick={handleCancel}>Cancelar</button>
+      </div>
+</>
   );
 }
 

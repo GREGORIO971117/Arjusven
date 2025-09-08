@@ -13,17 +13,12 @@ function InventarioTemplate({ data, onGoBack }) {
 
   return (
     <>
-
-
-    {!isEdit && (
-
-            <button onClick={() => setIsEdit(true)} className="edit-button">Editar</button>
-        )}
       {isEdit ? (
         <RenderEditDatosInventario
           data={data}
           onGoBack={onGoBack}
           datosEstaticos={datosEstaticos}
+          onedit={()=>setIsEdit(true)}
           // Puedes añadir una función para salir del modo de edición
           onCancelEdit={() => setIsEdit(false)}
         />

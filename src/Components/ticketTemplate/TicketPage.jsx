@@ -32,9 +32,8 @@ function TicketPage() {
             <div className='ticket-content-flex'>
                 <div className="ticket-list-column">
                     <TicketList
-                        tickets={ticketsData}
-                        onSelectTicket={setSelectedTicket}
-                        // La prop onUpdateTickets ya no es necesaria si el padre maneja la actualización
+                    tickets={ticketsData}
+                    onSelectTicket={setSelectedTicket}
                     />
                 </div>
 

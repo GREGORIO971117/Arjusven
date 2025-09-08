@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ticketList.css';
 
-function RenderEditDatosInventario({ data, onSave, onCancelEdit,datosEstaticos }) {
+function RenderEditDatosInventario({ data, onSave, onCancelEdit, datosEstaticos }) {
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
@@ -12,258 +12,86 @@ function RenderEditDatosInventario({ data, onSave, onCancelEdit,datosEstaticos }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSave = () => {
-    if (onSave) {
-      onSave(formData);
-    }
+    if (onSave) onSave(formData);
   };
 
   const handleCancel = () => {
-    if (onCancelEdit) {
-      onCancelEdit();
-    }
+    if (onCancelEdit) onCancelEdit();
   };
 
-  if (!formData.ticketNumber) {
-    return <div>Cargando datos...</div>;
-  }
+  const FormField = ({ label, name, type = 'text', options }) => (
+    <div className="formFieldCompact">
+      <label htmlFor={name}><strong>{label}:</strong></label>
+      {type === 'select' ? (
+        <select
+          id={name}
+          name={name}
+          value={formData[name] || ''}
+          onChange={handleChange}
+          className="form-input"
+        >
+          <option value="">Selecciona una opción</option>
+          {options.map(opt => (
+            <option key={opt} value={opt}>{opt}</option>
+          ))}
+        </select>
+      ) : (
+        <input
+          type={type}
+          id={name}
+          name={name}
+          value={formData[name] || ''}
+          onChange={handleChange}
+          className="form-input"
+        />
+      )}
+    </div>
+  );
+
+  if (!formData.ticketNumber) return <div>Cargando datos...</div>;
 
   return (
-    <div className="inventario-template-container">
-      <div className="inventario-details-card">
-        <h2 className="title">Editar Artículo de Inventario</h2>
+    <div className="formGridContainer">
 
-        {/* Sección de campos de edición en dos columnas */}
-        <div className="infoSection">
-          <div className="infoColumn">
-            {/* Campo de Título */}
-            <div className="infoItem">
-              <label htmlFor="ticketNumber"><strong>Título:</strong></label>
-              <input
-                type="text"
-                id="ticketNumber"
-                name="ticketNumber"
-                value={formData.ticketNumber || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Número de Serie */}
-            <div className="infoItem">
-              <label htmlFor="numeroSerie"><strong>Número de Serie:</strong></label>
-              <input
-                type="text"
-                id="numeroSerie"
-                name="numeroSerie"
-                value={formData.numeroSerie || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Estado */}
-            <div className="infoItem">
-              <label htmlFor="estado"><strong>Estado:</strong></label>
-              <select
-                id="estado"
-                name="estado"
-                value={formData.estado || ''}
-                onChange={handleChange}
-                className="form-input"
-              >
-                <option value="">Selecciona un estado</option>
-                {datosEstaticos.estado.map(estado => (
-                  <option key={estado} value={estado}>{estado}</option>
-                ))}
-              </select>
-            </div>
-            {/* Campo de Equipo */}
-            <div className="infoItem">
-              <label htmlFor="equipo"><strong>Equipo:</strong></label>
-              <select
-                id="equipo"
-                name="equipo"
-                value={formData.equipo || ''}
-                onChange={handleChange}
-                className="form-input"
-              >
-                <option value="">Selecciona un equipo</option>
-                {datosEstaticos.equipos.map(equipo => (
-                  <option key={equipo} value={equipo}>{equipo}</option>
-                ))}
-              </select>
-            </div>
-            {/* Campo de Responsable */}
-            <div className="infoItem">
-              <label htmlFor="responsable"><strong>Responsable:</strong></label>
-              <input
-                type="text"
-                id="responsable"
-                name="responsable"
-                value={formData.responsable || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Cliente */}
-            <div className="infoItem">
-              <label htmlFor="cliente"><strong>Cliente:</strong></label>
-              <input
-                type="text"
-                id="cliente"
-                name="cliente"
-                value={formData.cliente || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Plaza */}
-            <div className="infoItem">
-              <label htmlFor="plaza"><strong>Plaza:</strong></label>
-              <input
-                type="text"
-                id="plaza"
-                name="plaza"
-                value={formData.plaza || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-          </div>
-          
-          <div className="infoColumn">
-            {/* Campo de Técnico de Campo */}
-            <div className="infoItem">
-              <label htmlFor="tecnicoCampo"><strong>Técnico de Campo:</strong></label>
-              <select
-                id="tecnicoCampo"
-                name="tecnicoCampo"
-                value={formData.tecnicoCampo || ''}
-                onChange={handleChange}
-                className="form-input"
-              >
-                <option value="">Selecciona el tecnico</option>
-                {datosEstaticos.tecnicos.map(tecnico => (
-                  <option key={tecnico} value={tecnico}>{tecnico}</option>
-                ))}
-              </select>
-            </div>
-            {/* Campo de Número de Incidencia */}
-            <div className="infoItem">
-              <label htmlFor="numeroIncidencia"><strong>Número de Incidencia:</strong></label>
-              <input
-                type="text"
-                id="numeroIncidencia"
-                name="numeroIncidencia"
-                value={formData.numeroIncidencia || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Código de Email */}
-            <div className="infoItem">
-              <label htmlFor="codigoEmail"><strong>Código de Email:</strong></label>
-              <input
-                type="text"
-                id="codigoEmail"
-                name="codigoEmail"
-                value={formData.codigoEmail || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Guías */}
-            <div className="infoItem">
-              <label htmlFor="guias"><strong>Guías:</strong></label>
-              <input
-                type="text"
-                id="guias"
-                name="guias"
-                value={formData.guias || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Fecha de Inicio Prevista */}
-            <div className="infoItem">
-              <label htmlFor="fechaInicioPrevista"><strong>Fecha de Inicio Prevista:</strong></label>
-              <input
-                type="date"
-                id="fechaInicioPrevista"
-                name="fechaInicioPrevista"
-                value={formData.fechaInicioPrevista || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Fecha de Fin Prevista */}
-            <div className="infoItem">
-              <label htmlFor="fechaFinPrevista"><strong>Fecha de Fin Prevista:</strong></label>
-              <input
-                type="date"
-                id="fechaFinPrevista"
-                name="fechaFinPrevista"
-                value={formData.fechaFinPrevista || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Fecha de Fin */}
-            <div className="infoItem">
-              <label htmlFor="fechaFin"><strong>Fecha de Fin:</strong></label>
-              <input
-                type="date"
-                id="fechaFin"
-                name="fechaFin"
-                value={formData.fechaFin || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {/* Campo de Última Actualización */}
-            <div className="infoItem">
-              <label htmlFor="fechaActualizacion"><strong>Última Actualización:</strong></label>
-              <input
-                type="date"
-                id="fechaActualizacion"
-                name="fechaActualizacion"
-                value={formData.fechaActualizacion || ''}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-          </div>
+      <div className="grid3">
+        <FormField label="Título" name="ticketNumber" />
+        <FormField label="Número de Serie" name="numeroSerie" />
+        <FormField label="Estado" name="estado" type="select" options={datosEstaticos.estado} />
+        <FormField label="Equipo" name="equipo" type="select" options={datosEstaticos.equipos} />
+        <FormField label="Responsable" name="responsable" />
+        <FormField label="Cliente" name="cliente" />
+        <FormField label="Plaza" name="plaza" />
+        <FormField label="Técnico de Campo" name="tecnicoCampo" type="select" options={datosEstaticos.tecnicos} />
+        <FormField label="Número de Incidencia" name="numeroIncidencia" />
+        <FormField label="Código de Email" name="codigoEmail" />
+        <FormField label="Guías" name="guias" />
+        <FormField label="Fecha de Inicio Prevista" name="fechaInicioPrevista" type="date" />
+        <FormField label="Fecha de Fin Prevista" name="fechaFinPrevista" type="date" />
+        <FormField label="Fecha de Fin" name="fechaFin" type="date" />
+        <FormField label="Última Actualización" name="fechaActualizacion" type="date" />
+      </div>
+
+      <div className="fullWidthSection">
+        <div className="formFieldCompact">
+          <label htmlFor="descripcion"><strong>Descripción:</strong></label>
+          <textarea
+            id="descripcion"
+            name="descripcion"
+            value={formData.descripcion || ''}
+            onChange={handleChange}
+            rows="4"
+            className="form-input"
+          />
         </div>
+      </div>
 
-        {/* Sección de descripción de ancho completo */}
-        <div className="fullWidthSection">
-          <div className="infoItem">
-            <label htmlFor="descripcion"><strong>Descripción:</strong></label>
-            <textarea
-              id="descripcion"
-              name="descripcion"
-              value={formData.descripcion || ''}
-              onChange={handleChange}
-              rows="4"
-              className="form-input"
-            />
-          </div>
-        </div>
-
-        <div className="button-container">
-          <button onClick={handleSave} className="action-button save-button">
-            Guardar Cambios
-          </button>
-          <button className="cancel-button" onClick={handleCancel}>Cancelar</button>
-        </div>
-        
-
-
+      <div className="formActionsCompact">
+        <button className="action-button save-button" onClick={handleSave}>Guardar Cambios</button>
+        <button className="action-button cancel-button" onClick={handleCancel}>Cancelar</button>
       </div>
     </div>
   );

@@ -6,6 +6,15 @@ function RenderDatosAdicionales({ data }) {
     return null;
   }
 
+  const InfoItem = ({ label, value }) => {
+  if (!value) return "Sin asignar";
+  return (
+    <div className="infoItem">
+      <strong>{label}: <span>{value}</span></strong> 
+    </div>
+  );
+};
+
   const {
     ciudad,
     cantidadTPV,
@@ -42,141 +51,61 @@ function RenderDatosAdicionales({ data }) {
 
   return (
     <>
-      <div className="infoSection">
-        <div className="infoColumn">
-          <div className="infoItem">
-            <strong>Ciudad</strong>:
-            <span>{ciudad}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Cantidad TPV en Base</strong>:
-            <span>{cantidadTPV}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Modelo entra</strong>:
-            <span>{modeloEntra}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Marca Entra</strong>:
-            <span>{marcaEntra}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Serie Lógica entra</strong>:
-            <span>{serieLogicaEntra}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Serie Física entra</strong>:
-            <span>{serieFisicaEntra}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Versión Browser</strong>:
-            <span>{versionBrowser}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Tipo de Comunicación</strong>:
-            <span>{tipoComunicacion}</span>
-          </div>
-          <div className="infoItem">
-            <strong>SIM entra</strong>:
-            <span>{simEntra}</span>
-          </div>
-          <div className="infoItem">
-            <strong>PTID entra</strong>:
-            <span>{ptidEntra}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Eliminador Entra</strong>:
-            <span>{eliminadorEntra}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Eliminador Sale</strong>:
-            <span>{eliminadorSale}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Estado</strong>:
-            <span>{estado}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Orden de Servicio</strong>:
-            <span>{ordenDeServicio}</span>
-          </div>
-        </div>
-        <div className="infoColumn">
-          <div className="infoItem">
-            <strong>Modelo Sale</strong>:
-            <span>{modeloSale}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Marca Sale</strong>:
-            <span>{marcaSale}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Serie Lógica sale</strong>:
-            <span>{serieLogicaSale}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Serie Física sale</strong>:
-            <span>{serieFisicaSale}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Versión Browser</strong>:
-            <span>{versionBrowserSale}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Tipo de Comunicación</strong>:
-            <span>{tipoComunicacionSale}</span>
-          </div>
-          <div className="infoItem">
-            <strong>SIM Sale</strong>:
-            <span>{simSale}</span>
-          </div>
-          <div className="infoItem">
-            <strong>PTID Sale</strong>:
-            <span>{ptidSale}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Plaza</strong>:
-            <span>{plaza}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Técnico</strong>:
-            <span>{tecnico}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Cerro en Punto Clave</strong>:
-            <span>{cerroPuntoClave}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Atención en Punto</strong>:
-            <span>{atencionEnPunto}</span>
-          </div>
-          <div className="infoItem">
-            <strong>Firma en Estación</strong>:
-            <span>{firmaEnEstacion}</span>
-          </div>
-          <div className="infoItem">
-            <strong>#Tarjeta / TAG</strong>:
-            <span>{tarjetaTag}</span>
-          </div>
-        </div>
-      </div>
-      <div className="fullWidthSection">
-        <div className="infoItem">
-          <strong>INVENTARIO</strong>
-        </div>
-        <div className="infoItem">
-          <strong>Serie que queda de stock</strong>:
-          <span>{serieStock}</span>
-        </div>
-        <div className="infoItem">
-          <strong>SIM que queda de stock</strong>:
-          <span>{simStock}</span>
-        </div>
-        <div className="infoItem">
-          <strong>Modelo de Stock</strong>:
-          <span>{modeloStock}</span>
-        </div>
-      </div>
+    <div className="infoSection">
+
+  {/* Punto de Venta */}
+  <div className="section">
+    <InfoItem label="Ciudad" value={ciudad} />
+    <InfoItem label="Plaza" value={plaza} />
+    <InfoItem label="Técnico" value={tecnico} />
+    <InfoItem label="Cerro en Punto Clave" value={cerroPuntoClave} />
+    <InfoItem label="Atención en Punto" value={atencionEnPunto} />
+    <InfoItem label="Firma en Estación" value={firmaEnEstacion} />
+    <InfoItem label="#Tarjeta / TAG" value={tarjetaTag} />
+    <InfoItem label="Cantidad TPV en Base" value={cantidadTPV} />
+  </div>
+
+  {/* Equipo Entrante */}
+  <div className="section">
+    <InfoItem label="Modelo entra" value={modeloEntra} />
+    <InfoItem label="Marca Entra" value={marcaEntra} />
+    <InfoItem label="Serie Lógica entra" value={serieLogicaEntra} />
+    <InfoItem label="Serie Física entra" value={serieFisicaEntra} />
+    <InfoItem label="SIM entra" value={simEntra} />
+    <InfoItem label="PTID entra" value={ptidEntra} />
+    <InfoItem label="Eliminador Entra" value={eliminadorEntra} />
+  </div>
+
+  {/* Equipo Saliente */}
+  <div className="section">
+    <InfoItem label="Modelo Sale" value={modeloSale} />
+    <InfoItem label="Marca Sale" value={marcaSale} />
+    <InfoItem label="Serie Lógica sale" value={serieLogicaSale} />
+    <InfoItem label="Serie Física sale" value={serieFisicaSale} />
+    <InfoItem label="SIM Sale" value={simSale} />
+    <InfoItem label="PTID Sale" value={ptidSale} />
+    <InfoItem label="Eliminador Sale" value={eliminadorSale} />
+  </div>
+
+  {/* Servicio */}
+  <div className="section">
+    <InfoItem label="Versión Browser" value={versionBrowser} />
+    <InfoItem label="Versión Browser Sale" value={versionBrowserSale} />
+    <InfoItem label="Tipo de Comunicación" value={tipoComunicacion} />
+    <InfoItem label="Tipo de Comunicación Sale" value={tipoComunicacionSale} />
+    <InfoItem label="Estado" value={estado} />
+    <InfoItem label="Orden de Servicio" value={ordenDeServicio} />
+  </div>
+
+  {/* Inventario */}
+  <div className="section">
+    <InfoItem label="Serie que queda de stock" value={serieStock} />
+    <InfoItem label="SIM que queda de stock" value={simStock} />
+    <InfoItem label="Modelo de Stock" value={modeloStock} />
+  </div>
+
+</div>
+
     </>
   );
 };

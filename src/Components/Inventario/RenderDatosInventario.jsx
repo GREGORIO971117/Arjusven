@@ -1,7 +1,8 @@
 import React from 'react';
 import './InventarioList.css';
 
-function RenderDatosInventario({ data, onGoBack }) {
+function RenderDatosInventario({ data, onGoBack,onEdit }) {
+
   if (!data) {
     return null; 
   }
@@ -26,60 +27,68 @@ function RenderDatosInventario({ data, onGoBack }) {
   } = data;
 
   return (
+  
+  <>  
     <div className="inventario-template-container">
       <div className="inventario-details-card">
-        <h2 className="title">Equipo-{titulo}</h2>
+        <div className="ticket-header">
+                <h2 className="ticket-title">Equipo-{titulo}
+                <span>
+                  <button onClick={onEdit} className="edit-button">Editar</button>
+                  </span>
+                </h2>
+              </div>       
         
         {/* Sección de información en dos columnas */}
         <div className="infoSection">
           <div className="infoColumn">
             <div className="infoItem">
-              <strong>Título:</strong> <span>{titulo}</span>
+              <strong>Título:<span>{titulo}</span></strong> 
             </div>
             <div className="infoItem">
-              <strong>Número de Serie:</strong> <span>{numeroSerie}</span>
+              <strong>Número de Serie:<span>{numeroSerie}</span></strong> 
             </div>
             <div className="infoItem">
-              <strong>Equipo:</strong> <span>{equipo}</span>
+              <strong>Equipo:<span>{equipo}</span></strong> 
             </div>
             <div className="infoItem">
-              <strong>Estado:</strong> <span>{estado}</span>
+              <strong>Estado:<span>{estado}</span></strong> 
             </div>
             <div className="infoItem">
-              <strong>Responsable:</strong> <span>{responsable}</span>
+              <strong>Responsable:<span>{responsable}</span></strong> 
             </div>
             <div className="infoItem">
-              <strong>Cliente:</strong> <span>{cliente}</span>
+              <strong>Cliente:<span>{cliente}</span></strong> 
             </div>
             <div className="infoItem">
-              <strong>Plaza:</strong> <span>{plaza}</span>
+              <strong>Plaza:<span>{plaza}</span></strong> 
             </div>
           </div>
           
           <div className="infoColumn">
             <div className="infoItem">
-              <strong>Técnico de Campo:</strong> <span>{tecnicoCampo}</span>
+              <strong>Técnico de Campo:<span>{tecnicoCampo}</span></strong> 
             </div>
             <div className="infoItem">
-              <strong>Número de Incidencia:</strong> <span>{numeroIncidencia}</span>
+              <strong>Número de Incidencia:<span>{numeroIncidencia}</span></strong> 
             </div>
             <div className="infoItem">
-              <strong>Código de Email:</strong> <span>{codigoEmail}</span>
+              <strong>Código de Email:<span>{codigoEmail}</span></strong> 
             </div>
             <div className="infoItem">
-              <strong>Guías:</strong> <span>{guias}</span>
+              <strong>Guías:<span>{guias}</span></strong> 
             </div>
             <div className="infoItem">
-              <strong>Fecha de Inicio Prevista:</strong> <span>{fechaInicioPrevista}</span>
+              <strong>Fecha de Inicio Prevista:<span>{fechaInicioPrevista}</span></strong> 
             </div>
             <div className="infoItem">
-              <strong>Fecha de Fin Prevista:</strong> <span>{fechaFinPrevista}</span>
+              <strong>Fecha de Fin Prevista:<span>{fechaFinPrevista}</span></strong> 
             </div>
             <div className="infoItem">
-              <strong>Fecha de Fin:</strong> <span>{fechaFin}</span>
+              <strong>Fecha de Fin:<span>{fechaFin}</span></strong> 
             </div>
             <div className="infoItem">
-              <strong>Última Actualización:</strong> <span>{fechaActualizacion}</span>
+              <strong>Última Actualización:<span>{fechaActualizacion}</span></strong> 
             </div>
           </div>
         </div>
@@ -87,13 +96,15 @@ function RenderDatosInventario({ data, onGoBack }) {
         {/* Sección de descripción de ancho completo */}
         <div className="fullWidthSection">
           <div className="infoItem">
-            <strong>Descripción:</strong> <span>{descripcion}</span>
+            <strong>Descripción:<span>{descripcion}</span></strong> 
           </div>
         </div>
         
       </div>
     </div>
+    </>
   );
+  
 };
 
 export default RenderDatosInventario;
