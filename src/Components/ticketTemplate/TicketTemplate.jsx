@@ -11,10 +11,7 @@ function TicketTemplate({data,onGoBack}){
   return (
 
 
-
-
-
-
+    
     <>
       {isEdit ? (
         <EditDataServicio
@@ -23,7 +20,7 @@ function TicketTemplate({data,onGoBack}){
           datosEstaticos={datosEstaticos}
           onCancelEdit={()=>setIsEdit(false)}
         />
-        
+
       ):(
       <RenderDatosServicio
         data = {data}
