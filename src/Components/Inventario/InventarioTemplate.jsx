@@ -18,7 +18,6 @@ function InventarioTemplate({ data, onGoBack }) {
           data={data}
           onGoBack={onGoBack}
           datosEstaticos={datosEstaticos}
-          onedit={()=>setIsEdit(true)}
           // Puedes añadir una función para salir del modo de edición
           onCancelEdit={() => setIsEdit(false)}
         />

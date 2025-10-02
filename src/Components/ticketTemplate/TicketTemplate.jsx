@@ -1,44 +1,38 @@
 import React, { useState } from 'react';
 import '../Inventario/InventarioList.css';
+import RenderDatosServicio from './RenderDataServicios.jsx'
+import EditDataServicio from './EditDataServicios.jsx'
+import datosEstaticos from '../../assets/datos.json';
 
-const InventarioList = ({ data, onSelectTicket }) => {
+function TicketTemplate({data,onGoBack}){
 
-  const handleTicketClick = (ticket) => {
-    onSelectTicket(ticket);
-  };
+  const [isEdit, setIsEdit] = useState(false);
 
   return (
-    <div className="ticket-list">
-      <div className="filter-button-container">
-        <input
-          type="text"
-          placeholder="Buscar Inventario..."
-          className="search-input"
+
+
+
+
+
+
+    <>
+      {isEdit ? (
+        <EditDataServicio
+          onGoBack={onGoBack}
+          data={data}
+          datosEstaticos={datosEstaticos}
+          onCancelEdit={()=>setIsEdit(false)}
         />
-        <button
-          className="filter-toggle-button"
-        >
-          Filtro
-        </button>
-      </div>
+        
+      ):(
+      <RenderDatosServicio
+        data = {data}
+        onEdit={()=>setIsEdit(true)}
+      />  
+    )}
 
-      <ul>
-        {data.map(ticket => (
-          <li
-            key={ticket.numeroIncidencia + ticket.titulo}
-            className="ticket-item"
-            onClick={() => handleTicketClick(ticket)}
-          >
-            <div className="ticket-info">
-              <strong>{ticket.numeroIncidencia}</strong> — {ticket.titulo}
-            </div>
-          </li>
-        ))}
-      </ul>
-
-      
-    </div>
+  </>
   );
-};
+}
 
-export default InventarioList;
+export default TicketTemplate;

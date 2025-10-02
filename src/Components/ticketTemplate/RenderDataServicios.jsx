@@ -1,6 +1,6 @@
 import React from 'react';
 
-const RenderDatosServicio = ({ data }) => {
+const RenderDatosServicio = ({ data,onEdit}) => {
 
   if (!data) {
     return null;
@@ -71,6 +71,7 @@ const RenderDatosServicio = ({ data }) => {
     <>
   <h2 className="title">
     <strong>{caseNumber}-{title}</strong>
+    <button onClick={onEdit} className="edit-button">Editar</button>
   </h2>
 
   <div className='infoSection'>
