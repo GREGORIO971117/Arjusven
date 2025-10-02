@@ -7,15 +7,12 @@ const RenderDatosServicio = ({ data,onEdit}) => {
   }
 
   const InfoItem=({label,value})=>{
-    if (!value) 
-      {return value="Sin asignar";}
-    else{
+   
       return(
         <div className='infoItem'>
           <strong>{label}:<span>{value}</span></strong>
         </div>
-      )}}
-
+      )}
 
   const {
     ticketNumber,
@@ -28,7 +25,6 @@ const RenderDatosServicio = ({ data,onEdit}) => {
     additionalData
   } = data;
   
-  // Destructuring the nested objects
   const { 
     assignmentDate, 
     resolution, 
@@ -83,26 +79,20 @@ const RenderDatosServicio = ({ data,onEdit}) => {
     <InfoItem label="Nombre de ESS" value={title} />
     <InfoItem label="Incidencia" value={caseNumber} />
     <InfoItem label="Código de Afiliado" value={affiliateCode} />
-  </div>
-
-  <div className="section">
     <InfoItem label="Supervisor" value={supervisor} />
     <InfoItem label="ID Merchant" value={idMerchant} />
     <InfoItem label="Tipo de Servicio" value={serviceType} />
-    <InfoItem label="Técnico de Campo" value={fieldTechnician} />
-    <InfoItem label="SLA" value={sla} />
   </div>
 
   <div className="section">
     <InfoItem label="Motivo del Servicio" value={onSiteReason} />
     <InfoItem label="Motivo real del Servicio en sitio" value={serviceReason} />
     <InfoItem label="Observaciones ARJUSVEN" value={observations} />
-    <InfoItem label="Dirección" value={address} />
-  </div>
-
-  <div className="section">
     <InfoItem label="Guía de Encomienda" value={encomiendaGuide} />
     <InfoItem label="Fecha de envío de guía" value={guideSendDate} />
+    <InfoItem label="Dirección" value={address} />
+    <InfoItem label="Técnico de Campo" value={fieldTechnician} />
+    <InfoItem label="SLA" value={sla} />
   </div>
   </div>
 </>
