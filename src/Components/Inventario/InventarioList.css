@@ -19,6 +19,10 @@
     outline: none;
 }
 
+.filter-panel input{
+    text-align: center;
+}
+
 textarea.form-input {
     min-height: 100px;
     resize: vertical;
@@ -43,6 +47,7 @@ textarea.form-input {
 .formItem {
   display: flex;
   flex-direction: column;
+  
 }
 
 .infoSection {
@@ -109,6 +114,42 @@ textarea.form-input {
     backdrop-filter: blur(4px);
 }
 
+.modal-button-container{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0; /* Fondo normal */
+    color: #333;
+    cursor: pointer;
+    border-radius: 4px;
+
+}
+
+.modal-button{
+
+    
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0; /* Fondo normal */
+    color: #333;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.modal-button.active{
+
+     background-color: #007bff; /* Color de fondo cuando está activo */
+    color: white; /* Color de texto para el botón activo */
+    border-color: #007bff;
+    font-weight: bold;
+
+}
+
 .modal,
 .filter-panel {
     background-color: #ffffff;
@@ -129,18 +170,6 @@ textarea.form-input {
     font-weight: 600;
 }
 
-.modal p {
-    color: #7f8c8d;
-    margin-bottom: 2rem;
-    font-size: 1rem;
-    line-height: 1.6;
-}
-
-.modal-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-}
 
 .actemplate-container {
     border: 1px solid #e0e6ed;

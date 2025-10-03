@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import InventarioList from './InventarioList';
 import InventarioTemplate from './InventarioTemplate';
+import RenderFiltro from './RenderFiltro';
 import './InventarioList.css';
 
 function InventarioPage() {
   const [inventarioData, setInventarioData] = useState([]);
   const [selectedInventario, setSelectedInventario] = useState(null);
+  const [showFilterPanel, setShowFilterPanel] = useState(false);
 
   const API_URL = '/assets/inventoryData.json'; 
 
@@ -33,14 +35,21 @@ function InventarioPage() {
           <InventarioList
             Inventario={inventarioData}
             onSelectTicket={setSelectedInventario}
+            setShowFilterPanel={setShowFilterPanel}
           />
         </div>
+
+        {showFilterPanel && (
+          <RenderFiltro
+          setShowFilterPanel={setShowFilterPanel}          
+          />
+        )}
+                
 
         <div className="ticket-template-column">
           {selectedInventario ? (
             <InventarioTemplate
               data={selectedInventario}
-              onGoBack={() => setSelectedInventario(null)}
             />
           ) : (
             <div className="no-selection-message">

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import './InventarioList.css';
 
-const InventarioList = ({ Inventario, onSelectTicket }) => {
+const InventarioList = ({ Inventario, onSelectTicket,setShowFilterPanel}) => {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 15;
 
@@ -32,7 +32,10 @@ const InventarioList = ({ Inventario, onSelectTicket }) => {
           placeholder="Buscar Inventario..."
           className="search-input"
         />
-        <button className="filter-toggle-button">Filtro</button>
+        <button 
+          className="filter-toggle-button"
+          onClick={()=>setShowFilterPanel(true)}
+        >Filtro</button>
       </div>
 
       {Inventario.length === 0 ? (

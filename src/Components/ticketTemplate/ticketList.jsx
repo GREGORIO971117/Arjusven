@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 
-function ticketList({tickets,onSelectTicket}){
+function ticketList({tickets,onSelectTicket,setShowFilterPanel}){
 
   const [currentPage, setCurrentPage] = useState(0);
+
   const itemsPerPage = 15;
 
   const totalPages = Math.ceil(tickets.length / itemsPerPage);
@@ -33,7 +34,9 @@ function ticketList({tickets,onSelectTicket}){
                     placeholder="Buscar Inventario..."
                     className='search-input'/>
                     
-                <button className="filter-toggle-button">
+                <button className="filter-toggle-button"
+                        onClick={()=> setShowFilterPanel(true)}>
+
                     Filtro
                 </button>
             </div>
@@ -74,6 +77,9 @@ function ticketList({tickets,onSelectTicket}){
               Siguiente →
             </button>
           </div>
+
+          
+
 
         </>
       )}

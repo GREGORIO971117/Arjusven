@@ -89,6 +89,11 @@
         "BASE DE CARGA",
         "SIM TELCEL",
         "SIM ATT"
+    ],
+    "cliente":[
+        "cliente1",
+        "cliente2",
+        "cliente3"
     ]
     
 }

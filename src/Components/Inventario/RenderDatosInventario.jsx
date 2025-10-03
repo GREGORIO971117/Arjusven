@@ -1,7 +1,7 @@
 import React from 'react';
 import './InventarioList.css';
 
-function RenderDatosInventario({ data, onGoBack,onEdit }) {
+function RenderDatosInventario({ data,onEdit }) {
 
   if (!data) {
     return null; 
