@@ -2,38 +2,12 @@ import React, { useState, useMemo, useEffect } from 'react';
 import './InventarioList.css';
 
 const InventarioList = ({ Inventario, onSelectTicket }) => {
-  const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 15;
 
-  // 🔍 Eliminar duplicados por número de incidencia + título
-  const uniqueInventario = useMemo(() => {
-    const seen = new Set();
-    return Inventario.filter(item => {
-      const key = item.numeroIncidencia + item.titulo;
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
-  }, [Inventario]);
+  const totalPages = Math.ceil(Inventario.length / itemsPerPage);
 
-  // 🔎 Filtrar por búsqueda
-  const filteredInventario = useMemo(() => {
-    const term = searchTerm.toLowerCase();
-    return uniqueInventario.filter(ticket =>
-      ticket.titulo?.toLowerCase().includes(term) ||
-      ticket.numeroIncidencia?.toLowerCase().includes(term)
-    );
-  }, [uniqueInventario, searchTerm]);
-
-  // 🔄 Resetear página al cambiar búsqueda
-  useEffect(() => {
-    setCurrentPage(0);
-  }, [searchTerm]);
-
-  const totalPages = Math.ceil(filteredInventario.length / itemsPerPage);
-
-  const currentItems = filteredInventario.slice(
+  const currentItems = Inventario.slice(
     currentPage * itemsPerPage,
     (currentPage + 1) * itemsPerPage
   );
@@ -57,13 +31,11 @@ const InventarioList = ({ Inventario, onSelectTicket }) => {
           type="text"
           placeholder="Buscar Inventario..."
           className="search-input"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
         />
         <button className="filter-toggle-button">Filtro</button>
       </div>
 
-      {filteredInventario.length === 0 ? (
+      {Inventario.length === 0 ? (
         <p>No hay inventario para mostrar.</p>
       ) : (
         <>
@@ -90,7 +62,7 @@ const InventarioList = ({ Inventario, onSelectTicket }) => {
               ← Anterior
             </button>
             <span className="page-indicator">
-              Página {currentPage + 1} de {totalPages}
+              Página {currentPage + 1}:{totalPages}
             </span>
             <button
               onClick={handleNextPage}

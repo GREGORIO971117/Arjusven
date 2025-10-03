@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './ticketList.css';
 
 function RenderEditDatosInventario({ data, onSave, onCancelEdit, datosEstaticos }) {
   const [formData, setFormData] = useState({});
