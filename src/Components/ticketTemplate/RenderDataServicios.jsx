@@ -1,6 +1,6 @@
 import React from 'react';
 
-const RenderDatosServicio = ({ data,onEdit}) => {
+const RenderDatosServicio = ({ data,onEdit,activeTab,setActiveTab,isEditing}) => {
 
   if (!data) {
     return null;
@@ -67,8 +67,31 @@ const RenderDatosServicio = ({ data,onEdit}) => {
     <>
   <h2 className="title">
     <strong>{caseNumber}-{title}</strong>
-    <button onClick={onEdit} className="edit-button">Editar</button>
   </h2>
+
+  <div className="ticket-tabs">
+        <button
+          className={`tab-button ${activeTab === 'servicio' ? 'active' : ''}`}
+          onClick={() => setActiveTab('servicio')}
+        >
+          Datos de Servicio
+        </button>
+        <button
+          className={`tab-button ${activeTab === 'adicionales' ? 'active' : ''}`}
+          onClick={() => setActiveTab('adicionales')}
+        >
+          Datos Adicionales
+        </button>
+        <div className="ticket-actions">
+          {!isEditing && (
+            <button onClick={() => setIsEditing(true)} className="edit-button">
+              Editar
+            </button>
+          )}
+          
+          
+        </div>
+      </div>
 
   <div className='infoSection'>
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './ticketList.css';
 const RenderEditarDatosAdicionales = ({ data, onCancelEdit }) => {
   const [formData, setFormData] = useState({});
 

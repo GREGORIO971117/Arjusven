@@ -1,6 +1,6 @@
 import React from 'react';
 
-function RenderDatosAdicionales({ data }) {
+function RenderDatosAdicionales({ data,onEdit,activeTab,setActiveTab,isEditin }) {
 
   if (!data) {
     return null;
@@ -51,6 +51,36 @@ function RenderDatosAdicionales({ data }) {
 
   return (
     <>
+
+    <h2 className="title">
+    <strong>{caseNumber}-{title}</strong>
+  </h2>
+
+  <div className="ticket-tabs">
+        <button
+          className={`tab-button ${activeTab === 'servicio' ? 'active' : ''}`}
+          onClick={() => setActiveTab('servicio')}
+        >
+          Datos de Servicio
+        </button>
+        <button
+          className={`tab-button ${activeTab === 'adicionales' ? 'active' : ''}`}
+          onClick={() => setActiveTab('adicionales')}
+        >
+          Datos Adicionales
+        </button>
+        <div className="ticket-actions">
+          {!isEditing && (
+            <button onClick={() => setIsEditing(true)} className="edit-button">
+              Editar
+            </button>
+          )}
+          
+          
+        </div>
+  </div>
+
+
     <div className="infoSection">
 
   {/* Punto de Venta */}
