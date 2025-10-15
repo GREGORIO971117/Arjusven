@@ -23,6 +23,7 @@ function RenderEditDatosInventario({ data, onSave, onCancelEdit, datosEstaticos 
   };
 
   const FormField = ({ label, name, type = 'text', options }) => (
+
     <div className="formFieldCompact">
       <label htmlFor={name}><strong>{label}:</strong></label>
       {type === 'select' ? (
@@ -57,7 +58,7 @@ function RenderEditDatosInventario({ data, onSave, onCancelEdit, datosEstaticos 
     <div className="formGridContainer">
 
       <div className="grid3">
-        <FormField label="Título" name="ticketNumber" />
+        <FormField label="Título" name="title" />
         <FormField label="Número de Serie" name="numeroSerie" />
         <FormField label="Estado" name="estado" type="select" options={datosEstaticos.estado} />
         <FormField label="Equipo" name="equipo" type="select" options={datosEstaticos.equipos} />
@@ -80,9 +81,9 @@ function RenderEditDatosInventario({ data, onSave, onCancelEdit, datosEstaticos 
           <textarea
             id="descripcion"
             name="descripcion"
-            value={formData.descripcion || ''}
+            value={formData.descripcion}
             onChange={handleChange}
-            rows="4"
+            rows="2"
             className="form-input"
           />
         </div>

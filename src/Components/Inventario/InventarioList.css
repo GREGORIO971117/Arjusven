@@ -253,7 +253,7 @@ textarea.form-input {
     flex-direction: row; 
     align-items: baseline;
     gap: 0.5rem;
-    margin-bottom: 0.75rem; 
+    margin-bottom: 0; 
 }
 
 .infoItem strong,

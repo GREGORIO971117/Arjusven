@@ -1,6 +1,6 @@
 import React from 'react';
 
-function RenderDatosAdicionales({ data,onEdit,activeTab,setActiveTab,isEditin }) {
+function RenderDatosAdicionales({ data,onEdit,activeTab,setActiveTab,isEditing,setIsEditing }) {
 
   if (!data) {
     return null;
@@ -16,6 +16,8 @@ function RenderDatosAdicionales({ data,onEdit,activeTab,setActiveTab,isEditin })
 };
 
   const {
+    title,
+    caseNumber,
     ciudad,
     cantidadTPV,
     modeloEntra,
@@ -52,9 +54,7 @@ function RenderDatosAdicionales({ data,onEdit,activeTab,setActiveTab,isEditin })
   return (
     <>
 
-    <h2 className="title">
-    <strong>{caseNumber}-{title}</strong>
-  </h2>
+    
 
   <div className="ticket-tabs">
         <button
@@ -69,22 +69,30 @@ function RenderDatosAdicionales({ data,onEdit,activeTab,setActiveTab,isEditin })
         >
           Datos Adicionales
         </button>
+
+        <h2 className="title">
+          <strong> {data.title}</strong>
+        </h2>
         <div className="ticket-actions">
           {!isEditing && (
+            <>
             <button onClick={() => setIsEditing(true)} className="edit-button">
               Editar
-            </button>
-          )}
-          
-          
+            </button>   
+            </>         
+          )} 
+
+          <button className="download-button">
+            Descargar
+          </button>   
         </div>
   </div>
 
 
-    <div className="infoSection">
+    <div className="info-item">
 
   {/* Punto de Venta */}
-  <div className="section">
+  <div className="grid3">
     <InfoItem label="Ciudad" value={ciudad} />
     <InfoItem label="Plaza" value={plaza} />
     <InfoItem label="Técnico" value={tecnico} />
@@ -93,45 +101,49 @@ function RenderDatosAdicionales({ data,onEdit,activeTab,setActiveTab,isEditin })
     <InfoItem label="Firma en Estación" value={firmaEnEstacion} />
     <InfoItem label="#Tarjeta / TAG" value={tarjetaTag} />
     <InfoItem label="Cantidad TPV en Base" value={cantidadTPV} />
+    <InfoItem label="Modelo entra" value={modeloEntra} />
+
   </div>
 
   {/* Equipo Entrante */}
-  <div className="section">
-    <InfoItem label="Modelo entra" value={modeloEntra} />
+  <div className="grid3">
     <InfoItem label="Marca Entra" value={marcaEntra} />
     <InfoItem label="Serie Lógica entra" value={serieLogicaEntra} />
     <InfoItem label="Serie Física entra" value={serieFisicaEntra} />
     <InfoItem label="SIM entra" value={simEntra} />
     <InfoItem label="PTID entra" value={ptidEntra} />
     <InfoItem label="Eliminador Entra" value={eliminadorEntra} />
-  </div>
-
-  {/* Equipo Saliente */}
-  <div className="section">
     <InfoItem label="Modelo Sale" value={modeloSale} />
     <InfoItem label="Marca Sale" value={marcaSale} />
     <InfoItem label="Serie Lógica sale" value={serieLogicaSale} />
+  </div>
+
+  {/* Equipo Saliente */}
+  <div className="grid3">
+    
     <InfoItem label="Serie Física sale" value={serieFisicaSale} />
     <InfoItem label="SIM Sale" value={simSale} />
     <InfoItem label="PTID Sale" value={ptidSale} />
     <InfoItem label="Eliminador Sale" value={eliminadorSale} />
-  </div>
-
-  {/* Servicio */}
-  <div className="section">
     <InfoItem label="Versión Browser" value={versionBrowser} />
     <InfoItem label="Versión Browser Sale" value={versionBrowserSale} />
     <InfoItem label="Tipo de Comunicación" value={tipoComunicacion} />
     <InfoItem label="Tipo de Comunicación Sale" value={tipoComunicacionSale} />
     <InfoItem label="Estado" value={estado} />
-    <InfoItem label="Orden de Servicio" value={ordenDeServicio} />
   </div>
 
-  {/* Inventario */}
-  <div className="section">
+  {/* Servicio */}
+  <div className="grid3">
+    
+    <InfoItem label="Orden de Servicio" value={ordenDeServicio} />
     <InfoItem label="Serie que queda de stock" value={serieStock} />
     <InfoItem label="SIM que queda de stock" value={simStock} />
     <InfoItem label="Modelo de Stock" value={modeloStock} />
+  </div>
+
+  {/* Inventario */}
+  <div className="grid3">
+    
   </div>
 
 </div>

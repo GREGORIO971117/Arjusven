@@ -1,37 +1,52 @@
+/* Login.css */
+
+/* 1. ESTILOS BASE Y CENTRADO (Contenedor Principal) */
 .login-container {
+  /* Asegura que el contenedor ocupe al menos la altura de la ventana */
+  min-height: 100vh; 
+  width: 100%;
+  
+  /* Habilita Flexbox para centrar el contenido */
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 900px;
-  background-color: #f0f2f5;
-  font-family: Arial, sans-serif;
+  align-items: center; 
+  
+  background-color: #f0f2f5; /* Color de fondo claro */
+  padding: 20px; /* Padding para evitar que la tarjeta toque los bordes en móviles */
+  box-sizing: border-box; 
 }
 
+/* 2. ESTILOS DE LA TARJETA (Móvil Primero) */
 .login-card {
-  width: 350px;
-  padding: 40px 30px;
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  /* Usa un ancho flexible para adaptarse al móvil */
+  width: 100%; 
+  max-width: 350px; /* Ancho máximo para pantallas medianas/móviles grandes */
+  
+  padding: 25px; /* Ligeramente reducido para móviles */
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Sombra mejorada */
 }
 
+/* 3. ESTILOS DE ENCABEZADO Y LOGO */
 .login-header {
   margin-bottom: 20px;
+  text-align: center; /* Centra el logo y el texto dentro del encabezado */
 }
 
 .heart-logo {
-  width: 80px;
+  width: 70px; /* Ligeramente más pequeño en móvil */
+  height: auto;
   margin-bottom: 10px;
-  
 }
 
 .login-header h1 {
-  font-size: 1rem;
+  font-size: 1.2rem; /* Tamaño de fuente relativo y ajustado */
   color: #777;
-  font-weight: normal;
+  font-weight: 400; /* Normal es mejor con 400 */
 }
 
+/* 4. ESTILOS DEL FORMULARIO */
 .login-form {
   display: flex;
   flex-direction: column;
@@ -45,28 +60,45 @@
 }
 
 .login-form input {
+  width: 100%; /* CLAVE: Ocupa todo el ancho disponible */
   padding: 12px;
   margin-bottom: 20px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 1rem;
+  box-sizing: border-box; /* CLAVE: Para que el padding no desborde el 100% */
 }
 
+.error-message {
+  color: #e53935; 
+  font-size: 0.8rem;
+  margin-top: -15px;
+  margin-bottom: 10px;
+}
+
+/* 5. ESTILOS DE BOTONES */
 .login-button {
-  padding: 15px;
+  width: 100%; /* CLAVE: Ocupa todo el ancho disponible */
+  padding: 14px; /* Un poco más de padding */
   border: none;
   border-radius: 8px;
   background-color: #5b5bfa;
   color: white;
-  font-size: 1rem;
+  font-size: 1.05rem; /* Ligeramente más grande */
   font-weight: bold;
   cursor: pointer;
   margin-top: 10px;
   box-shadow: 0 4px 10px rgba(76, 76, 255, 0.3);
+  transition: background-color 0.3s; /* Añade una transición */
 }
 
+.login-button:hover {
+ background-color: #4444e0; /* Efecto hover */
+}
+
+/* 6. ESTILOS DE PIE DE PÁGINA */
 .forgot-password-link {
-  font-size: 0.8rem;
+  font-size: 0.85rem; /* Ligeramente ajustado */
   color: #888;
   text-decoration: none;
   margin-top: 15px;
@@ -76,6 +108,7 @@
 .login-footer {
   margin-top: 30px;
   display: flex;
+  flex-direction: column; /* Cambia a columna en móviles para evitar desbordamiento */
   justify-content: center;
   align-items: center;
   font-size: 0.9rem;
@@ -84,20 +117,51 @@
 }
 
 .create-account-button {
-  padding: 10px 20px;
+  width: 100%; /* Ocupa todo el ancho en móvil */
+  padding: 12px 0; /* Ajuste de padding */
   border: none;
   border-radius: 8px;
-  background-color: #f06292;
   color: white;
   font-weight: bold;
   cursor: pointer;
   background-image: linear-gradient(135deg, #f06292 0%, #ff86b0 100%);
   box-shadow: 0 4px 10px rgba(240, 98, 146, 0.3);
+  transition: opacity 0.3s;
 }
 
-.error-message {
-    color: #e53935; 
-    font-size: 0.8rem;
-    margin-top: -15px;
-    margin-bottom: 10px;
+.create-account-button:hover {
+  opacity: 0.9;
+}
+
+/* ======================================= */
+/* 7. MEDIA QUERIES PARA ESCRITORIO (min-width: 768px) */
+/* ======================================= */
+
+@media (min-width: 768px) {
+    /* Ajustes para tabletas y escritorios */
+    .login-card {
+        /* Aumentamos el ancho máximo de la tarjeta */
+        max-width: 420px; 
+        padding: 40px; /* Aumentamos el padding para más espacio */
+    }
+
+    .login-header h1 {
+        font-size: 1.5rem; /* Hacemos el título más grande */
+    }
+
+    .heart-logo {
+        width: 80px; /* Revertimos el tamaño original del logo */
+    }
+    
+    .login-footer {
+    /* Volvemos a la disposición en fila para pantallas más grandes */
+    flex-direction: row; 
+    gap: 15px;
+    }
+    
+    .create-account-button {
+    /* Le damos un ancho fijo o automático en escritorio */
+    width: auto; 
+    padding: 10px 20px;
+    }
 }

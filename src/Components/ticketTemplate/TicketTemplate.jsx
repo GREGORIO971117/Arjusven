@@ -32,6 +32,7 @@ const TicketTemplate = ({data}) => {
             data={data}
             datosEstaticos={datosEstaticos}
             onCancelEdit={() => setIsEditing(false)}
+            handleDownload={handleDownload}
           />
         );
       }
@@ -41,8 +42,10 @@ const TicketTemplate = ({data}) => {
           <RenderDatosServicio 
                 data={data} 
                 setActiveTab={setActiveTab}
+                setIsEditing={setIsEditing}
                 activeTab={activeTab}
                 isEditing={isEditing}
+                handleDownload={handleDownload}
                 />
       );
     }
@@ -52,6 +55,7 @@ const TicketTemplate = ({data}) => {
                   setActiveTab={setActiveTab}
                   activeTab={activeTab}
                   isEditing={isEditing}
+                  setIsEditing={setIsEditing}
                   />
         );
       }
@@ -61,13 +65,6 @@ const TicketTemplate = ({data}) => {
 
   return (
     <div className="ticket-template-container">
-      <div className="ticket-header">
-        <h2 className="ticket-title">{data['Nombre de ESS']}</h2>
-      </div>
-
-      <button onClick={handleDownload} className="download-button">
-            Descargar
-          </button>
       
       <div className="ticket-content">{renderContent()}</div>
     </div>
