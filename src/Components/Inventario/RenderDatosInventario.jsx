@@ -20,7 +20,7 @@ function RenderDatosInventario({ data,onEdit }) {
     fechaInicioPrevista,
     responsable,
     codigoEmail,
-    numeroSerie,
+    numeroDeSerie,
     titulo,
     descripcion,
     fechaActualizacion,
@@ -53,7 +53,7 @@ function RenderDatosInventario({ data,onEdit }) {
 
         <div className="section">
             <InfoItem label="Título" value={titulo} />
-            <InfoItem label="Número de Serie" value={numeroSerie} />
+            <InfoItem label="Número de Serie" value={numeroDeSerie} />
             <InfoItem label="Equipo" value={equipo} />
             <InfoItem label="Estado" value={estado} />
             <InfoItem label="Responsable" value={responsable} />
@@ -64,7 +64,7 @@ function RenderDatosInventario({ data,onEdit }) {
         </div>
 
         <div className="section">
-            <InfoItem label="Número de Incidencia" value={numeroIncidencia} />
+            <InfoItem label="Número de ultima incidencia" value={numeroIncidencia} />
             <InfoItem label="Código de Email" value={codigoEmail} />
             <InfoItem label="Guías" value={guias} />
             <InfoItem label="Fecha de Inicio Prevista" value={fechaInicioPrevista} />

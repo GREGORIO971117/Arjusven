@@ -1,14 +1,46 @@
-import ServiceRequestForm from '../Service/ServiceRequestForm';
+import React,{useState} from 'react';
 
-function subirArchivos({loadTickets}) {
+import RenderInventario from './subirInventarioTemplate';
+import RenderTicket from './subirTicketTemplate';
+
+export default function subirArchivos() {
+    const [activeTab, setActiveTab] = useState('inventario');
+
+    const renderContent=()=>{
+        if (activeTab==='inventario') {
+
+            return(
+                <RenderInventario/>
+            );
+        }if (activeTab==='ticket') {
+            return(
+                <RenderTicket/>
+            )
+        }
+    }
+
     return(
         <>
-            <h1>Gestión de Tickets de Servicio</h1>
-            <p>Sube un archivo de Excel para ver los tickets generados.</p>
+        <div className="ticket-tabs">
+            <button
+            className={`tab-button ${activeTab === 'inventario' ? 'active' : ''}`}
+            onClick={() => setActiveTab('inventario')}
+            >
+                Crear Articulo de inventario
+            </button>
 
-            <ServiceRequestForm onNewTicket={loadTickets} />
+            <button
+            className={`tab-button ${activeTab === 'ticket' ? 'active' : ''}`}
+            onClick={() => setActiveTab('ticket')}
+            >
+                Crear Ticket
+            </button>
+
+           
+        </div>
+
+         <div className='ticket-content'>{renderContent()}</div>
         </>
+
     )
 }
-
-export default subirArchivos;

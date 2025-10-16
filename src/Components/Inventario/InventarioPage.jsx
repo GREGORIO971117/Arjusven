@@ -9,7 +9,7 @@ function InventarioPage() {
   const [selectedInventario, setSelectedInventario] = useState(null);
   const [showFilterPanel, setShowFilterPanel] = useState(false);
 
-  const API_URL = '/assets/inventoryData.json'; 
+  const API_URL = 'http://localhost:8080/api/inventario'; 
 
   useEffect(() => {
     const loadInventario = async () => {

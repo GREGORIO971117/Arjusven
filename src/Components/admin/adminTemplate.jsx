@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import datosEstaticos from '../../assets/datos.json';
 
 const API_BASE_URL = 'http://localhost:8080/api/usuarios'; // Endpoint base para Usuarios
 
 export default function AdminTemplate() {
-    // El defaultUser y STORAGE_KEY ya no son necesarios
-    // const STORAGE_KEY = "arjusven_users";
-    // const defaultUser = { /* ... */ };
-
+    
     const [users, setUsers] = useState([]);
     const [form, setForm] = useState({
         nombre: "",
@@ -54,7 +52,7 @@ export default function AdminTemplate() {
     }
 
     function validateForm() {
-        // ... (Tu lógica de validación se mantiene, pero quitamos el chequeo de unicidad local)
+        
         if (!form.nombre.trim()) return "El nombre es requerido.";
         if (!form.correo.trim()) return "El correo es requerido.";
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.correo)) return "Correo inválido.";
@@ -143,6 +141,7 @@ export default function AdminTemplate() {
         } catch (err) {
             setError(err.message || "Fallo la conexión con el servidor.");
         }
+        console.log(`El usuario con ${id} fue eliminado`)
     }
 
     return (

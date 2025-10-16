@@ -50,7 +50,7 @@ const InventarioList = ({ Inventario, onSelectTicket,setShowFilterPanel}) => {
                 onClick={() => handleTicketClick(ticket)}
               >
                 <div className="ticket-info">
-                  <strong>{ticket.numeroIncidencia}</strong> — {ticket.titulo}
+                  <strong>{ticket.numeroDeSerie}</strong>
                 </div>
               </li>
             ))}
