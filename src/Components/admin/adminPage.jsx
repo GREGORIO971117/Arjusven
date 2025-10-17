@@ -3,8 +3,6 @@ import AdminTemplate from './adminTemplate';
 import './adminPage.css';
 
 function AdminPage() {
-   
-
     return (
        <AdminTemplate/>
     );

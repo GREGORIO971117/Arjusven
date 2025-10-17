@@ -168,7 +168,6 @@ export default function SubirInventarioTemplate() {
 
     return (
         <div style={styles.container}>
-            <h2 style={styles.title}>Gestión de Inventario</h2>
 
             {/* SECCIÓN AGREGAR ARTÍCULO */}
             <section style={styles.card}>

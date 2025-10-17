@@ -13,6 +13,7 @@ const TicketTemplate = ({data}) => {
   const handleDownload = () => {
     
     alert('La función de descarga está pendiente de implementación en el backend.');
+    
   };
 
   const renderContent = () => {
