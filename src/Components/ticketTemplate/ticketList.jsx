@@ -31,7 +31,7 @@ function ticketList({tickets,onSelectTicket,setShowFilterPanel}){
       <div className="filter-button-container">
                 <input
                     type="text"
-                    placeholder="Buscar Inventario..."
+                    placeholder="Buscar tickets..."
                     className='search-input'/>
                     
                 <button className="filter-toggle-button"
@@ -41,7 +41,7 @@ function ticketList({tickets,onSelectTicket,setShowFilterPanel}){
                 </button>
             </div>
       {tickets.length === 0 ? (
-        <p>No hay inventario para mostrar.</p>
+        <p>No hay tickets para mostrar.</p>
       ) : (
             <>
         <ul>

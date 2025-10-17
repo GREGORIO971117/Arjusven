@@ -18,12 +18,12 @@ function TicketPage() {
           try {
             const response = await fetch(API_URL);
             if (!response.ok) {
-              throw new Error('Error al cargar los datos del inventario');
+              throw new Error('Error al cargar los tickets');
             }
             const data = await response.json();
             setTicketsData(data);
           } catch (error) {
-            console.error('Error al cargar los datos:', error);
+            console.error('Error al cargar los tickets:', error);
           }
         };
     

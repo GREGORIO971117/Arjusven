@@ -18,7 +18,6 @@ export default function AdminTemplate() {
     const [currentView, setCurrentView] = useState(VIEWS.FORM); 
     const [currentPage, setCurrentPage] = useState(1);
     const [editingUser, setEditingUser] = useState(null);
-
     const USERS_PER_PAGE = 10; // Definimos el límite por página
     
     // Estados de datos y control
