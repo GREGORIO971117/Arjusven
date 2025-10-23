@@ -7,7 +7,6 @@ export default function UsuariosEdit({ user, onSave, onCancel }) {
 
     // Inicializa el estado del formulario con los datos del usuario recibido
     const [formData, setFormData] = useState({
-        // Usamos el operador nullish coalescing (??) para asegurar valores por defecto
         nombre: user?.nombre ?? "",
         correo: user?.correo ?? "",
         estadoDeResidencia: user?.estadoDeResidencia ?? "",
@@ -15,6 +14,7 @@ export default function UsuariosEdit({ user, onSave, onCancel }) {
         rol: user?.rol ?? "USUARIO",
         contraseña: "", 
     });
+    
     const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 

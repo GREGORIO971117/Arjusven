@@ -39,7 +39,7 @@ function RenderDatosInventario({ data,onEdit }) {
   
   <>  
         <div className="ticket-header">
-                <h2 className="ticket-title">Equipo-{titulo}
+                <h2 className="ticket-title">{titulo}
                 <span>
                   <button onClick={onEdit} className="edit-button">Editar</button>
                   </span>
