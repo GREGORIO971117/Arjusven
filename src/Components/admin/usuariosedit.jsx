@@ -47,9 +47,7 @@ export default function UsuariosEdit({ user, onSave, onCancel }) {
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.correo)) return "Correo inválido.";
         if (!formData.estadoDeResidencia.trim()) return "El estado de residencia es requerido.";
         if (!formData.edad || Number(formData.edad) <= 0) return "Edad inválida.";
-        if (!formData.rol.trim()) return "El rol es requerido.";
-        // No forzamos la contraseña si no se está modificando.
-        
+        if (!formData.rol.trim()) return "El rol es requerido.";        
         return "";
     };
 
