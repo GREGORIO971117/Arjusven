@@ -9,7 +9,7 @@ const API_BASE_URL = 'http://localhost:8080/api/usuarios'; // Endpoint base para
 const VIEWS = {
     FORM: 'agregarUsuario',
     LIST: 'listaUsuarios',
-    Edit: 'editarUsuario',
+    EDIT: 'editarUsuario',
 };
 
 export default function AdminTemplate() {
@@ -267,7 +267,6 @@ export default function AdminTemplate() {
     return (
         <div style={styles.container}>
 
-            {/* SECCIÓN DE NAVEGACIÓN (TABS) */}
             <div style={styles.cardNav}> 
                 <button
                     style={{ 
@@ -289,7 +288,6 @@ export default function AdminTemplate() {
                 </button>
             </div>
 
-            {/* CONTENIDO DINÁMICO (Muestra Formulario o Lista) */}
             <div style={{ marginTop: 20 }}>
                 {renderContent()}
             </div>
@@ -308,8 +306,8 @@ export const styles = {
     cardNav: { background: "#fff", padding: 16, borderRadius: 6, boxShadow: "0 0 6px rgba(0,0,0,0.06)", marginBottom: 16, display: 'flex', gap: 10 },
     form: {},
     row: { display: "flex", gap: 12, marginTop: 8, flexWrap: "wrap" },
-    label: { display: "flex", flexDirection: "column", flex: "1 1 220px", fontSize: 14 },
-    input: { marginTop: 6, padding: "8px 10px", borderRadius: 4, border: "1px solid #ccc", fontSize: 14 },
+    label: { display: "flex", flexDirection: "column", flex: "1 1 20px", fontSize: 14 },
+    input: { marginTop: 6, padding: "4px 8px", borderRadius: 4, border: "1px solid #ccc", fontSize: 14 },
     // Botones de acción principal
     buttonPrimary: { padding: "8px 12px", background: "#0078d4", color: "#fff", border: "none", borderRadius: 4, cursor: "pointer" },
     buttonDanger: { padding: "6px 10px", background: "#d9534f", color: "#fff", border: "none", borderRadius: 4, cursor: "pointer" },
@@ -333,7 +331,7 @@ export const styles = {
         borderCollapse: "collapse", 
         marginTop: 8 
     },
-    // Nuevos estilos para celdas y encabezados (para una tabla más limpia)
+
     th: {
         textAlign: 'left',
         padding: '12px',
