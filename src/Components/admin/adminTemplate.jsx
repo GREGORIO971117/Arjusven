@@ -238,6 +238,8 @@ export default function AdminTemplate() {
                             <label style={styles.label}>Rol
                                 <select name="rol" value={form.rol} onChange={handleChange} style={styles.input}>
                                     <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+                                    <option value="TECNICO">TECNICO</option>
+                                    <option value="SUPERVISOR">SUPERVISOR</option>
                                     <option value="USUARIO">USUARIO</option>
                                 </select>
                             </label>

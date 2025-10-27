@@ -136,6 +136,8 @@ export default function UsuariosEdit({ user, onSave, onCancel }) {
                     <label style={styles.label}>Rol
                         <select name="rol" value={formData.rol} onChange={handleChange} style={styles.input} >
                             <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+                            <option value="TECNICO">TECNICO</option>
+                            <option value="SUPERVISOR">SUPERVISOR</option>
                             <option value="USUARIO">USUARIO</option>
                         </select>
                     </label>

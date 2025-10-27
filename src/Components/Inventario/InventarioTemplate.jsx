@@ -43,7 +43,7 @@ function InventarioTemplate({ data, onGoBack }) {
                     data={data}
                     datosEstaticos={datosEstaticos}
                     onCancelEdit={() => setIsEdit(false)}
-                    onSave={() => setIsEdit(false)}
+                    onSave={() => setIsEdit(false)}bloc
                 />
             ) : (
                 // MODO DE VISUALIZACIÓN
