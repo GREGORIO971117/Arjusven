@@ -13,9 +13,11 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [userName, setUserName] = useState('Gregorio');
   
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = async (name) => {
     setIsLoggedIn(true);
+    setUserName(name);
   };
   
   const handleLogout = () => {
@@ -38,7 +40,7 @@ function App() {
 
   return (
     <>
-      {showNavbar && <NavBar links={links} onLogout={handleLogout} />} 
+      {showNavbar && <NavBar links={links} userName={userName} onLogout={handleLogout} />} 
       
       <Routes>
         <Route path="/" element={<Login onLogin={handleLoginSuccess} />} />

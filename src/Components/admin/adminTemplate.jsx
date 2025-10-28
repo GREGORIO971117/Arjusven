@@ -34,8 +34,6 @@ export default function AdminTemplate() {
         "contraseña": "",
     });
 
-    // --- LÓGICA DE API Y DATOS ---
-
     // Función para obtener todos los usuarios del backend
     const fetchUsers = async () => {
         setIsLoading(true);
