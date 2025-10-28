@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import datosEstaticos from '../../assets/datos.json'
 
 const API_BASE_URL = 'http://localhost:8080/api/inventario'; // Endpoint base para Inventario
+const USERS_API_URL = 'http://localhost:8080/api/usuarios'; 
 
 export default function SubirInventarioTemplate() {
 
     // --- ESTADOS ---
-    const [inventario, setInventario] = useState([]); // Lista de todos los artículos de inventario
-    const [form, setForm] = useState({ // Estado del formulario para agregar
+    const [inventario, setInventario] = useState([]); 
+    const [usuarios, setUsuarios] = useState([]); 
+    
+    const [form, setForm] = useState({ 
         titulo: "",
         numeroDeSerie: "",
         equipo: "",
         estado: "ACTIVO",
-        responsable: "",
+        responsable: "", // Aquí guardaremos el ID o nombre del responsable seleccionado
         cliente: "",
         plaza: "",
         tecnico: "",
@@ -23,16 +27,34 @@ export default function SubirInventarioTemplate() {
         fechaDeFin: "",
         ultimaActualizacion: "",
         descripcion: "",
-        // Eliminamos "attachments: []"
     });
 
-    const [artErrors, setArtErrors] = useState({}); // Errores de validación del formulario
-    const [error, setError] = useState(""); // Errores de API y mensajes de éxito
-    const [isLoading, setIsLoading] = useState(true); // Estado de carga inicial (GET)
-    const [isSubmitting, setIsSubmitting] = useState(false); // Estado de envío (POST)
+    const [artErrors, setArtErrors] = useState({}); 
+    const [error, setError] = useState(""); 
+    const [isLoading, setIsLoading] = useState(true); 
+    const [isSubmitting, setIsSubmitting] = useState(false); 
 
-    // --- FUNCIONES DE FETCH Y LÓGICA ---
+    // ---------------------------------------------------------------------
+    // 🆕 FUNCIONES DE FETCH ADICIONALES
+    // ---------------------------------------------------------------------
 
+    // Función para cargar la lista de usuarios/responsables (GET)
+    const fetchUsers = async () => {
+        try {
+            const response = await fetch(USERS_API_URL);
+            if (!response.ok) throw new Error("Error al cargar la lista de usuarios.");
+            
+            const data = await response.json();
+            // 💡 Asumimos que data es un array de objetos: 
+            //    [{ id: 1, name: "Usuario A" }, { id: 2, name: "Usuario B" }, ...]
+            setUsuarios(Array.isArray(data) ? data : []); 
+        } catch (err) {
+            console.error(err);
+            // Mostrar error solo si afecta la funcionalidad principal (opcional)
+            // setError(err.message || "No se pudo cargar la lista de responsables."); 
+        }
+    };
+    
     // Función para cargar todos los artículos de inventario (GET)
     const fetchInventario = async () => {
         setIsLoading(true);
@@ -51,18 +73,17 @@ export default function SubirInventarioTemplate() {
         }
     };
 
-    // Carga inicial del inventario
+
     useEffect(() => {
         fetchInventario();
+        fetchUsers(); 
     }, []);
 
-    // Manejador de cambios en inputs de texto/select
     function handleChange(e) {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     }
 
-    // Validación del formulario de inventario
     function validateForm() {
         const errs = {};
         if (!form.titulo || form.titulo.trim() === "") {
@@ -78,14 +99,14 @@ export default function SubirInventarioTemplate() {
         return Object.keys(errs).length === 0;
     }
 
-    // Función para resetear el formulario
     function resetForm() {
         setForm({
+            // ... (Todos los campos reseteados) ...
             titulo: "",
             numeroDeSerie: "",
             equipo: "",
             estado: "ACTIVO",
-            responsable: "",
+            responsable: "", // Importante resetear este campo también
             cliente: "",
             plaza: "",
             tecnico: "",
@@ -101,7 +122,6 @@ export default function SubirInventarioTemplate() {
         setArtErrors({});
     }
 
-    // Función para agregar un nuevo artículo (POST - USANDO JSON)
     async function submitArticulo(e) {
         e.preventDefault();
         
@@ -111,14 +131,13 @@ export default function SubirInventarioTemplate() {
         }
 
         setIsSubmitting(true);
-        setError(""); // Limpiar errores de API
+        setError(""); 
         
         try {
-            // EL FETCH CRÍTICO: Usando JSON y el header Content-Type
             const response = await fetch(API_BASE_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(form), // Se envía directamente el objeto 'form'
+                body: JSON.stringify(form), 
             });
 
             if (!response.ok) {
@@ -135,7 +154,7 @@ export default function SubirInventarioTemplate() {
             const nuevoArticulo = await response.json();
             setInventario((prev) => [nuevoArticulo, ...prev]);
             resetForm();
-            setError("Artículo de inventario creado correctamente."); // Mensaje de éxito
+            setError("Artículo de inventario creado correctamente."); 
 
         } catch (err) {
             setError("Error: " + err.message);
@@ -144,7 +163,6 @@ export default function SubirInventarioTemplate() {
         }
     }
 
-    // Función para eliminar un artículo (DELETE)
     async function removeArticulo(id) {
         if (!window.confirm("¿Borrar este artículo de inventario? Esta acción no se puede deshacer.")) return;
 
@@ -177,11 +195,11 @@ export default function SubirInventarioTemplate() {
                     {/* Fila 1: Título y Número de Serie */}
                     <div style={styles.row}>
                         <label style={styles.label}>
-                            Título*
+                            Título
                             <input name="titulo" value={form.titulo} onChange={handleChange} style={styles.input} />
                         </label>
                         <label style={styles.label}>
-                            Número de serie*
+                            Número de serie
                             <input name="numeroDeSerie" value={form.numeroDeSerie} onChange={handleChange} style={styles.input} />
                         </label>
                     </div>
@@ -194,30 +212,51 @@ export default function SubirInventarioTemplate() {
 
                     {/* Fila 2: Equipo y Estado */}
                     <div style={styles.row}>
-                        <label style={styles.label}>
-                            Equipo
-                            <input name="equipo" value={form.equipo} onChange={handleChange} style={styles.input} />
-                        </label>
-                        <label style={styles.label}>
-                            Estado
-                            <select name="estado" value={form.estado} onChange={handleChange} style={styles.input}>
-                                <option value="ACTIVO">ACTIVO</option>
-                                <option value="EN REPARACIÓN">EN REPARACIÓN</option>
-                                <option value="INACTIVO">INACTIVO</option>
-                            </select>
-                        </label>
+                        <label style={styles.label}>Equipo
+                        <select name="equipo" value={form.equipo} onChange={handleChange} style={styles.input}>
+                            <option value="">Seleccione Equipo</option>
+                            {datosEstaticos.equipos?.map((opcion) => (
+                                <option key={opcion} value={opcion}>{opcion}</option>
+                            ))}
+                        </select>
+                    </label>
+                        <label style={styles.label}>Estado
+                        <select name="estado" value={form.estado} onChange={handleChange} style={styles.input}>
+                            <option value="">Seleccione Estado</option>
+                            {datosEstaticos.estado?.map((opcion) => (
+                                <option key={opcion} value={opcion}>{opcion}</option>
+                            ))}
+                        </select>
+                    </label>
                     </div>
                     
                     {/* Fila 3: Responsable y Cliente */}
                     <div style={styles.row}>
-                        <label style={styles.label}>
-                            Responsable
-                            <input name="responsable" value={form.responsable} onChange={handleChange} style={styles.input} />
-                        </label>
-                        <label style={styles.label}>
-                            Cliente
-                            <input name="cliente" value={form.cliente} onChange={handleChange} style={styles.input} />
-                        </label>
+                        <label style={styles.label}>Responsable
+                        <select 
+                            name="responsable" 
+                            value={form.responsable} 
+                            onChange={handleChange} 
+                            style={styles.input}
+                        >
+                            <option value="">Seleccione Responsable</option>
+                            {usuarios.map((user) => (
+                                // 💡 Asume que el objeto tiene propiedades 'id' y 'name' o similar
+                                <option key={user.idUsuarios} value={user.nombre}> 
+                                    {user.nombre}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                        {/* CAMPO CLIENTE EXISTENTE */}
+                        <label style={styles.label}>Cliente
+                        <select name="cliente" value={form.cliente} onChange={handleChange} style={styles.input}>
+                            <option value="">Seleccione Cliente</option>
+                            {datosEstaticos.cliente?.map((opcion) => (
+                                <option key={opcion} value={opcion}>{opcion}</option>
+                            ))}
+                        </select>
+                    </label>
                     </div>
 
                     {/* Fila 4: Descripción (ocupa toda la fila) */}
@@ -243,7 +282,7 @@ export default function SubirInventarioTemplate() {
                 </form>
             </section>
 
-            {/* SECCIÓN LISTA DE ARTÍCULOS */}
+            {/* SECCIÓN LISTA DE ARTÍCULOS (sin cambios) */}
             <section style={styles.card}>
                 <h3>Artículos en Inventario ({inventario.length})</h3>
                 {isLoading ? (
@@ -285,7 +324,7 @@ export default function SubirInventarioTemplate() {
     );
 }
 
-// Estilos copiados y adaptados de AdminTemplate
+// Estilos (sin cambios)
 const styles = {
     container: { padding: 20, fontFamily: "Segoe UI, Roboto, system-ui, sans-serif", color: "#222" },
     title: { marginBottom: 12 },
