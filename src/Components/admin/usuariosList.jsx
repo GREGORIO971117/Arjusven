@@ -79,7 +79,6 @@ export default function UsuariosList({ users, isLoading, removeUser,currentPage,
                     </div>
                 )}
 
-                {/* ⬇️ CONTROL DE PAGINACIÓN ⬇️ */}
                 {/* Solo muestra los controles si hay más de una página y no está cargando */}
                 {!isLoading && totalPages > 1 && (
                     <div style={paginationContainerStyle}>

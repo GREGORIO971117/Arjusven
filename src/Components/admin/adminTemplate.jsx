@@ -151,8 +151,6 @@ export default function AdminTemplate() {
             
             // Limpiar formulario y error
             setForm({ nombre: "", correo: "", estadoDeResidencia: "", edad: "", rol: "USUARIO", "contraseña": "" });
-            // Opcional: Cambiar a la vista de lista después de agregar
-            // setCurrentView(VIEWS.LIST); 
             
         } catch (err) {
             setError(err.message || "Fallo la conexión con el servidor.");
@@ -163,7 +161,7 @@ export default function AdminTemplate() {
 
     // 3. ELIMINAR USUARIO (DELETE)
     async function removeUser(id) {
-        if (!window.confirm("¿Borrar este usuario? Esta acción no se puede deshacer.")) return;
+        if (!window.confirm("¿Borrar este usuario?")) return;
         
         try {
             const response = await fetch(`${API_BASE_URL}/${id}`, {
@@ -326,12 +324,6 @@ export const styles = {
     },
     table: { width: "100%", borderCollapse: "collapse", marginTop: 8 },
     error: { color: "#b00020", marginTop: 8 },
-    table: { 
-        width: "100%", 
-        borderCollapse: "collapse", 
-        marginTop: 8 
-    },
-
     th: {
         textAlign: 'left',
         padding: '12px',

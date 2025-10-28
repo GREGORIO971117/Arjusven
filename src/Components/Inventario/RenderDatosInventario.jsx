@@ -6,6 +6,7 @@ import './InventarioList.css';
  * @param {string | LocalDate} dateString - Cadena de fecha (YYYY-MM-DD o formato largo).
  * @returns {string} Fecha formateada o una cadena vacía.
  */
+
 const formatDate = (dateString) => {
     // Si Java devuelve LocalDate, el string ya será YYYY-MM-DD.
     if (typeof dateString === 'string') {
@@ -28,6 +29,7 @@ function RenderDatosInventario({ data, onEdit }) {
             </div>
         );
     };
+
     const {
         fechaDeInicioPrevista,
         fechaDeFinPrevista, 
@@ -39,7 +41,7 @@ function RenderDatosInventario({ data, onEdit }) {
         titulo,
         descripcion,
         equipo,
-        numeroIncidencia,
+        numeroDeIncidencia,
         estado,
         cliente,
         plaza,
@@ -73,20 +75,21 @@ function RenderDatosInventario({ data, onEdit }) {
                     <InfoItem label="Técnico de Campo" value={tecnico} /> 
                 </div>
 
-                {/* Columna 2 */}
                 <div className="section">
-                    <InfoItem label="Número de Incidencia" value={numeroIncidencia} />
+                    <InfoItem label="Número de Incidencia" value={numeroDeIncidencia} />
                     <InfoItem label="Código de Email" value={codigoEmail} />
                     <InfoItem label="Guías" value={guias} />
-                    
-                    {/* USANDO LOS NOMBRES DE LA API (fechaDeInicioPrevista, etc.) */}
                     <InfoItem label="Fecha de Inicio Prevista" value={formatDate(fechaDeInicioPrevista)} />
                     <InfoItem label="Fecha de Fin Prevista" value={formatDate(fechaDeFinPrevista)} />
                     <InfoItem label="Fecha de Fin" value={formatDate(fechaDeFin)} />
                     <InfoItem label="Última Actualización" value={formatDate(ultimaActualizacion)} />
-                    
-                    <InfoItem label="Descripción" value={descripcion} /> 
                 </div>
+
+                <div className='section'>
+                    <InfoItem label="Descripción" value={descripcion} /> 
+
+                </div>
+
             </div>
 
         </>
