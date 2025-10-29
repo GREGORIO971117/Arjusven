@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 const RenderDatosServicio = ({ data,onEdit,activeTab,setActiveTab,isEditing,setIsEditing}) => { // Agregué setIsEditing a los props para que funcione el botón de Editar
