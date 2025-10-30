@@ -17,8 +17,8 @@ function Login({ onLoginSuccess }) {
 
     const navigate = useNavigate();
 
-    const usernameRegex = /^[a-zA-Z0-9_-]{3,20}$/;
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%:^&*()_+])[A-Za-z\d!@#:$%^&*()_+]{8,15}$/;
+    const usernameRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const passwordRegex = /^(?=.*[a-z]).{6,}$/;
 
     const handleSubmit = async (e) => { 
         e.preventDefault();
@@ -51,10 +51,14 @@ function Login({ onLoginSuccess }) {
         try {
             // Objeto de credenciales con las claves que espera el backend
             const credentials = {
-                correo: username, // Enviamos el estado 'username' como 'correo'
-                contraseña: password // Enviamos el estado 'password' como 'contraseña'
+                correo: username, 
+                contraseña: password,
+                // Valores 'dummy' para campos NOT NULL requeridos por el modelo Usuarios:
+                nombre: " Temporal",
+                estadoDeResidencia: "Temporal",
+                edad: 0, 
+                rol: "USUARIO"
             };
-            
             const response = await fetch(API_LOGIN_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -105,6 +109,7 @@ function Login({ onLoginSuccess }) {
                         id="username"
                         placeholder="Usuario"
                         value={username}
+                        onChange={(e)=> setUsername(e.target.value)}
                         disabled={isLoading}
                     />
                     {usernameError && <p className="error-message">{usernameError}</p>}
