@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './Login.css'; 
 import Logo from '../../assets/Arjus.png'; 
 
-const API_LOGIN_URL = 'http://localhost:8080/api/usuarios'; 
+const API_LOGIN_URL = 'http://localhost:8080/api/usuarios/login'; 
 
 function Login({ onLoginSuccess }) {
     // Estados para los campos de formulario
@@ -53,11 +53,6 @@ function Login({ onLoginSuccess }) {
             const credentials = {
                 correo: username, 
                 contraseña: password,
-                // Valores 'dummy' para campos NOT NULL requeridos por el modelo Usuarios:
-                nombre: " Temporal",
-                estadoDeResidencia: "Temporal",
-                edad: 0, 
-                rol: "USUARIO"
             };
             const response = await fetch(API_LOGIN_URL, {
                 method: 'POST',
