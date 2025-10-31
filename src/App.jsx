@@ -11,41 +11,34 @@ import Admin from './components/admin/adminPage';
 import Perfil from './components/perfil/perfilPage';
 import './App.css'; 
 
-
 function App() {
-    // Estado de la sesión: inicializado como 'false'
+
     const [isLoggedIn, setIsLoggedIn] = useState(false); 
-    const [userName, setUserName] = useState('');
     
     // --- 1. LÓGICA DE PERSISTENCIA (Al cargar la app) ---
     // Revisa si hay una sesión guardada en localStorage
     useEffect(() => {
         // En este esquema simple, usamos 'isLoggedIn' en localStorage como bandera
-        const storedLogin = localStorage.getItem('isLoggedIn');
-        const storedUserName = localStorage.getItem('userName');
-        
-        if (storedLogin === 'true' && storedUserName) {
+        const storedLogin = localStorage.getItem('isLoggedIn');        
+        if (storedLogin === 'true') {
             // Si encontramos la bandera y el nombre, asumimos sesión válida
             setIsLoggedIn(true);
-            setUserName(storedUserName);
-        }
+                }
     }, []); 
 
     // --- 2. MANEJADORES DE SESIÓN ---
-
     // Función llamada desde Login.jsx cuando la autenticación es exitosa
-    const handleLoginSuccess = (name) => {
+    const handleLoginSuccess = () => {
         setIsLoggedIn(true);
-        setUserName(name);
-        // localStorage.setItem('isLoggedIn', 'true') y 'userName' ya se hicieron en Login.jsx
     };
     
     // Función llamada desde NavBar.jsx para cerrar la sesión
     const handleLogout = () => {
         setIsLoggedIn(false);
-        setUserName('');
         localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('jwtToken');
         localStorage.removeItem('userName');
+        localStorage.removeItem('idUsuario');
     };
 
     // --- 3. CONFIGURACIÓN DE NAVEGACIÓN Y NAVBAR ---
@@ -73,7 +66,6 @@ function App() {
             {showNavbar && (
                 <NavBar 
                     links={links} 
-                    userName={userName} 
                     onLogout={handleLogout} 
                 />
             )} 

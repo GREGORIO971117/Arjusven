@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { styles } from './adminTemplate'; // Importamos los estilos compartidos
+import { apiRequest } from '../login/Api';
 
-const API_BASE_URL = 'http://localhost:8080/api/usuarios';
+const API_BASE_URL = '/usuarios';
 
 export default function UsuariosEdit({ user, onSave, onCancel }) {
 
@@ -76,7 +77,7 @@ export default function UsuariosEdit({ user, onSave, onCancel }) {
                 delete dataToUpdate.contraseña;
             }
 
-            const response = await fetch(`${API_BASE_URL}/${user.idUsuarios}`, {
+            const response = await apiRequest(`${API_BASE_URL}/${user.idUsuarios}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dataToUpdate),
@@ -91,7 +92,6 @@ export default function UsuariosEdit({ user, onSave, onCancel }) {
                  throw new Error(errorMsg);
             }
 
-            // Éxito: Llamar a la función onSave (que en AdminTemplate hará el cambio de vista y recargará la lista)
             onSave(); 
             
         } catch (err) {

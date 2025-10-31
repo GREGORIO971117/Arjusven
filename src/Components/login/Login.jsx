@@ -79,10 +79,11 @@ function Login({ onLoginSuccess }) {
             }
 
             // Usamos el nombre del usuario si el backend lo devuelve, si no, el correo.
-            const userNameForDisplay = data.nombre; 
+            const userNameForDisplay = data.userName; 
             
             localStorage.setItem('isLoggedIn', 'true'); 
             localStorage.setItem('userName', userNameForDisplay);
+            localStorage.setItem('idUsuario',data.userId);
             
             // Notificar al componente App.js
             onLoginSuccess(userNameForDisplay); 

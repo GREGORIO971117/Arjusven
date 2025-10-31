@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-/**
- * PerfilTemplate - pantalla de perfil simple.
- * Archivo: src/Components/perfil/perfilTemplate.jsx
- *
- * Uso:
- * <PerfilTemplate initialProfile={obj} onSave={(updated) => { ... }} />
- *
- * Si no se pasa initialProfile usa un ejemplo con los campos solicitados.
- */
 
 const DEFAULT_PROFILE = {
     idUsuarios: 1,

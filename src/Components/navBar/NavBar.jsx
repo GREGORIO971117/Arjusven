@@ -2,7 +2,9 @@ import './Navbar.css';
 import logo from '../../assets/Arjus.png';
 import { Link } from 'react-router-dom';
 
-function NavBar({ links, userName, onLogout }) {
+function NavBar({ links, onLogout}) {
+
+    const userName = localStorage.getItem('userName')
 
     return (
         <nav>
@@ -18,7 +20,7 @@ function NavBar({ links, userName, onLogout }) {
             </div>
             
             <div className="user-section">
-                <span className="user-name">Hola, {userName}</span> 
+                <span className="user-name">Hola,{userName}</span> 
                 <button 
                     onClick={onLogout} 
                     className="logout-button">
