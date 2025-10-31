@@ -3,8 +3,9 @@ import InventarioList from './InventarioList';
 import InventarioTemplate from './InventarioTemplate';
 import RenderFiltro from './RenderFiltro';
 import './InventarioList.css';
+import { apiRequest } from '../login/Api';
 
- const API_URL = 'http://localhost:8080/api/inventario';
+ const API_URL = '/inventario';
 
 function InventarioPage() {
     const [inventarioData, setInventarioData] = useState([]);
@@ -16,7 +17,7 @@ function InventarioPage() {
     const loadInventario = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch(API_URL);
+            const response = await apiRequest(API_URL, {method: "GET"});
             if (!response.ok) {
                 throw new Error('Error al cargar los datos del inventario');
             }
@@ -57,6 +58,7 @@ function InventarioPage() {
                     {selectedInventario ? (
                         <InventarioTemplate
                             data={selectedInventario}
+                            loadInventario={loadInventario}
                         />
                     ) : (
                         <div className="no-selection-message">

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './InventarioList.css'; 
 import { styles as baseStyles } from '../admin/adminTemplate'; 
+import { apiRequest } from '../login/Api';
 
-const API_BASE_URL = 'http://localhost:8080/api/inventario';
+const API_BASE_URL = '/inventario';
 
 const formatInitialDate = (dateString) => dateString ? String(dateString).slice(0, 10) : '';
 
@@ -134,7 +135,7 @@ function RenderEditDatosInventario({onSave, onCancelEdit, data, datosEstaticos})
                 ultimaActualizacion: updateDateString || null, 
             };
             
-            const response = await fetch(`${API_BASE_URL}/${data.idInventario}`, {
+            const response = await apiRequest(`${API_BASE_URL}/${data.idInventario}`, {
                 method: 'PATCH', 
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dataToUpdate),
@@ -174,7 +175,7 @@ function RenderEditDatosInventario({onSave, onCancelEdit, data, datosEstaticos})
         setError("");
 
         try {
-            const response = await fetch(`${API_BASE_URL}/${idInventario}`, {
+            const response = await apiRequest(`${API_BASE_URL}/${idInventario}`, {
                 method: 'DELETE',
             });
             
@@ -187,7 +188,6 @@ function RenderEditDatosInventario({onSave, onCancelEdit, data, datosEstaticos})
                 throw new Error(errorMsg);
             }
 
-            // Llamamos a onSave para que el componente padre actualice la lista y cierre este formulario
             await onSave(); 
             
         } catch (err) {

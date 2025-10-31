@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import NavBar from './components/navBar/NavBar';
-import Login from './components/login/Login';
+import Login from './Components/login/Login';
 import ProtectedRoute from './ProtectedRoute'; 
 import Home from './components/home/Home'; 
 import Inventario from './components/inventario/InventarioPage';

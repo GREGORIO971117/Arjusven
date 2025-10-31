@@ -9,7 +9,6 @@ function Login({ onLoginSuccess }) {
     // Estados para los campos de formulario
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    
     const [usernameError, setUsernameError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [loginError, setLoginError] = useState(''); // Para errores de la API
@@ -54,6 +53,7 @@ function Login({ onLoginSuccess }) {
                 correo: username, 
                 contraseña: password,
             };
+
             const response = await fetch(API_LOGIN_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -67,8 +67,17 @@ function Login({ onLoginSuccess }) {
                 throw new Error(errorMessage);
             }
 
-            // --- 3. Autenticación Exitosa ---
-            
+            // --- 3. Autenticación Exitosa --
+
+            if (data.accessToken) {
+                // El token se guarda en el "bolsillo" del navegador.
+                localStorage.setItem('jwtToken', data.accessToken); 
+                console.log("Token JWT guardado exitosamente.");
+            } else {
+                // Manejar si el backend no devuelve el token
+                throw new Error('Login exitoso, pero el servidor no envió el token JWT.');
+            }
+
             // Usamos el nombre del usuario si el backend lo devuelve, si no, el correo.
             const userNameForDisplay = data.nombre; 
             
@@ -116,18 +125,16 @@ function Login({ onLoginSuccess }) {
                         placeholder="Contraseña"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        // Deshabilitar input mientras carga
                         disabled={isLoading}
                     />
                     {passwordError && <p className="error-message">{passwordError}</p>}
                     
-                    {/* Mostrar error del API/Fetch si existe */}
                     {loginError && <p className="error-message api-error">{loginError}</p>}
 
                     <button 
                         type="submit" 
                         className="login-button" 
-                        disabled={isLoading} // Deshabilitar el botón durante la carga
+                        disabled={isLoading}
                     >
                         {isLoading ? 'Verificando credenciales...' : 'Entrar'}
                     </button>
