@@ -49,12 +49,10 @@ function RenderDatosAdicionales({ data,onEdit,activeTab,setActiveTab,isEditing,s
     serieStock,
     simStock,
     modeloStock
-  } = data.additionalData;
+  } = data.adicionales || {};
 
   return (
-    <>
-
-    
+    <> 
 
   <div className="ticket-tabs">
         <button
@@ -89,65 +87,148 @@ function RenderDatosAdicionales({ data,onEdit,activeTab,setActiveTab,isEditing,s
   </div>
 
 
-    <div className="info-item">
+<div className="detalleGridContainer">
 
-  {/* Punto de Venta */}
   <div className="grid3">
-    <InfoItem label="Ciudad" value={ciudad} />
-    <InfoItem label="Plaza" value={plaza} />
-    <InfoItem label="Técnico" value={tecnico} />
-    <InfoItem label="Cerro en Punto Clave" value={cerroPuntoClave} />
-    <InfoItem label="Atención en Punto" value={atencionEnPunto} />
-    <InfoItem label="Firma en Estación" value={firmaEnEstacion} />
-    <InfoItem label="#Tarjeta / TAG" value={tarjetaTag} />
-    <InfoItem label="Cantidad TPV en Base" value={cantidadTPV} />
-    <InfoItem label="Modelo entra" value={modeloEntra} />
-
+    <div className="infoItem">
+      <div className="label"><strong>Ciudad:</strong></div>
+      <div className="value">{ciudad}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Plaza:</strong></div>
+      <div className="value">{plaza}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Técnico:</strong></div>
+      <div className="value">{tecnico}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Cerro en Punto Clave:</strong></div>
+      <div className="value">{cerroPuntoClave}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Atención en Punto:</strong></div>
+      <div className="value">{atencionEnPunto}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Firma en Estación:</strong></div>
+      <div className="value">{firmaEnEstacion}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>#Tarjeta / TAG:</strong></div>
+      <div className="value">{tarjetaTag}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Cantidad TPV en Base:</strong></div>
+      <div className="value">{cantidadTPV}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Modelo entra:</strong></div>
+      <div className="value">{modeloEntra}</div>
+    </div>
   </div>
 
-  {/* Equipo Entrante */}
+  {/* --- Equipo Entrante --- */}
   <div className="grid3">
-    <InfoItem label="Marca Entra" value={marcaEntra} />
-    <InfoItem label="Serie Lógica entra" value={serieLogicaEntra} />
-    <InfoItem label="Serie Física entra" value={serieFisicaEntra} />
-    <InfoItem label="SIM entra" value={simEntra} />
-    <InfoItem label="PTID entra" value={ptidEntra} />
-    <InfoItem label="Eliminador Entra" value={eliminadorEntra} />
-    <InfoItem label="Modelo Sale" value={modeloSale} />
-    <InfoItem label="Marca Sale" value={marcaSale} />
-    <InfoItem label="Serie Lógica sale" value={serieLogicaSale} />
+    <div className="infoItem">
+      <div className="label"><strong>Marca Entra:</strong></div>
+      <div className="value">{marcaEntra}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Serie Lógica entra:</strong></div>
+      <div className="value">{serieLogicaEntra}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Serie Física entra:</strong></div>
+      <div className="value">{serieFisicaEntra}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>SIM entra:</strong></div>
+      <div className="value">{simEntra}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>PTID entra:</strong></div>
+      <div className="value">{ptidEntra}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Eliminador Entra:</strong></div>
+      <div className="value">{eliminadorEntra}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Modelo Sale:</strong></div>
+      <div className="value">{modeloSale}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Marca Sale:</strong></div>
+      <div className="value">{marcaSale}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Serie Lógica sale:</strong></div>
+      <div className="value">{serieLogicaSale}</div>
+    </div>
   </div>
 
-  {/* Equipo Saliente */}
+  {/* --- Equipo Saliente --- */}
   <div className="grid3">
-    
-    <InfoItem label="Serie Física sale" value={serieFisicaSale} />
-    <InfoItem label="SIM Sale" value={simSale} />
-    <InfoItem label="PTID Sale" value={ptidSale} />
-    <InfoItem label="Eliminador Sale" value={eliminadorSale} />
-    <InfoItem label="Versión Browser" value={versionBrowser} />
-    <InfoItem label="Versión Browser Sale" value={versionBrowserSale} />
-    <InfoItem label="Tipo de Comunicación" value={tipoComunicacion} />
-    <InfoItem label="Tipo de Comunicación Sale" value={tipoComunicacionSale} />
-    <InfoItem label="Estado" value={estado} />
+    <div className="infoItem">
+      <div className="label"><strong>Serie Física sale:</strong></div>
+      <div className="value">{serieFisicaSale}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>SIM Sale:</strong></div>
+      <div className="value">{simSale}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>PTID Sale:</strong></div>
+      <div className="value">{ptidSale}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Eliminador Sale:</strong></div>
+      <div className="value">{eliminadorSale}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Versión Browser:</strong></div>
+      <div className="value">{versionBrowser}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Versión Browser Sale:</strong></div>
+      <div className="value">{versionBrowserSale}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Tipo de Comunicación:</strong></div>
+      <div className="value">{tipoComunicacion}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Tipo de Comunicación Sale:</strong></div>
+      <div className="value">{tipoComunicacionSale}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Estado:</strong></div>
+      <div className="value">{estado}</div>
+    </div>
   </div>
 
-  {/* Servicio */}
   <div className="grid3">
-    
-    <InfoItem label="Orden de Servicio" value={ordenDeServicio} />
-    <InfoItem label="Serie que queda de stock" value={serieStock} />
-    <InfoItem label="SIM que queda de stock" value={simStock} />
-    <InfoItem label="Modelo de Stock" value={modeloStock} />
-  </div>
-
-  {/* Inventario */}
-  <div className="grid3">
-    
+    <div className="infoItem">
+      <div className="label"><strong>Orden de Servicio:</strong></div>
+      <div className="value">{ordenDeServicio}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Serie que queda de stock:</strong></div>
+      <div className="value">{serieStock}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>SIM que queda de stock:</strong></div>
+      <div className="value">{simStock}</div>
+    </div>
+    <div className="infoItem">
+      <div className="label"><strong>Modelo de Stock:</strong></div>
+      <div className="value">{modeloStock}</div>
+    </div>
   </div>
 
 </div>
-
+ 
     </>
   );
 };

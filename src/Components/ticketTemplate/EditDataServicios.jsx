@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-function RenderEditDatosInventario({ data, onSave, onCancelEdit, datosEstaticos }) {
+function RenderEditDatosInventario({ data, onCancelEdit, datosEstaticos }) {
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    if (data) {
-      setFormData(data);
+    if (data?.servicio) {
+      setFormData(data?.servicio);
     }
   }, [data]);
 
@@ -14,87 +14,261 @@ function RenderEditDatosInventario({ data, onSave, onCancelEdit, datosEstaticos 
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = () => {
-    if (onSave) onSave(formData);
-  };
-
-  const handleCancel = () => {
+   const handleCancel = () => {
     if (onCancelEdit) onCancelEdit();
   };
 
-  const FormField = ({ label, name, type = 'text', options }) => (
+  const handleSave = () => {
+    console.log('Datos guardados:', formData);
+  };
 
-    <div className="formFieldCompact">
-      <label htmlFor={name}><strong>{label}:</strong></label>
-      {type === 'select' ? (
+if (!formData) {
+  return <div>Cargando datos...</div>;
+}
+
+return (
+
+  
+  <div className="formGridContainer">
+
+    <div className="grid3">
+      {/* Título */}
+      <div className="formFieldCompact">
+        <label htmlFor="title"><strong>Título:</strong></label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value={formData.title || ''}
+          onChange={handleChange}
+          className="form-input"
+        />
+      </div>
+
+      {/* Número de Serie */}
+      <div className="formFieldCompact">
+        <label htmlFor="numeroSerie"><strong>Número de Serie:</strong></label>
+        <input
+          type="text"
+          id="numeroSerie"
+          name="numeroSerie"
+          value={formData.numeroSerie || ''}
+          onChange={handleChange}
+          className="form-input"
+        />
+      </div>
+
+      {/* Estado (Select) */}
+      <div className="formFieldCompact">
+        <label htmlFor="estado"><strong>Estado:</strong></label>
         <select
-          id={name}
-          name={name}
-          value={formData[name] || ''}
+          id="estado"
+          name="estado"
+          value={formData.estado || ''}
           onChange={handleChange}
           className="form-input"
         >
           <option value="">Selecciona una opción</option>
-          {options.map(opt => (
+          {datosEstaticos.estado && datosEstaticos.estado.map(opt => (
             <option key={opt} value={opt}>{opt}</option>
           ))}
         </select>
-      ) : (
+      </div>
+
+      {/* Equipo (Select) */}
+      <div className="formFieldCompact">
+        <label htmlFor="equipo"><strong>Equipo:</strong></label>
+        <select
+          id="equipo"
+          name="equipo"
+          value={formData.equipo || ''}
+          onChange={handleChange}
+          className="form-input"
+        >
+          <option value="">Selecciona una opción</option>
+          {datosEstaticos.equipos && datosEstaticos.equipos.map(opt => (
+            <option key={opt} value={opt}>{opt}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Responsable */}
+      <div className="formFieldCompact">
+        <label htmlFor="responsable"><strong>Responsable:</strong></label>
         <input
-          type={type}
-          id={name}
-          name={name}
-          value={formData[name] || ''}
+          type="text"
+          id="responsable"
+          name="responsable"
+          value={formData.responsable || ''}
           onChange={handleChange}
           className="form-input"
         />
-      )}
+      </div>
+
+      {/* Cliente */}
+      <div className="formFieldCompact">
+        <label htmlFor="cliente"><strong>Cliente:</strong></label>
+        <input
+          type="text"
+          id="cliente"
+          name="cliente"
+          value={formData.cliente || ''}
+          onChange={handleChange}
+          className="form-input"
+        />
+      </div>
+
+      {/* Plaza */}
+      <div className="formFieldCompact">
+        <label htmlFor="plaza"><strong>Plaza:</strong></label>
+        <input
+          type="text"
+          id="plaza"
+          name="plaza"
+          value={formData.plaza || ''}
+          onChange={handleChange}
+          className="form-input"
+        />
+      </div>
+
+      {/* Técnico de Campo (Select) */}
+      <div className="formFieldCompact">
+        <label htmlFor="tecnicoCampo"><strong>Técnico de Campo:</strong></label>
+        <select
+          id="tecnicoCampo"
+          name="tecnicoCampo"
+          value={formData.tecnicoCampo || ''}
+          onChange={handleChange}
+          className="form-input"
+        >
+          <option value="">Selecciona una opción</option>
+          {datosEstaticos.tecnicos && datosEstaticos.tecnicos.map(opt => (
+            <option key={opt} value={opt}>{opt}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Número de Incidencia */}
+      <div className="formFieldCompact">
+        <label htmlFor="numeroIncidencia"><strong>Número de Incidencia:</strong></label>
+        <input
+          type="text"
+          id="numeroIncidencia"
+          name="numeroIncidencia"
+          value={formData.numeroIncidencia || ''}
+          onChange={handleChange}
+          className="form-input"
+        />
+      </div>
+
+      {/* Código de Email */}
+      <div className="formFieldCompact">
+        <label htmlFor="codigoEmail"><strong>Código de Email:</strong></label>
+        <input
+          type="text"
+          id="codigoEmail"
+          name="codigoEmail"
+          value={formData.codigoEmail || ''}
+          onChange={handleChange}
+          className="form-input"
+        />
+      </div>
+
+      {/* Guías */}
+      <div className="formFieldCompact">
+        <label htmlFor="guias"><strong>Guías:</strong></label>
+        <input
+          type="text"
+          id="guias"
+          name="guias"
+          value={formData.guias || ''}
+          onChange={handleChange}
+          className="form-input"
+        />
+      </div>
+
+      {/* Fecha de Inicio Prevista */}
+      <div className="formFieldCompact">
+        <label htmlFor="fechaInicioPrevista"><strong>Fecha de Inicio Prevista:</strong></label>
+        <input
+          type="date"
+          id="fechaInicioPrevista"
+          name="fechaInicioPrevista"
+          value={formData.fechaInicioPrevista || ''}
+          onChange={handleChange}
+          className="form-input"
+        />
+      </div>
+
+      {/* Fecha de Fin Prevista */}
+      <div className="formFieldCompact">
+        <label htmlFor="fechaFinPrevista"><strong>Fecha de Fin Prevista:</strong></label>
+        <input
+          type="date"
+          id="fechaFinPrevista"
+          name="fechaFinPrevista"
+          value={formData.fechaFinPrevista || ''}
+          onChange={handleChange}
+          className="form-input"
+        />
+      </div>
+
+      {/* Fecha de Fin */}
+      <div className="formFieldCompact">
+        <label htmlFor="fechaFin"><strong>Fecha de Fin:</strong></label>
+        <input
+          type="date"
+          id="fechaFin"
+          name="fechaFin"
+          value={formData.fechaFin || ''}
+          onChange={handleChange}
+          className="form-input"
+        />
+      </div>
+
+      {/* Última Actualización */}
+      <div className="formFieldCompact">
+        <label htmlFor="fechaActualizacion"><strong>Última Actualización:</strong></label>
+        <input
+          type="date"
+          id="fechaActualizacion"
+          name="fechaActualizacion"
+          value={formData.fechaActualizacion || ''}
+          onChange={handleChange}
+          className="form-input"
+        />
+      </div>
     </div>
-  );
 
-  if (!formData.ticketNumber) return <div>Cargando datos...</div>;
-
-  return (
-    <div className="formGridContainer">
-
-      <div className="grid3">
-        <FormField label="Título" name="title" />
-        <FormField label="Número de Serie" name="numeroSerie" />
-        <FormField label="Estado" name="estado" type="select" options={datosEstaticos.estado} />
-        <FormField label="Equipo" name="equipo" type="select" options={datosEstaticos.equipos} />
-        <FormField label="Responsable" name="responsable" />
-        <FormField label="Cliente" name="cliente" />
-        <FormField label="Plaza" name="plaza" />
-        <FormField label="Técnico de Campo" name="tecnicoCampo" type="select" options={datosEstaticos.tecnicos} />
-        <FormField label="Número de Incidencia" name="numeroIncidencia" />
-        <FormField label="Código de Email" name="codigoEmail" />
-        <FormField label="Guías" name="guias" />
-        <FormField label="Fecha de Inicio Prevista" name="fechaInicioPrevista" type="date" />
-        <FormField label="Fecha de Fin Prevista" name="fechaFinPrevista" type="date" />
-        <FormField label="Fecha de Fin" name="fechaFin" type="date" />
-        <FormField label="Última Actualización" name="fechaActualizacion" type="date" />
+    {/* Descripción (Textarea) */}
+    <div className="fullWidthSection">
+      <div className="formFieldCompact">
+        <label htmlFor="descripcion"><strong>Descripción:</strong></label>
+        <textarea
+          id="descripcion"
+          name="descripcion"
+          value={formData.descripcion || ''}
+          onChange={handleChange}
+          rows="2"
+          className="form-input"
+        />
       </div>
-
-      <div className="fullWidthSection">
-        <div className="formFieldCompact">
-          <label htmlFor="descripcion"><strong>Descripción:</strong></label>
-          <textarea
-            id="descripcion"
-            name="descripcion"
-            value={formData.descripcion}
-            onChange={handleChange}
-            rows="2"
-            className="form-input"
-          />
-        </div>
-      </div>
+    </div>
 
       <div className="formActionsCompact">
         <button className="action-button save-button" onClick={handleSave}>Guardar Cambios</button>
         <button className="action-button cancel-button" onClick={handleCancel}>Cancelar</button>
       </div>
-    </div>
-  );
+
+
+  </div>
+);
+
+
+
+
 }
 
 export default RenderEditDatosInventario;
+
+

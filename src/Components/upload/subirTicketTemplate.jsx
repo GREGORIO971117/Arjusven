@@ -1,132 +1,15 @@
 import React, { useState } from "react";
+import {apiRequest} from '../login/Api';
+
+const API_BASE_URL = '/tickets';
 
 export default function SubirTicketTemplate() {
-    const [ticket, setTicket] = useState({
-        servicio: {
-            idServicios: "",
-            fechaDeAsignacion: "",
-            resolucion: "",
-            situacionActual: "",
-            nombreDeEss: "",
-            incidencia: "",
-            codigoDeAfiliado: "",
-            supervidor: "",
-            idMerchant: "",
-            tipoDeServicio: "",
-            motivoDeServicio: "",
-            motivoReal: "",
-            observaciones: "",
-            guiaDeEncomienda: "",
-            fechaDeEnvio: "",
-            direccion: "",
-            tecnico: "",
-            sla: ""
-        },
-        adicionales: {
-            idAdicionales: "",
-            ciudad: "",
-            cerroEnPuntoClave: "",
-            tarjeta: "",
-            marcaEntra: "",
-            sim: "",
-            modeloSale: "",
-            serieFisicaSale: "",
-            eliminadorSale: "",
-            tipoDeComunicacion: "",
-            ordenDeServicio: "",
-            modeloDeStock: "",
-            plaza: "",
-            atencionEnPunto: "",
-            cantidadTpv: "",
-            serieLogicaEntra: "",
-            ptidEntra: "",
-            marcaSale: "",
-            simSale: "",
-            versionDeBrowser: "",
-            tipoDeComunicacionSale: "",
-            serieQueQuedaDeStock: "",
-            tecnico: "",
-            firmaEnEstacion: "",
-            modeloEntra: "TPV Modelo A",
-            serieFisicaEntra: "SF-A123456",
-            eliminadorEntra: "",
-            serieLogicaSale: "",
-            ptidSale: "",
-            estado: "Pendiente de Revisión",
-            simQueQuedaDeStock: ""
-        },
-        attachments: []
-    });
-
+    const [ticket, setTicket] = useState([]);
     const [ticketErrors, setTicketErrors] = useState({});
-    const [artErrors, setArtErrors] = useState({});
     const [message, setMessage] = useState("");
 
-    function handleServicioChange(e) {
-        const { name, value } = e.target;
-        setTicket((prev) => ({
-            ...prev,
-            servicio: { ...prev.servicio, [name]: value }
-        }));
-    }
 
-
-    function handleTicketFiles(e) {
-        const files = Array.from(e.target.files);
-        setTicket((prev) => ({ ...prev, attachments: files }));
-    }
-
-    function validateTicket() {
-        const errs = {};
-        if (!ticket.servicio.nombreDeEss || ticket.servicio.nombreDeEss.trim() === "") {
-            errs.nombreDeEss = "El campo nombreDeEss es requerido.";
-        }
-        // más validaciones opcionales se pueden agregar aquí
-        setTicketErrors(errs);
-        return Object.keys(errs).length === 0;
-    }
-
-    function validateArticulo() {
-        const errs = {};
-        if (!articulo.titulo || articulo.titulo.trim() === "") {
-            errs.titulo = "El título es requerido.";
-        }
-        if (!articulo.numeroDeSerie || articulo.numeroDeSerie.trim() === "") {
-            errs.numeroDeSerie = "El número de serie es requerido.";
-        }
-        setArtErrors(errs);
-        return Object.keys(errs).length === 0;
-    }
-
-    async function submitTicket(e) {
-        e.preventDefault();
-        setMessage("");
-        if (!validateTicket()) return;
-        // Construir FormData para incluir archivos si existen
-        const fd = new FormData();
-        fd.append("servicio", JSON.stringify(ticket.servicio));
-        fd.append("adicionales", JSON.stringify(ticket.adicionales));
-        ticket.attachments.forEach((f, i) => fd.append("attachments", f));
-        try {
-            // Reemplazar URL por la API real
-            const res = await fetch("/api/tickets", { method: "POST", body: fd });
-            if (!res.ok) {
-                const text = await res.text();
-                throw new Error(text || "Error al crear ticket");
-            }
-            setMessage("Ticket creado correctamente.");
-            // limpiar formulario si se desea:
-            setTicket((prev) => ({
-                ...prev,
-                servicio: { ...prev.servicio, nombreDeEss: "" },
-                attachments: []
-            }));
-            setTicketErrors({});
-        } catch (err) {
-            setMessage("Error: " + err.message);
-        }
-    }
-
+   
     return (
         <div style={{ padding: 20, fontFamily: "sans-serif", maxWidth: 960, margin: "0 auto" }}>
             <h2>Crear ticket</h2>

@@ -3,8 +3,8 @@ const RenderEditarDatosAdicionales = ({ data, onCancelEdit }) => {
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    if (data?.additionalData) {
-      setFormData(data.additionalData);
+    if (data?.adicionales) {
+      setFormData(data.adicionales);
     }
   }, [data]);
 
@@ -18,7 +18,6 @@ const RenderEditarDatosAdicionales = ({ data, onCancelEdit }) => {
   };
 
   const handleSave = () => {
-    // Aquí podrías enviar formData al backend con fetch o axios
     console.log('Datos guardados:', formData);
   };
 

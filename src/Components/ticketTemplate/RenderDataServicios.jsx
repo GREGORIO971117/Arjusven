@@ -66,7 +66,6 @@ const RenderDatosServicio = ({ data,onEdit,activeTab,setActiveTab,isEditing,setI
 
  return (
   <>
- 
 
  <div className="ticket-tabs">
     <div className="tabs-container">
@@ -89,12 +88,9 @@ const RenderDatosServicio = ({ data,onEdit,activeTab,setActiveTab,isEditing,setI
 
     <div className="ticket-actions">
      {!isEditing && (
-      <>
       <button onClick={() => setIsEditing(true)} className="edit-button">
        Editar
       </button>
-      
-      </>
      )}
 
      <button className="download-button">
