@@ -1,90 +1,74 @@
 import React, { useState, useEffect } from 'react';
-import datosEstaticos from '../../assets/datos.json'
+// Asegúrate de que las rutas sean correctas
+import datosEstaticos from '../../assets/datos.json';
+import { apiRequest } from '../login/Api'; 
 
-const API_BASE_URL = 'http://localhost:8080/api/inventario'; // Endpoint base para Inventario
-const USERS_API_URL = 'http://localhost:8080/api/usuarios'; 
+// Endpoints
+const INVENTARIO_API_URL = '/inventario'; // Asumiendo que POST es a /inventario
+const USERS_API_URL = '/usuarios'; 
+
+// Estado inicial para resetear y usar en el useState
+const initialFormState = {
+    titulo: "",
+    numeroDeSerie: "",
+    equipo: "",
+    estado: "ACTIVO",
+    responsable: "", 
+    cliente: "",
+    plaza: "",
+    tecnico: "",
+    numeroDeIncidencia: "",
+    codigoEmail: "",
+    guias: "",
+    fechaDeInicioPrevista: "",
+    fechaDeFinPrevista: "",
+    fechaDeFin: "",
+    ultimaActualizacion: "",
+    descripcion: "",
+};
 
 export default function SubirInventarioTemplate() {
 
     // --- ESTADOS ---
+    // [Se mantiene el estado de inventario si quieres mostrar la lista después de agregar, aunque no se usa en el return]
     const [inventario, setInventario] = useState([]); 
     const [usuarios, setUsuarios] = useState([]); 
-    
-    const [form, setForm] = useState({ 
-        titulo: "",
-        numeroDeSerie: "",
-        equipo: "",
-        estado: "ACTIVO",
-        responsable: "", // Aquí guardaremos el ID o nombre del responsable seleccionado
-        cliente: "",
-        plaza: "",
-        tecnico: "",
-        numeroDeIncidencia: "",
-        codigoEmail: "",
-        guias: "",
-        fechaDeInicioPrevista: "",
-        fechaDeFinPrevista: "",
-        fechaDeFin: "",
-        ultimaActualizacion: "",
-        descripcion: "",
-    });
+    const [form, setForm] = useState(initialFormState); 
 
     const [artErrors, setArtErrors] = useState({}); 
     const [error, setError] = useState(""); 
-    const [isLoading, setIsLoading] = useState(true); 
+    const [isLoadingUsers, setIsLoadingUsers] = useState(true); // Renombrado para más claridad
     const [isSubmitting, setIsSubmitting] = useState(false); 
 
-    // ---------------------------------------------------------------------
-    // 🆕 FUNCIONES DE FETCH ADICIONALES
-    // ---------------------------------------------------------------------
-
-    // Función para cargar la lista de usuarios/responsables (GET)
+    // --- LÓGICA DE CARGA DE USUARIOS ---
     const fetchUsers = async () => {
         try {
-            const response = await fetch(USERS_API_URL);
-            if (!response.ok) throw new Error("Error al cargar la lista de usuarios.");
+            const response = await apiRequest(USERS_API_URL, {method: 'GET'});
+            if (!response.ok) throw new Error("Error al cargar la lista de responsables.");
             
             const data = await response.json();
-            // 💡 Asumimos que data es un array de objetos: 
-            //    [{ id: 1, name: "Usuario A" }, { id: 2, name: "Usuario B" }, ...]
             setUsuarios(Array.isArray(data) ? data : []); 
         } catch (err) {
-            console.error(err);
-            // Mostrar error solo si afecta la funcionalidad principal (opcional)
-            // setError(err.message || "No se pudo cargar la lista de responsables."); 
-        }
-    };
-    
-    // Función para cargar todos los artículos de inventario (GET)
-    const fetchInventario = async () => {
-        setIsLoading(true);
-        setError("");
-        try {
-            const response = await fetch(API_BASE_URL);
-            if (!response.ok) throw new Error("Error al cargar el inventario.");
-
-            const data = await response.json();
-            setInventario(Array.isArray(data) ? data : []);
-        } catch (err) {
-            setError(err.message || "No se pudo conectar al servidor de inventario.");
-            setInventario([]);
+            console.error("Fallo de API al cargar usuarios:", err);
+            setError("No se pudo cargar la lista de responsables.");
         } finally {
-            setIsLoading(false);
+             setIsLoadingUsers(false);
         }
     };
-
 
     useEffect(() => {
-        fetchInventario();
         fetchUsers(); 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // --- HANDLERS Y UTILIDADES ---
     function handleChange(e) {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     }
 
     function validateForm() {
+        // ... (Tu lógica de validación se mantiene) ...
         const errs = {};
         if (!form.titulo || form.titulo.trim() === "") {
             errs.titulo = "El título es requerido.";
@@ -92,60 +76,52 @@ export default function SubirInventarioTemplate() {
         if (!form.numeroDeSerie || form.numeroDeSerie.trim() === "") {
             errs.numeroDeSerie = "El número de serie es requerido.";
         }
+        // Agregando validación para el select de responsable
+        if (!form.responsable || form.responsable.trim() === "") {
+            errs.responsable = "Debe seleccionar un responsable.";
+        }
         
-        if (error) setError(""); 
+        // Limpiar mensaje de error general si la validación falla
+        if (Object.keys(errs).length > 0) setError(""); 
 
         setArtErrors(errs);
         return Object.keys(errs).length === 0;
     }
 
     function resetForm() {
-        setForm({
-            // ... (Todos los campos reseteados) ...
-            titulo: "",
-            numeroDeSerie: "",
-            equipo: "",
-            estado: "ACTIVO",
-            responsable: "", // Importante resetear este campo también
-            cliente: "",
-            plaza: "",
-            tecnico: "",
-            numeroDeIncidencia: "",
-            codigoEmail: "",
-            guias: "",
-            fechaDeInicioPrevista: "",
-            fechaDeFinPrevista: "",
-            fechaDeFin: "",
-            ultimaActualizacion: "",
-            descripcion: "",
-        });
+        setForm(initialFormState); // Usamos el objeto de estado inicial
         setArtErrors({});
     }
 
+    // --- FUNCIÓN DE ENVÍO PROTEGIDA (CORREGIDA) ---
     async function submitArticulo(e) {
         e.preventDefault();
         
         if (!validateForm()) {
-             setError("Por favor, rellena los campos obligatorios.");
-             return;
+            setError("Por favor, rellena los campos obligatorios.");
+            return;
         }
 
         setIsSubmitting(true);
         setError(""); 
         
         try {
-            const response = await fetch(API_BASE_URL, {
+            // 🔑 CORRECCIÓN CRÍTICA: Usar apiRequest en lugar de fetch nativo 🔑
+            const response = await apiRequest(INVENTARIO_API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form), 
             });
 
             if (!response.ok) {
+                // Manejo de errores detallado (como ya lo tenías)
                 let errorMsg = `Error ${response.status}: Falló la creación. `;
-                try {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                
+                if (isJson) {
                     const errorData = await response.json();
                     errorMsg += errorData.message || response.statusText;
-                } catch {
+                } else {
                     errorMsg += await response.text();
                 }
                 throw new Error(errorMsg);
@@ -154,7 +130,7 @@ export default function SubirInventarioTemplate() {
             const nuevoArticulo = await response.json();
             setInventario((prev) => [nuevoArticulo, ...prev]);
             resetForm();
-            setError("Artículo de inventario creado correctamente."); 
+            setError("✅ Artículo de inventario creado correctamente."); 
 
         } catch (err) {
             setError("Error: " + err.message);
@@ -163,33 +139,13 @@ export default function SubirInventarioTemplate() {
         }
     }
 
-    async function removeArticulo(id) {
-        if (!window.confirm("¿Borrar este artículo de inventario? Esta acción no se puede deshacer.")) return;
-
-        setError("");
-        try {
-            const response = await fetch(`${API_BASE_URL}/${id}`, {
-                method: 'DELETE',
-            });
-
-            if (!response.ok) {
-                throw new Error(`Error al borrar: ${response.statusText}`);
-            }
-
-            setInventario((prev) => prev.filter((art) => art.idInventario !== id));
-            setError("Artículo eliminado correctamente.");
-        } catch (err) {
-            setError(err.message || "Fallo la conexión con el servidor.");
-        }
-    }
-
-
+    // --- RENDERIZADO ---
     return (
         <div style={styles.container}>
 
             {/* SECCIÓN AGREGAR ARTÍCULO */}
             <section style={styles.card}>
-                <h3>Agregar artículo</h3>
+                <h3>Agregar artículo al Inventario</h3>
                 <form onSubmit={submitArticulo} style={styles.form}>
                     
                     {/* Fila 1: Título y Número de Serie */}
@@ -238,15 +194,17 @@ export default function SubirInventarioTemplate() {
                             value={form.responsable} 
                             onChange={handleChange} 
                             style={styles.input}
+                            disabled={isLoadingUsers} // Desactivar si están cargando
                         >
-                            <option value="">Seleccione Responsable</option>
-                            {usuarios.map((user) => (
-                                // 💡 Asume que el objeto tiene propiedades 'id' y 'name' o similar
+                            <option value="">{isLoadingUsers ? 'Cargando responsables...' : 'Seleccione Responsable'}</option>
+                            {/* Renderizar solo si no hay error y se cargaron */}
+                            {!isLoadingUsers && usuarios.map((user) => (
                                 <option key={user.idUsuarios} value={user.nombre}> 
-                                    {user.nombre}
+                                    {user.nombre} ({user.correo})
                                 </option>
                             ))}
                         </select>
+                        {artErrors.responsable && <div style={styles.errorTextRow}>{artErrors.responsable}</div>}
                     </label>
                         {/* CAMPO CLIENTE EXISTENTE */}
                         <label style={styles.label}>Cliente
@@ -259,7 +217,7 @@ export default function SubirInventarioTemplate() {
                     </label>
                     </div>
 
-                    {/* Fila 4: Descripción (ocupa toda la fila) */}
+                    {/* Fila 4: Descripción */}
                     <div style={{...styles.row, flexWrap: 'nowrap'}}>
                         <label style={{...styles.label, flex: '1 1 100%'}}>
                             Descripción
@@ -282,44 +240,6 @@ export default function SubirInventarioTemplate() {
                 </form>
             </section>
 
-            {/* SECCIÓN LISTA DE ARTÍCULOS (sin cambios) */}
-            <section style={styles.card}>
-                <h3>Artículos en Inventario ({inventario.length})</h3>
-                {isLoading ? (
-                    <div>Cargando inventario...</div>
-                ) : inventario.length === 0 ? (
-                    <div>No hay artículos registrados.</div>
-                ) : (
-                    <div style={{ overflowX: "auto" }}>
-                        <table style={styles.table}>
-                            <thead>
-                                <tr>
-                                    <th style={styles.th}>ID</th>
-                                    <th style={styles.th}>Título</th>
-                                    <th style={styles.th}>Serie</th>
-                                    <th style={styles.th}>Estado</th>
-                                    <th style={styles.th}>Responsable</th>
-                                    <th style={styles.th}>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {inventario.map((art) => (
-                                    <tr key={art.idInventario}>
-                                        <td style={styles.td}>{art.idInventario}</td>
-                                        <td style={styles.td}>{art.titulo}</td>
-                                        <td style={styles.td}>{art.numeroDeSerie}</td>
-                                        <td style={styles.td}>{art.estado}</td>
-                                        <td style={styles.td}>{art.responsable}</td>
-                                        <td style={styles.td}>
-                                            <button onClick={() => removeArticulo(art.idInventario)} style={styles.buttonDanger}>Borrar</button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-            </section>
         </div>
     );
 }

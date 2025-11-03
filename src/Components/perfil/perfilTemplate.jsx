@@ -11,7 +11,7 @@ const DEFAULT_PROFILE = {
     contraseña: "", // Solo para edición, no para mostrar
 };
 
-export default function PerfilTemplate({ onSave }) { // Ya no necesita initialProfile
+export default function PerfilTemplate() {
     
     // 1. Estados para manejo de datos y UI
     const [profile, setProfile] = useState(DEFAULT_PROFILE); // Almacenará los datos del perfil
@@ -25,7 +25,6 @@ export default function PerfilTemplate({ onSave }) { // Ya no necesita initialPr
     // 🔑 OBTENEMOS el ID del usuario logueado
     const idEditUsuario = localStorage.getItem('idUsuario'); // NOTA: Cambié de 'idUsuario' a 'userId'
     const EditUsuarioURL = `${API_BASE_URL}${idEditUsuario}`;
-
 
     // 3. Función de validación (debe estar dentro o importarse)
     const validate = (currentProfile) => {
@@ -98,8 +97,8 @@ export default function PerfilTemplate({ onSave }) { // Ya no necesita initialPr
     const updateURL = `${API_BASE_URL}${idEditUsuario}`; // Ej: /usuarios/5
 
     try {
-        setIsLoading(true);
 
+        setIsLoading(true);
         const response = await apiRequest(updateURL, {
             method: 'PATCH', 
             headers: {
