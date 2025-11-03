@@ -30,7 +30,6 @@ const initialFormState = {
 export default function SubirInventarioTemplate() {
 
     // --- ESTADOS ---
-    // [Se mantiene el estado de inventario si quieres mostrar la lista después de agregar, aunque no se usa en el return]
     const [inventario, setInventario] = useState([]); 
     const [usuarios, setUsuarios] = useState([]); 
     const [form, setForm] = useState(initialFormState); 
@@ -143,9 +142,6 @@ export default function SubirInventarioTemplate() {
     return (
         <div style={styles.container}>
 
-            {/* SECCIÓN AGREGAR ARTÍCULO */}
-            <section style={styles.card}>
-                <h3>Agregar artículo al Inventario</h3>
                 <form onSubmit={submitArticulo} style={styles.form}>
                     
                     {/* Fila 1: Título y Número de Serie */}
@@ -238,7 +234,7 @@ export default function SubirInventarioTemplate() {
                         </button>
                     </div>
                 </form>
-            </section>
+    
 
         </div>
     );
