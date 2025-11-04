@@ -2,57 +2,114 @@ import React, { useState, useEffect } from 'react';
 import TicketList from '../ticketTemplate/ticketList';
 import TicketTemplate from './TicketTemplate';
 import RenderFiltro from './RenderFiltro';
-import {apiRequest} from '../login/Api';
+import { apiRequest } from '../login/Api';
 
 const API_BASE_URL = '/tickets';
+const API_SERVICIOS_URL = '/servicio'; 
 
 function TicketPage() {
     const [ticketsData, setTicketsData] = useState([]);
     const [selectedTicket, setSelectedTicket] = useState(null);
     const [showFilterPanel, setShowFilterPanel] = useState(false);
-    const [isLoading, setIsLoading] = useState(false); // Estado para la carga
-    const [error, setError] = useState(""); // Estado para manejar errores
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [isSaving, setIsSaving] = useState(false); 
+    const [saveError, setSaveError] = useState(null); 
 
-    // Función para obtener los tickets de la API
     const fetchTickets = async () => {
         setIsLoading(true);
         setError("");
         try {
-            // Usa la API_BASE_URL y apiRequest para la llamada real, incluyendo el JWT
             const response = await apiRequest(API_BASE_URL, { method: 'GET' }); 
             
             if (!response.ok) {
-                // Manejo de errores del servidor o autenticación
-                throw new Error(`Error ${response.status}: ${response.statusText}. Por favor, verifique la conexión o inicie sesión de nuevo.`);
+                throw new Error(`Error ${response.status}: ${response.statusText}.`);
             }
             
             const data = await response.json();
-            // Aseguramos que los datos sean un array antes de establecerlos
             setTicketsData(Array.isArray(data) ? data : []); 
-            console.log(data);
         } catch (err) {
             console.error('Error al cargar los tickets:', err);
             setError(err.message || "No se pudo conectar al servidor de tickets.");
-            setTicketsData([]); // Limpia los datos en caso de error
+            setTicketsData([]);
         } finally {
             setIsLoading(false);
         }
     };
 
-    // Carga inicial de tickets al montar el componente
+
+   const handleServicePatch = async (updatedServiceData) => {
+    setIsSaving(true);
+    setSaveError(null);
+
+    const idServicio = updatedServiceData.idServicios; 
+    
+    if (!idServicio) {
+        setSaveError("Error: El campo 'idServicio' no fue encontrado para realizar la actualización.");
+        setIsSaving(false);
+        return { success: false };
+    }
+
+    try {
+        const response = await apiRequest(`${API_SERVICIOS_URL}/${idServicio}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedServiceData),
+        });
+
+        if (!response.ok) {
+            let errorMsg = `Error ${response.status} al actualizar el servicio.`;
+            // Intenta leer el JSON de error solo si la respuesta tiene contenido
+            if (response.headers.get('content-length') > 0 || response.headers.get('content-type')?.includes('application/json')) {
+                 try {
+                    const errorData = await response.json();
+                    errorMsg = errorData.message || errorData.error || errorMsg;
+                } catch (e) {
+                    // Ignora el error de JSON si el cuerpo no es JSON (ej: HTML de error)
+                }
+            }
+            throw new Error(errorMsg);
+        }
+
+        let newServiceData = updatedServiceData;
+      
+        if (response.status !== 204) {
+            newServiceData = await response.json();
+            
+        } 
+        
+        // 1. Actualizar el estado central del ticket (`selectedTicket`)
+        setSelectedTicket(prevTicket => {
+            if (!prevTicket) return null;
+            return {
+                ...prevTicket,
+                servicios: newServiceData, // Usamos los datos devueltos (o los enviados si fue 204)
+            };
+        });
+        
+        // 2. Notificar al componente de edición que todo salió bien
+        return { success: true };
+        
+    } catch (err) {
+        console.error("Fallo la operación de guardado de Servicio:", err);
+        setSaveError(err.message || "Fallo la conexión o la actualización del servicio.");
+        return { success: false, error: err.message };
+    } finally {
+        setIsSaving(false);
+    }
+};
+    
     useEffect(() => {
         fetchTickets();
-    }, []); // El array vacío asegura que se ejecute solo una vez al montar
+    }, []);
 
     return (
         <>
             <div className='ticket-content-flex'>
                 <div className="ticket-list-column">
-                    {/* Muestra un mensaje de carga o error si es necesario */}
+                    {/* ... (renderizado de lista de tickets) ... */}
                     {isLoading && <p>Cargando tickets...</p>}
-                    {error && <div className="error-message">🚨 Error: {error}</div>}
-                    
-                    {/* Solo renderiza la lista si no está cargando Y no hay error, o si hay datos */}
+                    {error && <div className="error-message"> Error: {error}</div>}
                     {!isLoading && !error && (
                         <TicketList
                             tickets={ticketsData}
@@ -65,16 +122,18 @@ function TicketPage() {
                 {showFilterPanel && (
                     <RenderFiltro
                         setShowFilterPanel={setShowFilterPanel}
-                        // Aquí probablemente quieras pasar una función para aplicar el filtro
-                        // y volver a llamar a fetchTickets con los parámetros de filtro.
                     />
                 )}
                 
                 <div className="ticket-template-column">
+                    {isSaving && <div className="saving-message"> Guardando cambios...</div>}
+                    {saveError && <div className="error-message"> Error al guardar: {saveError}</div>}
+                    
                     {selectedTicket ? (
                         <TicketTemplate
                             data={selectedTicket}
                             onGoBack={() => setSelectedTicket(null)}
+                            onSaveService={handleServicePatch} 
                         />
                     ) : (
                         <div className="no-selection-message">
