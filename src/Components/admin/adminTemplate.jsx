@@ -207,8 +207,6 @@ export default function AdminTemplate() {
         // Muestra el formulario si la vista es FORM
         if (currentView === VIEWS.FORM) {
             return (
-                <section style={styles.card}>
-                    <h3>Agregar usuario</h3>
                     <form onSubmit={addUser} style={styles.form}>
                         
                         <div style={styles.row}>
@@ -249,7 +247,7 @@ export default function AdminTemplate() {
                             </button>
                         </div>
                     </form>
-                </section>
+             
             );
         }
         

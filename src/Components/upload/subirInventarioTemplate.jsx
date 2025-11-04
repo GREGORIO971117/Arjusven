@@ -57,7 +57,7 @@ export default function SubirInventarioTemplate() {
 
     useEffect(() => {
         fetchUsers(); 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     }, []);
 
     // --- HANDLERS Y UTILIDADES ---
@@ -67,7 +67,6 @@ export default function SubirInventarioTemplate() {
     }
 
     function validateForm() {
-        // ... (Tu lógica de validación se mantiene) ...
         const errs = {};
         if (!form.titulo || form.titulo.trim() === "") {
             errs.titulo = "El título es requerido.";
@@ -105,7 +104,6 @@ export default function SubirInventarioTemplate() {
         setError(""); 
         
         try {
-            // 🔑 CORRECCIÓN CRÍTICA: Usar apiRequest en lugar de fetch nativo 🔑
             const response = await apiRequest(INVENTARIO_API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

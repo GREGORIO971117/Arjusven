@@ -21,16 +21,13 @@ export default function UsuariosList({ users, isLoading, removeUser,currentPage,
 
     const buttonEditStyle = {
         ...styles.buttonPrimary, // O un color diferente
-        background: '#5bc0de', // Color informativo/azul claro
+        background: '#6394a3ff', // Color informativo/azul claro
         marginLeft: '8px', 
         padding: '6px 10px',
     };
 
     return(
         <>
-        <section style={styles.card}>
-                
-                {/* Manejo de estados: Carga, Sin Datos, Error */}
                 {isLoading ? (
                     <div>Cargando usuarios...</div>
                 ) : (users && users.length === 0 && currentPage === 1) ? ( 
@@ -103,7 +100,7 @@ export default function UsuariosList({ users, isLoading, removeUser,currentPage,
                         
                     </div>
                 )}
-            </section>
+           
         
         </>
     )
