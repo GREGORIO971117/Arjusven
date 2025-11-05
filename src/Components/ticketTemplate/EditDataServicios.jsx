@@ -1,4 +1,44 @@
 import React, { useState, useEffect } from 'react';
+import {styles as baseStyles} from '../admin/adminTemplate';
+
+const styles = {
+        ...baseStyles, 
+            card: {
+            padding: '0px',
+            backgroundColor: '#ffffff',
+            borderRadius: '8px',
+            maxWidth: '1200px',
+            margin: '10px auto',
+        },
+        form: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+        },
+        label: {
+            ...baseStyles.label,
+            flex: '1 1 calc(33.33% - 20px)', 
+            minWidth: '250px',
+        },
+        row: {
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '10px',
+            justifyContent: 'flex-start',
+            width: '100%',
+        },
+        buttonDanger: {
+            backgroundColor: '#dc3545', 
+            color: 'white',
+            padding: '10px 20px',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            transition: 'background-color 0.3s',
+            marginRight: 'auto', 
+        },
+    };
 
 function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveEdit }) { 
     
@@ -49,150 +89,267 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
         }
 
     return (
-        <div className="formGridContainer">
+       <div style={{...styles.card, padding: 0}}> {/* Usamos styles.card para el contenedor principal */}
 
-            <div className="grid3">
-                
-                <div className="formFieldCompact">
-                    <label htmlFor="nombreDeEss"><strong>Nombre de ESS:</strong></label>
-                    <input type="text" id="nombreDeEss" name="nombreDeEss" 
-                           value={formData.nombreDeEss || ''} onChange={handleChange} className="form-input" />
-                </div>
+    <div style={styles.row}> 
+        
+        {/* 1. Nombre de ESS */}
+        <label style={styles.label}>
+            <strong>Nombre de ESS:</strong>
+            <input 
+                type="text" 
+                id="nombreDeEss" 
+                name="nombreDeEss" 
+                value={formData.nombreDeEss || ''} 
+                onChange={handleChange} 
+                style={styles.input} // Reemplaza className="form-input"
+            />
+        </label>
 
-               
-                <div className="formFieldCompact">
-                    <label htmlFor="incidencia"><strong>Número de Incidencia:</strong></label>
-                    <input type="text" id="incidencia" name="incidencia" 
-                           value={formData.incidencia || ''} onChange={handleChange} className="form-input" />
-                </div>
-                
-                {/* 3. Resolución */}
-                <div className="formFieldCompact">
-                    <label htmlFor="resolucion"><strong>Resolución:</strong></label>
-                    <input type="text" id="resolucion" name="resolucion" 
-                           value={formData.resolucion || ''} onChange={handleChange} className="form-input" />
-                </div>
-                
-                {/* 4. Situación Actual */}
-                <div className="formFieldCompact">
-                    <label htmlFor="situacionActual"><strong>Situación Actual:</strong></label>
-                    <input type="text" id="situacionActual" name="situacionActual" 
-                           value={formData.situacionActual || ''} onChange={handleChange} className="form-input" />
-                </div>
-                
-                {/* 5. Código de Afiliado */}
-                <div className="formFieldCompact">
-                    <label htmlFor="codigoDeAfiliado"><strong>Código de Afiliado:</strong></label>
-                    <input type="text" id="codigoDeAfiliado" name="codigoDeAfiliado" 
-                           value={formData.codigoDeAfiliado || ''} onChange={handleChange} className="form-input" />
-                </div>
+        {/* 2. Número de Incidencia */}
+        <label style={styles.label}>
+            <strong>Número de Incidencia:</strong>
+            <input 
+                type="text" 
+                id="incidencia" 
+                name="incidencia" 
+                value={formData.incidencia || ''} 
+                onChange={handleChange} 
+                style={styles.input}
+            />
+        </label>
+        
+        {/* 3. Resolución */}
+        <label style={styles.label}>
+            <strong>Resolución:</strong>
+            <input 
+                type="text" 
+                id="resolucion" 
+                name="resolucion" 
+                value={formData.resolucion || ''} 
+                onChange={handleChange} 
+                style={styles.input}
+            />
+        </label>
+        
+        {/* 4. Situación Actual */}
+        <label style={styles.label}>
+            <strong>Situación Actual:</strong>
+            <input 
+                type="text" 
+                id="situacionActual" 
+                name="situacionActual" 
+                value={formData.situacionActual || ''} 
+                onChange={handleChange} 
+                style={styles.input}
+            />
+        </label>
+        
+        {/* 5. Código de Afiliado */}
+        <label style={styles.label}>
+            <strong>Código de Afiliado:</strong>
+            <input 
+                type="text" 
+                id="codigoDeAfiliado" 
+                name="codigoDeAfiliado" 
+                value={formData.codigoDeAfiliado || ''} 
+                onChange={handleChange} 
+                style={styles.input}
+            />
+        </label>
 
-                {/* 6. Supervisor */}
-                <div className="formFieldCompact">
-                    <label htmlFor="supervisor"><strong>Supervisor:</strong></label>
-                    <input type="text" id="supervisor" name="supervisor" 
-                           value={formData.supervisor || ''} onChange={handleChange} className="form-input" />
-                </div>
-                
-                <div className="formFieldCompact">
-                    <label htmlFor="idMerchant"><strong>ID Merchant:</strong></label>
-                    <input type="text" id="idMerchant" name="idMerchant" 
-                           value={formData.idMerchant || ''} onChange={handleChange} className="form-input" />
-                </div>
+        {/* 6. Supervisor */}
+        <label style={styles.label}>
+            <strong>Supervisor:</strong>
+            <input 
+                type="text" 
+                id="supervisor" 
+                name="supervisor" 
+                value={formData.supervisor || ''} 
+                onChange={handleChange} 
+                style={styles.input}
+            />
+        </label>
+        
+        {/* 7. ID Merchant */}
+        <label style={styles.label}>
+            <strong>ID Merchant:</strong>
+            <input 
+                type="text" 
+                id="idMerchant" 
+                name="idMerchant" 
+                value={formData.idMerchant || ''} 
+                onChange={handleChange} 
+                style={styles.input}
+            />
+        </label>
 
-                <div className="formFieldCompact">
-                    <label htmlFor="tipoDeServicio"><strong>Tipo de Servicio:</strong></label>
-                    <input type="text" id="tipoDeServicio" name="tipoDeServicio" 
-                           value={formData.tipoDeServicio || ''} onChange={handleChange} className="form-input" />
-                </div>
-                
-                {/* 9. Motivo de Servicio */}
-                <div className="formFieldCompact">
-                    <label htmlFor="motivoDeServicio"><strong>Motivo del Servicio:</strong></label>
-                    <input type="text" id="motivoDeServicio" name="motivoDeServicio" 
-                           value={formData.motivoDeServicio || ''} onChange={handleChange} className="form-input" />
-                </div>
-                
-                {/* 10. Motivo Real del Servicio en sitio */}
-                <div className="formFieldCompact">
-                    <label htmlFor="motivoReal"><strong>Motivo real en sitio:</strong></label>
-                    <input type="text" id="motivoReal" name="motivoReal" 
-                           value={formData.motivoReal || ''} onChange={handleChange} className="form-input" />
-                </div>
+        {/* 8. Tipo de Servicio */}
+        <label style={styles.label}>
+            <strong>Tipo de Servicio:</strong>
+            <input 
+                type="text" 
+                id="tipoDeServicio" 
+                name="tipoDeServicio" 
+                value={formData.tipoDeServicio || ''} 
+                onChange={handleChange} 
+                style={styles.input}
+            />
+        </label>
+        
+        {/* 9. Motivo de Servicio */}
+        <label style={styles.label}>
+            <strong>Motivo del Servicio:</strong>
+            <input 
+                type="text" 
+                id="motivoDeServicio" 
+                name="motivoDeServicio" 
+                value={formData.motivoDeServicio || ''} 
+                onChange={handleChange} 
+                style={styles.input}
+            />
+        </label>
+        
+        {/* 10. Motivo Real del Servicio en sitio */}
+        <label style={styles.label}>
+            <strong>Motivo real en sitio:</strong>
+            <input 
+                type="text" 
+                id="motivoReal" 
+                name="motivoReal" 
+                value={formData.motivoReal || ''} 
+                onChange={handleChange} 
+                style={styles.input}
+            />
+        </label>
 
-                {/* 11. Guía de Encomienda */}
-                <div className="formFieldCompact">
-                    <label htmlFor="guiaDeEncomienda"><strong>Guía de Encomienda:</strong></label>
-                    <input type="text" id="guiaDeEncomienda" name="guiaDeEncomienda" 
-                           value={formData.guiaDeEncomienda || ''} onChange={handleChange} className="form-input" />
-                </div>
-                
-                {/* 12. Fecha de envío de guía */}
-                <div className="formFieldCompact">
-                    <label htmlFor="fechaDeEnvio"><strong>Fecha de Envío:</strong></label>
-                    <input type="date" id="fechaDeEnvio" name="fechaDeEnvio" 
-                           value={formData.fechaDeEnvio || ''} onChange={handleChange} className="form-input" />
-                </div>
-                
-                {/* 13. Dirección */}
-                <div className="formFieldCompact">
-                    <label htmlFor="direccion"><strong>Dirección:</strong></label>
-                    <input type="text" id="direccion" name="direccion" 
-                           value={formData.direccion || ''} onChange={handleChange} className="form-input" />
-                </div>
-                
-                {/* 14. Técnico de Campo */}
-                <div className="formFieldCompact">
-                    <label htmlFor="tecnico"><strong>Técnico de Campo:</strong></label>
-                    <input type="text" id="tecnico" name="tecnico" 
-                           value={formData.tecnico || ''} onChange={handleChange} className="form-input" />
-                </div>
-                
-                {/* 15. SLA */}
-                <div className="formFieldCompact">
-                    <label htmlFor="sla"><strong>SLA:</strong></label>
-                    <input type="number" id="sla" name="sla" 
-                           value={formData.sla || ''} onChange={handleChange} className="form-input" />
-                </div>
+        {/* 11. Guía de Encomienda */}
+        <label style={styles.label}>
+            <strong>Guía de Encomienda:</strong>
+            <input 
+                type="text" 
+                id="guiaDeEncomienda" 
+                name="guiaDeEncomienda" 
+                value={formData.guiaDeEncomienda || ''} 
+                onChange={handleChange} 
+                style={styles.input}
+            />
+        </label>
+        
+        {/* 12. Fecha de envío de guía */}
+        <label style={styles.label}>
+            <strong>Fecha de Envío:</strong>
+            <input 
+                type="date" 
+                id="fechaDeEnvio" 
+                name="fechaDeEnvio" 
+                value={formData.fechaDeEnvio || ''} 
+                onChange={handleChange} 
+                style={styles.input}
+            />
+        </label>
+        
+        {/* 13. Dirección */}
+        <label style={styles.label}>
+            <strong>Dirección:</strong>
+            <input 
+                type="text" 
+                id="direccion" 
+                name="direccion" 
+                value={formData.direccion || ''} 
+                onChange={handleChange} 
+                style={styles.input}
+            />
+        </label>
+        
+        {/* 14. Técnico de Campo */}
+        <label style={styles.label}>
+            <strong>Técnico de Campo:</strong>
+            <input 
+                type="text" 
+                id="tecnico" 
+                name="tecnico" 
+                value={formData.tecnico || ''} 
+                onChange={handleChange} 
+                style={styles.input}
+            />
+        </label>
+        
+        <label style={styles.label}>
+            <strong>SLA:</strong>
+            <input 
+                type="number" 
+                id="sla" 
+                name="sla" 
+                value={formData.sla || ''} 
+                onChange={handleChange} 
+                style={styles.input}
+            />
+        </label>
 
-                {/* 16. Fecha de Asignación */}
-                <div className="formFieldCompact">
-                    <label htmlFor="fechaDeAsignacion"><strong>Fecha de Asignación:</strong></label>
-                    <input type="date" id="fechaDeAsignacion" name="fechaDeAsignacion" 
-                           value={formData.fechaDeAsignacion || ''} onChange={handleChange} className="form-input" />
-                </div>
+        {/* 16. Fecha de Asignación */}
+        <label style={styles.label}>
+            <strong>Fecha de Asignación:</strong>
+            <input 
+                type="date" 
+                id="fechaDeAsignacion" 
+                name="fechaDeAsignacion" 
+                value={formData.fechaDeAsignacion || ''} 
+                onChange={handleChange} 
+                style={styles.input}
+            />
+        </label>
 
-            </div>
+    </div>
 
-            {/* Observaciones (Textarea, full width) */}
-            <div className="fullWidthSection">
-                <div className="formFieldCompact">
-                    <label htmlFor="observaciones"><strong>Observaciones ARJUSVEN:</strong></label>
-                    <textarea id="observaciones" name="observaciones" 
-                              value={formData.observaciones || ''} onChange={handleChange} rows="2" className="form-input" />
-                </div>
-            </div>
+   <div style={{ ...styles.row, flexDirection: 'column', width: '100%' }}>
+
+        <label style={{...styles.label, flex: '1 1 100%'}}>
+            <strong>Observaciones ARJUSVEN:</strong>
+        </label>
+        
+        <textarea 
+            id="observaciones" 
+            name="observaciones" 
+            value={formData.observaciones || ''} 
+            onChange={handleChange} 
+            rows="3" // Aumentado a 3 para consistencia y espacio
+            style={{ ...styles.input, minHeight: '80px', width: '100%', boxSizing: 'border-box' }}
+        />
+    </div>
+    
+    {localError && <div style={styles.error}>{localError}</div>}
+
+    <div style={{ marginTop: 20, display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+
+        <button 
+            type="button" 
+         // onClick={handleRemove}
+            style={styles.buttonDanger}
+            disabled={isSubmitting}
+        >
+            Borrar Inventario
+        </button>
+        <button 
+            type="button" // Cancelar (similar al onCancelEdit)
+            onClick={handleCancel}
+            style={styles.navButton} // Estilo 'Cancelar'
+            disabled={isSubmitting}
+        >
+            Cancelar
+        </button>
+        <button 
+            type="button" 
+            onClick={handleSave}
+            style={styles.buttonPrimary} // Estilo 'Guardar'
+            disabled={isSubmitting} 
+        >
             
-            {/* Mensaje de Error Local */}
-            {localError && <div className="error-message" style={{ color: 'red' }}>{localError}</div>}
-
-            <div className="formActionsCompact">
-                <button 
-                    className="action-button save-button" 
-                    onClick={handleSave}
-                    disabled={isSubmitting} // Deshabilitar mientras se guarda
-                >
-                    {isSubmitting ? "Guardando..." : "Guardar Cambios"}
-                </button>
-                <button 
-                    className="action-button cancel-button" 
-                    onClick={handleCancel}
-                    disabled={isSubmitting}
-                >
-                    Cancelar
-                </button>
-            </div>
-        </div>
+            {isSubmitting ? "Guardando..." : "Guardar Cambios"}
+        </button>
+        
+    </div>
+</div>
     );
 }
 

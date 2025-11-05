@@ -85,14 +85,18 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
                         <InfoItem label="Supervisor" value={supervisor} />
                         <InfoItem label="ID Merchant" value={idMerchant} />
                         <InfoItem label="Tipo de Servicio" value={tipoDeServicio} />
-                        <InfoItem label="Motivo del Servicio" value={motivoDeServicio} />
-                        <InfoItem label="Motivo real del Servicio en sitio" value={motivoReal} />
-                        <InfoItem label="Observaciones ARJUSVEN" value={observaciones} />
+                        
                         <InfoItem label="Guía de Encomienda" value={guiaDeEncomienda} />
                         <InfoItem label="Fecha de envío de guía" value={fechaDeEnvio} />
                         <InfoItem label="Dirección" value={direccion} />
                         <InfoItem label="Técnico de Campo" value={tecnico} />
                         <InfoItem label="SLA" value={sla} />
+                        
+                    </div>
+                    <div className="grid">
+                        <InfoItem label="Observaciones ARJUSVEN" value={observaciones} />
+                        <InfoItem label="Motivo del Servicio" value={motivoDeServicio} />
+                        <InfoItem label="Motivo real del Servicio en sitio" value={motivoReal} />
                     </div>
                 </div>
             )}

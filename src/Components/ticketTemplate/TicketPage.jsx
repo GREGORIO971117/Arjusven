@@ -9,6 +9,7 @@ const API_SERVICIOS_URL = '/servicio';
 const API_ADICIONALES_URL = '/adicional';
 
 function TicketPage() {
+    
     const [ticketsData, setTicketsData] = useState([]);
     const [selectedTicket, setSelectedTicket] = useState(null);
     const [showFilterPanel, setShowFilterPanel] = useState(false);

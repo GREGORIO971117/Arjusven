@@ -1,4 +1,45 @@
 import React, { useState, useEffect } from 'react';
+import { styles as baseStyles } from '../admin/adminTemplate'; 
+
+const styles = {
+        ...baseStyles, 
+            card: {
+            padding: '0px',
+            backgroundColor: '#ffffff',
+            borderRadius: '8px',
+            maxWidth: '1200px',
+            margin: '10px auto',
+        },
+        form: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+        },
+        label: {
+            ...baseStyles.label,
+            flex: '1 1 calc(33.33% - 20px)', 
+            minWidth: '250px',
+        },
+        row: {
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '10px',
+            justifyContent: 'flex-start',
+            width: '100%',
+        },
+        buttonDanger: {
+            backgroundColor: '#dc3545', 
+            color: 'white',
+            padding: '10px 20px',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            transition: 'background-color 0.3s',
+            marginRight: 'auto', 
+        },
+    };
+
 
 const RenderEditarDatosAdicionales = ({ data, onCancelEdit,onSaveEdit }) => {
 
@@ -50,194 +91,252 @@ const [isSubmitting, setIsSubmitting] = useState(false);
 
     return(
 
-  <div className="formGridContainer">
+<div style={{...styles.card}}>
+    <div style={styles.row}>
+        
+        {/* Ciudad */}
+        <label style={styles.label}>
+            <strong>Ciudad:</strong>
+            <input type="text" id="ciudad" name="ciudad"
+                value={formData.ciudad || ''} onChange={handleChange} style={styles.input} />
+        </label>
+    
+        {/* Plaza */}
+        <label style={styles.label}>
+            <strong>Plaza:</strong>
+            <input type="text" id="plaza" name="plaza"
+                value={formData.plaza || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* Técnico */}
+        <label style={styles.label}>
+            <strong>Técnico:</strong>
+            <input type="text" id="tecnico" name="tecnico"
+                value={formData.tecnico || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* Cerro en Punto Clave */}
+        <label style={styles.label}>
+            <strong>Cerro en Punto Clave:</strong>
+            <input type="text" id="cerroPuntoClave" name="cerroPuntoClave"
+                value={formData.cerroPuntoClave || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* Atención en Punto */}
+        <label style={styles.label}>
+            <strong>Atención en Punto:</strong>
+            <input type="text" id="atencionEnPunto" name="atencionEnPunto"
+                value={formData.atencionEnPunto || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* Firma en Estación */}
+        <label style={styles.label}>
+            <strong>Firma en Estación:</strong>
+            <input type="text" id="firmaEnEstacion" name="firmaEnEstacion"
+                value={formData.firmaEnEstacion || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* #Tarjeta / TAG */}
+        <label style={styles.label}>
+            <strong>#Tarjeta / TAG:</strong>
+            <input type="text" id="tarjetaTag" name="tarjetaTag"
+                value={formData.tarjetaTag || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* Cantidad TPV en Base */}
+        <label style={styles.label}>
+            <strong>Cantidad TPV en Base:</strong>
+            <input type="number" id="cantidadTPV" name="cantidadTPV"
+                value={formData.cantidadTPV || ''} onChange={handleChange} style={styles.input} />
+        </label>
+         <label style={styles.label}>
+            <strong>Modelo:</strong>
+            <input type="text" id="modeloEntra" name="modeloEntra"
+                value={formData.modeloEntra || ''} onChange={handleChange} style={styles.input} />
+        </label>
+         <label style={styles.label}>
+            <strong>Marca:</strong>
+            <input type="text" id="marcaEntra" name="marcaEntra"
+                value={formData.marcaEntra || ''} onChange={handleChange} style={styles.input} />
+        </label>
 
-            <div className="grid3">
-                <div className="formFieldCompact">
-                    <label htmlFor="ciudad"><strong>Ciudad:</strong></label>
-                    <input type="text" id="ciudad" name="ciudad"
-                           value={formData.ciudad || ''} onChange={handleChange} className="form-input" />
-                </div>
-           
-                <div className="formFieldCompact">
-                    <label htmlFor="plaza"><strong>Plaza:</strong></label>
-                    <input type="text" id="plaza" name="plaza"
-                           value={formData.plaza || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="tecnico"><strong>Técnico:</strong></label>
-                    <input type="text" id="tecnico" name="tecnico"
-                           value={formData.tecnico || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="cerroPuntoClave"><strong>Cerro en Punto Clave:</strong></label>
-                    <input type="text" id="cerroPuntoClave" name="cerroPuntoClave"
-                           value={formData.cerroPuntoClave || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="atencionEnPunto"><strong>Atención en Punto:</strong></label>
-                    <input type="text" id="atencionEnPunto" name="atencionEnPunto"
-                           value={formData.atencionEnPunto || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="firmaEnEstacion"><strong>Firma en Estación:</strong></label>
-                    <input type="text" id="firmaEnEstacion" name="firmaEnEstacion"
-                           value={formData.firmaEnEstacion || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="tarjetaTag"><strong>#Tarjeta / TAG:</strong></label>
-                    <input type="text" id="tarjetaTag" name="tarjetaTag"
-                           value={formData.tarjetaTag || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="cantidadTPV"><strong>Cantidad TPV en Base:</strong></label>
-                    <input type="number" id="cantidadTPV" name="cantidadTPV"
-                           value={formData.cantidadTPV || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="modeloEntra"><strong>Modelo:</strong></label>
-                    <input type="text" id="modeloEntra" name="modeloEntra"
-                           value={formData.modeloEntra || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="marcaEntra"><strong>Marca:</strong></label>
-                    <input type="text" id="marcaEntra" name="marcaEntra"
-                           value={formData.marcaEntra || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="serieLogicaEntra"><strong>Serie Lógica:</strong></label>
-                    <input type="text" id="serieLogicaEntra" name="serieLogicaEntra"
-                           value={formData.serieLogicaEntra || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="serieFisicaEntra"><strong>Serie Física:</strong></label>
-                    <input type="text" id="serieFisicaEntra" name="serieFisicaEntra"
-                           value={formData.serieFisicaEntra || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="simEntra"><strong>SIM:</strong></label>
-                    <input type="text" id="simEntra" name="simEntra"
-                           value={formData.simEntra || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="ptidEntra"><strong>PTID:</strong></label>
-                    <input type="text" id="ptidEntra" name="ptidEntra"
-                           value={formData.ptidEntra || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="eliminadorEntra"><strong>Eliminador:</strong></label>
-                    <input type="text" id="eliminadorEntra" name="eliminadorEntra"
-                           value={formData.eliminadorEntra || ''} onChange={handleChange} className="form-input" />
-                </div>
-            </div>
+        <label style={styles.label}>
+            <strong>Serie Lógica:</strong>
+            <input type="text" id="serieLogicaEntra" name="serieLogicaEntra"
+                value={formData.serieLogicaEntra || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* Serie Física Entra */}
+        <label style={styles.label}>
+            <strong>Serie Física:</strong>
+            <input type="text" id="serieFisicaEntra" name="serieFisicaEntra"
+                value={formData.serieFisicaEntra || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* SIM Entra */}
+        <label style={styles.label}>
+            <strong>SIM:</strong>
+            <input type="text" id="simEntra" name="simEntra"
+                value={formData.simEntra || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* PTID Entra */}
+        <label style={styles.label}>
+            <strong>PTID:</strong>
+            <input type="text" id="ptidEntra" name="ptidEntra"
+                value={formData.ptidEntra || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* Eliminador Entra */}
+        <label style={styles.label}>
+            <strong>Eliminador:</strong>
+            <input type="text" id="eliminadorEntra" name="eliminadorEntra"
+                value={formData.eliminadorEntra || ''} onChange={handleChange} style={styles.input} />
+        </label>
 
-          
-                <div className="grid3">
-                    <div className="formFieldCompact">
-                        <label htmlFor="modeloSale"><strong>Modelo Sale:</strong></label>
-                        <input type="text" id="modeloSale" name="modeloSale"
-                               value={formData.modeloSale || ''} onChange={handleChange} className="form-input" />
-                    </div>
-                    <div className="formFieldCompact">
-                        <label htmlFor="marcaSale"><strong>Marca Sale:</strong></label>
-                        <input type="text" id="marcaSale" name="marcaSale"
-                               value={formData.marcaSale || ''} onChange={handleChange} className="form-input" />
-                    </div>
-                    <div className="formFieldCompact">
-                        <label htmlFor="serieLogicaSale"><strong>Serie Lógica Sale:</strong></label>
-                        <input type="text" id="serieLogicaSale" name="serieLogicaSale"
-                               value={formData.serieLogicaSale || ''} onChange={handleChange} className="form-input" />
-                    </div>
-                    <div className="formFieldCompact">
-                        <label htmlFor="serieFisicaSale"><strong>Serie Física Sale:</strong></label>
-                        <input type="text" id="serieFisicaSale" name="serieFisicaSale"
-                               value={formData.serieFisicaSale || ''} onChange={handleChange} className="form-input" />
-                    </div>
-                    <div className="formFieldCompact">
-                        <label htmlFor="simSale"><strong>SIM Sale:</strong></label>
-                        <input type="text" id="simSale" name="simSale"
-                               value={formData.simSale || ''} onChange={handleChange} className="form-input" />
-                    </div>
-                    <div className="formFieldCompact">
-                        <label htmlFor="ptidSale"><strong>PTID Sale:</strong></label>
-                        <input type="text" id="ptidSale" name="ptidSale"
-                               value={formData.ptidSale || ''} onChange={handleChange} className="form-input" />
-                    </div>
-                    <div className="formFieldCompact">
-                        <label htmlFor="eliminadorSale"><strong>Eliminador Sale:</strong></label>
-                        <input type="text" id="eliminadorSale" name="eliminadorSale"
-                               value={formData.eliminadorSale || ''} onChange={handleChange} className="form-input" />
-                    </div>
-                </div>
-         
+        <label style={styles.label}>
+            <strong>Modelo Sale:</strong>
+            <input type="text" id="modeloSale" name="modeloSale"
+                value={formData.modeloSale || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* Marca Sale */}
+        <label style={styles.label}>
+            <strong>Marca Sale:</strong>
+            <input type="text" id="marcaSale" name="marcaSale"
+                value={formData.marcaSale || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* Serie Lógica Sale */}
+        <label style={styles.label}>
+            <strong>Serie Lógica Sale:</strong>
+            <input type="text" id="serieLogicaSale" name="serieLogicaSale"
+                value={formData.serieLogicaSale || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* Serie Física Sale */}
+        <label style={styles.label}>
+            <strong>Serie Física Sale:</strong>
+            <input type="text" id="serieFisicaSale" name="serieFisicaSale"
+                value={formData.serieFisicaSale || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* SIM Sale */}
+        <label style={styles.label}>
+            <strong>SIM Sale:</strong>
+            <input type="text" id="simSale" name="simSale"
+                value={formData.simSale || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* PTID Sale */}
+        <label style={styles.label}>
+            <strong>PTID Sale:</strong>
+            <input type="text" id="ptidSale" name="ptidSale"
+                value={formData.ptidSale || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* Eliminador Sale */}
+        <label style={styles.label}>
+            <strong>Eliminador Sale:</strong>
+            <input type="text" id="eliminadorSale" name="eliminadorSale"
+                value={formData.eliminadorSale || ''} onChange={handleChange} style={styles.input} />
+        </label>
 
-            <div className="grid3">
-                <div className="formFieldCompact">
-                    <label htmlFor="versionBrowser"><strong>Versión Browser:</strong></label>
-                    <input type="text" id="versionBrowser" name="versionBrowser"
-                           value={formData.versionBrowser || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="versionBrowserSale"><strong>Versión Browser Sale:</strong></label>
-                    <input type="text" id="versionBrowserSale" name="versionBrowserSale"
-                           value={formData.versionBrowserSale || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="tipoComunicacion"><strong>Tipo de Comunicación:</strong></label>
-                    <input type="text" id="tipoComunicacion" name="tipoComunicacion"
-                           value={formData.tipoComunicacion || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="tipoComunicacionSale"><strong>Tipo Comunicación Sale:</strong></label>
-                    <input type="text" id="tipoComunicacionSale" name="tipoComunicacionSale"
-                           value={formData.tipoComunicacionSale || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="estado"><strong>Estado:</strong></label>
-                    <input type="text" id="estado" name="estado"
-                           value={formData.estado || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="ordenDeServicio"><strong>Orden de Servicio:</strong></label>
-                    <input type="text" id="ordenDeServicio" name="ordenDeServicio"
-                           value={formData.ordenDeServicio || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="serieStock"><strong>Serie Stock:</strong></label>
-                    <input type="text" id="serieStock" name="serieStock"
-                           value={formData.serieStock || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="simStock"><strong>SIM Stock:</strong></label>
-                    <input type="text" id="simStock" name="simStock"
-                           value={formData.simStock || ''} onChange={handleChange} className="form-input" />
-                </div>
-                <div className="formFieldCompact">
-                    <label htmlFor="modeloStock"><strong>Modelo Stock:</strong></label>
-                    <input type="text" id="modeloStock" name="modeloStock"
-                           value={formData.modeloStock || ''} onChange={handleChange} className="form-input" />
-                </div>
+         <label style={styles.label}>
+            <strong>Versión Browser (Entra):</strong>
+            <input type="text" id="versionBrowser" name="versionBrowser"
+                value={formData.versionBrowser || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* Versión Browser Sale */}
+        <label style={styles.label}>
+            <strong>Versión Browser (Sale):</strong>
+            <input type="text" id="versionBrowserSale" name="versionBrowserSale"
+                value={formData.versionBrowserSale || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* Tipo de Comunicación */}
+        <label style={styles.label}>
+            <strong>Tipo de Comunicación (Entra):</strong>
+            <input type="text" id="tipoComunicacion" name="tipoComunicacion"
+                value={formData.tipoComunicacion || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* Tipo Comunicación Sale */}
+        <label style={styles.label}>
+            <strong>Tipo Comunicación (Sale):</strong>
+            <input type="text" id="tipoComunicacionSale" name="tipoComunicacionSale"
+                value={formData.tipoComunicacionSale || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* Estado */}
+        <label style={styles.label}>
+            <strong>Estado:</strong>
+            <input type="text" id="estado" name="estado"
+                value={formData.estado || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        {/* Orden de Servicio */}
+        <label style={styles.label}>
+            <strong>Orden de Servicio:</strong>
+            <input type="text" id="ordenDeServicio" name="ordenDeServicio"
+                value={formData.ordenDeServicio || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        <label style={styles.label}>
+            <strong>Serie Stock:</strong>
+            <input type="text" id="serieStock" name="serieStock"
+                value={formData.serieStock || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        <label style={styles.label}>
+            <strong>SIM Stock:</strong>
+            <input type="text" id="simStock" name="simStock"
+                value={formData.simStock || ''} onChange={handleChange} style={styles.input} />
+        </label>
+        
+        <label style={styles.label}>
+            <strong>Modelo Stock:</strong>
+            <input type="text" id="modeloStock" name="modeloStock"
+                value={formData.modeloStock || ''} onChange={handleChange} style={styles.input} />
+        </label>
 
-                <input type="hidden" name="idServicios" value={formData.idServicios || ''} />
-            </div>
+        <input type="hidden" name="idServicios" value={formData.idServicios || ''} />
 
-            {localError && <div className="error-message" style={{ color: 'red' }}>{localError}</div>}
+    </div>
 
-            <div className="formActionsCompact">
-                <button 
-                    className="action-button save-button" 
-                    onClick={handleSave}
-                                  >
-                    {isSubmitting ? "Guardando..." : "Guardar Cambios"}
-                </button>
-                <button 
-                    className="action-button cancel-button" 
-                    onClick={handleCancel}
-                                  >
-                    Cancelar
-                </button>
-            </div>
-  </div>
+
+
+    {localError && <div style={styles.error}>{localError}</div>}
+
+    {/* Botones de Acción */}
+    <div style={{ marginTop: 20, display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+        <button 
+            type="button" 
+         // onClick={handleRemove}
+            style={styles.buttonDanger}
+            disabled={isSubmitting}
+        >
+            Borrar Inventario
+        </button>
+        <button 
+            type="button" 
+            onClick={handleCancel}
+            style={styles.navButton} 
+            disabled={isSubmitting}
+        >
+            Cancelar
+        </button>
+        <button 
+            type="button" 
+            onClick={handleSave}
+            style={styles.buttonPrimary} 
+            disabled={isSubmitting} 
+        >
+            {isSubmitting ? "Guardando..." : "Guardar Cambios"}
+        </button>
+    </div>
+</div>
 
           )
 };
