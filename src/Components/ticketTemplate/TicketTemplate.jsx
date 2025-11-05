@@ -5,7 +5,7 @@ import RenderEditarDatosServicio from './EditDataServicios';
 import RenderEditarDatosAdicionales from './EditDataAdicionales';
 import datosEstaticos from '../../assets/datos.json';
 
-const TicketTemplate = ({data, onSaveService}) => {
+const TicketTemplate = ({data, onSaveService, onSaveAdicional}) => {
   const [activeTab, setActiveTab] = useState('servicio');
   const [isEditing, setIsEditing] = useState(false);
   
@@ -35,6 +35,7 @@ const TicketTemplate = ({data, onSaveService}) => {
             datosEstaticos={datosEstaticos}
             onCancelEdit={() => setIsEditing(false)}
             handleDownload={handleDownload}
+            onSaveEdit={onSaveAdicional}
           />
         );
       }

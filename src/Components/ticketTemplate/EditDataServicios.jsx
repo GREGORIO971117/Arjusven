@@ -48,20 +48,18 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
         return <div>Cargando datos de Servicio...</div>;
     }
 
-    // --- Aquí se han corregido los 'name' y 'value' para que coincidan con la entidad Servicio ---
     return (
         <div className="formGridContainer">
 
             <div className="grid3">
                 
-                {/* 1. Nombre de ESS */}
                 <div className="formFieldCompact">
                     <label htmlFor="nombreDeEss"><strong>Nombre de ESS:</strong></label>
                     <input type="text" id="nombreDeEss" name="nombreDeEss" 
                            value={formData.nombreDeEss || ''} onChange={handleChange} className="form-input" />
                 </div>
 
-                {/* 2. Número de Incidencia */}
+               
                 <div className="formFieldCompact">
                     <label htmlFor="incidencia"><strong>Número de Incidencia:</strong></label>
                     <input type="text" id="incidencia" name="incidencia" 
@@ -96,14 +94,12 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
                            value={formData.supervisor || ''} onChange={handleChange} className="form-input" />
                 </div>
                 
-                {/* 7. ID Merchant */}
                 <div className="formFieldCompact">
                     <label htmlFor="idMerchant"><strong>ID Merchant:</strong></label>
                     <input type="text" id="idMerchant" name="idMerchant" 
                            value={formData.idMerchant || ''} onChange={handleChange} className="form-input" />
                 </div>
 
-                {/* 8. Tipo de Servicio */}
                 <div className="formFieldCompact">
                     <label htmlFor="tipoDeServicio"><strong>Tipo de Servicio:</strong></label>
                     <input type="text" id="tipoDeServicio" name="tipoDeServicio" 

@@ -1,15 +1,12 @@
 import React from 'react';
 
-// Ahora, este componente espera recibir 'serviceData' que es la entidad Servicio
 const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEditing }) => {
     
-    // Si no hay datos de servicio, mostramos un mensaje (aunque en teoría siempre deberían venir)
     if (!data) {
         return <div className="no-data-message">No se encontraron datos de Servicio para este ticket.</div>;
     }
 
     const InfoItem = ({ label, value }) => {
-        // Aseguramos que el valor no sea null/undefined y usamos un guion si está vacío
         const displayValue = value === undefined || value === null || value === '' ? '—' : value;
         
         return (
@@ -19,16 +16,15 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
         );
     }
 
-    // --- Mapeo de Propiedades de serviceData a Variables Legibles ---
-    // Usamos el destructuring para acceder directamente a las props del backend (Servicio.java)
+  
     const {
         fechaDeAsignacion,
         resolucion,
         situacionActual,
-        nombreDeEss, // Mapeado de 'Nombre_de_ESS'
+        nombreDeEss, 
         incidencia,
         codigoDeAfiliado,
-        supervisor, // Nota: Este campo es String, no objeto Usuario
+        supervisor, 
         idMerchant,
         tipoDeServicio,
         motivoDeServicio,
@@ -37,18 +33,12 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
         guiaDeEncomienda,
         fechaDeEnvio, // Mapeado de 'Fecha_de_envio'
         direccion,
-        tecnico, // Nota: Este campo es String, no objeto Usuario
+        tecnico, 
         sla
     } = data;
 
-
-    // Solo mostramos el contenido de la pestaña de Servicio si está activa.
-    // Asumimos que la lógica de pestañas ('adicionales') se maneja a nivel superior
-    // o que este componente solo renderiza CUANDO la pestaña 'servicio' está activa.
-
     return (
         <>
-            {/* --- Controles Superiores --- */}
             <div className="ticket-tabs">
                 <div className="tabs-container">
                     <button
