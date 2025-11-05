@@ -178,7 +178,7 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
             </div>
             
             {/* Mensaje de Error Local */}
-            {localError && <div className="error-message" style={{ color: 'red', marginTop: '10px' }}>{localError}</div>}
+            {localError && <div className="error-message" style={{ color: 'red' }}>{localError}</div>}
 
             <div className="formActionsCompact">
                 <button 

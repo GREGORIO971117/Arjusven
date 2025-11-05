@@ -58,14 +58,15 @@ function TicketList({ tickets, onSelectTicket, setShowFilterPanel }) {
                                 onClick={() => handleTicketClick(ticket)}
                             >
                                 <div className="ticket-info">
+
+                                    <span className="incidence-number">
+                                        {getServiceValue(ticket, 'incidencia')}
+                                    </span>
                                     
                                     <span className="station-name">
                                         {getServiceValue(ticket, 'nombreDeEss')}
                                     </span>
-                                    <span className="incidence-number">
-                                        {getServiceValue(ticket, 'incidencia')}
-                                    </span>
-                                    {/* --------------------------- */}
+                                    
                                 </div>
                             </li>
                         ))}
