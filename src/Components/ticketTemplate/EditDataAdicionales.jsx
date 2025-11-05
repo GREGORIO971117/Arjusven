@@ -41,7 +41,7 @@ const styles = {
     };
 
 
-const RenderEditarDatosAdicionales = ({ data, onCancelEdit,onSaveEdit }) => {
+const RenderEditarDatosAdicionales = ({ data, onCancelEdit,onSaveEdit,onDeleteEdit }) => {
 
   
 const [formData, setFormData] = useState({});
@@ -313,7 +313,7 @@ const [isSubmitting, setIsSubmitting] = useState(false);
     <div style={{ marginTop: 20, display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
         <button 
             type="button" 
-         // onClick={handleRemove}
+            onClick={onDeleteEdit}
             style={styles.buttonDanger}
             disabled={isSubmitting}
         >

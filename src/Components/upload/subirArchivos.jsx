@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-
+import datosEstaticos from '../../assets/datos.json';
 import RenderInventario from './subirInventarioTemplate';
 import RenderTicket from './subirTicketTemplate';
 import { styles } from '../admin/adminTemplate';
@@ -11,11 +11,15 @@ export default function subirArchivos() {
         if (activeTab==='inventario') {
 
             return(
-                <RenderInventario/>
+                <RenderInventario
+                datosEstaticos={datosEstaticos}
+                />
             );
         }if (activeTab==='ticket') {
             return(
-                <RenderTicket/>
+                <RenderTicket
+                datosEstaticos={datosEstaticos}
+                />
             )
         }
     }

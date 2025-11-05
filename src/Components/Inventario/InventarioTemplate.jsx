@@ -18,10 +18,8 @@ function InventarioTemplate({ data, onGoBack,loadInventario }) {
             await loadInventario(); 
             // Solo después de la recarga exitosa, sale del modo de edición.
             setIsEditing(false);
-
         } catch (err) {
             console.error("Fallo la recarga de inventario después de guardar.", err);
-            // El usuario permanece en la pantalla de edición si la recarga falló.
         }
     };
 

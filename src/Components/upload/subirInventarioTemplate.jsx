@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 // Asegúrate de que las rutas sean correctas
-import datosEstaticos from '../../assets/datos.json';
 import { apiRequest } from '../login/Api'; 
 import { styles } from '../admin/adminTemplate';
 
@@ -28,7 +27,7 @@ const initialFormState = {
     descripcion: "",
 };
 
-export default function SubirInventarioTemplate() {
+export default function SubirInventarioTemplate({datosEstaticos}) {
 
     // --- ESTADOS ---
     const [inventario, setInventario] = useState([]); 

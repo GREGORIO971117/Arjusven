@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { apiRequest } from "../login/Api"; 
+import {styles} from '../admin/adminTemplate'
 
 // --- CONFIGURACIÓN DE ENDPOINTS Y ESTADO INICIAL ---
 const API_TICKETS_URL = '/tickets'; 
 const USERS_API_URL = '/usuarios'; 
 const ADMIN_ID_DEFAULT = ""; // Cambiamos a cadena vacía para forzar la selección
 
-export default function SubirTicketTemplate() {
+export default function SubirTicketTemplate(datosEstaticos) {
     
     // --- ESTADOS ---
     const [nombreEstacion, setNombreEstacion] = useState("");
-    const [idResponsable, setIdResponsable] = useState(ADMIN_ID_DEFAULT); // Almacenará el idUsuarios del responsable
+    const [idResponsable, setIdResponsable] = useState(ADMIN_ID_DEFAULT);
+    const [incidencia,setIncidencia]= useState("");
+    const [estadosMx, setEstadosMx] = useState("");
     const [usuarios, setUsuarios] = useState([]); // Lista de usuarios (Administradores)
     
     const [loading, setLoading] = useState(false);
@@ -40,19 +43,21 @@ export default function SubirTicketTemplate() {
         fetchUsers(); 
     }, []);
 
-    // --- HANDLERS ---
     
     function validateForm() {
         const errs = {};
         if (!nombreEstacion.trim()) {
             errs.nombreEstacion = "El nombre de la estación es requerido.";
         }
-        // Validar que se haya seleccionado un responsable
         if (!idResponsable || idResponsable === "") {
             errs.idResponsable = "Debe seleccionar un responsable (Admin).";
         }
-        
-        // Limpiar mensaje de error general si la validación falla
+        if(!incidencia.trim()){
+            errs.incidencia = "Numero de incidencia es requerido.";
+        }
+        if (!estadosMx || estadosMx === "") {
+            errs.idResponsable = "Debe seleccionar la ciudad.";
+        }
         if (Object.keys(errs).length > 0) setError(null); 
 
         setFormErrors(errs);
@@ -72,13 +77,14 @@ export default function SubirTicketTemplate() {
         // 1. CONSTRUIR EL PAYLOAD COMPLETO ANIDADO
         const payload = {
             "administrador": {
-                "idUsuarios": Number(idResponsable) // Referencia al usuario administrador
+                "idUsuarios": Number(idResponsable)
             },
             "servicios": {
-                "nombreDeEss": nombreEstacion.trim() 
+                "nombreDeEss": nombreEstacion.trim(),
+                "incidencia": incidencia.trim()
             },
             "adicionales":{
-                "ciudad": "Puebla" // Valor inicial dummy
+                "ciudad":  estadosMx
             }
         };
         
@@ -103,7 +109,6 @@ export default function SubirTicketTemplate() {
             // 3. ÉXITO
             setMensaje(`✅ Ticket ${newTicket.idTickets} y sus entidades creados con éxito.`);
             setNombreEstacion(""); 
-            // Opcional: setea idResponsable a un valor por defecto o déjalo.
             setFormErrors({}); 
             
         } catch (err) {
@@ -120,10 +125,8 @@ export default function SubirTicketTemplate() {
             
             <form onSubmit={handleSubmit} style={styles.form}>
                 
-                {/* Fila 1: Nombre de Estación y Responsable */}
                 <div style={styles.row}>
                     
-                    {/* Nombre de Estación (Servicio) */}
                     <label style={styles.label}>
                         Nombre de estación (ESS)
                         <input
@@ -136,8 +139,34 @@ export default function SubirTicketTemplate() {
                         />
                          {formErrors.nombreEstacion && <div style={styles.errorTextRow}>{formErrors.nombreEstacion}</div>}
                     </label>
+
+                    <label style={styles.label}>
+                        Numero de incidencia
+                        <input
+                            type="text"
+                            value={incidencia}
+                            onChange={(e) => setIncidencia(e.target.value)}
+                            disabled={loading}
+                            required
+                            style={styles.input}
+                        />
+                         {formErrors.incidencia && <div style={styles.errorTextRow}>{formErrors.incidencia}</div>}
+                    </label>
+
+
                     
-                    {/* ID del Responsable (Administrador) */}
+                                            <label style={styles.label}>Ciudad
+                                            <select name="estadosMx"
+                                             value={datosEstaticos.estadosMx}
+                                                onChange={(e) => setEstadosMx(e.target.value)}
+                                               style={styles.input}>
+                                                <option value="">Seleccione una ciudad</option>
+                                                {datosEstaticos.estadosMx?.map((opcion) => (
+                                                <option key={opcion} value={opcion}>{opcion}</option>
+                                ))}
+                            </select>
+                    </label>
+                    
                     <label style={styles.label}>Responsable (Admin)
                         <select
                             name="idResponsable"
@@ -158,7 +187,6 @@ export default function SubirTicketTemplate() {
                     </label>
                 </div>
                 
-                {/* Fila de mensajes (Éxito / Error) */}
                 <div style={{...styles.row, flexWrap: 'nowrap'}}>
                     {mensaje && <div style={{...styles.success, flex: '1 1 100%' }}>{mensaje}</div>}
                     {error && <div style={{...styles.error, flex: '1 1 100%'}}>🚨 {error}</div>}
@@ -174,45 +202,3 @@ export default function SubirTicketTemplate() {
     );
 }
 
-// --- ESTILOS UNIFICADOS ---
-const styles = {
-    container: { padding: 20, fontFamily: "Segoe UI, Roboto, system-ui, sans-serif", color: "#222" },
-    title: { marginBottom: 12 },
-    form: {},
-    row: { 
-        display: "flex", 
-        gap: 12, 
-        marginTop: 8, 
-        flexWrap: "wrap" 
-    },
-    label: { 
-        display: "flex", 
-        flexDirection: "column", 
-        flex: "1 1 220px", 
-        fontSize: 14 
-    },
-    input: { marginTop: 6, padding: "8px 10px", borderRadius: 4, border: "1px solid #ccc", fontSize: 14 },
-    buttonPrimary: { padding: "8px 12px", background: "#0078d4", color: "#fff", border: "none", borderRadius: 4, cursor: "pointer" },
-    error: { 
-        color: "#b00020", 
-        marginTop: 8, 
-        padding: 8, 
-        border: "1px solid #b00020", 
-        borderRadius: 4, 
-        background: "#ffdddd" 
-    },
-    success: {
-        color: "#155724", 
-        marginTop: 8, 
-        padding: 8, 
-        border: "1px solid #c3e6cb", 
-        borderRadius: 4, 
-        background: "#d4edda"
-    },
-    errorTextRow: { 
-        color: "#b00020", 
-        fontSize: 12, 
-        flex: "1 1 220px",
-        marginTop: 4 
-    }
-};

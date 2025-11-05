@@ -40,7 +40,7 @@ const styles = {
         },
     };
 
-function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveEdit }) { 
+function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveEdit,onDeleteEdit }) { 
     
     const [formData, setFormData] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -208,20 +208,7 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
                 onChange={handleChange} 
                 style={styles.input}
             />
-        </label>
-        
-        {/* 10. Motivo Real del Servicio en sitio */}
-        <label style={styles.label}>
-            <strong>Motivo real en sitio:</strong>
-            <input 
-                type="text" 
-                id="motivoReal" 
-                name="motivoReal" 
-                value={formData.motivoReal || ''} 
-                onChange={handleChange} 
-                style={styles.input}
-            />
-        </label>
+        </label>        
 
         {/* 11. Guía de Encomienda */}
         <label style={styles.label}>
@@ -299,6 +286,17 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
                 style={styles.input}
             />
         </label>
+        <label style={styles.label}>
+            <strong>Motivo real en sitio:</strong>
+            <input 
+                type="text" 
+                id="motivoReal" 
+                name="motivoReal" 
+                value={formData.motivoReal || ''} 
+                onChange={handleChange} 
+                style={styles.input}
+            />
+        </label>
 
     </div>
 
@@ -324,7 +322,7 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
 
         <button 
             type="button" 
-         // onClick={handleRemove}
+            onClick={onDeleteEdit}
             style={styles.buttonDanger}
             disabled={isSubmitting}
         >

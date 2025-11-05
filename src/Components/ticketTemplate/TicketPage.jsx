@@ -18,6 +18,14 @@ function TicketPage() {
     const [isSaving, setIsSaving] = useState(false); 
     const [saveError, setSaveError] = useState  (null); 
 
+     const handleSave = async () => {
+        try {
+            await fetchTickets(); 
+        } catch (err) {
+            console.error("Fallo la recarga de inventario después de guardar.", err);
+        }
+    };
+
     const fetchTickets = async () => {
         setIsLoading(true);
         setError("");
@@ -39,6 +47,46 @@ function TicketPage() {
         }
     };
 
+
+    async function handleServiceDelete() {
+
+            setIsSaving(true);
+            setSaveError(null);
+            const idTickets = selectedTicket.idTickets;
+    
+            if (!idTickets) {
+                setError("Error: ID del ticket no ha sido encontrado para borrar.");
+                return;
+            }
+    
+            if (!window.confirm(`¿Estás seguro de que quieres BORRAR permanentemente el Ticket?`)) {
+                return;
+            }
+    
+           
+    
+            try {
+                const response = await apiRequest(`${API_BASE_URL}/${idTickets}`, {
+                    method: 'DELETE',
+                });
+                
+                if (!response.ok) {
+                    let errorMsg = `Error al borrar el inventario. Estado: ${response.status}`;
+                    try {
+                        const errorData = await response.json();
+                        errorMsg = errorData.message || errorData.error || errorMsg;
+                    } catch {}
+                    throw new Error(errorMsg);
+                }
+    
+                await handleSave(); 
+                
+            } catch (err) {
+                setError(err.message || "Fallo la conexión con el servidor al intentar borrar.");
+            } finally {
+                setIsSaving(false);
+            }
+        }
 
    const handleServicePatch = async (updatedServiceData) => {
     setIsSaving(true);
@@ -80,16 +128,14 @@ function TicketPage() {
             
         } 
         
-        // 1. Actualizar el estado central del ticket (`selectedTicket`)
         setSelectedTicket(prevTicket => {
             if (!prevTicket) return null;
             return {
                 ...prevTicket,
-                servicios: newServiceData, // Usamos los datos devueltos (o los enviados si fue 204)
+                servicios: newServiceData, 
             };
         });
         
-        // 2. Notificar al componente de edición que todo salió bien
         return { success: true };
         
     } catch (err) {
@@ -200,6 +246,7 @@ const handleAdicionalPatch = async (updatedServiceData) => {
                             onGoBack={() => setSelectedTicket(null)}
                             onSaveService={handleServicePatch} 
                             onSaveAdicional={handleAdicionalPatch}
+                            onDeleteService={handleServiceDelete}
                         />
                     ) : (
                         <div className="no-selection-message">
