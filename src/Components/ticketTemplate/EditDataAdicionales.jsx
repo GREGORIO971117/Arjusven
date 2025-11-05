@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
+
 const RenderEditarDatosAdicionales = ({ data, onCancelEdit,onSaveEdit }) => {
+
+  
 const [formData, setFormData] = useState({});
 const [localError, setLocalError] = useState(null);
 const [isSubmitting, setIsSubmitting] = useState(false);

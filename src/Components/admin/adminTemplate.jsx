@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {apiRequest} from '../login/Api'; // Asegúrate de que la ruta sea correcta
-import UsuariosList from './usuariosList'; // Asegúrate de que la ruta sea correcta
+import {apiRequest} from '../login/Api'; 
+import UsuariosList from './usuariosList'; 
 import UsuariosEdit from './usuariosedit';
 
-const API_BASE_URL = '/usuarios'; // Endpoint relativo. apiRequest añade la URL base.
+const API_BASE_URL = '/usuarios'; 
 
-// Definición de las "páginas" o vistas para evitar errores tipográficos
 const VIEWS = {
     FORM: 'agregarUsuario',
     LIST: 'listaUsuarios',
@@ -15,7 +14,6 @@ const VIEWS = {
 export default function AdminTemplate() {
     
     const USERS_PER_PAGE = 10;
-    
     const [currentView, setCurrentView] = useState(VIEWS.FORM); 
     const [currentPage, setCurrentPage] = useState(1);
     const [editingUser, setEditingUser] = useState(null);
@@ -23,6 +21,11 @@ export default function AdminTemplate() {
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(true); 
     const [isSubmitting, setIsSubmitting] = useState(false); 
+
+    const totalPages = Math.ceil(users.length / USERS_PER_PAGE);
+    const startIndex = (currentPage - 1) * USERS_PER_PAGE;
+    const endIndex = startIndex + USERS_PER_PAGE;
+    const currentUsers = users.slice(startIndex, endIndex);
     
     const [form, setForm] = useState({
         nombre: "",
@@ -33,16 +36,14 @@ export default function AdminTemplate() {
         "contraseña": "",
     });
 
-    // 1. FUNCIÓN PARA OBTENER USUARIOS (PROTEGIDO - GET)
+
     const fetchUsers = async () => {
         setIsLoading(true);
         setError("");
         try {
-            // 🔑 JWT: Usa apiRequest para enviar el token
             const response = await apiRequest(API_BASE_URL, { method: 'GET' }); 
             
             if (!response.ok) {
-                // Manejo de error de JWT (401/403) o servidor
                 throw new Error(`Error al cargar usuarios: ${response.statusText}. Por favor, inicie sesión de nuevo.`);
             }
             
@@ -80,7 +81,6 @@ export default function AdminTemplate() {
         fetchUsers();
     };
 
-    // Validación simple del formulario
     function validateForm() {
         if (!form.nombre.trim()) return "El nombre es requerido.";
         if (!form.correo.trim()) return "El correo es requerido.";
@@ -93,10 +93,7 @@ export default function AdminTemplate() {
     }
 
 
-    const totalPages = Math.ceil(users.length / USERS_PER_PAGE);
-    const startIndex = (currentPage - 1) * USERS_PER_PAGE;
-    const endIndex = startIndex + USERS_PER_PAGE;
-    const currentUsers = users.slice(startIndex, endIndex);
+    
 
     // 4. Funciones de navegación
     const handleNextPage = () => {
@@ -204,7 +201,6 @@ export default function AdminTemplate() {
             );
         }
 
-        // Muestra el formulario si la vista es FORM
         if (currentView === VIEWS.FORM) {
             return (
                     <form onSubmit={addUser} style={styles.form}>
@@ -287,43 +283,45 @@ export default function AdminTemplate() {
     );
 }
 
-// --- ESTILOS ---
+
 export const styles = {
-    container: { padding: 20, fontFamily: "Segoe UI, Roboto, system-ui, sans-serif", color: "#222" },
-    title: { marginBottom: 12 },
-    // Estilos para la tarjeta de contenido
-    card: { background: "#fff", padding: 16, borderRadius: 6, boxShadow: "0 0 6px rgba(0,0,0,0.06)", marginBottom: 16 },
-    // Estilos para la navegación de pestañas
-    cardNav: { background: "#fff", padding: 16, borderRadius: 6, boxShadow: "0 0 6px rgba(0,0,0,0.06)", marginBottom: 16, display: 'flex', gap: 10 },
-    form: {},
-    row: { display: "flex", gap: 12, marginTop: 8, flexWrap: "wrap" },
-    label: { display: "flex", flexDirection: "column", flex: "1 1 20px", fontSize: 14 },
-    input: { marginTop: 6, padding: "4px 8px", borderRadius: 4, border: "1px solid #ccc", fontSize: 14 },
-    buttonPrimary: { padding: "8px 12px", background: "#0078d4", color: "#fff", border: "none", borderRadius: 4, cursor: "pointer" },
-    buttonDanger: { padding: "6px 10px", background: "#d9534f", color: "#fff", border: "none", borderRadius: 4, cursor: "pointer" },
-    navButton: { 
-        padding: "10px 15px", 
-        border: "1px solid #ccc", 
-        borderRadius: 4, 
-        cursor: "pointer", 
-        background: "#f0f0f0"
-    },
-    activeNavButton: {
-        background: "#0078d4",
-        color: "#fff",
-        borderColor: "#0078d4"
-    },
-    table: { width: "100%", borderCollapse: "collapse", marginTop: 8 },
-    error: { color: "#b00020", marginTop: 8 },
-    th: {
-        textAlign: 'left',
-        padding: '12px',
-        borderBottom: '2px solid #ddd', // Borde inferior más grueso
-        backgroundColor: '#f8f8f8', // Fondo ligeramente gris para encabezados
-        fontWeight: '600'
-    },
-    td: {
-        padding: '10px 12px',
-        borderBottom: '1px solid #eee', // Borde inferior delgado para filas
-    }
+    container: { padding: 0, fontFamily: "Segoe UI, Roboto, system-ui, sans-serif", color: "#222" },
+    title: { marginBottom: 12 },
+    card: { background: "#fff", padding: 16, borderRadius: 6, boxShadow: "0 0 6px rgba(0,0,0,0.06)", marginBottom: 16 },
+    cardNav: { background: "#fff", padding: 16, borderRadius: 6, boxShadow: "0 0 6px rgba(0,0,0,0.06)", marginBottom: 16, display: 'flex', gap: 10 },
+    form: {},
+    row: { display: "flex", gap: 12, marginTop: 8, flexWrap: "wrap" },
+    label: { display: "flex", flexDirection: "column", flex: "1 1 20px", fontSize: 14 },
+    input: { marginTop: 6, padding: "4px 8px", borderRadius: 4, border: "1px solid #ccc", fontSize: 14 },
+    buttonPrimary: { padding: "8px 12px", background: "#0078d4", color: "#fff", border: "none", borderRadius: 4, cursor: "pointer" },
+    buttonDanger: { padding: "6px 10px", background: "#d9534f", color: "#fff", border: "none", borderRadius: 4, cursor: "pointer" },
+    
+    navButton: { 
+        padding: "10px 15px", 
+        borderWidth: 1,      
+        borderStyle: "solid", 
+        borderColor: "#ccc", 
+        borderRadius: 4, 
+        cursor: "pointer", 
+        background: "#f0f0f0"
+    },
+    activeNavButton: {
+        background: "#0078d4",
+        color: "#fff",
+        borderColor: "#0078d4", 
+    },
+    
+    table: { width: "100%", borderCollapse: "collapse", marginTop: 8 },
+    error: { color: "#b00020", marginTop: 8 },
+    th: {
+        textAlign: 'left',
+        padding: '12px',
+        borderBottom: '2px solid #ddd',
+        backgroundColor: '#f8f8f8',
+        fontWeight: '600'
+    },
+    td: {
+        padding: '10px 12px',
+        borderBottom: '1px solid #eee',
+    }
 };

@@ -2,6 +2,7 @@ import React,{useState} from 'react';
 
 import RenderInventario from './subirInventarioTemplate';
 import RenderTicket from './subirTicketTemplate';
+import { styles } from '../admin/adminTemplate';
 
 export default function subirArchivos() {
     const [activeTab, setActiveTab] = useState('inventario');
@@ -21,25 +22,31 @@ export default function subirArchivos() {
 
     return(
         <>
-        <div className="ticket-tabs">
-            <button
-            className={`tab-button ${activeTab === 'inventario' ? 'active' : ''}`}
-            onClick={() => setActiveTab('inventario')}
-            >
-                Crear Articulo de inventario
-            </button>
+        <div className={styles.container}>
+            <div style={styles.cardNav}>
+                <button
+                style={{ 
+                     ...styles.navButton, 
+                     ...(activeTab === "inventario" ? styles.activeNavButton : {}) 
+                     }}
+                onClick={() => setActiveTab('inventario')}>
+                    Crear Articulo de inventario
+                </button>
 
-            <button
-            className={`tab-button ${activeTab === 'ticket' ? 'active' : ''}`}
-            onClick={() => setActiveTab('ticket')}
-            >
-                Crear Ticket
-            </button>
-
-           
+                <button
+                style={{ 
+                     ...styles.navButton, 
+                     ...(activeTab === "ticket" ? styles.activeNavButton : {}) 
+                     }}
+                onClick={() => setActiveTab('ticket')}>
+                    Crear Ticket
+                </button>
+            </div>
         </div>
 
-         <div className='ticket-content'>{renderContent()}</div>
+         <div style={{marginTop:20}}>
+            {renderContent()}
+            </div>
         </>
 
     )

@@ -44,9 +44,9 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
         if (onCancelEdit) onCancelEdit();
     };
 
-    if (!formData || Object.keys(formData).length === 0) {
-        return <div>Cargando datos de Servicio...</div>;
-    }
+        if (!formData || Object.keys(formData).length === 0) {
+            return <div>Cargando datos de Servicio...</div>;
+        }
 
     return (
         <div className="formGridContainer">

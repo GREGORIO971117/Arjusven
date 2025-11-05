@@ -31,7 +31,7 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
         motivoReal,
         observaciones,
         guiaDeEncomienda,
-        fechaDeEnvio, // Mapeado de 'Fecha_de_envio'
+        fechaDeEnvio, 
         direccion,
         tecnico, 
         sla
@@ -74,9 +74,8 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
 
             {/* --- Renderizado Condicional del Contenido --- */}
             {activeTab === 'servicio' && (
-                <div className='infoSection'>
-                    <div className="section">
-                        {/* Columna 1 */}
+                <div className='detalleGridContainer'>
+                    <div className="grid2">
                         <InfoItem label="Fecha de Asignación" value={fechaDeAsignacion} />
                         <InfoItem label="Resolución" value={resolucion} />
                         <InfoItem label="Situación Actual" value={situacionActual} />
@@ -86,10 +85,6 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
                         <InfoItem label="Supervisor" value={supervisor} />
                         <InfoItem label="ID Merchant" value={idMerchant} />
                         <InfoItem label="Tipo de Servicio" value={tipoDeServicio} />
-                    </div>
-
-                    <div className="section">
-                        {/* Columna 2 */}
                         <InfoItem label="Motivo del Servicio" value={motivoDeServicio} />
                         <InfoItem label="Motivo real del Servicio en sitio" value={motivoReal} />
                         <InfoItem label="Observaciones ARJUSVEN" value={observaciones} />
@@ -102,9 +97,7 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
                 </div>
             )}
             
-            {/* Aquí iría la lógica para renderizar los Datos Adicionales si activeTab === 'adicionales' */}
-            {/* Por ahora, si no es 'servicio', no renderiza nada en esta sección */}
-
+       
         </>
     );
 };

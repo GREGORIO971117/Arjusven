@@ -49,14 +49,11 @@ function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setI
 
 
 
-    // Función simplificada para mostrar cada elemento de información
     const InfoItem = ({ label, value }) => {
-        // Muestra "Sin asignar" o el valor, evitando la redundancia en el JSX principal.
         const displayValue = value ? value : "—"; 
         return (
             <div className="infoItem">
-                <div className="label"><strong>{label}:</strong></div>
-                <div className="value">{displayValue}</div>
+                <strong>{label}:</strong><span>{displayValue} </span>
             </div>
         );
     };
@@ -108,9 +105,6 @@ function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setI
                     <InfoItem label="Firma en Estación" value={firmaEnEstacion} />
                     <InfoItem label="#Tarjeta / TAG" value={tarjetaTag} />
                     <InfoItem label="Cantidad TPV en Base" value={cantidadTPV} />
-                </div>
-
-                <div className="grid3">
                     <InfoItem label="Modelo entra" value={modeloEntra} />
                     <InfoItem label="Marca Entra" value={marcaEntra} />
                     <InfoItem label="Serie Lógica entra" value={serieLogicaEntra} />
@@ -120,9 +114,6 @@ function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setI
                     <InfoItem label="Eliminador Entra" value={eliminadorEntra} />
                     <InfoItem label="Versión Browser" value={versionBrowser} />
                     <InfoItem label="Tipo de Comunicación" value={tipoComunicacion} />
-                </div>
-
-                <div className="grid3">
                     <InfoItem label="Modelo Sale" value={modeloSale} />
                     <InfoItem label="Marca Sale" value={marcaSale} />
                     <InfoItem label="Serie Lógica sale" value={serieLogicaSale} />
@@ -132,9 +123,6 @@ function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setI
                     <InfoItem label="Eliminador Sale" value={eliminadorSale} />
                     <InfoItem label="Versión Browser Sale" value={versionBrowserSale} />
                     <InfoItem label="Tipo Com. Sale" value={tipoComunicacionSale} />
-                </div>
-                
-                <div className="grid3">
                     <InfoItem label="Modelo de Stock" value={modeloStock} />
                     <InfoItem label="Serie de Stock" value={serieStock} />
                     <InfoItem label="SIM de Stock" value={simStock} />

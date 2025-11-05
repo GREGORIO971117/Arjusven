@@ -13,7 +13,6 @@ function InventarioPage() {
     const [showFilterPanel, setShowFilterPanel] = useState(false);
     const [isLoading, setIsLoading] = useState(false); // Nuevo estado de carga
 
-    // Función principal para cargar (GET) el inventario
     const loadInventario = async () => {
         setIsLoading(true);
         try {

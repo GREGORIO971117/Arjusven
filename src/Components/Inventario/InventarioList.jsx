@@ -39,7 +39,7 @@ const InventarioList = ({ Inventario, onSelectTicket,setShowFilterPanel}) => {
       </div>
 
       {Inventario.length === 0 ? (
-        <p>No hay inventario para mostrar.</p>
+        <p>Cargando datos de inventario</p>
       ) : (
         <>
           <ul>

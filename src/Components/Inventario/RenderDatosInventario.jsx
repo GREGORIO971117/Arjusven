@@ -62,10 +62,8 @@ function RenderDatosInventario({ data, onEdit }) {
             </div>
 
             {/* Sección de información en dos columnas */}
-            <div className="infoSection">
-
-                {/* Columna 1 */}
-                <div className="section">
+            <div className="detalleGridContainer">
+                <div className="grid2">
                     <InfoItem label="Número de Serie" value={numeroDeSerie} />
                     <InfoItem label="Equipo" value={equipo} />
                     <InfoItem label="Estado" value={estado} />
@@ -73,9 +71,6 @@ function RenderDatosInventario({ data, onEdit }) {
                     <InfoItem label="Cliente" value={cliente} />
                     <InfoItem label="Plaza" value={plaza} />
                     <InfoItem label="Técnico de Campo" value={tecnico} /> 
-                </div>
-
-                <div className="section">
                     <InfoItem label="Número de Incidencia" value={numeroDeIncidencia} />
                     <InfoItem label="Código de Email" value={codigoEmail} />
                     <InfoItem label="Guías" value={guias} />
@@ -83,13 +78,8 @@ function RenderDatosInventario({ data, onEdit }) {
                     <InfoItem label="Fecha de Fin Prevista" value={formatDate(fechaDeFinPrevista)} />
                     <InfoItem label="Fecha de Fin" value={formatDate(fechaDeFin)} />
                     <InfoItem label="Última Actualización" value={formatDate(ultimaActualizacion)} />
-                </div>
-
-                <div className='section'>
                     <InfoItem label="Descripción" value={descripcion} /> 
-
                 </div>
-
             </div>
 
         </>

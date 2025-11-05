@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 // Asegúrate de que las rutas sean correctas
 import datosEstaticos from '../../assets/datos.json';
 import { apiRequest } from '../login/Api'; 
+import { styles } from '../admin/adminTemplate';
 
 // Endpoints
 const INVENTARIO_API_URL = '/inventario'; // Asumiendo que POST es a /inventario
@@ -238,43 +239,3 @@ export default function SubirInventarioTemplate() {
     );
 }
 
-// Estilos (sin cambios)
-const styles = {
-    container: { padding: 20, fontFamily: "Segoe UI, Roboto, system-ui, sans-serif", color: "#222" },
-    title: { marginBottom: 12 },
-    card: { background: "#fff", padding: 16, borderRadius: 6, boxShadow: "0 0 6px rgba(0,0,0,0.06)", marginBottom: 16 },
-    form: {},
-    row: { 
-        display: "flex", 
-        gap: 12, 
-        marginTop: 8, 
-        flexWrap: "wrap" 
-    },
-    label: { 
-        display: "flex", 
-        flexDirection: "column", 
-        flex: "1 1 220px", 
-        fontSize: 14 
-    },
-    input: { marginTop: 6, padding: "8px 10px", borderRadius: 4, border: "1px solid #ccc", fontSize: 14 },
-    textarea: { marginTop: 6, padding: "8px 10px", borderRadius: 4, border: "1px solid #ccc", fontSize: 14, width: "100%", boxSizing: "border-box" },
-    buttonPrimary: { padding: "8px 12px", background: "#0078d4", color: "#fff", border: "none", borderRadius: 4, cursor: "pointer" },
-    buttonDanger: { padding: "6px 10px", background: "#d9534f", color: "#fff", border: "none", borderRadius: 4, cursor: "pointer" },
-    table: { width: "100%", borderCollapse: "collapse", marginTop: 8 },
-    th: { border: "1px solid #ddd", padding: 8, textAlign: "left", background: "#f4f4f4" },
-    td: { border: "1px solid #ddd", padding: 8, verticalAlign: "top" },
-    error: { 
-        color: "#b00020", 
-        marginTop: 8, 
-        padding: 8, 
-        border: "1px solid #b00020", 
-        borderRadius: 4, 
-        background: "#ffdddd" 
-    },
-    errorTextRow: { 
-        color: "#b00020", 
-        fontSize: 12, 
-        flex: "1 1 220px",
-        marginTop: 4 
-    }
-};
