@@ -103,7 +103,99 @@ function RenderEditDatosInventario({onSave, onCancelEdit, data, datosEstaticos})
     const now = new Date();
     const updateDateString = now.toISOString().slice(0,10);
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const err = validateForm();
+        if (err) {
+            setError(err);
+            return;
+        }
 
+        setIsSubmitting(true);
+        setError("");
+
+        try {
+            const dataToUpdate = { 
+                idInventario: data.idInventario,
+                titulo: formData.titulo,
+                responsable: formData.responsable,
+                codigoEmail: formData.codigoEmail,
+                numeroDeSerie: formData.numeroDeSerie, 
+                descripcion: formData.descripcion,
+                equipo: formData.equipo,
+                numeroDeIncidencia: formData.numeroDeIncidencia,
+                estado: formData.estado, 
+                cliente: formData.cliente, 
+                plaza: formData.plaza, 
+                guias: formData.guias,
+                tecnico: formData.tecnicoCampo, 
+                fechaDeInicioPrevista: formData.fechaInicioPrevista || null, 
+                fechaDeFinPrevista: formData.fechaFinPrevista || null, 
+                fechaDeFin: formData.fechaFin || null, 
+                ultimaActualizacion: updateDateString || null, 
+            };
+            
+            const response = await apiRequest(`${API_BASE_URL}/${data.idInventario}`, {
+                method: 'PATCH', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dataToUpdate),
+            });
+            
+            if (!response.ok) {
+                let errorMsg = `Error al actualizar el inventario. Estado: ${response.status}`;
+                try {
+                    const errorData = await response.json();
+                    errorMsg = errorData.message || errorData.error || errorMsg;
+                } catch {}
+                throw new Error(errorMsg);
+            }
+
+            await onSave(); 
+            
+        } catch (err) {
+            setError(err.message || "Fallo la conexión con el servidor.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    }; 
+
+    async function handleRemove() {
+        const idInventario = data.idInventario;
+
+        if (!idInventario) {
+            setError("Error: ID de Inventario no encontrado para borrar.");
+            return;
+        }
+
+        if (!window.confirm(`¿Estás seguro de que quieres BORRAR permanentemente el inventario con Título: "${data.titulo}"? Esta acción es irreversible.`)) {
+            return;
+        }
+
+        setIsSubmitting(true);
+        setError("");
+
+        try {
+            const response = await apiRequest(`${API_BASE_URL}/${idInventario}`, {
+                method: 'DELETE',
+            });
+            
+            if (!response.ok) {
+                let errorMsg = `Error al borrar el inventario. Estado: ${response.status}`;
+                try {
+                    const errorData = await response.json();
+                    errorMsg = errorData.message || errorData.error || errorMsg;
+                } catch {}
+                throw new Error(errorMsg);
+            }
+
+            await onSave(); 
+            
+        } catch (err) {
+            setError(err.message || "Fallo la conexión con el servidor al intentar borrar.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
 
     return (
         <section style={styles.card}>
