@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
 import options from '../../assets/datos.json';
 
-const RenderFiltro = ({
-    setShowFilterPanel
-}) => {
+const RenderFiltro = ({setShowFilterPanel}) => {
 
     const[botonesModal,setBotonesModal]=useState('Todos');
 
@@ -15,7 +13,6 @@ if (botonesModal === status) {
         }    }
   
     return (
-        // CLASE CORREGIDA: Usa 'modal-overlay' para el fondo oscuro y fijo.
         <div className="modal-overlay"> 
             
             <div className="filter-panel">

@@ -119,7 +119,6 @@ export default function SubirTicketTemplate(datosEstaticos) {
         }
     };
 
-    // --- RENDERIZADO ---
     return (
         <div style={styles.container}>
             
@@ -152,18 +151,15 @@ export default function SubirTicketTemplate(datosEstaticos) {
                         />
                          {formErrors.incidencia && <div style={styles.errorTextRow}>{formErrors.incidencia}</div>}
                     </label>
-
-
                     
-                                            <label style={styles.label}>Ciudad
-                                            <select name="estadosMx"
-                                             value={datosEstaticos.estadosMx}
-                                                onChange={(e) => setEstadosMx(e.target.value)}
-                                               style={styles.input}>
-                                                <option value="">Seleccione una ciudad</option>
-                                                {datosEstaticos.estadosMx?.map((opcion) => (
-                                                <option key={opcion} value={opcion}>{opcion}</option>
-                                ))}
+                        <label style={styles.label}>Ciudad
+                            <select name="estadosMx"
+                                    value={datosEstaticos.estadosMx}
+                                    onChange={(e) => setEstadosMx(e.target.value)}
+                                    style={styles.input}>
+                                <option value="">Seleccione una ciudad</option>
+                                    {datosEstaticos.estadosMx?.map((opcion) => (
+                                <option key={opcion} value={opcion}>{opcion}</option>))}
                             </select>
                     </label>
                     

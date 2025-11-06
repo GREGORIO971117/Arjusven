@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './InventarioList.css'; 
 import { styles as baseStyles } from '../admin/adminTemplate'; 
-import { apiRequest } from '../login/Api';
-
-const API_BASE_URL = '/inventario';
 
 const formatInitialDate = (dateString) => dateString ? String(dateString).slice(0, 10) : '';
 
@@ -27,15 +24,17 @@ const getInitialState = (data) => {
         cliente: data.cliente ?? "", 
         plaza: data.plaza ?? "", 
         guias: data.guias ?? "",
+        idInventario: data.idInventario, 
     };
 };
 
-
-function RenderEditDatosInventario({onSave, onCancelEdit, data, datosEstaticos}){
+function RenderEditDatosInventario({handleUpdate, onCancelEdit, data,handleRemove, datosEstaticos, isSubmitting = false 
+}){
     
+    // Estilos internos (permanecen igual, pero se añaden al scope)
     const styles = {
         ...baseStyles, 
-            card: {
+        card: {
             padding: '0px',
             backgroundColor: '#ffffff',
             borderRadius: '8px',
@@ -70,17 +69,28 @@ function RenderEditDatosInventario({onSave, onCancelEdit, data, datosEstaticos})
             transition: 'background-color 0.3s',
             marginRight: 'auto', 
         },
+        // Añade el estilo de error si no está en baseStyles
+        error: { 
+            color: '#dc3545', 
+            backgroundColor: '#f8d7da', 
+            border: '1px solid #f5c6cb', 
+            padding: '10px', 
+            borderRadius: '4px',
+            marginBottom: '10px'
+        },
+        buttonPrimary: baseStyles.buttonPrimary,
+        navButton: baseStyles.navButton, 
     };
 
     const [formData, setFormData] = useState(getInitialState(data));
     const [error, setError] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
+    
     useEffect(() => {
         setFormData(getInitialState(data));
+        setError("");
     }, [data]);
     
-   
+    
     const handleChange = (e) => {
         const {name, value} = e.target;
         setFormData((f) => ({
@@ -100,8 +110,6 @@ function RenderEditDatosInventario({onSave, onCancelEdit, data, datosEstaticos})
         return "";
     };
 
-    const now = new Date();
-    const updateDateString = now.toISOString().slice(0,10);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -110,9 +118,9 @@ function RenderEditDatosInventario({onSave, onCancelEdit, data, datosEstaticos})
             setError(err);
             return;
         }
-
-        setIsSubmitting(true);
-        setError("");
+        
+        // El estado de isSubmitting se maneja en el padre
+        setError(""); // Limpiar errores locales
 
         try {
             const dataToUpdate = { 
@@ -128,75 +136,26 @@ function RenderEditDatosInventario({onSave, onCancelEdit, data, datosEstaticos})
                 cliente: formData.cliente, 
                 plaza: formData.plaza, 
                 guias: formData.guias,
-                tecnico: formData.tecnicoCampo, 
+                tecnico: formData.tecnicoCampo, // Mapeado de vuelta
                 fechaDeInicioPrevista: formData.fechaInicioPrevista || null, 
                 fechaDeFinPrevista: formData.fechaFinPrevista || null, 
                 fechaDeFin: formData.fechaFin || null, 
-                ultimaActualizacion: updateDateString || null, 
             };
             
-            const response = await apiRequest(`${API_BASE_URL}/${data.idInventario}`, {
-                method: 'PATCH', 
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dataToUpdate),
-            });
+            const result = await handleUpdate(dataToUpdate); 
             
-            if (!response.ok) {
-                let errorMsg = `Error al actualizar el inventario. Estado: ${response.status}`;
-                try {
-                    const errorData = await response.json();
-                    errorMsg = errorData.message || errorData.error || errorMsg;
-                } catch {}
-                throw new Error(errorMsg);
+            if (result && result.success === false) {
+                 
+                 setError(result.error || "Fallo la actualización en el servidor.");
             }
-
-            await onSave(); 
+            
             
         } catch (err) {
-            setError(err.message || "Fallo la conexión con el servidor.");
-        } finally {
-            setIsSubmitting(false);
-        }
+            setError("Ocurrió un error inesperado al enviar los datos.");
+        } 
     }; 
 
-    async function handleRemove() {
-        const idInventario = data.idInventario;
-
-        if (!idInventario) {
-            setError("Error: ID de Inventario no encontrado para borrar.");
-            return;
-        }
-
-        if (!window.confirm(`¿Estás seguro de que quieres BORRAR permanentemente el inventario con Título: "${data.titulo}"? Esta acción es irreversible.`)) {
-            return;
-        }
-
-        setIsSubmitting(true);
-        setError("");
-
-        try {
-            const response = await apiRequest(`${API_BASE_URL}/${idInventario}`, {
-                method: 'DELETE',
-            });
-            
-            if (!response.ok) {
-                let errorMsg = `Error al borrar el inventario. Estado: ${response.status}`;
-                try {
-                    const errorData = await response.json();
-                    errorMsg = errorData.message || errorData.error || errorMsg;
-                } catch {}
-                throw new Error(errorMsg);
-            }
-
-            await onSave(); 
-            
-        } catch (err) {
-            setError(err.message || "Fallo la conexión con el servidor al intentar borrar.");
-        } finally {
-            setIsSubmitting(false);
-        }
-    }
-
+    
     return (
         <section style={styles.card}>
             <h3>Editar Inventario: {formData.titulo}</h3>
@@ -205,7 +164,6 @@ function RenderEditDatosInventario({onSave, onCancelEdit, data, datosEstaticos})
                 
                 {error && <div style={styles.error}>{error}</div>} 
 
-                {/* FILA 1: Título, Número de Serie y Responsable */}
                 <div style={styles.row}>
                     <label style={styles.label}>Título
                         <input name="titulo" value={formData.titulo} onChange={handleChange} style={styles.input} />
@@ -353,7 +311,7 @@ function RenderEditDatosInventario({onSave, onCancelEdit, data, datosEstaticos})
                         style={styles.buttonDanger}
                         disabled={isSubmitting}
                     >
-                         Borrar Inventario
+                        Borrar Inventario
                     </button>
                     
                     <div style={{ marginLeft: 'auto', display: 'flex', gap: 10 }}>

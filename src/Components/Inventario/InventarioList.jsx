@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState } from 'react';
 import './InventarioList.css';
 
 const InventarioList = ({ Inventario, onSelectTicket,setShowFilterPanel}) => {
@@ -51,6 +51,7 @@ const InventarioList = ({ Inventario, onSelectTicket,setShowFilterPanel}) => {
               >
                 <div className="ticket-info">
                   <strong>{ticket.numeroDeSerie}</strong>
+                {ticket.titulo}
                 </div>
               </li>
             ))}
