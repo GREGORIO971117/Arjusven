@@ -287,15 +287,24 @@ export default function AdminTemplate() {
 export const styles = {
     container: { padding: 0, fontFamily: "Segoe UI, Roboto, system-ui, sans-serif", color: "#222" },
     title: { marginBottom: 12 },
-    card: { background: "#fff", padding: 16, borderRadius: 6, boxShadow: "0 0 6px rgba(0,0,0,0.06)", marginBottom: 16 },
+    card: {  padding: 16, borderRadius: 6, marginBottom: 16 },
     cardNav: { background: "#fff", padding: 16, borderRadius: 6, boxShadow: "0 0 6px rgba(0,0,0,0.06)", marginBottom: 16, display: 'flex', gap: 10 },
     form: {},
     row: { display: "flex", gap: 12, marginTop: 8, flexWrap: "wrap" },
     label: { display: "flex", flexDirection: "column", flex: "1 1 20px", fontSize: 14 },
     input: { marginTop: 6, padding: "4px 8px", borderRadius: 4, border: "1px solid #ccc", fontSize: 14 },
     buttonPrimary: { padding: "8px 12px", background: "#0078d4", color: "#fff", border: "none", borderRadius: 4, cursor: "pointer" },
-    buttonDanger: { padding: "6px 10px", background: "#d9534f", color: "#fff", border: "none", borderRadius: 4, cursor: "pointer" },
-    
+buttonDanger: {
+            backgroundColor: '#dc3545', 
+            color: 'white',
+            padding: '10px 20px',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            transition: 'background-color 0.3s',
+            marginRight: 'auto', 
+        },    
     navButton: { 
         padding: "10px 15px", 
         borderWidth: 1,      

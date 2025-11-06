@@ -1,45 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { styles as baseStyles } from '../admin/adminTemplate'; 
-
-const styles = {
-        ...baseStyles, 
-            card: {
-            padding: '0px',
-            backgroundColor: '#ffffff',
-            borderRadius: '8px',
-            maxWidth: '1200px',
-            margin: '10px auto',
-        },
-        form: {
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px',
-        },
-        label: {
-            ...baseStyles.label,
-            flex: '1 1 calc(33.33% - 20px)', 
-            minWidth: '250px',
-        },
-        row: {
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '10px',
-            justifyContent: 'flex-start',
-            width: '100%',
-        },
-        buttonDanger: {
-            backgroundColor: '#dc3545', 
-            color: 'white',
-            padding: '10px 20px',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            transition: 'background-color 0.3s',
-            marginRight: 'auto', 
-        },
-    };
-
+import { styles } from '../admin/adminTemplate'; 
 
 const RenderEditarDatosAdicionales = ({ data, onCancelEdit,onSaveEdit,onDeleteEdit }) => {
 
