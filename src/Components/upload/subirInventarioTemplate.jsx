@@ -109,6 +109,8 @@ export default function SubirInventarioTemplate({datosEstaticos}) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form), 
             });
+            
+            console.log(response);
 
             if (!response.ok) {
                 // Manejo de errores detallado (como ya lo tenías)

@@ -7,14 +7,15 @@ const API_TICKETS_URL = '/tickets';
 const USERS_API_URL = '/usuarios'; 
 const ADMIN_ID_DEFAULT = ""; // Cambiamos a cadena vacía para forzar la selección
 
-export default function SubirTicketTemplate(datosEstaticos) {
+export default function SubirTicketTemplate({ datosEstaticos }) { // Desestructuramos datosEstaticos de props
     
     // --- ESTADOS ---
     const [nombreEstacion, setNombreEstacion] = useState("");
     const [idResponsable, setIdResponsable] = useState(ADMIN_ID_DEFAULT);
     const [incidencia,setIncidencia]= useState("");
-    const [estadosMx, setEstadosMx] = useState("");
-    const [usuarios, setUsuarios] = useState([]); // Lista de usuarios (Administradores)
+    const [ciudadSeleccionada, setCiudadSeleccionada] = useState(""); 
+    
+    const [usuarios, setUsuarios] = useState([]);
     
     const [loading, setLoading] = useState(false);
     const [isLoadingUsers, setIsLoadingUsers] = useState(true);
@@ -22,14 +23,13 @@ export default function SubirTicketTemplate(datosEstaticos) {
     const [error, setError] = useState(null);
     const [formErrors, setFormErrors] = useState({});
 
-    // --- LÓGICA DE CARGA DE USUARIOS (Igual que en Inventario) ---
+    // --- LÓGICA DE CARGA DE USUARIOS ---
     const fetchUsers = async () => {
         try {
             const response = await apiRequest(USERS_API_URL, {method: 'GET'});
             if (!response.ok) throw new Error("Error al cargar la lista de responsables.");
             
             const data = await response.json();
-            // Asumimos que todos los usuarios devueltos pueden ser "Administradores"
             setUsuarios(Array.isArray(data) ? data : []); 
         } catch (err) {
             console.error("Fallo de API al cargar usuarios:", err);
@@ -46,18 +46,28 @@ export default function SubirTicketTemplate(datosEstaticos) {
     
     function validateForm() {
         const errs = {};
+        
+        // 1. Validar Nombre de Estación
         if (!nombreEstacion.trim()) {
             errs.nombreEstacion = "El nombre de la estación es requerido.";
         }
+        
+        // 2. Validar Número de Incidencia
+        if(!incidencia.trim()){
+            errs.incidencia = "Número de incidencia es requerido.";
+        }
+        
+        // 3. Validar Ciudad (Corregido: usa ciudadSeleccionada)
+        if (!ciudadSeleccionada || ciudadSeleccionada === "") {
+            errs.ciudadSeleccionada = "Debe seleccionar la ciudad."; // Nuevo campo de error
+        }
+        
+        // 4. Validar Responsable (Admin)
         if (!idResponsable || idResponsable === "") {
             errs.idResponsable = "Debe seleccionar un responsable (Admin).";
         }
-        if(!incidencia.trim()){
-            errs.incidencia = "Numero de incidencia es requerido.";
-        }
-        if (!estadosMx || estadosMx === "") {
-            errs.idResponsable = "Debe seleccionar la ciudad.";
-        }
+        
+        // Si hay errores de formulario, aseguramos que el error global no se muestre inicialmente.
         if (Object.keys(errs).length > 0) setError(null); 
 
         setFormErrors(errs);
@@ -69,46 +79,51 @@ export default function SubirTicketTemplate(datosEstaticos) {
         setMensaje(null);
         setError(null);
         
+
         if (!validateForm()) {
-            setError("Por favor, rellena todos los campos obligatorios.");
+            if (Object.keys(formErrors).length === 0) {
+                 setError("Por favor, rellena todos los campos obligatorios.");
+            }
             return;
         }
         
-        // 1. CONSTRUIR EL PAYLOAD COMPLETO ANIDADO
+   
         const payload = {
-            "administrador": {
-                "idUsuarios": Number(idResponsable)
-            },
-            "servicios": {
-                "nombreDeEss": nombreEstacion.trim(),
-                "incidencia": incidencia.trim()
-            },
-            "adicionales":{
-                "ciudad":  estadosMx
-            }
-        };
+                "administrador": {
+                    "idUsuarios": Number(idResponsable) // Dinámico
+                },
+                "servicios": {
+                    "nombreDeEss": nombreEstacion.trim(), // Dinámico
+                    "incidencia": incidencia.trim() // Dinámico
+                },
+                "adicionales":{
+                    "ciudad": ciudadSeleccionada // Dinámico
+                }
+            };
         
         setLoading(true);
 
         try {
-            // 2. Ejecutar un ÚNICO POST
             const response = await apiRequest(API_TICKETS_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),
             });
-
+            console.log(response);
+            
             if (!response.ok) {
-                // Captura de errores de API/servidor
                 const errorData = await response.json().catch(() => ({})); 
                 throw new Error(errorData.message || `Error ${response.status}: Falló la creación del Ticket.`);
             }
             
             const newTicket = await response.json();
-            
-            // 3. ÉXITO
-            setMensaje(`✅ Ticket ${newTicket.idTickets} y sus entidades creados con éxito.`);
+            console.log(newTicket);
+            const displayId = newTicket?.idTickets || 'desconocido'; 
+            setMensaje(`✅ Ticket ${displayId} y sus entidades creados con éxito. (Solo se envió el ID: ${Number(idResponsable)})`); 
             setNombreEstacion(""); 
+            setIncidencia("");
+            setCiudadSeleccionada("");
+            setIdResponsable(ADMIN_ID_DEFAULT);
             setFormErrors({}); 
             
         } catch (err) {
@@ -126,6 +141,7 @@ export default function SubirTicketTemplate(datosEstaticos) {
                 
                 <div style={styles.row}>
                     
+                    {/* Nombre de estación (ESS) */}
                     <label style={styles.label}>
                         Nombre de estación (ESS)
                         <input
@@ -136,9 +152,11 @@ export default function SubirTicketTemplate(datosEstaticos) {
                             required
                             style={styles.input}
                         />
+                         {/* Muestra el error específico */}
                          {formErrors.nombreEstacion && <div style={styles.errorTextRow}>{formErrors.nombreEstacion}</div>}
                     </label>
 
+                    {/* Numero de incidencia */}
                     <label style={styles.label}>
                         Numero de incidencia
                         <input
@@ -149,20 +167,30 @@ export default function SubirTicketTemplate(datosEstaticos) {
                             required
                             style={styles.input}
                         />
-                         {formErrors.incidencia && <div style={styles.errorTextRow}>{formErrors.incidencia}</div>}
+                        {/* Muestra el error específico */}
+                        {formErrors.incidencia && <div style={styles.errorTextRow}>{formErrors.incidencia}</div>}
                     </label>
                     
-                        <label style={styles.label}>Ciudad
-                            <select name="estadosMx"
-                                    value={datosEstaticos.estadosMx}
-                                    onChange={(e) => setEstadosMx(e.target.value)}
-                                    style={styles.input}>
-                                <option value="">Seleccione una ciudad</option>
-                                    {datosEstaticos.estadosMx?.map((opcion) => (
-                                <option key={opcion} value={opcion}>{opcion}</option>))}
-                            </select>
+                    {/* Ciudad (Corregido: usa ciudadSeleccionada) */}
+                    <label style={styles.label}>Ciudad
+                        <select 
+                            name="ciudadSeleccionada" 
+                            value={ciudadSeleccionada} 
+                            onChange={(e) => setCiudadSeleccionada(e.target.value)}
+                            style={styles.input}
+                            required
+                        >
+                            <option value="">Seleccione Ciudad</option>
+                            {/* datosEstaticos.estadosMx es la lista de opciones */}
+                            {datosEstaticos.estadosMx?.map((opcion) => (
+                                <option key={opcion} value={opcion}>{opcion}</option>
+                            ))}
+                        </select>
+                         {/* Muestra el error específico */}
+                         {formErrors.ciudadSeleccionada && <div style={styles.errorTextRow}>{formErrors.ciudadSeleccionada}</div>}
                     </label>
                     
+                    {/* Responsable (Admin) */}
                     <label style={styles.label}>Responsable (Admin)
                         <select
                             name="idResponsable"
@@ -183,11 +211,13 @@ export default function SubirTicketTemplate(datosEstaticos) {
                     </label>
                 </div>
                 
+                {/* Mensajes de estado/error general */}
                 <div style={{...styles.row, flexWrap: 'nowrap'}}>
                     {mensaje && <div style={{...styles.success, flex: '1 1 100%' }}>{mensaje}</div>}
                     {error && <div style={{...styles.error, flex: '1 1 100%'}}>🚨 {error}</div>}
                 </div>
 
+                {/* Botón de envío */}
                 <div style={{ marginTop: 20 }}>
                     <button type="submit" style={styles.buttonPrimary} disabled={loading}>
                         {loading ? "Creando Ticket..." : "Publicar Ticket"}
@@ -197,4 +227,3 @@ export default function SubirTicketTemplate(datosEstaticos) {
         </div>
     );
 }
-
