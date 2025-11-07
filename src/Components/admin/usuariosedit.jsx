@@ -4,7 +4,8 @@ import { apiRequest } from '../login/Api';
 
 const API_BASE_URL = '/usuarios';
 
-export default function UsuariosEdit({ user, onSave, onCancel }) {
+// 1. Recibimos 'validateForm' como prop
+export default function UsuariosEdit({ user, onSave, onCancel, validateForm}) {
 
     // Inicializa el estado del formulario con los datos del usuario recibido
     const [formData, setFormData] = useState({
@@ -41,25 +42,19 @@ export default function UsuariosEdit({ user, onSave, onCancel }) {
         }));
     };
 
-    // Validación del formulario
-    const validateForm = () => {
-        if (!formData.nombre.trim()) return "El nombre es requerido.";
-        if (!formData.correo.trim()) return "El correo es requerido.";
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.correo)) return "Correo inválido.";
-        if (!formData.estadoDeResidencia.trim()) return "El estado de residencia es requerido.";
-        if (!formData.edad || Number(formData.edad) <= 0) return "Edad inválida.";
-        if (!formData.rol.trim()) return "El rol es requerido.";        
-        return "";
-    };
 
     // Manejo del envío del formulario (PUT)
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const err = validateForm();
+        
+        // 2. CLAVE: Llamamos a la función pasada por prop, enviando el estado LOCAL (formData)
+        // La función de validación debe manejar la lógica de la contraseña condicionalmente.
+        const err = validateForm(formData, false); // El segundo argumento (false) indica que la contraseña no es OBLIGATORIA (es edición)
         if (err) {
             setError(err);
             return;
         }
+        // ... (El resto de la lógica de envío se mantiene igual)
 
         setIsSubmitting(true);
         setError("");
@@ -125,10 +120,10 @@ export default function UsuariosEdit({ user, onSave, onCancel }) {
                 
                 <div style={styles.row}>
                     <label style={styles.label}>Estado de residencia
-                        <input name="estadoDeResidencia" value={formData.estadoDeResidencia} onChange={handleChange} style={styles.input}  />
+                        <input name="estadoDeResidencia" value={formData.estadoDeResidencia} onChange={handleChange} style={styles.input}  />
                     </label>
                     <label style={styles.label}>Edad
-                        <input name="edad" value={formData.edad} onChange={handleChange} style={styles.input} inputMode="numeric"  />
+                        <input name="edad" value={formData.edad} onChange={handleChange} style={styles.input} inputMode="numeric"  />
                     </label>
                 </div>
                 

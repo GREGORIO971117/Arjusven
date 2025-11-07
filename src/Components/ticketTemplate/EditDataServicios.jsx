@@ -3,41 +3,12 @@ import {styles as baseStyles} from '../admin/adminTemplate';
 
 const styles = {
         ...baseStyles, 
-            card: {
-            padding: '0px',
-            backgroundColor: '#ffffff',
-            borderRadius: '8px',
-            maxWidth: '1200px',
-            margin: '10px auto',
-        },
-        form: {
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px',
-        },
         label: {
             ...baseStyles.label,
             flex: '1 1 calc(33.33% - 20px)', 
             minWidth: '250px',
         },
-        row: {
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '10px',
-            justifyContent: 'flex-start',
-            width: '100%',
-        },
-        buttonDanger: {
-            backgroundColor: '#dc3545', 
-            color: 'white',
-            padding: '10px 20px',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            transition: 'background-color 0.3s',
-            marginRight: 'auto', 
-        },
+    
     };
 
 function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveEdit,onDeleteEdit }) { 
@@ -47,7 +18,6 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
     const [localError, setLocalError] = useState(null);
 
     useEffect(() => {
-   
         if (data) { 
             setFormData(data);
         }
@@ -123,7 +93,7 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
         <label style={styles.label}>
             <strong>Resolución:</strong>
             <input 
-                type="text" 
+                type="date" 
                 id="resolucion" 
                 name="resolucion" 
                 value={formData.resolucion || ''} 
@@ -133,18 +103,22 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
         </label>
         
         {/* 4. Situación Actual */}
-        <label style={styles.label}>
-            <strong>Situación Actual:</strong>
-            <input 
-                type="text" 
+         <label style={styles.label}>
+            <strong>Situación actual:</strong>
+            <select 
                 id="situacionActual" 
                 name="situacionActual" 
                 value={formData.situacionActual || ''} 
                 onChange={handleChange} 
                 style={styles.input}
-            />
-        </label>
-        
+            >
+                <option value="">Seleccione la situación Actual:</option>
+                {datosEstaticos.estado?.map((opcion) => (
+                <option key={opcion} value={opcion}>{opcion}</option>
+            ))}
+
+            </select>
+        </label>        
         {/* 5. Código de Afiliado */}
         <label style={styles.label}>
             <strong>Código de Afiliado:</strong>
@@ -187,14 +161,19 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
         {/* 8. Tipo de Servicio */}
         <label style={styles.label}>
             <strong>Tipo de Servicio:</strong>
-            <input 
-                type="text" 
+            <select 
                 id="tipoDeServicio" 
                 name="tipoDeServicio" 
                 value={formData.tipoDeServicio || ''} 
                 onChange={handleChange} 
                 style={styles.input}
-            />
+            >
+                <option value="">Seleccione la situación Actual:</option>
+                {datosEstaticos.servicio?.map((opcion) => (
+                <option key={opcion} value={opcion}>{opcion}</option>
+            ))}
+
+            </select>
         </label>
         
         {/* 9. Motivo de Servicio */}
@@ -264,15 +243,20 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
         
         <label style={styles.label}>
             <strong>SLA:</strong>
-            <input 
-                type="number" 
+            <select 
                 id="sla" 
                 name="sla" 
                 value={formData.sla || ''} 
                 onChange={handleChange} 
                 style={styles.input}
-            />
-        </label>
+            >
+                <option value="">SLA:</option>
+                {datosEstaticos.sla?.map((opcion) => (
+                <option key={opcion} value={opcion}>{opcion}</option>
+            ))}
+
+            </select>
+        </label>  
 
         {/* 16. Fecha de Asignación */}
         <label style={styles.label}>

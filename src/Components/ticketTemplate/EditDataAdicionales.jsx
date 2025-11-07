@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { styles } from '../admin/adminTemplate'; 
 
-const RenderEditarDatosAdicionales = ({ data, onCancelEdit,onSaveEdit,onDeleteEdit }) => {
+const RenderEditarDatosAdicionales = ({ data, onCancelEdit, onSaveEdit,onDeleteEdit}) => {
 
   
 const [formData, setFormData] = useState({});
@@ -78,8 +78,8 @@ const [isSubmitting, setIsSubmitting] = useState(false);
         {/* Cerro en Punto Clave */}
         <label style={styles.label}>
             <strong>Cerro en Punto Clave:</strong>
-            <input type="text" id="cerroPuntoClave" name="cerroPuntoClave"
-                value={formData.cerroPuntoClave || ''} onChange={handleChange} style={styles.input} />
+            <input type="text" id="cerroEnPuntoClave" name="cerroEnPuntoClave"
+                value={formData.cerroEnPuntoClave || ''} onChange={handleChange} style={styles.input} />
         </label>
         
         {/* Atención en Punto */}
@@ -99,15 +99,15 @@ const [isSubmitting, setIsSubmitting] = useState(false);
         {/* #Tarjeta / TAG */}
         <label style={styles.label}>
             <strong>#Tarjeta / TAG:</strong>
-            <input type="text" id="tarjetaTag" name="tarjetaTag"
-                value={formData.tarjetaTag || ''} onChange={handleChange} style={styles.input} />
+            <input type="text" id="tarjeta" name="tarjeta"
+                value={formData.tarjeta || ''} onChange={handleChange} style={styles.input} />
         </label>
         
         {/* Cantidad TPV en Base */}
         <label style={styles.label}>
             <strong>Cantidad TPV en Base:</strong>
-            <input type="number" id="cantidadTPV" name="cantidadTPV"
-                value={formData.cantidadTPV || ''} onChange={handleChange} style={styles.input} />
+            <input type="number" id="cantidadTpv" name="cantidadTpv"
+                value={formData.cantidadTpv || ''} onChange={handleChange} style={styles.input} />
         </label>
          <label style={styles.label}>
             <strong>Modelo:</strong>
@@ -135,9 +135,9 @@ const [isSubmitting, setIsSubmitting] = useState(false);
         
         {/* SIM Entra */}
         <label style={styles.label}>
-            <strong>SIM:</strong>
-            <input type="text" id="simEntra" name="simEntra"
-                value={formData.simEntra || ''} onChange={handleChange} style={styles.input} />
+            <strong>SIM entra:</strong>
+            <input type="text" id="sim" name="sim"
+                value={formData.sim || ''} onChange={handleChange} style={styles.input} />
         </label>
         
         {/* PTID Entra */}
@@ -201,32 +201,32 @@ const [isSubmitting, setIsSubmitting] = useState(false);
             <input type="text" id="eliminadorSale" name="eliminadorSale"
                 value={formData.eliminadorSale || ''} onChange={handleChange} style={styles.input} />
         </label>
-
-         <label style={styles.label}>
-            <strong>Versión Browser (Entra):</strong>
-            <input type="text" id="versionBrowser" name="versionBrowser"
-                value={formData.versionBrowser || ''} onChange={handleChange} style={styles.input} />
-        </label>
         
         {/* Versión Browser Sale */}
         <label style={styles.label}>
-            <strong>Versión Browser (Sale):</strong>
-            <input type="text" id="versionBrowserSale" name="versionBrowserSale"
-                value={formData.versionBrowserSale || ''} onChange={handleChange} style={styles.input} />
+            <strong>Versión Browser Entra:</strong>
+            <input type="text" id="versionDeBrowserEntra" name="versionDeBrowserEntra"
+                value={formData.versionDeBrowserEntra || ''} onChange={handleChange} style={styles.input} />
         </label>
-        
+
+
+        <label style={styles.label}>
+            <strong>Versión Browser Sale:</strong>
+            <input type="text" id="versionDeBrowserSale" name="versionDeBrowserSale"
+                value={formData.versionDeBrowserSale || ''} onChange={handleChange} style={styles.input} />
+        </label>
         {/* Tipo de Comunicación */}
         <label style={styles.label}>
-            <strong>Tipo de Comunicación (Entra):</strong>
-            <input type="text" id="tipoComunicacion" name="tipoComunicacion"
-                value={formData.tipoComunicacion || ''} onChange={handleChange} style={styles.input} />
+            <strong>Tipo de Comunicación Entra:</strong>
+            <input type="text" id="tipoDeComunicacion" name="tipoDeComunicacion"
+                value={formData.tipoDeComunicacion || ''} onChange={handleChange} style={styles.input} />
         </label>
         
         {/* Tipo Comunicación Sale */}
         <label style={styles.label}>
-            <strong>Tipo Comunicación (Sale):</strong>
-            <input type="text" id="tipoComunicacionSale" name="tipoComunicacionSale"
-                value={formData.tipoComunicacionSale || ''} onChange={handleChange} style={styles.input} />
+            <strong>Tipo Comunicación Sale:</strong>
+            <input type="text" id="tipoDeComunicacionSale" name="tipoDeComunicacionSale"
+                value={formData.tipoDeComunicacionSale || ''} onChange={handleChange} style={styles.input} />
         </label>
         
         {/* Estado */}
@@ -245,20 +245,20 @@ const [isSubmitting, setIsSubmitting] = useState(false);
         
         <label style={styles.label}>
             <strong>Serie Stock:</strong>
-            <input type="text" id="serieStock" name="serieStock"
-                value={formData.serieStock || ''} onChange={handleChange} style={styles.input} />
+            <input type="text" id="serieQueQuedaDeStock" name="serieQueQuedaDeStock"
+                value={formData.serieQueQuedaDeStock || ''} onChange={handleChange} style={styles.input} />
         </label>
         
         <label style={styles.label}>
             <strong>SIM Stock:</strong>
-            <input type="text" id="simStock" name="simStock"
-                value={formData.simStock || ''} onChange={handleChange} style={styles.input} />
+            <input type="text" id="simQueQuedaDeStock" name="simQueQuedaDeStock"
+                value={formData.simQueQuedaDeStock || ''} onChange={handleChange} style={styles.input} />
         </label>
         
         <label style={styles.label}>
             <strong>Modelo Stock:</strong>
-            <input type="text" id="modeloStock" name="modeloStock"
-                value={formData.modeloStock || ''} onChange={handleChange} style={styles.input} />
+            <input type="text" id="modeloDeStock" name="modeloDeStock"
+                value={formData.modeloDeStock || ''} onChange={handleChange} style={styles.input} />
         </label>
 
         <input type="hidden" name="idServicios" value={formData.idServicios || ''} />

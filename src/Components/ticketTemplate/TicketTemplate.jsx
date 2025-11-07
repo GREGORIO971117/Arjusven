@@ -24,6 +24,7 @@ const TicketTemplate = ({data, onSaveService, onSaveAdicional, onDeleteService})
             data={data.servicios}
             datosEstaticos={datosEstaticos}
             onCancelEdit={() => setIsEditing(false)}
+            handleDownload={handleDownload}
             onSaveEdit={onSaveService}
             onDeleteEdit={onDeleteService}
           />

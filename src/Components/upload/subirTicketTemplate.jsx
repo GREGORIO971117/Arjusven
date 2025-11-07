@@ -14,9 +14,7 @@ export default function SubirTicketTemplate({ datosEstaticos }) { // Desestructu
     const [idResponsable, setIdResponsable] = useState(ADMIN_ID_DEFAULT);
     const [incidencia,setIncidencia]= useState("");
     const [ciudadSeleccionada, setCiudadSeleccionada] = useState(""); 
-    
     const [usuarios, setUsuarios] = useState([]);
-    
     const [loading, setLoading] = useState(false);
     const [isLoadingUsers, setIsLoadingUsers] = useState(true);
     const [mensaje, setMensaje] = useState(null);
@@ -181,12 +179,10 @@ export default function SubirTicketTemplate({ datosEstaticos }) { // Desestructu
                             required
                         >
                             <option value="">Seleccione Ciudad</option>
-                            {/* datosEstaticos.estadosMx es la lista de opciones */}
                             {datosEstaticos.estadosMx?.map((opcion) => (
                                 <option key={opcion} value={opcion}>{opcion}</option>
                             ))}
                         </select>
-                         {/* Muestra el error específico */}
                          {formErrors.ciudadSeleccionada && <div style={styles.errorTextRow}>{formErrors.ciudadSeleccionada}</div>}
                     </label>
                     

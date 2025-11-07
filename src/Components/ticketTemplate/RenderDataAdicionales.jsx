@@ -1,52 +1,49 @@
 import React from 'react';
 
-// Se removió 'onEdit' ya que no se usa y se pasó 'data' como prop principal
 function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setIsEditing }) {
 
     if (!data.adicionales) {
         return <div>No hay datos adicionales disponibles.</div>;
     }
 
-    // 🔑 Desestructuramos directamente el objeto 'adicionales' para simplificar el código
     const {
-        caseNumber,
+
         ciudad, 
-        cantidadTPV, 
-        modeloEntra, 
-        marcaEntra,
+        modeloEntra,      
+        marcaEntra,       
         serieLogicaEntra, 
         serieFisicaEntra, 
-        versionBrowser, 
-        tipoComunicacion,
-        simEntra, 
-        ptidEntra, 
-        eliminadorEntra, 
-        eliminadorSale, 
-        estado,
-        ordenDeServicio, 
-        modeloSale, 
-        marcaSale, 
-        serieLogicaSale,
-        serieFisicaSale, 
-        versionBrowserSale, 
-        tipoComunicacionSale,
-        simSale, 
-        ptidSale, 
-        plaza, 
-        tecnico, 
-        cerroPuntoClave,
-        atencionEnPunto, 
-        firmaEnEstacion, 
-        tarjetaTag, 
-        serieStock,
-        simStock, 
-        modeloStock
+        eliminadorEntra,  
+        modeloSale,       
+        marcaSale,        
+        serieLogicaSale,  
+        serieFisicaSale,  
+        eliminadorSale,     
+        estado,        
+        ordenDeServicio,    
+        plaza,              
+        tecnico,            
+        cerroEnPuntoClave, 
+        atencionEnPunto,   
+        firmaEnEstacion,    
+        tarjeta,            
+        cantidadTpv,   
+        tipoDeComunicacion, 
+        sim,              
+        ptidEntra,        
+        simSale,         
+        ptidSale,           
+        versionDeBrowserSale,    
+        versionDeBrowserEntra,
+        tipoDeComunicacionSale,   
+        serieQueQuedaDeStock, 
+        simQueQuedaDeStock,  
+        modeloDeStock         
     } = data.adicionales;
 
     const{
       nombreDeEss
     }=data.servicios;
-
 
 
     const InfoItem = ({ label, value }) => {
@@ -75,7 +72,7 @@ function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setI
                 </button>
 
                 <h2 className="title">
-                    <strong>{nombreDeEss || 'Sin pena ni gloria'}</strong>
+                    <strong>{nombreDeEss}</strong>
                 </h2>
                 
                 <div className="ticket-actions">
@@ -94,38 +91,39 @@ function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setI
             <div className="detalleGridContainer">
 
                 <div className="grid3">
-                    <InfoItem label="Case Number" value={caseNumber} />
                     <InfoItem label="Ciudad" value={ciudad} />
-                    <InfoItem label="Plaza" value={plaza} />
-                    <InfoItem label="Técnico" value={tecnico} />
+                    <InfoItem label="Cantidad TPV en Base" value={cantidadTpv} /> 
                     <InfoItem label="Estado" value={estado} />
                     <InfoItem label="Orden de Servicio" value={ordenDeServicio} />
-                    <InfoItem label="Cerro en Punto Clave" value={cerroPuntoClave} />
+                    <InfoItem label="Plaza" value={plaza} />
+                    <InfoItem label="Técnico" value={tecnico} />
+                    <InfoItem label="Cerro en Punto Clave" value={cerroEnPuntoClave} /> 
                     <InfoItem label="Atención en Punto" value={atencionEnPunto} />
                     <InfoItem label="Firma en Estación" value={firmaEnEstacion} />
-                    <InfoItem label="#Tarjeta / TAG" value={tarjetaTag} />
-                    <InfoItem label="Cantidad TPV en Base" value={cantidadTPV} />
+                    <InfoItem label="#Tarjeta / TAG" value={tarjeta} /> 
                     <InfoItem label="Modelo entra" value={modeloEntra} />
                     <InfoItem label="Marca Entra" value={marcaEntra} />
                     <InfoItem label="Serie Lógica entra" value={serieLogicaEntra} />
                     <InfoItem label="Serie Física entra" value={serieFisicaEntra} />
-                    <InfoItem label="SIM entra" value={simEntra} />
+                    <InfoItem label="Tipo de Comunicación" value={tipoDeComunicacion} /> 
+                    <InfoItem label="SIM entra" value={sim} /> 
                     <InfoItem label="PTID entra" value={ptidEntra} />
                     <InfoItem label="Eliminador Entra" value={eliminadorEntra} />
-                    <InfoItem label="Versión Browser" value={versionBrowser} />
-                    <InfoItem label="Tipo de Comunicación" value={tipoComunicacion} />
                     <InfoItem label="Modelo Sale" value={modeloSale} />
                     <InfoItem label="Marca Sale" value={marcaSale} />
                     <InfoItem label="Serie Lógica sale" value={serieLogicaSale} />
                     <InfoItem label="Serie Física sale" value={serieFisicaSale} />
+                    <InfoItem label="Versión Browser Sale" value={versionDeBrowserSale} />
+                    <InfoItem label="Versión Browser Entra" value={versionDeBrowserEntra} />
+                    <InfoItem label="Tipo Comunicación Sale" value={tipoDeComunicacionSale} />
                     <InfoItem label="SIM Sale" value={simSale} />
                     <InfoItem label="PTID Sale" value={ptidSale} />
                     <InfoItem label="Eliminador Sale" value={eliminadorSale} />
-                    <InfoItem label="Versión Browser Sale" value={versionBrowserSale} />
-                    <InfoItem label="Tipo Com. Sale" value={tipoComunicacionSale} />
-                    <InfoItem label="Modelo de Stock" value={modeloStock} />
-                    <InfoItem label="Serie de Stock" value={serieStock} />
-                    <InfoItem label="SIM de Stock" value={simStock} />
+
+                    <InfoItem label="Serie de Stock" value={serieQueQuedaDeStock} /> 
+                    <InfoItem label="SIM de Stock" value={simQueQuedaDeStock} /> 
+                    <InfoItem label="Modelo de Stock" value={modeloDeStock} /> 
+                                        
                 </div>
 
             </div>

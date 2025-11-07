@@ -2,292 +2,275 @@ import React, { useState, useEffect } from 'react';
 import {apiRequest} from '../login/Api'; 
 import UsuariosList from './usuariosList'; 
 import UsuariosEdit from './usuariosedit';
+import UsuariosUpload from './usuariosUpload';
 
 const API_BASE_URL = '/usuarios'; 
 
 const VIEWS = {
-    FORM: 'agregarUsuario',
-    LIST: 'listaUsuarios',
-    EDIT: 'editarUsuario',
+    FORM: 'agregarUsuario',
+    LIST: 'listaUsuarios',
+    EDIT: 'editarUsuario',
 };
 
 export default function AdminTemplate() {
-    
-    const USERS_PER_PAGE = 10;
-    const [currentView, setCurrentView] = useState(VIEWS.FORM); 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [editingUser, setEditingUser] = useState(null);
-    const [users, setUsers] = useState([]);
-    const [error, setError] = useState("");
-    const [isLoading, setIsLoading] = useState(true); 
-    const [isSubmitting, setIsSubmitting] = useState(false); 
+    
+    const USERS_PER_PAGE = 10;
+    const [currentView, setCurrentView] = useState(VIEWS.FORM); 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [editingUser, setEditingUser] = useState(null);
+    const [users, setUsers] = useState([]);
+    const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(true); 
+    const [isSubmitting, setIsSubmitting] = useState(false); 
 
     const totalPages = Math.ceil(users.length / USERS_PER_PAGE);
-    const startIndex = (currentPage - 1) * USERS_PER_PAGE;
-    const endIndex = startIndex + USERS_PER_PAGE;
-    const currentUsers = users.slice(startIndex, endIndex);
-    
-    const [form, setForm] = useState({
-        nombre: "",
-        correo: "",
-        estadoDeResidencia: "",
-        edad: "",
-        rol: "USUARIO",
-        "contraseña": "",
-    });
+    const startIndex = (currentPage - 1) * USERS_PER_PAGE;
+    const endIndex = startIndex + USERS_PER_PAGE;
+    const currentUsers = users.slice(startIndex, endIndex);
+    
+    const [form, setForm] = useState({
+        nombre: "",
+        correo: "",
+        estadoDeResidencia: "",
+        edad: "",
+        rol: "USUARIO",
+        "contraseña": "",
+    });
 
 
-    const fetchUsers = async () => {
-        setIsLoading(true);
-        setError("");
-        try {
-            const response = await apiRequest(API_BASE_URL, { method: 'GET' }); 
-            
-            if (!response.ok) {
-                throw new Error(`Error al cargar usuarios: ${response.statusText}. Por favor, inicie sesión de nuevo.`);
-            }
-            
-            const data = await response.json();
-            setUsers(Array.isArray(data) ? data : []); 
-        } catch (err) {
-            setError(err.message || "No se pudo conectar al servidor.");
-            setUsers([]);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const fetchUsers = async () => {
+        setIsLoading(true);
+        setError("");
+        try {
+            const response = await apiRequest(API_BASE_URL, { method: 'GET' }); 
+            
+            if (!response.ok) {
+                throw new Error(`Error al cargar usuarios: ${response.statusText}. Por favor, inicie sesión de nuevo.`);
+            }
+            
+            const data = await response.json();
+            setUsers(Array.isArray(data) ? data : []); 
+        } catch (err) {
+            setError(err.message || "No se pudo conectar al servidor.");
+            setUsers([]);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-    // Carga inicial de usuarios al montar el componente
-    useEffect(() => {
-        fetchUsers();
-    }, []); 
-    
-    // Manejo de cambios en el formulario
-    function handleChange(e) {
-        const { name, value } = e.target;
-        setForm((f) => ({ 
-            ...f, 
-            [name]: name === "edad" ? value.replace(/\D/g, "") : value 
-        }));
-    }
-    const handleEdit = (user) => {
-        setEditingUser(user);
-        setCurrentView(VIEWS.EDIT);
-    };
+    // Carga inicial de usuarios al montar el componente
+    useEffect(() => {
+        fetchUsers();
+    }, []); 
+    
+    // Manejo de cambios en el formulario
+    function handleChange(e) {
+        const { name, value } = e.target;
+        setForm((f) => ({ 
+            ...f, 
+            [name]: name === "edad" ? value.replace(/\D/g, "") : value 
+        }));
+    }
+    const handleEdit = (user) => {
+        setEditingUser(user);
+        setCurrentView(VIEWS.EDIT);
+    };
 
-    const handleCancelEdit = () => {
-        setEditingUser(null);
-        setCurrentView(VIEWS.LIST);
-        fetchUsers();
-    };
+    const handleCancelEdit = () => {
+        setEditingUser(null);
+        setCurrentView(VIEWS.LIST);
+        fetchUsers();
+    };
 
-    function validateForm() {
-        if (!form.nombre.trim()) return "El nombre es requerido.";
-        if (!form.correo.trim()) return "El correo es requerido.";
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.correo)) return "Correo inválido.";
-        if (!form.estadoDeResidencia.trim()) return "El estado de residencia es requerido.";
-        if (!form.edad || Number(form.edad) <= 0) return "Edad inválida.";
-        if (!form.rol.trim()) return "El rol es requerido.";
-        if (!form["contraseña"]) return "La contraseña es requerida.";
-        return "";
-    }
+   const validateForm = (formData, isPasswordRequired = true) => {
+        
+        if (!formData.nombre.trim()) return "El nombre es requerido.";
+        if (!formData.correo.trim()) return "El correo es requerido.";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.correo)) return "Correo inválido.";
+        if (!formData.estadoDeResidencia.trim()) return "El estado de residencia es requerido.";
+        if (!formData.edad || Number(formData.edad) <= 0) return "Edad inválida.";
+        if (!formData.rol.trim()) return "El rol es requerido.";
+        
+        const password = formData["contraseña"];
+        
+        // 2. Validación de Obligatoriedad de Contraseña
+        if (isPasswordRequired && !password) {
+             return "La contraseña es requerida.";
+        }
+        
+        // 3. Validación de Seguridad (Solo si hay contraseña y no está vacía)
+        if (password) {
+            if (password.length < 8) {
+                return "La contraseña debe tener al menos 8 caracteres.";
+            }
+            if (!/[A-Z]/.test(password)) {
+                return "La contraseña debe contener al menos 1 letra mayúscula.";
+            }
+            if (!/[a-z]/.test(password)) {
+                return "La contraseña debe contener al menos 1 letra minúscula.";
+            }
+            if (!/[\W_]/.test(password)) {
+                return "La contraseña debe contener al menos 1 carácter especial (ej: !@#$%).";
+            }
+        }
+        
+        return "";
+    };
 
+    // 4. Funciones de navegación
+    const handleNextPage = () => {
+        setCurrentPage(prev => Math.min(prev + 1, totalPages));
+    };
 
-    
+    const handlePrevPage = () => {
+        setCurrentPage(prev => Math.max(prev - 1, 1));
+    };
 
-    // 4. Funciones de navegación
-    const handleNextPage = () => {
-        setCurrentPage(prev => Math.min(prev + 1, totalPages));
-    };
+    async function addUser(e) {
+        e.preventDefault();
+        const err = validateForm(form, true); 
+        if (err) {
+            setError(err);
+            return;
+        }
 
-    const handlePrevPage = () => {
-        setCurrentPage(prev => Math.max(prev - 1, 1));
-    };
+        setIsSubmitting(true);
+        setError("");
 
-    // 2. AÑADIR USUARIO (PROTEGIDO - POST)
-    async function addUser(e) {
-        e.preventDefault();
-        const err = validateForm();
-        if (err) {
-            setError(err);
-            return;
-        }
+        try {
 
-        setIsSubmitting(true);
-        setError("");
+            const userData = { ...form, edad: Number(form.edad) };
+            const response = await apiRequest(API_BASE_URL, {
+                method: 'POST',
+                body: JSON.stringify(userData),
+            });
+            
+            if (!response.ok) {
+                 let errorMsg = "Error al crear el usuario. ";
+                 try {
+                     const errorData = await response.json();
+                     if (response.status === 400 || response.status === 500) {
+                          errorMsg += errorData.message || errorData.error;
+                     } else {
+                          errorMsg += response.statusText;
+                     }
+                 } catch {
+                     errorMsg += "Respuesta no es JSON.";
+                 }
+                 throw new Error(errorMsg);
+            }
 
-        try {
-            const userData = { ...form, edad: Number(form.edad) };
+            const newUser = await response.json();
+            setUsers((prev) => [newUser, ...prev]);
+            setForm({ nombre: "", correo: "", estadoDeResidencia: "", edad: "", rol: "USUARIO", "contraseña": "" });
+            
+        } catch (err) {
+            setError(err.message || "Fallo la conexión con el servidor.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
 
-            // 🔑 JWT: Usa apiRequest para POST (adjunta token)
-            const response = await apiRequest(API_BASE_URL, {
-                method: 'POST',
-                body: JSON.stringify(userData),
-            });
-            
-            if (!response.ok) {
-                 let errorMsg = "Error al crear el usuario. ";
-                 try {
-                     const errorData = await response.json();
-                     if (response.status === 400 || response.status === 500) {
-                          errorMsg += errorData.message || errorData.error;
-                     } else {
-                          errorMsg += response.statusText;
-                     }
-                 } catch {
-                     errorMsg += "Respuesta no es JSON.";
-                 }
-                 throw new Error(errorMsg);
-            }
+    async function removeUser(id) {
+        if (!window.confirm("¿Borrar este usuario?")) return;
+        
+        try {
+            const response = await apiRequest(`${API_BASE_URL}/${id}`, {
+                method: 'DELETE',
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Error al borrar: ${response.statusText}`);
+            }
+            setUsers((prev) => prev.filter((u) => u.idUsuarios !== id));
+            
+        } catch (err) {
+            setError(err.message || "Fallo la conexión con el servidor.");
+        }
+    }
 
-            const newUser = await response.json();
-            setUsers((prev) => [newUser, ...prev]);
-            setForm({ nombre: "", correo: "", estadoDeResidencia: "", edad: "", rol: "USUARIO", "contraseña": "" });
-            
-        } catch (err) {
-            setError(err.message || "Fallo la conexión con el servidor.");
-        } finally {
-            setIsSubmitting(false);
-        }
-    }
+    const renderContent = () => {
+        if (currentView === VIEWS.LIST) {
+            return (
+                <UsuariosList
+                    users={currentUsers}
+                    isLoading={isLoading}
+                    removeUser={removeUser} 
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onNextPage={handleNextPage}
+                    onPrevPage={handlePrevPage}
+                    onEdit={handleEdit}
+                />
+            );
+        }
 
-    // 3. ELIMINAR USUARIO (PROTEGIDO - DELETE)
-    async function removeUser(id) {
-        if (!window.confirm("¿Borrar este usuario?")) return;
-        
-        try {
-            // 🔑 JWT: Usa apiRequest para DELETE (adjunta token)
-            const response = await apiRequest(`${API_BASE_URL}/${id}`, {
-                method: 'DELETE',
-            });
-            
-            if (!response.ok) {
-                throw new Error(`Error al borrar: ${response.statusText}`);
-            }
+        if (currentView === VIEWS.EDIT && editingUser) {
+            return (
+                <UsuariosEdit
+                    user={editingUser}
+                    onCancel={handleCancelEdit}
+                    onSave={handleCancelEdit}
+                    validateForm={validateForm}
+                    
+                />
+            );
+        }
 
-            // Éxito: Filtrar el usuario de la lista local
-            setUsers((prev) => prev.filter((u) => u.idUsuarios !== id));
-            
-        } catch (err) {
-            setError(err.message || "Fallo la conexión con el servidor.");
-        }
-    }
-
-    // --- LÓGICA DE RENDERIZADO (MOSTRAR VISTA) ---
-
-    const renderContent = () => {
-        if (currentView === VIEWS.LIST) {
-            return (
-                <UsuariosList
-                    users={currentUsers}
-                    isLoading={isLoading}
-                    removeUser={removeUser} 
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onNextPage={handleNextPage}
-                    onPrevPage={handlePrevPage}
-                    onEdit={handleEdit}
-                />
-            );
-        }
-
-        if (currentView === VIEWS.EDIT && editingUser) {
-            return (
-                <UsuariosEdit
-                    user={editingUser}
-                    onCancel={handleCancelEdit}
-                    onSave={handleCancelEdit}
-                />
-            );
-        }
-
-        if (currentView === VIEWS.FORM) {
-            return (
-                    <form onSubmit={addUser} style={styles.form}>
-                        
-                        <div style={styles.row}>
-                            <label style={styles.label}>Nombre
-                                <input name="nombre" value={form.nombre} onChange={handleChange} style={styles.input} />
-                            </label>
-                            <label style={styles.label}>Correo
-                                <input name="correo" value={form.correo} onChange={handleChange} style={styles.input} />
-                            </label>
-                        </div>
-                        <div style={styles.row}>
-                            <label style={styles.label}>Estado de residencia
-                                <input name="estadoDeResidencia" value={form.estadoDeResidencia} onChange={handleChange} style={styles.input} />
-                            </label>
-                            <label style={styles.label}>Edad
-                                <input name="edad" value={form.edad} onChange={handleChange} style={styles.input} inputMode="numeric" />
-                            </label>
-                        </div>
-                        <div style={styles.row}>
-                            <label style={styles.label}>Rol
-                                <select name="rol" value={form.rol} onChange={handleChange} style={styles.input}>
-                                    <option value="ADMINISTRADOR">ADMINISTRADOR</option>
-                                    <option value="TECNICO">TECNICO</option>
-                                    <option value="SUPERVISOR">SUPERVISOR</option>
-                                    <option value="USUARIO">USUARIO</option>
-                                </select>
-                            </label>
-                            <label style={styles.label}>Contraseña
-                                <input name="contraseña" type="password" value={form["contraseña"]} onChange={handleChange} style={styles.input} />
-                            </label>
-                        </div> 
-                        
-                        {error && <div style={styles.error}>{error}</div>}
-
-                        <div style={{ marginTop: 8 }}>
-                            <button type="submit" style={styles.buttonPrimary} disabled={isSubmitting}>
-                                {isSubmitting ? "Agregando..." : "Agregar usuario"}
-                            </button>
-                        </div>
-                    </form>
-             
-            );
-        }
-        
-        return null; 
-    };
+        if (currentView === VIEWS.FORM) {
+            return (
+                <UsuariosUpload
+                 addUser={addUser}
+                 form={form}
+                 isSubmitting={isSubmitting}
+                 handleChange={handleChange}
+                 error={error}
+                
+                />
+            );
+        }
+        
+        return null; 
+    };
 
 
-    return (
-        <div style={styles.container}>
+    return (
+        <div style={styles.container}>
 
-            <div style={styles.cardNav}> 
-                <button
-                    style={{ 
-                        ...styles.navButton, 
-                        ...(currentView === VIEWS.FORM ? styles.activeNavButton : {}) 
-                    }}
-                    onClick={() => setCurrentView(VIEWS.FORM)}
-                >
-                    Agregar Usuario
-                </button>
-                <button
-                    style={{ 
-                        ...styles.navButton, 
-                        ...(currentView === VIEWS.LIST ? styles.activeNavButton : {}) 
-                    }}
-                    onClick={() => setCurrentView(VIEWS.LIST)}
-                >
-                    Lista de Usuarios
-                </button>
-            </div>
+            <div style={styles.cardNav}> 
+                <button
+                    style={{ 
+                        ...styles.navButton, 
+                        ...(currentView === VIEWS.FORM ? styles.activeNavButton : {}) 
+                    }}
+                    onClick={() => setCurrentView(VIEWS.FORM)}
+                >
+                    Agregar Usuario
+                </button>
+                <button
+                    style={{ 
+                        ...styles.navButton, 
+                        ...(currentView === VIEWS.LIST ? styles.activeNavButton : {}) 
+                    }}
+                    onClick={() => setCurrentView(VIEWS.LIST)}
+                >
+                    Lista de Usuarios
+                </button>
+            </div>
 
-            <div style={{ marginTop: 20 }}>
-                {renderContent()}
-            </div>
-            
-        </div>
-    );
+            <div style={{ marginTop: 20 }}>
+                {renderContent()}
+            </div>
+            
+        </div>
+    );
 }
 
 
 export const styles = {
     container: { padding: 0, fontFamily: "Segoe UI, Roboto, system-ui, sans-serif", color: "#222" },
     title: { marginBottom: 12 },
-    card: {  padding: 16, borderRadius: 6, marginBottom: 16 },
+    card: {  padding: 16, borderRadius: 6, marginBottom: 16 },
     cardNav: { background: "#fff", padding: 16, borderRadius: 6, boxShadow: "0 0 6px rgba(0,0,0,0.06)", marginBottom: 16, display: 'flex', gap: 10 },
     form: {},
     row: { display: "flex", gap: 12, marginTop: 8, flexWrap: "wrap" },
@@ -304,10 +287,10 @@ buttonDanger: {
             fontWeight: 'bold',
             transition: 'background-color 0.3s',
             marginRight: 'auto', 
-        },    
+        },    
     navButton: { 
         padding: "10px 15px", 
-        borderWidth: 1,      
+        borderWidth: 1,      
         borderStyle: "solid", 
         borderColor: "#ccc", 
         borderRadius: 4, 
