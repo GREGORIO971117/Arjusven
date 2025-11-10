@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './InventarioList.css'; 
-import { styles as baseStyles } from '../admin/adminTemplate'; 
+import { styles } from '../admin/adminTemplate'; 
 
 const formatInitialDate = (dateString) => dateString ? String(dateString).slice(0, 10) : '';
 
@@ -31,57 +31,6 @@ const getInitialState = (data) => {
 function RenderEditDatosInventario({handleUpdate, onCancelEdit, data,handleRemove, datosEstaticos, isSubmitting = false 
 }){
     
-    // Estilos internos (permanecen igual, pero se añaden al scope)
-    const styles = {
-        ...baseStyles, 
-        card: {
-            padding: '0px',
-            backgroundColor: '#ffffff',
-            borderRadius: '8px',
-            maxWidth: '1200px',
-            margin: '10px auto',
-        },
-        form: {
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px',
-        },
-        label: {
-            ...baseStyles.label,
-            flex: '1 1 calc(33.33% - 20px)', 
-            minWidth: '250px',
-        },
-        row: {
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '10px',
-            justifyContent: 'flex-start',
-            width: '100%',
-        },
-        buttonDanger: {
-            backgroundColor: '#dc3545', 
-            color: 'white',
-            padding: '10px 20px',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            transition: 'background-color 0.3s',
-            marginRight: 'auto', 
-        },
-        // Añade el estilo de error si no está en baseStyles
-        error: { 
-            color: '#dc3545', 
-            backgroundColor: '#f8d7da', 
-            border: '1px solid #f5c6cb', 
-            padding: '10px', 
-            borderRadius: '4px',
-            marginBottom: '10px'
-        },
-        buttonPrimary: baseStyles.buttonPrimary,
-        navButton: baseStyles.navButton, 
-    };
-
     const [formData, setFormData] = useState(getInitialState(data));
     const [error, setError] = useState("");
     
@@ -183,8 +132,10 @@ function RenderEditDatosInventario({handleUpdate, onCancelEdit, data,handleRemov
                 {/* FILA 2: Código Email, Cliente y Plaza */}
                 <div style={styles.row}>
                     <label style={styles.label}>Código Email
-                        <input name="codigoEmail" value={formData.codigoEmail} onChange={handleChange} style={styles.input} type="email" />
+                        <input name="codigoEmail" value={formData.codigoEmail} onChange={handleChange} style={styles.input} type="text" />
                     </label>
+
+                    
                     {/* SELECT: Cliente */}
                     <label style={styles.label}>Cliente
                         <select name="cliente" value={formData.cliente} onChange={handleChange} style={styles.input}>

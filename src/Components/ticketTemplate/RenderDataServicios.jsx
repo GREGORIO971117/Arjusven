@@ -66,9 +66,15 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
                             Editar
                         </button>
                     )}
+
+                     <button className="edit-button">
+                        Inventario usado
+                    </button> 
+
                     <button className="download-button">
                         Descargar
                     </button> 
+                   
                 </div>
             </div>
 
@@ -85,7 +91,6 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
                         <InfoItem label="Supervisor" value={supervisor} />
                         <InfoItem label="ID Merchant" value={idMerchant} />
                         <InfoItem label="Tipo de Servicio" value={tipoDeServicio} />
-                        
                         <InfoItem label="Guía de Encomienda" value={guiaDeEncomienda} />
                         <InfoItem label="Fecha de envío de guía" value={fechaDeEnvio} />
                         <InfoItem label="Dirección" value={direccion} />

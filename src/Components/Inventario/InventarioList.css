@@ -137,8 +137,8 @@ textarea.form-input {
 
 .modal-button.active{
 
-     background-color: #007bff; /* Color de fondo cuando está activo */
-    color: white; /* Color de texto para el botón activo */
+     background-color: #007bff; 
+    color: white; 
     border-color: #007bff;
     font-weight: bold;
 
@@ -224,7 +224,7 @@ textarea.form-input {
 .title {
     font-size: 1.7rem;
     color: #34495e;
-    margin: 0;
+    margin: 10px;
     font-weight: 600;
 }
 
@@ -478,6 +478,7 @@ textarea.form-input {
 
 .edit-button{
     margin-left: 20px;
+    margin: 10px;
 }
 
 

@@ -5,13 +5,14 @@ import {styles} from '../admin/adminTemplate'
 // --- CONFIGURACIÓN DE ENDPOINTS Y ESTADO INICIAL ---
 const API_TICKETS_URL = '/tickets'; 
 const USERS_API_URL = '/usuarios'; 
-const ADMIN_ID_DEFAULT = ""; // Cambiamos a cadena vacía para forzar la selección
+const ADMIN_ID_DEFAULT = ""; 
 
 export default function SubirTicketTemplate({ datosEstaticos }) { // Desestructuramos datosEstaticos de props
     
     // --- ESTADOS ---
     const [nombreEstacion, setNombreEstacion] = useState("");
     const [idResponsable, setIdResponsable] = useState(ADMIN_ID_DEFAULT);
+    const [idMerchant,setIdMerchant] = useState("")
     const [incidencia,setIncidencia]= useState("");
     const [ciudadSeleccionada, setCiudadSeleccionada] = useState(""); 
     const [usuarios, setUsuarios] = useState([]);
@@ -65,6 +66,10 @@ export default function SubirTicketTemplate({ datosEstaticos }) { // Desestructu
             errs.idResponsable = "Debe seleccionar un responsable (Admin).";
         }
         
+        if (!idMerchant || idMerchant === "") {
+            errs.idMerchant="Ese IdMerchant no existe";
+        }
+        
         // Si hay errores de formulario, aseguramos que el error global no se muestre inicialmente.
         if (Object.keys(errs).length > 0) setError(null); 
 
@@ -92,7 +97,8 @@ export default function SubirTicketTemplate({ datosEstaticos }) { // Desestructu
                 },
                 "servicios": {
                     "nombreDeEss": nombreEstacion.trim(), // Dinámico
-                    "incidencia": incidencia.trim() // Dinámico
+                    "incidencia": incidencia.trim(), // Dinámico
+                    "idMerchant": idMerchant.trim(),
                 },
                 "adicionales":{
                     "ciudad": ciudadSeleccionada // Dinámico
@@ -167,6 +173,21 @@ export default function SubirTicketTemplate({ datosEstaticos }) { // Desestructu
                         />
                         {/* Muestra el error específico */}
                         {formErrors.incidencia && <div style={styles.errorTextRow}>{formErrors.incidencia}</div>}
+                    </label>
+
+                    {/*El campo de idmerchant */}
+                     <label style={styles.label}>
+                        IdMerchant
+                        <input
+                            type="text"
+                            value={idMerchant}
+                            onChange={(e) => setIdMerchant(e.target.value)}
+                            disabled={loading}
+                            required
+                            style={styles.input}
+                        />
+                        {/* Muestra el error específico */}
+                        {formErrors.idMerchant && <div style={styles.errorTextRow}>{formErrors.idMerchant}</div>}
                     </label>
                     
                     {/* Ciudad (Corregido: usa ciudadSeleccionada) */}
