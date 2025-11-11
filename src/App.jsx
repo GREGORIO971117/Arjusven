@@ -9,6 +9,7 @@ import TicketPage from './components/ticketTemplate/TicketPage';
 import Upload from './components/upload/subirArchivos';
 import Admin from './components/admin/adminPage';
 import Perfil from './components/perfil/perfilPage';
+import Estaciones from './Components/estaciones/EstacionesPage';
 import './App.css'; 
 
 function App() {
@@ -55,9 +56,12 @@ function App() {
         {id: 1, text: "Home", url: "/Home"},
         {id: 2, text: "Ticket", url: "/Ticket"},
         {id: 3, text: "Inventario", url: "/Inventario"},
-        {id: 4, text: "Subir", url: "/SubirIncidencias" },
-        {id: 5, text: "Administrar", url: "/Admin"},
-        {id: 6, text: "Perfil", url: "/Perfil"},
+        {id: 4, text: "Administrar", url: "/Admin"},
+        {id: 5, text: "Perfil", url: "/Perfil"},
+        {id: 6, text: "Estaciones", url: "/Estaciones"},
+        {id: 7, text: "Subir", url: "/SubirIncidencias" },
+
+        
     ];
 
     return (
@@ -81,9 +85,10 @@ function App() {
                     <Route path="/Home" element={<Home />} />
                     <Route path="/Ticket" element={<TicketPage/>} />
                     <Route path="/Inventario" element={<Inventario />} />
-                    <Route path="/SubirIncidencias" element={<Upload/>} />
+                    <Route path="/Estaciones" element={<Estaciones/>} />
                     <Route path="/Admin" element={<Admin/>}/>
                     <Route path="/Perfil" element={<Perfil/>}/>
+                    <Route path="/SubirIncidencias" element={<Upload/>} />
                 </Route>
                 
                 {/* Ruta para cualquier otra URL (404) */}

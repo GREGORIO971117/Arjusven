@@ -91,7 +91,6 @@ export default function SubirInventarioTemplate({datosEstaticos}) {
         setArtErrors({});
     }
 
-    // --- FUNCIÓN DE ENVÍO PROTEGIDA (CORREGIDA) ---
     async function submitArticulo(e) {
         e.preventDefault();
         
