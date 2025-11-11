@@ -6,7 +6,6 @@ import './InventarioList.css';
  * @param {string | LocalDate} dateString - Cadena de fecha (YYYY-MM-DD o formato largo).
  * @returns {string} Fecha formateada o una cadena vacía.
  */
-
 const formatDate = (dateString) => {
     // Si Java devuelve LocalDate, el string ya será YYYY-MM-DD.
     if (typeof dateString === 'string') {
@@ -16,7 +15,7 @@ const formatDate = (dateString) => {
 };
 
 
-function RenderDatosInventario({ data, onEdit }) {
+function RenderDatosInventario({ data, onEdit, loadHistorial }) {
 
     if (!data) {
         return null;
@@ -50,18 +49,15 @@ function RenderDatosInventario({ data, onEdit }) {
     } = data;
 
     return (
-
         <> 
             <div className="ticket-header">
                 <h2 className="ticket-title">
                     {titulo}
-                
                         <button onClick={onEdit} className="edit-button">Editar</button>
-                                            <button onClick={onEdit} className="edit-button">Editar</button>
+                        <button onClick={loadHistorial} className="delete-button">Historial</button>
                 </h2>
             </div>
 
-            {/* Sección de información en dos columnas */}
             <div className="detalleGridContainer">
                 <div className="grid2">
                     <InfoItem label="Número de Serie" value={numeroDeSerie} />

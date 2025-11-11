@@ -5,7 +5,7 @@ import RenderFiltro from './RenderFiltro';
 import './InventarioList.css';
 import { apiRequest } from '../login/Api';
 
- const API_URL = '/inventario';
+const API_URL = '/inventario';
 
 function InventarioPage() {
 
@@ -36,18 +36,13 @@ function InventarioPage() {
 
     const handleUpdate = async (dataToUpdate) => {
     
-    // El estado de envío (isSubmitting) debe estar en el padre
     setIsSubmitting(true);
-    setError(""); // Usamos el setError del padre
+    setError(""); 
 
-    // 1. Obtener el ID
     const idInventario = dataToUpdate.idInventario;
-
-    // 2. Definir la fecha de actualización
     const now = new Date();
     const updateDateString = now.toISOString().slice(0,10);
     
-    // 3. Crear el objeto final para enviar, incluyendo la actualización
     const finalDataToSend = {
         ...dataToUpdate,
         ultimaActualizacion: updateDateString || null,
@@ -75,7 +70,7 @@ function InventarioPage() {
         
     } catch (err) {
         setError(err.message || "Fallo la conexión con el servidor al intentar actualizar.");
-        return { success: false, error: err.message }; // Retornar el error
+        return { success: false, error: err.message };
     } finally {
         setIsSubmitting(false);
     }
@@ -122,13 +117,12 @@ function InventarioPage() {
      const handleSave = async () => {
     try {
         await loadInventario(); 
-        setSelectedInventario(null); // Opcional: Deseleccionar tras guardar
+        setSelectedInventario(null); 
         setIsEditing(false);
     } catch (err) {
         console.error("Fallo la recarga de inventario después de guardar.", err);
     }
 };
-
 
       const handleCancel = () => {
         setIsEditing(false);
