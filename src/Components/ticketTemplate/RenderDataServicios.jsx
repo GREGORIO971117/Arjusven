@@ -23,7 +23,6 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
         situacionActual,
         nombreDeEss, 
         incidencia,
-        codigoDeAfiliado,
         supervisor, 
         idMerchant,
         tipoDeServicio,
@@ -55,13 +54,11 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
                     </button>
                 </div>
                 <h2 className="title">
-                    {/* El título puede ser dinámico, por ejemplo, el nombre de la ESS */}
                     <strong>{nombreDeEss || 'Sin Nombre'}</strong> 
                 </h2>
 
                 <div className="ticket-actions">
                     {!isEditing && (
-                        // 🔑 Llamada para cambiar el estado a edición en el componente padre (TicketTemplate)
                         <button onClick={() => setIsEditing(true)} className="edit-button">
                             Editar
                         </button>
@@ -87,7 +84,6 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
                         <InfoItem label="Situación Actual" value={situacionActual} />
                         <InfoItem label="Nombre de ESS" value={nombreDeEss} />
                         <InfoItem label="Incidencia" value={incidencia} />
-                        <InfoItem label="Código de Afiliado" value={codigoDeAfiliado} />
                         <InfoItem label="Supervisor" value={supervisor} />
                         <InfoItem label="ID Merchant" value={idMerchant} />
                         <InfoItem label="Tipo de Servicio" value={tipoDeServicio} />
