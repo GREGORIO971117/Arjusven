@@ -179,7 +179,7 @@ export const styles = {
     label: { display: "flex", flexDirection: "column", flex: "1 1 20px", fontSize: 14 },
     input: { marginTop: 6, padding: "4px 8px", borderRadius: 4, border: "1px solid #ccc", fontSize: 14 },
     buttonPrimary: { padding: "8px 12px", background: "#0078d4", color: "#fff", border: "none", borderRadius: 4, cursor: "pointer" },
-buttonDanger: {
+    buttonDanger: {
             backgroundColor: '#dc3545', 
             color: 'white',
             padding: '10px 20px',

@@ -45,8 +45,8 @@ function App() {
         {id: 1, text: "Home", url: "/Home"},
         {id: 2, text: "Ticket", url: "/Ticket"},
         {id: 3, text: "Inventario", url: "/Inventario"},
-        {id: 4, text: "Usuarios", url: "/Usuarios"},
-        {id: 5, text: "Estaciones", url: "/Estaciones"},
+        {id: 4, text: "Estaciones", url: "/Estaciones"},
+        {id: 5, text: "Usuarios", url: "/Usuarios"},
         {id: 6, text: "Perfil", url: "/Perfil"},
         {id: 7, text: "Subir", url: "/SubirIncidencias" },
 

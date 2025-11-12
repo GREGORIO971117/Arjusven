@@ -9,7 +9,8 @@ const initialEstacionFormState = {
     nombreComercial: '',   
     direccion: '',         
     estado: '',            
-    plazaDeAtencion: ''    
+    plazaDeAtencion: '',
+    cobertura: ''        
 };
 
 export default function SubirEstacionTemplate() {
@@ -25,8 +26,10 @@ export default function SubirEstacionTemplate() {
         const { name, value } = e.target;
         setForm((prev) => ({ 
             ...prev, 
-            [name]: name === 'idMerchant' ? Number(value) : value 
+            // Convierte el ID Merchant a número si es ese campo
+            [name]: name === 'idMerchant' ? (value ? Number(value) : '') : value 
         }));
+        // Limpiar errores al cambiar
         if (formErrors[name]) {
             setFormErrors(prev => ({ ...prev, [name]: "" }));
         }
@@ -34,8 +37,10 @@ export default function SubirEstacionTemplate() {
 
     function validateForm() {
         const errs = {};
-        if (!form.idMerchant || form.idMerchant === 0) {
-            errs.idMerchant = "El ID Merchant es requerido y debe ser un número.";
+        
+        // --- VALIDACIONES DE CAMPOS MÍNIMOS ---
+        if (!form.idMerchant || form.idMerchant <= 0) {
+            errs.idMerchant = "El ID Merchant es requerido y debe ser un número positivo.";
         }
         if (!form.nombreComercial || form.nombreComercial.trim() === "") {
             errs.nombreComercial = "El Nombre Comercial es requerido.";
@@ -49,7 +54,7 @@ export default function SubirEstacionTemplate() {
         if (!form.plazaDeAtencion || form.plazaDeAtencion.trim() === "") {
             errs.plazaDeAtencion = "La Plaza de Atención es requerida.";
         }
-        
+       
         if (Object.keys(errs).length > 0) setError("Por favor, rellena los campos obligatorios.");
         else setError(""); 
 
@@ -75,6 +80,7 @@ export default function SubirEstacionTemplate() {
         setError(""); 
         
         try {
+            // El API_URL completo es /api/estaciones
             const response = await apiRequest(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -87,8 +93,8 @@ export default function SubirEstacionTemplate() {
                 
                 if (isJson) {
                     const errorData = await response.json();
-                    // Usar un campo común de error de Spring o el mensaje de la respuesta
-                    errorMsg += errorData.message || errorData.error || response.statusText; 
+                    // Capturar el mensaje de error de Spring (ej. duplicado de ID Merchant)
+                    errorMsg += errorData.message || response.statusText; 
                 } else {
                     errorMsg += await response.text();
                 }
@@ -108,9 +114,10 @@ export default function SubirEstacionTemplate() {
 
     // --- RENDERIZADO ---
     return (
-        <div style={styles.container}>            
+        <div style={styles.container}>
             <form onSubmit={submitEstacion} style={styles.form}>
                 
+                {/* Fila 1: ID Merchant y Nombre Comercial */}
                 <div style={styles.row}>
                     <label style={styles.label}>
                         ID Merchant
@@ -120,10 +127,9 @@ export default function SubirEstacionTemplate() {
                             value={form.idMerchant} 
                             onChange={handleChange} 
                             style={styles.input} 
-                            // Convertir de vuelta a String para que el input funcione bien
                             min="1"
                         />
-                         {formErrors.idMerchant && <div style={styles.errorTextRow}>{formErrors.idMerchant}</div>}
+                        {formErrors.idMerchant && <div style={styles.errorTextRow}>{formErrors.idMerchant}</div>}
                     </label>
                     <label style={styles.label}>
                         Nombre Comercial 
@@ -146,7 +152,8 @@ export default function SubirEstacionTemplate() {
                     </label>
                 </div>
 
-                 <div style={styles.row}>
+                {/* Fila 3: Plaza de Atención y Cobertura */}
+                <div style={styles.row}>
                     <label style={styles.label}>
                         Plaza de Atención 
                         <input name="plazaDeAtencion" value={form.plazaDeAtencion} onChange={handleChange} style={styles.input} />
@@ -155,12 +162,13 @@ export default function SubirEstacionTemplate() {
                     <label style={styles.label}>
                         Cobertura
                         <input name="cobertura" value={form.cobertura} onChange={handleChange} style={styles.input} />
-                        {formErrors.cobertura && <div style={styles.errorTextRow}>{formErrors.cobertura}</div>}
+                        {/* Se puede dejar sin validación si no es un campo MÍNIMO, pero se incluye para consistencia con el render */}
+                        {formErrors.cobertura && <div style={styles.errorTextRow}>{formErrors.cobertura}</div>} 
                     </label>
                 </div>
 
                 {successMessage && (
-                    <div style={{ ...styles.error, backgroundColor: '#d4edda', color: '#155724', border: '1px solid #c3e6cb', padding: '10px' }}>
+                    <div style={{ ...styles.success, marginBottom: '10px' }}>
                         {successMessage}
                     </div>
                 )}
@@ -172,7 +180,7 @@ export default function SubirEstacionTemplate() {
 
                 <div style={{ marginTop: 15 }}>
                     <button type="submit" style={styles.buttonPrimary} disabled={isSubmitting}>
-                        {isSubmitting ? "Guardando Estación..." : "Guardar"}
+                        {isSubmitting ? "Guardando Estación..." : "Guardar Estación"}
                     </button>
                     
                 </div>

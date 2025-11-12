@@ -132,10 +132,7 @@ function InventarioPage() {
     const handleEnterEditMode = () => {
         setIsEditing(true);
     };
-
-   
-
-
+    
     useEffect(() => {
         loadInventario();
     }, []);

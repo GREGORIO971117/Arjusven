@@ -47,27 +47,22 @@ export default function UsuariosEdit({ user, onSave, onCancel, validateForm}) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // 2. CLAVE: Llamamos a la función pasada por prop, enviando el estado LOCAL (formData)
-        // La función de validación debe manejar la lógica de la contraseña condicionalmente.
-        const err = validateForm(formData, false); // El segundo argumento (false) indica que la contraseña no es OBLIGATORIA (es edición)
+        const err = validateForm(formData, false); 
         if (err) {
             setError(err);
             return;
         }
-        // ... (El resto de la lógica de envío se mantiene igual)
 
         setIsSubmitting(true);
         setError("");
 
         try {
-            // Prepara los datos a enviar
             const dataToUpdate = { 
                 ...formData, 
-                idUsuarios: user.idUsuarios, // Necesario para la API
+                idUsuarios: user.idUsuarios, 
                 edad: Number(formData.edad) 
             };
             
-            // Si el campo de contraseña está vacío, NO lo enviamos al backend
             if (!formData.contraseña) {
                 delete dataToUpdate.contraseña;
             }
@@ -99,15 +94,9 @@ export default function UsuariosEdit({ user, onSave, onCancel, validateForm}) {
 
     return (
         <section style={styles.card}>
-            <h3>Editar usuario: {user?.nombre}</h3>
             
             <form onSubmit={handleSubmit} style={styles.form}>
-                
-                <div style={{...styles.row, marginBottom: '16px'}}>
-                    <p style={{ margin: 0, padding: 0, color: '#666', fontSize: 14 }}>
-                        ID de Usuario: {user?.idUsuarios}
-                    </p>
-                </div>
+
 
                 <div style={styles.row}>
                     <label style={styles.label}>Nombre

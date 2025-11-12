@@ -4,7 +4,7 @@ import {styles} from '../admin/adminTemplate'
 
 // --- CONFIGURACIÓN DE ENDPOINTS Y ESTADO INICIAL ---
 const API_TICKETS_URL = '/tickets'; 
-const ADMIN_ID_DEFAULT = ""; 
+const ADMIN_ID_DEFAULT = localStorage.getItem("idUsuario"); 
 
 export default function SubirTicketTemplate() { // Desestructuramos datosEstaticos de props
     
@@ -18,7 +18,6 @@ export default function SubirTicketTemplate() { // Desestructuramos datosEstatic
     const [error, setError] = useState(null);
     const [formErrors, setFormErrors] = useState({});
 
-    
     function validateForm() {
         const errs = {};
         if(!incidencia.trim()){
@@ -50,8 +49,9 @@ export default function SubirTicketTemplate() { // Desestructuramos datosEstatic
         
    
         const payload = {
-                "administrador": {
 
+                "administrador": {
+                    "idUsuarios":Number(ADMIN_ID_DEFAULT),
                 },
                 "servicios": {
                     "motivoDeServicio": motivoServicio.trim(),
@@ -60,7 +60,7 @@ export default function SubirTicketTemplate() { // Desestructuramos datosEstatic
                     "idMerchant": idMerchant.trim(),
                 },
                 "adicionales":{
-                    
+                    "ciudad":"Puebla"
                 }
             };
         
@@ -72,6 +72,7 @@ export default function SubirTicketTemplate() { // Desestructuramos datosEstatic
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),
             });
+            
             console.log(response);
             
             if (!response.ok) {

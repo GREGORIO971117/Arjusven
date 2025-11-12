@@ -1,40 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import {apiRequest} from '../login/Api';
-import RenderDataEstaciones from './RenderDataEstaciones';
+import RenderDatosEstacion from './RenderDataEstaciones';
+import RenderEditDatosEstacion from './RenderEditDataEstaciones'; 
+import '../Inventario/InventarioList.css'; 
 
-const API_BASE_URL = './estaciones'
+function EstacionesTemplate({ 
+    handleRemove, 
+    handleEnterEditMode, 
+    handleCancel, 
+    isEditing, 
+    data, 
+    handleUpdate,
+    isSubmitting,
+    error 
+}) {
 
-export default function EstacionTemplate() {
+    return (
+        <div className="ticket-template-content">
+            {error && <div className="error-message">{error}</div>}
+            
+            {isSubmitting && <div className="submitting-message">Procesando solicitud...</div>}
 
-    const [isLoading, setIsLoading] = useState(true); 
-    const [error, setError] = useState("");
-    const [Estaciones, setEstaciones] = useState([]);
-
-    const fetchUsers = async () => {
-            setIsLoading(true);
-            setError("");
-            try {
-                const response = await apiRequest(API_BASE_URL, { method: 'GET' }); 
-                
-                if (!response.ok) {
-                    throw new Error(`Error al cargar usuarios: ${response.statusText}. Por favor, inicie sesión de nuevo.`);
-                }
-                
-                const data = await response.json();
-                setUsers(Array.isArray(data) ? data : []); 
-                console.log(Estaciones);
-            } catch (err) {
-                setError(err.message || "No se pudo conectar al servidor.");
-                setEstaciones([]);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-    return(
-
-        <RenderDataEstaciones
-            fetchEstaciones={fetchUsers}
-        />
-    )
+            {isEditing ? (
+                <RenderEditDatosEstacion
+                    data={data}
+                    onCancelEdit={handleCancel} 
+                    handleUpdate={handleUpdate}
+                    isSubmitting={isSubmitting} 
+                />
+            ) : (
+                <RenderDatosEstacion
+                    data={data}
+                    onEdit={handleEnterEditMode} 
+                    handleRemove={handleRemove} 
+                />
+            )}
+        </div>
+    );
 }
+
+export default EstacionesTemplate;

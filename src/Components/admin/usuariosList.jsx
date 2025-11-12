@@ -12,18 +12,10 @@ export default function UsuariosList({ users, isLoading, removeUser,currentPage,
         marginTop: '20px',
     };
     
-    // Estilo base para los botones de paginación
     const paginationButtonStyle = {
-        ...styles.buttonPrimary, // Reutiliza el estilo primario
+        ...styles.buttonPrimary, 
         padding: '8px 16px',
         minWidth: '100px',
-    };
-
-    const buttonEditStyle = {
-        ...styles.buttonPrimary, // O un color diferente
-        background: '#6394a3ff', // Color informativo/azul claro
-        marginLeft: '8px', 
-        padding: '6px 10px',
     };
 
     return(
@@ -31,10 +23,8 @@ export default function UsuariosList({ users, isLoading, removeUser,currentPage,
                 {isLoading ? (
                     <div>Cargando usuarios...</div>
                 ) : (users && users.length === 0 && currentPage === 1) ? ( 
-                    // Muestra esto solo si no hay usuarios en la primera carga
                     <div>No hay usuarios registrados.</div>
                 ) : (
-                    // ... (La tabla de usuarios permanece igual)
                     <div style={{ overflowX: "auto" }}>
                         <table style={styles.table}>
                             <thead>
@@ -63,8 +53,8 @@ export default function UsuariosList({ users, isLoading, removeUser,currentPage,
                                                 Borrar
                                             </button>
                                             <button 
-                                        onClick={() => onEdit(u)} // Llama a la función del padre y le pasa el usuario (u)
-                                        style={buttonEditStyle}
+                                        onClick={() => onEdit(u)} 
+                                        style={styles.navButton}
                                     >
                                         Editar
                                         </button>
@@ -76,7 +66,6 @@ export default function UsuariosList({ users, isLoading, removeUser,currentPage,
                     </div>
                 )}
 
-                {/* Solo muestra los controles si hay más de una página y no está cargando */}
                 {!isLoading && totalPages > 1 && (
                     <div style={paginationContainerStyle}>
                         <button 
