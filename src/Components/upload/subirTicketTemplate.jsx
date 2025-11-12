@@ -51,6 +51,7 @@ export default function SubirTicketTemplate() { // Desestructuramos datosEstatic
    
         const payload = {
                 "administrador": {
+
                 },
                 "servicios": {
                     "motivoDeServicio": motivoServicio.trim(),
@@ -59,6 +60,7 @@ export default function SubirTicketTemplate() { // Desestructuramos datosEstatic
                     "idMerchant": idMerchant.trim(),
                 },
                 "adicionales":{
+                    
                 }
             };
         
