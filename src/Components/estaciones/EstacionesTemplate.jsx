@@ -22,6 +22,7 @@ function EstacionesTemplate({
             {isEditing ? (
                 <RenderEditDatosEstacion
                     data={data}
+                    handleRemove={handleRemove}
                     onCancelEdit={handleCancel} 
                     handleUpdate={handleUpdate}
                     isSubmitting={isSubmitting} 
@@ -30,7 +31,7 @@ function EstacionesTemplate({
                 <RenderDatosEstacion
                     data={data}
                     onEdit={handleEnterEditMode} 
-                    handleRemove={handleRemove} 
+                  
                 />
             )}
         </div>

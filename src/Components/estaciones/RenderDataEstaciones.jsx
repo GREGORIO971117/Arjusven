@@ -1,7 +1,7 @@
 import React from 'react';
 import '../Inventario/InventarioList.css';
 
-export default function RenderDatosEstacion({ data, onEdit, handleRemove }) {
+export default function RenderDatosEstacion({ data, onEdit }) {
 
     if (!data) {
         return null;

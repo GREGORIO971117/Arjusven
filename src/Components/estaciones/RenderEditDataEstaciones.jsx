@@ -43,9 +43,6 @@ const getInitialState = (data) => {
     };
 };
 
-/**
- * Componente de formulario para editar todos los datos de una Estación.
- */
 export default function RenderEditDatosEstacion({ 
     handleUpdate, 
     onCancelEdit, 
