@@ -1,24 +1,19 @@
 import React, { useState } from 'react';
-// Asumo que apiRequest está correctamente importado desde tu ruta
 import { apiRequest } from '../login/Api'; 
-import { styles } from '../admin/adminTemplate'; // Asumo que tus estilos están aquí
+import { styles } from '../admin/adminTemplate'; 
 
-// Endpoint de la API para las Estaciones (ajusta si es necesario)
 const API_URL = '/estaciones'; 
 
-// Estado inicial con los campos básicos requeridos
 const initialEstacionFormState = {
-    idMerchant: '',        // Long
-    nombreComercial: '',   // String
-    direccion: '',         // String
-    estado: '',            // String
-    plazaDeAtencion: ''    // String
+    idMerchant: '',        
+    nombreComercial: '',   
+    direccion: '',         
+    estado: '',            
+    plazaDeAtencion: ''    
 };
 
-// El componente ya no necesita datosEstaticos ni la carga de usuarios
 export default function SubirEstacionTemplate() {
 
-    // --- ESTADOS ---
     const [form, setForm] = useState(initialEstacionFormState); 
     const [formErrors, setFormErrors] = useState({}); 
     const [error, setError] = useState(""); 
@@ -26,15 +21,12 @@ export default function SubirEstacionTemplate() {
     const [successMessage, setSuccessMessage] = useState("");
 
 
-    // --- HANDLERS Y UTILIDADES ---
     function handleChange(e) {
         const { name, value } = e.target;
         setForm((prev) => ({ 
             ...prev, 
-            // Convertir idMerchant a Number para que coincida con el tipo Long de Spring
             [name]: name === 'idMerchant' ? Number(value) : value 
         }));
-        // Limpiar errores mientras se escribe
         if (formErrors[name]) {
             setFormErrors(prev => ({ ...prev, [name]: "" }));
         }
@@ -167,10 +159,6 @@ export default function SubirEstacionTemplate() {
                     </label>
                 </div>
 
-
-            
-
-                {/* Mensajes de API */}
                 {successMessage && (
                     <div style={{ ...styles.error, backgroundColor: '#d4edda', color: '#155724', border: '1px solid #c3e6cb', padding: '10px' }}>
                         {successMessage}

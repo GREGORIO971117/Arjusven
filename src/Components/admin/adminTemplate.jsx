@@ -6,8 +6,7 @@ import UsuariosUpload from './usuariosUpload';
 
 const API_BASE_URL = '/usuarios'; 
 
-const VIEWS = {
-    FORM: 'agregarUsuario',
+const VIEWS = {                 
     LIST: 'listaUsuarios',
     EDIT: 'editarUsuario',
 };
@@ -15,29 +14,18 @@ const VIEWS = {
 export default function AdminTemplate() {
     
     const USERS_PER_PAGE = 10;
-    const [currentView, setCurrentView] = useState(VIEWS.FORM); 
+    const [currentView, setCurrentView] = useState(VIEWS.LIST); 
     const [currentPage, setCurrentPage] = useState(1);
     const [editingUser, setEditingUser] = useState(null);
     const [users, setUsers] = useState([]);
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(true); 
-    const [isSubmitting, setIsSubmitting] = useState(false); 
 
     const totalPages = Math.ceil(users.length / USERS_PER_PAGE);
     const startIndex = (currentPage - 1) * USERS_PER_PAGE;
     const endIndex = startIndex + USERS_PER_PAGE;
     const currentUsers = users.slice(startIndex, endIndex);
     
-    const [form, setForm] = useState({
-        nombre: "",
-        correo: "",
-        estadoDeResidencia: "",
-        edad: "",
-        rol: "USUARIO",
-        "contraseña": "",
-    });
-
-
     const fetchUsers = async () => {
         setIsLoading(true);
         setError("");
@@ -63,14 +51,6 @@ export default function AdminTemplate() {
         fetchUsers();
     }, []); 
     
-    // Manejo de cambios en el formulario
-    function handleChange(e) {
-        const { name, value } = e.target;
-        setForm((f) => ({ 
-            ...f, 
-            [name]: name === "edad" ? value.replace(/\D/g, "") : value 
-        }));
-    }
     const handleEdit = (user) => {
         setEditingUser(user);
         setCurrentView(VIEWS.EDIT);
@@ -126,50 +106,6 @@ export default function AdminTemplate() {
         setCurrentPage(prev => Math.max(prev - 1, 1));
     };
 
-    async function addUser(e) {
-        e.preventDefault();
-        const err = validateForm(form, true); 
-        if (err) {
-            setError(err);
-            return;
-        }
-
-        setIsSubmitting(true);
-        setError("");
-
-        try {
-
-            const userData = { ...form, edad: Number(form.edad) };
-            const response = await apiRequest(API_BASE_URL, {
-                method: 'POST',
-                body: JSON.stringify(userData),
-            });
-            
-            if (!response.ok) {
-                 let errorMsg = "Error al crear el usuario. ";
-                 try {
-                     const errorData = await response.json();
-                     if (response.status === 400 || response.status === 500) {
-                          errorMsg += errorData.message || errorData.error;
-                     } else {
-                          errorMsg += response.statusText;
-                     }
-                 } catch {
-                     errorMsg += "Respuesta no es JSON.";
-                 }
-                 throw new Error(errorMsg);
-            }
-
-            const newUser = await response.json();
-            setUsers((prev) => [newUser, ...prev]);
-            setForm({ nombre: "", correo: "", estadoDeResidencia: "", edad: "", rol: "USUARIO", "contraseña": "" });
-            
-        } catch (err) {
-            setError(err.message || "Fallo la conexión con el servidor.");
-        } finally {
-            setIsSubmitting(false);
-        }
-    }
 
     async function removeUser(id) {
         if (!window.confirm("¿Borrar este usuario?")) return;
@@ -216,48 +152,14 @@ export default function AdminTemplate() {
                 />
             );
         }
-
-        if (currentView === VIEWS.FORM) {
-            return (
-                <UsuariosUpload
-                 addUser={addUser}
-                 form={form}
-                 isSubmitting={isSubmitting}
-                 handleChange={handleChange}
-                 error={error}
-                
-                />
-            );
-        }
         
         return null; 
     };
 
 
     return (
+
         <div style={styles.container}>
-
-            <div style={styles.cardNav}> 
-                <button
-                    style={{ 
-                        ...styles.navButton, 
-                        ...(currentView === VIEWS.FORM ? styles.activeNavButton : {}) 
-                    }}
-                    onClick={() => setCurrentView(VIEWS.FORM)}
-                >
-                    Agregar Usuario
-                </button>
-                <button
-                    style={{ 
-                        ...styles.navButton, 
-                        ...(currentView === VIEWS.LIST ? styles.activeNavButton : {}) 
-                    }}
-                    onClick={() => setCurrentView(VIEWS.LIST)}
-                >
-                    Lista de Usuarios
-                </button>
-            </div>
-
             <div style={{ marginTop: 20 }}>
                 {renderContent()}
             </div>

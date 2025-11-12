@@ -3,6 +3,7 @@ import datosEstaticos from '../../assets/datos.json';
 import RenderInventario from './subirInventarioTemplate';
 import RenderTicket from './subirTicketTemplate';
 import RenderEstaciones from './subirEstacionesTemplate';
+import RenderUsuarios from './SubirUsuarioTemplate';
 import { styles } from '../admin/adminTemplate';
 
 export default function subirArchivos() {
@@ -25,6 +26,11 @@ export default function subirArchivos() {
         }if (activeTab==='estaciones') {
             return(
                 <RenderEstaciones
+                />
+            )
+        }if (activeTab==='usuarios') {
+            return(
+                <RenderUsuarios
                 />
             )
         }
@@ -59,6 +65,14 @@ export default function subirArchivos() {
                      }}
                 onClick={() => setActiveTab('estaciones')}>
                     Crear Estación
+                </button>
+                 <button
+                style={{ 
+                     ...styles.navButton, 
+                     ...(activeTab === "usuarios" ? styles.activeNavButton : {}) 
+                     }}
+                onClick={() => setActiveTab('usuarios')}>
+                    Crear Usuario
                 </button>
             </div>
         </div>
