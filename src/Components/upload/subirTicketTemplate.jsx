@@ -9,7 +9,9 @@ const ADMIN_ID_DEFAULT = "";
 export default function SubirTicketTemplate() { // Desestructuramos datosEstaticos de props
     
     
-    const [idMerchant,setIdMerchant] = useState("")
+    const [idMerchant,setIdMerchant] = useState("");
+    const [motivoServicio,setMotivoServicio] = useState("");
+    const [observaciones,setObservaciones] = useState("")
     const [incidencia,setIncidencia]= useState("");
     const [loading, setLoading] = useState(false);
     const [mensaje, setMensaje] = useState(null);
@@ -51,7 +53,9 @@ export default function SubirTicketTemplate() { // Desestructuramos datosEstatic
                 "administrador": {
                 },
                 "servicios": {
-                    "incidencia": incidencia.trim(), // Dinámico
+                    "motivoDeServicio": motivoServicio.trim(),
+                    "observaciones": observaciones.trim(),
+                    "incidencia": incidencia.trim(), 
                     "idMerchant": idMerchant.trim(),
                 },
                 "adicionales":{
@@ -95,7 +99,6 @@ export default function SubirTicketTemplate() { // Desestructuramos datosEstatic
                 
                 <div style={styles.row}>
 
-                    {/* Numero de incidencia */}
                     <label style={styles.label}>
                         Numero de incidencia
                         <input
@@ -110,7 +113,6 @@ export default function SubirTicketTemplate() { // Desestructuramos datosEstatic
                         {formErrors.incidencia && <div style={styles.errorTextRow}>{formErrors.incidencia}</div>}
                     </label>
 
-                    {/*El campo de idmerchant */}
                      <label style={styles.label}>
                         IdMerchant
                         <input
@@ -123,6 +125,34 @@ export default function SubirTicketTemplate() { // Desestructuramos datosEstatic
                         />
                         {/* Muestra el error específico */}
                         {formErrors.idMerchant && <div style={styles.errorTextRow}>{formErrors.idMerchant}</div>}
+                    </label>
+
+                     <label style={styles.label}>
+                        Observaciones
+                        <input
+                            type="text"
+                            value={observaciones}
+                            onChange={(e) => setObservaciones(e.target.value)}
+                            disabled={loading}
+                            required
+                            style={styles.input}
+                        />
+                        {/* Muestra el error específico */}
+                        {formErrors.observaciones && <div style={styles.errorTextRow}>{formErrors.observaciones}</div>}
+                    </label>
+
+                    <label style={styles.label}>
+                        Motivo Servicio
+                        <input
+                            type="text"
+                            value={motivoServicio}
+                            onChange={(e) => setMotivoServicio(e.target.value)}
+                            disabled={loading}
+                            required
+                            style={styles.input}
+                        />
+                        {/* Muestra el error específico */}
+                        {formErrors.motivoServicio && <div style={styles.errorTextRow}>{formErrors.motivoServicio}</div>}
                     </label>
                     
                 </div>
@@ -137,6 +167,10 @@ export default function SubirTicketTemplate() { // Desestructuramos datosEstatic
                 <div style={{ marginTop: 20 }}>
                     <button type="submit" style={styles.buttonPrimary} disabled={loading}>
                         {loading ? "Creando Ticket..." : "Publicar Ticket"}
+                    </button>
+
+                    <button type="submit" style={styles.buttonPrimary} disabled={loading}>
+                        {loading ? "Creando Ticket..." : "Subir excel Ticket"}
                     </button>
                 </div>
             </form>
