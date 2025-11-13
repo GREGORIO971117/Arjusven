@@ -29,17 +29,15 @@ const initialFormState = {
 
 export default function SubirInventarioTemplate({datosEstaticos}) {
 
-    // --- ESTADOS ---
     const [inventario, setInventario] = useState([]); 
     const [usuarios, setUsuarios] = useState([]); 
     const [form, setForm] = useState(initialFormState); 
 
     const [artErrors, setArtErrors] = useState({}); 
     const [error, setError] = useState(""); 
-    const [isLoadingUsers, setIsLoadingUsers] = useState(true); // Renombrado para más claridad
+    const [isLoadingUsers, setIsLoadingUsers] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false); 
 
-    // --- LÓGICA DE CARGA DE USUARIOS ---
     const fetchUsers = async () => {
         try {
             const response = await apiRequest(USERS_API_URL, {method: 'GET'});

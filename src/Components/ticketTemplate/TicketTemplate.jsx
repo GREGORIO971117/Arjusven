@@ -5,16 +5,10 @@ import RenderEditarDatosServicio from './EditDataServicios';
 import RenderEditarDatosAdicionales from './EditDataAdicionales';
 import datosEstaticos from '../../assets/datos.json';
 
-const TicketTemplate = ({data, onSaveService, onSaveAdicional, onDeleteService}) => {
+const TicketTemplate = ({data, onSaveService, onSaveAdicional, onDeleteService,handleDownload}) => {
   const [activeTab, setActiveTab] = useState('servicio');
   const [isEditing, setIsEditing] = useState(false);
   
-
-  const handleDownload = () => {
-    
-    alert('La función de descarga está pendiente de implementación en el backend.');
-    
-  };
 
   const renderContent = () => {
     if (isEditing) {

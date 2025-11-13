@@ -1,6 +1,7 @@
 import React from 'react';
+import { apiRequest } from '../login/Api';
 
-const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEditing }) => {
+const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEditing,handleDownload }) => {
     
     if (!data) {
         return <div className="no-data-message">No se encontraron datos de Servicio para este ticket.</div>;
@@ -15,6 +16,7 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
             </div>
         );
     }
+   
   
     const {
         fechaDeAsignacion,
@@ -67,7 +69,7 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
                         Inventario usado
                     </button> 
 
-                    <button className="download-button">
+                    <button className="download-button" onClick={()=> handleDownload()}> 
                         Descargar
                     </button> 
                    

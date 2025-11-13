@@ -18,6 +18,67 @@ function TicketPage() {
     const [isSaving, setIsSaving] = useState(false); 
     const [saveError, setSaveError] = useState  (null); 
 
+     const handleDownloadDocx = async () => {
+
+        const id =selectedTicket.idTickets;
+
+
+        if (!id) {
+            alert('Error: ID del ticket no encontrado.');
+            return;
+        }
+
+        const URL = `/tickets/download/${id}`; 
+        
+        try {
+            const response = await apiRequest(URL, {
+                method: 'GET',
+                // CRÍTICO: No enviamos un cuerpo (RequestBody) ya que usamos GET con el ID
+                // y Spring Boot ya sabe que debe devolver un archivo.
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error del servidor: ${response.statusText}`);
+            }
+
+            // 2. Obtener la respuesta como un BLOB (Binary Large Object)
+            const blob = await response.blob(); 
+            
+            // 3. Crear una URL temporal para el BLOB
+            const url = window.URL.createObjectURL(blob);
+            
+            // 4. Crear un enlace <a> temporal en el DOM para simular el click
+            const link = document.createElement('a');
+            link.href = url;
+            
+            // 5. Obtener el nombre del archivo de la cabecera Content-Disposition
+            // Esto es importante para que el archivo se descargue con el nombre correcto
+            const contentDisposition = response.headers.get('Content-Disposition');
+            let filename = `ticket_${id}.docx`; // Nombre por defecto
+
+            if (contentDisposition) {
+                const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+                if (filenameMatch && filenameMatch.length > 1) {
+                    filename = filenameMatch[1];
+                }
+            }
+
+            link.setAttribute('download', filename); // Asignar el nombre del archivo
+            document.body.appendChild(link);
+            
+            // 6. Simular el click y limpiar (forzar la descarga)
+            link.click();
+            link.remove();
+            
+            // 7. Liberar la URL del objeto para ahorrar memoria
+            window.URL.revokeObjectURL(url);
+
+        } catch (error) {
+            console.error('Error durante la descarga del documento:', error);
+            alert('No se pudo descargar el documento. Verifique la conexión al servidor.');
+        }
+    };
+
      const handleSave = async () => {
         try {
             await fetchTickets(); 
@@ -247,6 +308,7 @@ const handleAdicionalPatch = async (updatedServiceData) => {
                             onSaveService={handleServicePatch} 
                             onSaveAdicional={handleAdicionalPatch}
                             onDeleteService={handleServiceDelete}
+                            handleDownload = {handleDownloadDocx}
                         />
                     ) : (
                         <div className="no-selection-message">

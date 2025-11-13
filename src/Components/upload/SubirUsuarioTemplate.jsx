@@ -77,12 +77,10 @@ export default function SubirUsuarioTemplate({ onUserAdded }) {
 
             const newUser = await response.json();
             
-            // ⭐️ LLAMADA AL CALLBACK: Notificamos al componente padre (AdminTemplate)
             if(onUserAdded) {
                 onUserAdded(newUser);
             }
             
-            // Limpiar el formulario
             setForm({ nombre: "", correo: "", estadoDeResidencia: "", edad: "", rol: "USUARIO", "contraseña": "" });
             
         } catch (err) {
