@@ -15,7 +15,6 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
             </div>
         );
     }
-
   
     const {
         fechaDeAsignacion,

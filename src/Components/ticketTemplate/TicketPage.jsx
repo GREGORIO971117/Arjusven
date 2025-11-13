@@ -31,7 +31,7 @@ function TicketPage() {
         setError("");
         try {
             const response = await apiRequest(API_BASE_URL, { method: 'GET' }); 
-            
+            console.log(response);
             if (!response.ok) {
                 throw new Error(`Error ${response.status}: ${response.statusText}.`);
             }

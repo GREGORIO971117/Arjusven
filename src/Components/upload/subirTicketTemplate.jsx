@@ -57,7 +57,7 @@ export default function SubirTicketTemplate() { // Desestructuramos datosEstatic
                     "motivoDeServicio": motivoServicio.trim(),
                     "observaciones": observaciones.trim(),
                     "incidencia": incidencia.trim(), 
-                    "idMerchant": idMerchant.trim(),
+                    "idMerchant": Number(idMerchant.trim()),
                 },
                 "adicionales":{
                     "ciudad":"Puebla"
@@ -85,6 +85,9 @@ export default function SubirTicketTemplate() { // Desestructuramos datosEstatic
             const displayId = newTicket?.idTickets || 'desconocido'; 
             setMensaje(`✅ Ticket ${displayId} y sus entidades creados con éxito.`); 
             setIncidencia("");
+            setObservaciones("");
+            setMotivoServicio("");
+            setIdMerchant("");
             setFormErrors({}); 
             
         } catch (err) {

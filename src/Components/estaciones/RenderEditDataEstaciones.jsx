@@ -49,10 +49,9 @@ export default function RenderEditDatosEstacion({
     data, 
     handleRemove, 
     isSubmitting = false,
-    datosEstaticos // Asume que necesitas datos estáticos para selects, como en Inventario
+    datosEstaticos 
 }) {
     
-    // Desestructuración de los estilos para un uso más limpio
     const { card, form, row, label, input, buttonDanger, buttonPrimary, navButton, error } = styles;
     
     const [formData, setFormData] = useState(getInitialState(data));
@@ -67,7 +66,6 @@ export default function RenderEditDatosEstacion({
         const { name, value } = e.target;
         let finalValue = value;
 
-        // Manejo de valores numéricos (limpiando strings vacíos a null o 0 para la actualización)
         if (['cantPOSActivas', 'rollos', 'transporte'].includes(name)) {
             finalValue = value === '' ? 0 : parseInt(value, 10) || 0;
         } else if (['km', 'latitud', 'longitud'].includes(name)) {
@@ -96,8 +94,6 @@ export default function RenderEditDatosEstacion({
         
         setLocalError(""); 
         
-        // La función handleUpdate debe manejar la lógica de API y el estado de isSubmitting.
-        // Se envía el estado completo del formulario.
         const result = await handleUpdate(formData); 
         
         if (result && result.success === false) {

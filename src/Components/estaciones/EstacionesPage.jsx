@@ -89,7 +89,6 @@ export default function EstacionesPage() {
         }
     };
 
-        // --- 4. LÓGICA DE BORRADO (D) ---
 async function handleRemove() {
     const idMerchant = selectedEstacion.idMerchant;
 
@@ -104,20 +103,15 @@ async function handleRemove() {
             method: 'DELETE',
         });
         
-        // Asumiendo que el borrado fue exitoso (status 200 o 204)
         if (response.ok || response.status === 200 || response.status === 204) {
             
-            // 1. ACTUALIZACIÓN INMEDIATA DEL ESTADO (¡SOLUCIÓN!)
             setEstacionesData(prevData => 
                 prevData.filter(estacion => estacion.idMerchant !== idMerchant)
             );
             
-            // 2. Limpiar la selección actual para que el panel de detalles se cierre
             setSelectedEstacion(null);
-            setMessage("Estación eliminada correctamente.");
 
         } else {
-             // ... (manejo de errores de API) ...
              let errorMsg = `Error al borrar la estación. Estado: ${response.status}`;
              try {
                 const errorData = await response.json();
