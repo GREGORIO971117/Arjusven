@@ -89,44 +89,51 @@ export default function EstacionesPage() {
         }
     };
 
-    // --- 4. LÓGICA DE BORRADO (D) ---
-    async function handleRemove() {
-        const idMerchant = selectedEstacion.idMerchant;
+        // --- 4. LÓGICA DE BORRADO (D) ---
+async function handleRemove() {
+    const idMerchant = selectedEstacion.idMerchant;
 
-        if (!idMerchant) {
-            setError("Error: ID Merchant no encontrado para borrar.");
+     if (!window.confirm(`¿Estás seguro de que quieres BORRAR permanentemente la estación con ID: "${idMerchant}"? Esta acción es irreversible.`)) {
             return;
         }
+    setIsSubmitting(true);
+    setError("");
 
-        if (!window.confirm(`¿Estás seguro de que quieres BORRAR permanentemente la estación con ID: "${idMerchant}"? Esta acción es irreversible.`)) {
-            return;
+    try {
+        const response = await apiRequest(`${API_URL}/${idMerchant}`, {
+            method: 'DELETE',
+        });
+        
+        // Asumiendo que el borrado fue exitoso (status 200 o 204)
+        if (response.ok || response.status === 200 || response.status === 204) {
+            
+            // 1. ACTUALIZACIÓN INMEDIATA DEL ESTADO (¡SOLUCIÓN!)
+            setEstacionesData(prevData => 
+                prevData.filter(estacion => estacion.idMerchant !== idMerchant)
+            );
+            
+            // 2. Limpiar la selección actual para que el panel de detalles se cierre
+            setSelectedEstacion(null);
+            setMessage("Estación eliminada correctamente.");
+
+        } else {
+             // ... (manejo de errores de API) ...
+             let errorMsg = `Error al borrar la estación. Estado: ${response.status}`;
+             try {
+                const errorData = await response.json();
+                errorMsg = errorData.message || errorData.error || errorMsg;
+             } catch {}
+             throw new Error(errorMsg);
         }
 
-        setIsSubmitting(true);
-        setError("");
-
-        try {
-            const response = await apiRequest(`${API_URL}/${idMerchant}`, {
-                method: 'DELETE',
-            });
-            
-            if (response.status !== 204) { // 204 No Content es el esperado de tu Controller
-                 let errorMsg = `Error al borrar la estación. Estado: ${response.status}`;
-                 try {
-                     const errorData = await response.json();
-                     errorMsg = errorData.message || errorData.error || errorMsg;
-                 } catch {}
-                 throw new Error(errorMsg);
-            }
-
-            await handleSave(); // Recargar datos y resetear selección
-            
-        } catch (err) {
-            setError(err.message || "Fallo la conexión con el servidor al intentar borrar.");
-        } finally {
-            setIsSubmitting(false);
-        }
+    } catch (err) {
+        setError(err.message || "Fallo la conexión con el servidor al intentar borrar.");
+    } finally {
+        setIsSubmitting(false);
     }
+}
+
+
 
     // --- 5. LÓGICA DE VISTA ---
     const handleCancel = () => {

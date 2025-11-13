@@ -113,24 +113,12 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
                 style={styles.input}
             >
                 <option value="">Seleccione la situación Actual:</option>
-                {datosEstaticos.estado?.map((opcion) => (
+                {datosEstaticos.situacion?.map((opcion) => (
                 <option key={opcion} value={opcion}>{opcion}</option>
             ))}
 
             </select>
         </label>        
-        {/* 5. Código de Afiliado */}
-        <label style={styles.label}>
-            <strong>Código de Afiliado:</strong>
-            <input 
-                type="text" 
-                id="codigoDeAfiliado" 
-                name="codigoDeAfiliado" 
-                value={formData.codigoDeAfiliado || ''} 
-                onChange={handleChange} 
-                style={styles.input}
-            />
-        </label>
 
         {/* 6. Supervisor */}
         <label style={styles.label}>
@@ -175,33 +163,8 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
 
             </select>
         </label>
-        
-        {/* 9. Motivo de Servicio */}
-        <label style={styles.label}>
-            <strong>Motivo del Servicio:</strong>
-            <input 
-                type="text" 
-                id="motivoDeServicio" 
-                name="motivoDeServicio" 
-                value={formData.motivoDeServicio || ''} 
-                onChange={handleChange} 
-                style={styles.input}
-            />
-        </label>        
+             
 
-        {/* 11. Guía de Encomienda */}
-        <label style={styles.label}>
-            <strong>Guía de Encomienda:</strong>
-            <input 
-                type="text" 
-                id="guiaDeEncomienda" 
-                name="guiaDeEncomienda" 
-                value={formData.guiaDeEncomienda || ''} 
-                onChange={handleChange} 
-                style={styles.input}
-            />
-        </label>
-        
         {/* 12. Fecha de envío de guía */}
         <label style={styles.label}>
             <strong>Fecha de Envío:</strong>
@@ -270,33 +233,60 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
                 style={styles.input}
             />
         </label>
+
+        {/* 9. Motivo de Servicio */}
         <label style={styles.label}>
-            <strong>Motivo real en sitio:</strong>
+            <strong>Motivo del Servicio:</strong>
             <input 
                 type="text" 
-                id="motivoReal" 
-                name="motivoReal" 
-                value={formData.motivoReal || ''} 
+                id="motivoDeServicio" 
+                name="motivoDeServicio" 
+                value={formData.motivoDeServicio || ''} 
                 onChange={handleChange} 
                 style={styles.input}
             />
-        </label>
+        </label>   
 
-    </div>
+         <label style={styles.label}>
+                <strong>Guía de Encomienda:</strong>
+                <input 
+                    type="text" 
+                    id="guiaDeEncomienda" 
+                    name="guiaDeEncomienda" 
+                    value={formData.guiaDeEncomienda || ''} 
+                    onChange={handleChange} 
+                    style={styles.input}
+                />
+            </label>
+
+            
+
+        </div>
 
    <div style={{ ...styles.row, flexDirection: 'column', width: '100%' }}>
+
+            <label style={styles.label}>
+                <strong>Motivo real en sitio:</strong>
+                <input 
+                    type="text" 
+                    id="motivoReal" 
+                    name="motivoReal" 
+                    value={formData.motivoReal || ''} 
+                    onChange={handleChange} 
+                    style={styles.input}
+                />
+            </label>
 
         <label style={{...styles.label, flex: '1 1 100%'}}>
             <strong>Observaciones ARJUSVEN:</strong>
         </label>
-        
         <textarea 
             id="observaciones" 
             name="observaciones" 
             value={formData.observaciones || ''} 
             onChange={handleChange} 
-            rows="3" // Aumentado a 3 para consistencia y espacio
-            style={{ ...styles.input, minHeight: '80px', width: '100%', boxSizing: 'border-box' }}
+            rows="3"
+            style={{ ...styles.input, minHeight: '40px', width: '100%', boxSizing: 'border-box' }}
         />
     </div>
     

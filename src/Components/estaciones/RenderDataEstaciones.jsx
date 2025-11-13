@@ -15,7 +15,8 @@ export default function RenderDatosEstacion({ data, onEdit }) {
 
         return (
             <div className='infoItem'>
-                <strong>{label}:<span>{displayValue}</span></strong> 
+                {label}:
+                <strong><span>{displayValue}</span></strong> 
             </div>
         );
     };
@@ -33,8 +34,7 @@ export default function RenderDatosEstacion({ data, onEdit }) {
         <> 
             <div className="ticket-header">
                 <h2 className="ticket-title">
-                    {/* Título de la Estación con ID */}
-                    Estación: {nombreComercial} {idMerchant}
+                  {idMerchant}  Estación: {nombreComercial} 
                     
                     <button onClick={onEdit} className="edit-button">Editar</button>
                 </h2>
@@ -47,7 +47,7 @@ export default function RenderDatosEstacion({ data, onEdit }) {
                     <InfoItem label="Nombre Comercial" value={nombreComercial} />
                     <InfoItem label="Código PEMEX" value={codigoPEMEX} />
                     <InfoItem label="Tipo PEMEX" value={tipoPEMEX} />
-                    <InfoItem label="Dirección" value={direccion} />
+                    
                     <InfoItem label="Colonia/Asentamiento" value={coloniaAsentamiento} />
                     <InfoItem label="CP" value={cp} />
                     <InfoItem label="Municipio" value={municipio} />
@@ -81,7 +81,9 @@ export default function RenderDatosEstacion({ data, onEdit }) {
                     <InfoItem label="Referencias" value={referencias} />
                     
                 </div>
-
+                <div className="grid">
+                    <InfoItem label="Dirección" value={direccion} />
+                </div>
             </div>
 
         </>

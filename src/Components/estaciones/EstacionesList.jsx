@@ -37,7 +37,7 @@ export default function EstacionesList ({ estaciones, onSelectEstacion, setShowF
             <div className="filter-button-container">
                 <input
                     type="text"
-                    placeholder="Buscar ID o Nombre..."
+                    placeholder="Buscar estación..."
                     className="search-input"
                     value={searchTerm}
                     onChange={(e) => {
@@ -65,7 +65,6 @@ export default function EstacionesList ({ estaciones, onSelectEstacion, setShowF
                                 onClick={() => handleEstacionClick(estacion)}
                             >
                                 <div className="ticket-info">
-                                    {/* Aquí mostramos los campos de Estaciones */}
                                     <strong> {estacion.idMerchant}</strong> 
                                     {estacion.nombreComercial}
                                 </div>
