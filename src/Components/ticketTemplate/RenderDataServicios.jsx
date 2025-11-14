@@ -1,5 +1,3 @@
-import React from 'react';
-import { apiRequest } from '../login/Api';
 
 const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEditing,handleDownload }) => {
     
