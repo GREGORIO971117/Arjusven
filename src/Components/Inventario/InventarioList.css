@@ -28,15 +28,7 @@ textarea.form-input {
     resize: vertical;
 }
 
-.infoItem label {
-    font-weight: 600;
-    color: #444;
-}
 
-.infoItem input,
-.infoItem textarea {
-    flex-grow: 1;
-}
 
 .formGrid {
   display: grid;
@@ -250,6 +242,23 @@ textarea.form-input {
 .ticket-info strong {
     color: #444;
     font-weight: 600;
+}
+
+.infoItem {
+  display: flex;
+  justify-content: justify;
+  padding: 1px;
+  font-size: 0.95rem;
+}
+
+.infoItem label {
+    font-weight: 600;
+    color: #444;
+}
+
+.infoItem input,
+.infoItem textarea {
+    flex-grow: 1;
 }
 
 .infoItem span,
@@ -559,12 +568,6 @@ textarea.form-input {
   border-bottom: 1px solid #ccc;
 }
 
-.infoItem {
-  display: flex;
-  justify-content: space-between;
-  padding: 0;
-  font-size: 0.95rem;
-}
 
 
 .formGridContainer {

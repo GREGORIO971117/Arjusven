@@ -1,4 +1,6 @@
 import React from 'react';
+// Importamos la configuración centralizada
+import {adicionalesConfig} from '../../assets/adicionalesConfig';
 
 function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setIsEditing }) {
 
@@ -6,46 +8,9 @@ function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setI
         return <div>No hay datos adicionales disponibles.</div>;
     }
 
-    const {
+    const { nombreDeEss } = data.servicios || {};
 
-        ciudad, 
-        modeloEntra,      
-        marcaEntra,       
-        serieLogicaEntra, 
-        serieFisicaEntra, 
-        eliminadorEntra,  
-        modeloSale,       
-        marcaSale,        
-        serieLogicaSale,  
-        serieFisicaSale,  
-        eliminadorSale,     
-        estado,        
-        ordenDeServicio,    
-        plaza,              
-        tecnico,            
-        cerroEnPuntoClave, 
-        atencionEnPunto,   
-        firmaEnEstacion,    
-        tarjeta,            
-        cantidadTpv,   
-        tipoDeComunicacion, 
-        sim,              
-        ptidEntra,        
-        simSale,         
-        ptidSale,           
-        versionDeBrowserSale,    
-        versionDeBrowserEntra,
-        tipoDeComunicacionSale,   
-        serieQueQuedaDeStock, 
-        simQueQuedaDeStock,  
-        modeloDeStock         
-    } = data.adicionales;
-
-    const{
-      nombreDeEss
-    }=data.servicios;
-
-
+    // El componente InfoItem se mantiene igual
     const InfoItem = ({ label, value }) => {
         const displayValue = value ? value : "—"; 
         return (
@@ -87,48 +52,22 @@ function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setI
                 </div>
             </div>
 
-
             <div className="detalleGridContainer">
 
                 <div className="grid3">
-                    <InfoItem label="Ciudad" value={ciudad} />
-                    <InfoItem label="Cantidad TPV en Base" value={cantidadTpv} /> 
-                    <InfoItem label="Estado" value={estado} />
-                    <InfoItem label="Orden de Servicio" value={ordenDeServicio} />
-                    <InfoItem label="Plaza" value={plaza} />
-                    <InfoItem label="Técnico" value={tecnico} />
-                    <InfoItem label="Cerro en Punto Clave" value={cerroEnPuntoClave} /> 
-                    <InfoItem label="Atención en Punto" value={atencionEnPunto} />
-                    <InfoItem label="Firma en Estación" value={firmaEnEstacion} />
-                    <InfoItem label="#Tarjeta / TAG" value={tarjeta} /> 
-                    <InfoItem label="Modelo entra" value={modeloEntra} />
-                    <InfoItem label="Marca Entra" value={marcaEntra} />
-                    <InfoItem label="Serie Lógica entra" value={serieLogicaEntra} />
-                    <InfoItem label="Serie Física entra" value={serieFisicaEntra} />
-                    <InfoItem label="Tipo de Comunicación" value={tipoDeComunicacion} /> 
-                    <InfoItem label="SIM entra" value={sim} /> 
-                    <InfoItem label="PTID entra" value={ptidEntra} />
-                    <InfoItem label="Eliminador Entra" value={eliminadorEntra} />
-                    <InfoItem label="Modelo Sale" value={modeloSale} />
-                    <InfoItem label="Marca Sale" value={marcaSale} />
-                    <InfoItem label="Serie Lógica sale" value={serieLogicaSale} />
-                    <InfoItem label="Serie Física sale" value={serieFisicaSale} />
-                    <InfoItem label="Versión Browser Sale" value={versionDeBrowserSale} />
-                    <InfoItem label="Versión Browser Entra" value={versionDeBrowserEntra} />
-                    <InfoItem label="Tipo Comunicación Sale" value={tipoDeComunicacionSale} />
-                    <InfoItem label="SIM Sale" value={simSale} />
-                    <InfoItem label="PTID Sale" value={ptidSale} />
-                    <InfoItem label="Eliminador Sale" value={eliminadorSale} />
-
-                    <InfoItem label="Serie de Stock" value={serieQueQuedaDeStock} /> 
-                    <InfoItem label="SIM de Stock" value={simQueQuedaDeStock} /> 
-                    <InfoItem label="Modelo de Stock" value={modeloDeStock} /> 
-                                        
+                   
+                    {adicionalesConfig.map(field => (
+                        <InfoItem 
+                            key={field.key} 
+                            label={field.label} 
+                            value={data.adicionales[field.key]} 
+                        />
+                    ))}
                 </div>
 
             </div>
         </>
     );
-};
+}
 
 export default RenderDatosAdicionales;

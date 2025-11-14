@@ -1,5 +1,7 @@
+import React from 'react';
+import { serviciosConfig } from '../../assets/serviciosConfig';
 
-const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEditing,handleDownload }) => {
+const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEditing, handleDownload }) => {
     
     if (!data) {
         return <div className="no-data-message">No se encontraron datos de Servicio para este ticket.</div>;
@@ -14,26 +16,34 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
             </div>
         );
     }
-   
+    
+    // Definición de los grupos de campos usando la configuración ---
+    
+    const grid2Keys = [
+        'fechaDeAsignacion',
+        'resolucion', 
+        'situacionActual', 
+        'nombreDeEss', 
+        'incidencia', 
+        'supervisor', 
+        'idMerchant', 
+        'tipoDeServicio',
+        'fechaDeEnvio', 
+        'tecnico', 
+        'sla'
+    ];
+    
+    const gridKeys = [
+        'direccion', 
+         'guiaDeEncomienda',
+        'observaciones',
+        'motivoDeServicio',
+        'motivoReal'];
+    
+    const getConfig = (key) => serviciosConfig.find(field => field.key === key);
+
   
-    const {
-        fechaDeAsignacion,
-        resolucion,
-        situacionActual,
-        nombreDeEss, 
-        incidencia,
-        supervisor, 
-        idMerchant,
-        tipoDeServicio,
-        motivoDeServicio,
-        motivoReal,
-        observaciones,
-        guiaDeEncomienda,
-        fechaDeEnvio, 
-        direccion,
-        tecnico, 
-        sla
-    } = data;
+    const nombreDeEss = data.nombreDeEss;
 
     return (
         <>
@@ -63,45 +73,54 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
                         </button>
                     )}
 
-                     <button className="edit-button">
+                    <button className="edit-button">
                         Inventario usado
                     </button> 
 
                     <button className="download-button" onClick={()=> handleDownload()}> 
                         Descargar
                     </button> 
-                   
                 </div>
             </div>
 
             {/* --- Renderizado Condicional del Contenido --- */}
             {activeTab === 'servicio' && (
                 <div className='detalleGridContainer'>
+                    
                     <div className="grid2">
-                        <InfoItem label="Fecha de Asignación" value={fechaDeAsignacion} />
-                        <InfoItem label="Resolución" value={resolucion} />
-                        <InfoItem label="Situación Actual" value={situacionActual} />
-                        <InfoItem label="Nombre de ESS" value={nombreDeEss} />
-                        <InfoItem label="Incidencia" value={incidencia} />
-                        <InfoItem label="Supervisor" value={supervisor} />
-                        <InfoItem label="ID Merchant" value={idMerchant} />
-                        <InfoItem label="Tipo de Servicio" value={tipoDeServicio} />
-                        <InfoItem label="Guía de Encomienda" value={guiaDeEncomienda} />
-                        <InfoItem label="Fecha de envío de guía" value={fechaDeEnvio} />
-                        <InfoItem label="Dirección" value={direccion} />
-                        <InfoItem label="Técnico de Campo" value={tecnico} />
-                        <InfoItem label="SLA" value={sla} />
-                        
+                        {grid2Keys.map(key => {
+                            const field = getConfig(key);
+                            const label = field ? field.label : key; 
+                            return (
+                                <InfoItem 
+                                    key={key} 
+                                    label={label}
+                                    value={data[key]} 
+                                />
+                            );
+                        })}
                     </div>
+                    
                     <div className="grid">
-                        <InfoItem label="Observaciones ARJUSVEN" value={observaciones} />
-                        <InfoItem label="Motivo del Servicio" value={motivoDeServicio} />
-                        <InfoItem label="Motivo real del Servicio en sitio" value={motivoReal} />
+                        {gridKeys.map(key => {
+                            const field = getConfig(key);
+                            
+                            let label = field ? field.label : key; 
+                            if(key === 'motivoReal') label = 'Motivo real del Servicio en sitio';
+                            if(key === 'motivoDeServicio') label = 'Motivo del Servicio';
+                            if(key === 'observaciones') label = 'Observaciones ARJUSVEN';
+                            
+                            return (
+                                <InfoItem 
+                                    key={key} 
+                                    label={label} 
+                                    value={data[key]} 
+                                />
+                            );
+                        })}
                     </div>
                 </div>
             )}
-            
-       
         </>
     );
 };

@@ -42,11 +42,9 @@ function TicketPage() {
         
         const contentDisposition = response.headers.get('Content-Disposition');
         
-        // Si el encabezado falla (porque el back-end envió un nombre inválido), 
-        // usaremos este nombre seguro.
+   
         let filename = `${selectedTicket.servicios.incidencia} ${selectedTicket.servicios.nombreDeEss}.docx`; 
 
-        // 2. Lógica para intentar leer el nombre del encabezado
         if (contentDisposition) {
             // Intenta leer el nombre codificado (filename*=...) para manejar caracteres especiales
             const encodedMatch = contentDisposition.match(/filename\*=UTF-8''(.+)/i);
