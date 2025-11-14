@@ -1,8 +1,10 @@
-import React from 'react';
+
 import { serviciosConfig } from '../../assets/serviciosConfig';
 
-const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEditing, handleDownload }) => {
+const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEditing }) => {
     
+        
+
     if (!data) {
         return <div className="no-data-message">No se encontraron datos de Servicio para este ticket.</div>;
     }
@@ -16,9 +18,7 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
             </div>
         );
     }
-    
-    // Definición de los grupos de campos usando la configuración ---
-    
+        
     const grid2Keys = [
         'fechaDeAsignacion',
         'resolucion', 
@@ -74,12 +74,10 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
                     )}
 
                     <button className="edit-button">
-                        Inventario usado
+                        Inventario
                     </button> 
 
-                    <button className="download-button" onClick={()=> handleDownload()}> 
-                        Descargar
-                    </button> 
+                                        
                 </div>
             </div>
 

@@ -46,14 +46,11 @@ function TicketPage() {
         let filename = `${selectedTicket.servicios.incidencia} ${selectedTicket.servicios.nombreDeEss}.docx`; 
 
         if (contentDisposition) {
-            // Intenta leer el nombre codificado (filename*=...) para manejar caracteres especiales
             const encodedMatch = contentDisposition.match(/filename\*=UTF-8''(.+)/i);
             
             if (encodedMatch && encodedMatch.length > 1) {
-                // Si encontramos el nombre codificado (RFC 5987), lo decodificamos y lo usamos.
                 filename = decodeURIComponent(encodedMatch[1]);
             } else {
-                // Si no encontramos el codificado, intentamos leer el nombre simple (filename="...")
                 const filenameMatch = contentDisposition.match(/filename="(.+)"/);
                 if (filenameMatch && filenameMatch.length > 1) {
                     filename = filenameMatch[1];
@@ -61,11 +58,9 @@ function TicketPage() {
             }
         }
 
-        // 3. Asignar el nombre del archivo (será el del back-end si se leyó, o el seguro si falló)
         link.setAttribute('download', filename);
         document.body.appendChild(link);
         
-        // Simular el click y limpiar
         link.click();
         link.remove();
         window.URL.revokeObjectURL(url);

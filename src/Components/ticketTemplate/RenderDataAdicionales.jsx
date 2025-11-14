@@ -1,8 +1,16 @@
-import React from 'react';
-// Importamos la configuración centralizada
+import {useState} from 'react';
 import {adicionalesConfig} from '../../assets/adicionalesConfig';
 
-function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setIsEditing }) {
+function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setIsEditing,handleDownload }) {
+
+
+        const [isOpen, setIsOpen] = useState(false);
+
+        // Función que llama a handleDownload con el tipo de archivo y cierra el menú
+        const handleAction = (type) => {
+            handleDownload(type);
+            setIsOpen(false); // Cierra el menú después de la selección
+        }
 
     if (!data.adicionales) {
         return <div>No hay datos adicionales disponibles.</div>;
@@ -46,9 +54,29 @@ function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setI
                             Editar
                         </button>
                     )}
-                    <button className="download-button">
-                        Descargar
-                    </button>
+                    <div className="download-dropdown-container">
+                                <button 
+                                        className="download-button"
+                                        onClick={() => setIsOpen(!isOpen)} 
+                                    > 
+                                        Descargar <span className="dropdown-arrow">{isOpen ? '▲' : '▼'}</span>
+                                    </button>
+                                
+                                {isOpen && (
+                                    <div className="dropdown-menu">
+                                        {/* Botones para los 3 tipos de archivo. Agrega la lógica de handleAction */}
+                                        <button className="dropdown-item" onClick={() => handleAction('PDF')}>
+                                            Descargar Cambio
+                                        </button>
+                                        <button className="dropdown-item" onClick={() => handleAction('Excel')}>
+                                            Descargar Mantenimiento
+                                        </button>
+                                        <button className="dropdown-item" onClick={() => handleAction('Ticket')}>
+                                            Descargar Retiro
+                                        </button>
+                                    </div>
+                                )}
+                    </div>
                 </div>
             </div>
 
