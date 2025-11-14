@@ -18,7 +18,6 @@ const TicketTemplate = ({data, onSaveService, onSaveAdicional, onDeleteService,h
             data={data.servicios}
             datosEstaticos={datosEstaticos}
             onCancelEdit={() => setIsEditing(false)}
-            handleDownload={handleDownload}
             onSaveEdit={onSaveService}
             onDeleteEdit={onDeleteService}
           />
@@ -30,7 +29,6 @@ const TicketTemplate = ({data, onSaveService, onSaveAdicional, onDeleteService,h
             data={data.adicionales}
             datosEstaticos={datosEstaticos}
             onCancelEdit={() => setIsEditing(false)}
-            handleDownload={handleDownload}
             onSaveEdit={onSaveAdicional}
             onDeleteEdit={onDeleteService}
           />
@@ -56,6 +54,7 @@ const TicketTemplate = ({data, onSaveService, onSaveAdicional, onDeleteService,h
                   activeTab={activeTab}
                   isEditing={isEditing}
                   setIsEditing={setIsEditing}
+                  handleDownload={handleDownload}
                   />
         );
       }

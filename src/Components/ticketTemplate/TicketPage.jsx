@@ -18,86 +18,110 @@ function TicketPage() {
     const [isSaving, setIsSaving] = useState(false); 
     const [saveError, setSaveError] = useState  (null); 
 
-     const handleDownloadDocx = async () => {
-    const id = selectedTicket.idTickets;
+    const handleDownload = async (type) => {
+            const id = selectedTicket.idTickets;
 
-    if (!id) {
-        alert('Error: ID del ticket no encontrado.');
-        return;
-    }
+            if (!id) {
+                alert('Error: ID del ticket no encontrado.');
+                return;
+            }
 
-    const URL = `/tickets/download/${id}`; 
-    
-    try {
-        const response = await apiRequest(URL, { method: 'GET' });
+           
+            let templateType = 'intercambio'; 
+            let templateName = 'Intercambio';
 
-        if (!response.ok) {
-            throw new Error(`Error del servidor: ${response.statusText}`);
-        }
+            switch (type) {
+                case 'mantenimiento': 
+                    templateType = 'mantenimiento';
+                    templateName = 'Mantenimiento';
+                    break;
+                case 'retiro': 
+                    templateType = 'retiro';
+                    templateName = 'Retiro';
+                    break;
+                case 'intercambio': 
+                default:
+                    templateType = 'intercambio';
+                    templateName = 'Intercambio';
+                    break;
+            }
 
-        const blob = await response.blob(); 
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        
-        const contentDisposition = response.headers.get('Content-Disposition');
-        
-   
-        let filename = `${selectedTicket.servicios.incidencia} ${selectedTicket.servicios.nombreDeEss}.docx`; 
+            const URL = `/tickets/download/${id}?type=${templateType}`; 
 
-        if (contentDisposition) {
-            const encodedMatch = contentDisposition.match(/filename\*=UTF-8''(.+)/i);
-            
-            if (encodedMatch && encodedMatch.length > 1) {
-                filename = decodeURIComponent(encodedMatch[1]);
-            } else {
-                const filenameMatch = contentDisposition.match(/filename="(.+)"/);
-                if (filenameMatch && filenameMatch.length > 1) {
-                    filename = filenameMatch[1];
+            try {
+                const response = await apiRequest(URL, { method: 'GET' });
+
+                if (!response.ok) {
+                    throw new Error(`Error del servidor: ${response.statusText}`);
                 }
+
+                const blob = await response.blob(); 
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                
+                const contentDisposition = response.headers.get('Content-Disposition');
+                
+                // --- Fallback para el nombre del archivo si la cabecera no se lee correctamente ---
+                let filename = `${selectedTicket.servicios.incidencia}_${selectedTicket.servicios.nombreDeEss}_${templateName}.docx`; 
+
+                if (contentDisposition) {
+                    // Intenta leer el nombre del archivo del encabezado (método moderno y seguro)
+                    const encodedMatch = contentDisposition.match(/filename\*=UTF-8''(.+)/i);
+                    
+                    if (encodedMatch && encodedMatch.length > 1) {
+                        filename = decodeURIComponent(encodedMatch[1]);
+                    } else {
+                        // Fallback para nombres simples
+                        const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+                        if (filenameMatch && filenameMatch.length > 1) {
+                            filename = filenameMatch[1];
+                        }
+                    }
+                }
+
+                link.setAttribute('download', filename);
+                document.body.appendChild(link);
+                
+                link.click();
+                link.remove();
+                window.URL.revokeObjectURL(url);
+
+            } catch (error) {
+                console.error('Error durante la descarga del documento:', error);
+                alert('No se pudo descargar el documento. Verifique la conexión al servidor.');
             }
-        }
+        }; 
 
-        link.setAttribute('download', filename);
-        document.body.appendChild(link);
-        
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
-
-    } catch (error) {
-        console.error('Error durante la descarga del documento:', error);
-        alert('No se pudo descargar el documento. Verifique la conexión al servidor.');
-    }
-};
-     const handleSave = async () => {
-        try {
-            await fetchTickets(); 
-        } catch (err) {
-            console.error("Fallo la recarga de inventario después de guardar.", err);
-        }
-    };
-
-    const fetchTickets = async () => {
-        setIsLoading(true);
-        setError("");
-        try {
-            const response = await apiRequest(API_BASE_URL, { method: 'GET' }); 
-            console.log(response);
-            if (!response.ok) {
-                throw new Error(`Error ${response.status}: ${response.statusText}.`);
-            }
             
-            const data = await response.json();
-            setTicketsData(Array.isArray(data) ? data : []); 
-        } catch (err) {
-            console.error('Error al cargar los tickets:', err);
-            setError(err.message || "No se pudo conectar al servidor de tickets.");
-            setTicketsData([]);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+            const handleSave = async () => {
+                try {
+                    await fetchTickets(); 
+                } catch (err) {
+                    console.error("Fallo la recarga de inventario después de guardar.", err);
+                }
+            };
+
+            const fetchTickets = async () => {
+                setIsLoading(true);
+                setError("");
+                try {
+                    const response = await apiRequest(API_BASE_URL, { method: 'GET' }); 
+                    console.log(response);
+                    if (!response.ok) {
+                        throw new Error(`Error ${response.status}: ${response.statusText}.`);
+                    }
+                    
+                    const data = await response.json();
+                    setTicketsData(Array.isArray(data) ? data : []); 
+                } catch (err) {
+                    console.error('Error al cargar los tickets:', err);
+                    setError(err.message || "No se pudo conectar al servidor de tickets.");
+                    setTicketsData([]);
+                } finally {
+                    setIsLoading(false);
+                }
+            };
 
 
     async function handleServiceDelete() {
@@ -294,12 +318,12 @@ const handleAdicionalPatch = async (updatedServiceData) => {
                     
                     {selectedTicket ? (
                         <TicketTemplate
-                            data={selectedTicket}
-                            onGoBack={() => setSelectedTicket(null)}
-                            onSaveService={handleServicePatch} 
-                            onSaveAdicional={handleAdicionalPatch}
-                            onDeleteService={handleServiceDelete}
-                            handleDownload = {handleDownloadDocx}
+                            data = {selectedTicket}
+                            onGoBack = {() => setSelectedTicket(null)}
+                            onSaveService = {handleServicePatch} 
+                            onSaveAdicional = {handleAdicionalPatch}
+                            onDeleteService = {handleServiceDelete}
+                            handleDownload = {handleDownload}
                         />
                     ) : (
                         <div className="no-selection-message">

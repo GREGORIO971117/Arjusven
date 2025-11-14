@@ -4,13 +4,12 @@ import {adicionalesConfig} from '../../assets/adicionalesConfig';
 function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setIsEditing,handleDownload }) {
 
 
-        const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
-        // Función que llama a handleDownload con el tipo de archivo y cierra el menú
-        const handleAction = (type) => {
-            handleDownload(type);
-            setIsOpen(false); // Cierra el menú después de la selección
-        }
+    const handleAction = (type) => {
+        handleDownload(type); 
+        setIsOpen(false); 
+    }
 
     if (!data.adicionales) {
         return <div>No hay datos adicionales disponibles.</div>;
@@ -18,7 +17,6 @@ function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setI
 
     const { nombreDeEss } = data.servicios || {};
 
-    // El componente InfoItem se mantiene igual
     const InfoItem = ({ label, value }) => {
         const displayValue = value ? value : "—"; 
         return (
@@ -48,42 +46,44 @@ function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setI
                     <strong>{nombreDeEss}</strong>
                 </h2>
                 
+                {/* Contenedor de Acciones del Ticket */}
                 <div className="ticket-actions">
                     {!isEditing && (
                         <button onClick={() => setIsEditing(true)} className="edit-button">
                             Editar
                         </button>
                     )}
+                    
+                    {/* --- Dropdown de Descarga IMPLEMENTADO --- */}
                     <div className="download-dropdown-container">
-                                <button 
-                                        className="download-button"
-                                        onClick={() => setIsOpen(!isOpen)} 
-                                    > 
-                                        Descargar <span className="dropdown-arrow">{isOpen ? '▲' : '▼'}</span>
-                                    </button>
-                                
-                                {isOpen && (
-                                    <div className="dropdown-menu">
-                                        {/* Botones para los 3 tipos de archivo. Agrega la lógica de handleAction */}
-                                        <button className="dropdown-item" onClick={() => handleAction('PDF')}>
-                                            Descargar Cambio
-                                        </button>
-                                        <button className="dropdown-item" onClick={() => handleAction('Excel')}>
-                                            Descargar Mantenimiento
-                                        </button>
-                                        <button className="dropdown-item" onClick={() => handleAction('Ticket')}>
-                                            Descargar Retiro
-                                        </button>
-                                    </div>
-                                )}
+                        <button 
+                            className="download-button"
+                            onClick={() => setIsOpen(!isOpen)} // Alterna el estado del menú
+                        > 
+                            Descargar <span className="dropdown-arrow">{isOpen ? '▲' : '▼'}</span>
+                        </button>
+                        
+                        {isOpen && (
+                            <div className="dropdown-menu">
+                                {/* Botones configurados para usar los nombres de plantillas del backend */}
+                                <button className="dropdown-item" onClick={() => handleAction('intercambio')}>
+                                    Descargar Cambio
+                                </button>
+                                <button className="dropdown-item" onClick={() => handleAction('mantenimiento')}>
+                                    Descargar Mantenimiento
+                                </button>
+                                <button className="dropdown-item" onClick={() => handleAction('retiro')}>
+                                    Descargar Retiro
+                                </button>
+                            </div>
+                        )}
                     </div>
+                    {/* -------------------------------------- */}
                 </div>
             </div>
 
             <div className="detalleGridContainer">
-
                 <div className="grid3">
-                   
                     {adicionalesConfig.map(field => (
                         <InfoItem 
                             key={field.key} 
@@ -92,7 +92,6 @@ function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setI
                         />
                     ))}
                 </div>
-
             </div>
         </>
     );
