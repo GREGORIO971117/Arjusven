@@ -132,7 +132,7 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
                     style={styles.buttonDanger}
                     disabled={isSubmitting}
                 >
-                    Borrar Inventario
+                    Borrar Incidencia
                 </button>
                 <button 
                     type="button" 
