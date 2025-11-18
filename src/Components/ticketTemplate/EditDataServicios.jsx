@@ -70,7 +70,6 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
                                 style={styles.input}
                             >
                                 <option value="">{`Seleccione ${field.label}:`}</option>
-                                {/* Usamos optionsKey para acceder a los datosEstaticos correctos */}
                                 {datosEstaticos[field.optionsKey]?.map((opcion) => (
                                     <option key={opcion} value={opcion}>{opcion}</option>
                                 ))}
@@ -89,7 +88,7 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
                 ))}
             </div>
 
-            <div style={{ ...styles.row, flexDirection: 'column', width: '100%', padding: '0 20px 20px 20px', borderTop: '1px solid #eee', marginTop: '10px' }}>
+            <div style={{ ...styles.row, flexDirection: 'column', width: '100%', marginTop: '10px' }}>
                 
                 {grid2Fields.map(field => (
                     <React.Fragment key={field.key}>

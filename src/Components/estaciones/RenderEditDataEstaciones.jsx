@@ -16,7 +16,7 @@ const getInitialState = (data) => {
         tipoDeConexion: formatInitialValue(data.tipoDeConexion),
         tipoSIM: formatInitialValue(data.tipoSIM), 
         carrier: formatInitialValue(data.carrier),
-        cantPOSActivas: data.cantPOSActivas ?? 0, // Campo numérico
+        cantPOSActivas: data.cantPOSActivas ?? 0,
         nombreComercial: formatInitialValue(data.nombreComercial),
         codigoPEMEX: formatInitialValue(data.codigoPEMEX),
         tipoPEMEX: formatInitialValue(data.tipoPEMEX),

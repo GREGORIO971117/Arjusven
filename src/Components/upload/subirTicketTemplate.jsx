@@ -73,8 +73,6 @@ export default function SubirTicketTemplate() { // Desestructuramos datosEstatic
                 body: JSON.stringify(payload),
             });
             
-            console.log(response);
-            
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({})); 
                 throw new Error(errorData.message || `Error ${response.status}: Falló la creación del Ticket.`);
@@ -115,7 +113,6 @@ export default function SubirTicketTemplate() { // Desestructuramos datosEstatic
                             required
                             style={styles.input}
                         />
-                        {/* Muestra el error específico */}
                         {formErrors.incidencia && <div style={styles.errorTextRow}>{formErrors.incidencia}</div>}
                     </label>
 

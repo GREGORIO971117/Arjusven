@@ -15,6 +15,6 @@ export const serviciosConfig = [
     { key: 'fechaDeAsignacion', label: 'Fecha de Asignación', type: 'date', grid: 1 },
     { key: 'guiaDeEncomienda', label: 'Guía de Encomienda', type: 'text', grid: 1 },
     { key: 'motivoDeServicio', label: 'Motivo del Servicio', type: 'text', grid: 1 },
-    { key: 'motivoReal', label: 'Motivo real en sitio', type: 'text', grid: 2 },
+    { key: 'motivoReal', label: 'Motivo real en sitio', type: 'textarea', grid: 2 },
     { key: 'observaciones', label: 'Observaciones ARJUSVEN', type: 'textarea', grid: 2 },
 ];
