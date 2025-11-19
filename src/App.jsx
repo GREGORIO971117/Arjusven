@@ -49,8 +49,6 @@ function App() {
         {id: 5, text: "Usuarios", url: "/Usuarios"},
         {id: 6, text: "Perfil", url: "/Perfil"},
         {id: 7, text: "Subir", url: "/SubirIncidencias" },
-
-        
     ];
 
     return (
