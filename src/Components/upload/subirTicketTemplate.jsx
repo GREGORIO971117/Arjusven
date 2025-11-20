@@ -13,13 +13,13 @@ export default function SubirTicketTemplate() {
     const [observaciones, setObservaciones] = useState("");
     const [incidencia, setIncidencia] = useState("");
     const [loading, setLoading] = useState(false);
-    const [mensaje, setMensaje] = useState(null); // Mensaje simple para carga manual
+    const [mensaje, setMensaje] = useState(null);
     const [error, setError] = useState(null);
     const [formErrors, setFormErrors] = useState({});
 
     // --- NUEVO: ESTADOS PARA CARGA MASIVA ---
-    const fileInputRef = useRef(null); // Referencia al input oculto
-    const [uploadResult, setUploadResult] = useState(null); // Guarda la respuesta del Excel (DTO)
+    const fileInputRef = useRef(null); 
+    const [uploadResult, setUploadResult] = useState(null); 
 
     function validateForm() {
         const errs = {};
@@ -121,22 +121,13 @@ export default function SubirTicketTemplate() {
         formData.append("idAdministrador", ADMIN_ID_DEFAULT);
 
         try {
-            // Nota: apiRequest suele ser un wrapper de fetch. 
-            // Al usar FormData, NO debemos poner header 'Content-Type': 'application/json', 
-            // el navegador lo pone automático como multipart/form-data boundary...
             
-            // Ajustamos la URL para apuntar a /upload
             const uploadUrl = `http://localhost:8080/api/tickets/upload`; 
-
-            // Si tu función apiRequest fuerza headers JSON, quizás necesites usar fetch directo o modificar apiRequest.
-            // Aquí asumo uso directo de fetch para asegurar FormData correcto o apiRequest sin headers forzados.
-            const token = localStorage.getItem("jwtToken"); // Asumiendo que usas token
-            
+            const token = localStorage.getItem("jwtToken"); 
             const response = await fetch(uploadUrl, { 
                 method: "POST",
                 headers: {
-                    // "Content-Type": "multipart/form-data" // IMPORTANTE: NO PONER ESTO MANUALMENTE CON FETCH
-                     "Authorization": `Bearer ${token}` // Si usas auth
+                     "Authorization": `Bearer ${token}` 
                 },
                 body: formData
             });
@@ -147,7 +138,6 @@ export default function SubirTicketTemplate() {
                 throw new Error(data.message || "Error al subir el archivo");
             }
 
-            // Guardamos el DTO de respuesta completo
             setUploadResult(data);
             
         } catch (err) {
@@ -158,7 +148,6 @@ export default function SubirTicketTemplate() {
         }
     };
 
-    // 3. Función auxiliar para disparar el click del input oculto
     const triggerFileInput = () => {
         fileInputRef.current.click();
     };
