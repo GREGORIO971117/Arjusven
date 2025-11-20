@@ -34,47 +34,37 @@ function InventarioPage() {
         }
     };
 
+
     const handleUpdate = async (dataToUpdate) => {
-    
-    setIsSubmitting(true);
-    setError(""); 
-
-    const idInventario = dataToUpdate.idInventario;
-    const now = new Date();
-    const updateDateString = now.toISOString().slice(0,10);
-    
-    const finalDataToSend = {
-        ...dataToUpdate,
-        ultimaActualizacion: updateDateString || null,
-    };
-    
     try {
-        const response = await apiRequest(`${API_URL}/${idInventario}`, {
-            method: 'PATCH', 
+        const response = await apiRequest(`/inventario/${dataToUpdate.idInventario}`, {
+            method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(finalDataToSend),
+            body: JSON.stringify(dataToUpdate),
         });
-        
-        if (!response.ok) {
-            let errorMsg = `Error al actualizar el inventario. Estado: ${response.status}`;
-            try {
-                const errorData = await response.json();
-                errorMsg = errorData.message || errorData.error || errorMsg;
-            } catch {}
-            throw new Error(errorMsg);
-        }
 
-        await handleSave(); 
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || `Error ${response.status} al actualizar.`);
+        }
         
-        return { success: true }; 
-        
-    } catch (err) {
-        setError(err.message || "Fallo la conexión con el servidor al intentar actualizar.");
-        return { success: false, error: err.message };
-    } finally {
-        setIsSubmitting(false);
+        const updatedInventoryItem = await response.json(); 
+        setSelectedInventario(updatedInventoryItem); 
+        setInventarioData(prevList => 
+            prevList.map(item => 
+                item.idInventario === updatedInventoryItem.idInventario ? updatedInventoryItem : item
+            )
+        );
+
+        setIsEditing(false); 
+        return { success: true };
+
+    } catch (error) {
+        console.error("Error al actualizar inventario:", error);
+        return { success: false, error: error.message }; 
     }
 };
+ 
 
   async function handleRemove() {
         const idInventario = selectedInventario.idInventario;
