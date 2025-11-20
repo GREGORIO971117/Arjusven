@@ -23,21 +23,31 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
     const handleSave = async () => {
         setLocalError(null);
         setIsSubmitting(true);
+
+        let dataToSend = { ...formData };
+
+        if (dataToSend.ticket) {
+        delete dataToSend.ticket; 
+    }
+
+    if (dataToSend.estaciones) {
+        delete dataToSend.estaciones; 
+    }
         
         try {
-            const result = await onSaveEdit(formData); 
-            
-            if (result && result.success) {
-                if (onCancelEdit) onCancelEdit(); 
-            } else {
-                throw new Error(result?.error || "Error desconocido al guardar. Verifica el ID del servicio.");
-            }
-        } catch (err) {
-            console.error("Fallo al ejecutar onSaveEdit:", err);
-            setLocalError(err.message || "Fallo la operación de guardado.");
-        } finally {
-            setIsSubmitting(false);
+        const result = await onSaveEdit(dataToSend); 
+        
+        if (result && result.success) {
+            if (onCancelEdit) onCancelEdit(); 
+        } else {
+            throw new Error(result?.error || "Error desconocido al guardar. Verifica la API.");
         }
+    } catch (err) {
+        console.error("Fallo al ejecutar onSaveEdit:", err);
+        setLocalError(err.message || "Fallo la operación de guardado.");
+    } finally {
+        setIsSubmitting(false);
+    }
     };
 
     const handleCancel = () => {

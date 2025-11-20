@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react"; // Agregamos useRef
 import { apiRequest } from "../login/Api"; 
 import { styles } from '../admin/adminTemplate';
 
-const API_TICKETS_URL = '/tickets'; 
+const API_TICKETS_URL = '/tickets';
 const ADMIN_ID_DEFAULT = localStorage.getItem("idUsuario"); 
 
 export default function SubirTicketTemplate() { 
@@ -36,7 +36,7 @@ export default function SubirTicketTemplate() {
         e.preventDefault();
         setMensaje(null);
         setError(null);
-        setUploadResult(null); // Limpiamos resultados de excel si los hubiera
+        setUploadResult(null); 
 
         if (!validateForm()) {
             if (Object.keys(formErrors).length === 0) {
@@ -46,14 +46,18 @@ export default function SubirTicketTemplate() {
         }
         
         const payload = {
-                "administrador": { "idUsuarios": Number(ADMIN_ID_DEFAULT) },
+                "administrador": {
+                     "idUsuarios": Number(ADMIN_ID_DEFAULT)
+                     },
                 "servicios": {
                     "motivoDeServicio": motivoServicio.trim(),
                     "observaciones": observaciones.trim(),
                     "incidencia": incidencia.trim(), 
                     "idMerchant": Number(idMerchant.trim()),
                 },
-                "adicionales":{ "ciudad":"Puebla" }
+                "adicionales":{ 
+                    "ciudad":"Puebla"
+                 }
             };
         
         setLoading(true);
@@ -73,8 +77,6 @@ export default function SubirTicketTemplate() {
             const newTicket = await response.json();
             const displayId = newTicket?.idTickets || 'desconocido'; 
             setMensaje(`✅ Ticket ${displayId} creado con éxito.`); 
-            
-            // Limpiar campos
             setIncidencia("");
             setObservaciones("");
             setMotivoServicio("");
@@ -89,14 +91,11 @@ export default function SubirTicketTemplate() {
         }
     };
 
-    // --- NUEVO: LOGICA PARA CARGA DE EXCEL ---
-    
-    // 1. Detectar cambio en el input file
+ 
     const handleFileChange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
-        // Validar extensión básica
         if (!file.name.endsWith('.xls') && !file.name.endsWith('.xlsx')) {
             setError("Solo se permiten archivos Excel (.xls, .xlsx)");
             return;
@@ -104,11 +103,9 @@ export default function SubirTicketTemplate() {
 
         await uploadExcel(file);
         
-        // Limpiar el input para permitir subir el mismo archivo si se corrige y reintenta
         e.target.value = null; 
     };
 
-    // 2. Enviar archivo al Backend
     const uploadExcel = async (file) => {
         setLoading(true);
         setError(null);
@@ -117,7 +114,6 @@ export default function SubirTicketTemplate() {
 
         const formData = new FormData();
         formData.append("file", file);
-        // Enviamos el ID del admin (necesario según definimos en el backend)
         formData.append("idAdministrador", ADMIN_ID_DEFAULT);
 
         try {
@@ -205,13 +201,11 @@ export default function SubirTicketTemplate() {
                     </label>
                 </div>
                 
-                {/* --- MENSAJES MANUALES --- */}
                 <div style={{...styles.row, flexWrap: 'nowrap'}}>
                     {mensaje && <div style={{...styles.success, flex: '1 1 100%' }}>{mensaje}</div>}
                     {error && <div style={{...styles.error, flex: '1 1 100%'}}>🚨 {error}</div>}
                 </div>
 
-                {/* --- NUEVO: VISUALIZACIÓN DE RESULTADOS DE EXCEL --- */}
                 {uploadResult && (
                     <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f9f9f9', borderRadius: '5px', width: '100%' }}>
                         <h4 style={{ margin: '0 0 10px 0' }}>Resumen de Carga Masiva:</h4>
@@ -219,7 +213,6 @@ export default function SubirTicketTemplate() {
                         <p style={{ color: 'green' }}><strong>Exitosos:</strong> {uploadResult.totalExitosos}</p>
                         <p style={{ color: 'red' }}><strong>Fallidos:</strong> {uploadResult.totalFallidos}</p>
                         
-                        {/* Lista de Errores */}
                         {uploadResult.errores.length > 0 && (
                             <div style={{ marginTop: '10px', color: 'red', fontSize: '0.9em' }}>
                                 <strong>Errores:</strong>
@@ -231,7 +224,6 @@ export default function SubirTicketTemplate() {
                             </div>
                         )}
 
-                        {/* Lista de Advertencias (Duplicados) */}
                         {uploadResult.advertencias.length > 0 && (
                             <div style={{ marginTop: '10px', color: '#e67e22', fontSize: '0.9em' }}>
                                 <strong>Advertencias:</strong>
@@ -248,12 +240,12 @@ export default function SubirTicketTemplate() {
 
                 {/* --- BOTONES --- */}
                 <div style={{ marginTop: 20, display: 'flex', gap: '10px' }}>
-                    {/* Botón Manual: type="submit" */}
-                    <button type="submit" style={styles.buttonPrimary} disabled={loading}>
-                        {loading ? "Procesando..." : "Publicar Ticket Manual"}
+                    <button 
+                    type="submit" 
+                    style={styles.buttonPrimary} disabled={loading}>
+                        {loading ? "Procesando..." : "Publicar Ticket"}
                     </button>
 
-                    {/* NUEVO: Input file oculto */}
                     <input 
                         type="file" 
                         ref={fileInputRef}
@@ -262,10 +254,9 @@ export default function SubirTicketTemplate() {
                         accept=".xls,.xlsx"
                     />
 
-                    {/* Botón Excel: type="button" (IMPORTANTE) */}
                     <button 
                         type="button" 
-                        style={{...styles.buttonPrimary, backgroundColor: '#28a745'}} // Color verde estilo Excel
+                        style={{...styles.buttonPrimary, backgroundColor: '#28a745'}}
                         disabled={loading}
                         onClick={triggerFileInput}
                     >

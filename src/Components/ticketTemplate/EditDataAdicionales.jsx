@@ -81,7 +81,7 @@ const RenderEditarDatosAdicionales = ({ data, onCancelEdit, onSaveEdit, onDelete
                     style={styles.buttonDanger}
                     disabled={isSubmitting}
                 >
-                    Borrar Inventario
+                    Borrar Incidencia
                 </button>
                 <button 
                     type="button" 
