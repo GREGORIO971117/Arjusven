@@ -265,16 +265,14 @@ const handleAdicionalPatch = async (updatedServiceData) => {
             
         } 
         
-        // 1. Actualizar el estado central del ticket (`selectedTicket`)
         setSelectedTicket(prevTicket => {
             if (!prevTicket) return null;
             return {
                 ...prevTicket,
-                servicios: newServiceData, // Usamos los datos devueltos (o los enviados si fue 204)
+                adicionales: newServiceData, 
             };
         });
         
-        // 2. Notificar al componente de edición que todo salió bien
         return { success: true };
         
     } catch (err) {
