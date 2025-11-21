@@ -13,13 +13,14 @@ const styles = {
         backgroundColor: '#4a698a', // Azul oscuro para el encabezado
         color: 'white',
         padding: '12px 15px',
-        textAlign: 'left',
+        textAlign: 'center',
         borderBottom: '2px solid #3c526a',
     },
     td: {
-        padding: '10px 15px',
+        padding: '10px 10px',
         borderBottom: '1px solid #ddd',
         backgroundColor: 'white',
+         textAlign: 'center',
         verticalAlign: 'top',
     },
     tr: {
@@ -56,11 +57,6 @@ const styles = {
     }
 };
 
-/**
- * Componente que renderiza el historial de un inventario en formato de tabla.
- * @param {Array<Object>} historial - El array de objetos del pivote (Historial).
- * @param {Function} onClose - Función para cerrar la vista del historial.
- */
 
 export default function RenderHistorial({ historial, onClose }) {
 
