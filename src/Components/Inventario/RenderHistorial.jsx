@@ -77,6 +77,7 @@ export default function RenderHistorial({ historial, onClose }) {
                             <th style={styles.th}>Incidencia</th>
                             <th style={styles.th}>Plaza</th>
                             <th style={styles.th}>Nombre ESS</th>
+                            <th style={styles.th}>Tipo de servicio</th>
                             <th style={styles.th}>Técnico</th>
                         </tr>
                     </thead>
@@ -90,10 +91,12 @@ export default function RenderHistorial({ historial, onClose }) {
                                 <td style={styles.td}>{item.ticket?.servicios?.incidencia || 'N/A'}</td>
                                 
                                 {/* Plaza del Inventario (el campo plaza) */}
-                                <td style={styles.td}>{item.inventario?.plaza || 'N/A'}</td>
+                                <td style={styles.td}>{item.ticket?.adicionales?.plaza || 'N/A'}</td>
 
                                 {/* Nombre ESS del Ticket (a través de la relación ticket.servicios.nombreDeEss) */}
                                 <td style={styles.td}>{item.ticket?.servicios?.nombreDeEss || 'N/A'}</td>
+
+                                <td style={styles.td}>{item.ticket?.servicios?.tipoDeServicio || 'N/A'}</td>
 
                                 {/* Nombre del Técnico (a través de la relación ticket.servicios.tecnico) */}
                                 <td style={styles.td}>{item.ticket?.servicios?.tecnico || 'N/A'}</td>

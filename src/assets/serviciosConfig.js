@@ -1,6 +1,5 @@
 
 export const serviciosConfig = [
-    // La configuración se mantiene para la edición y para la referencia
     { key: 'nombreDeEss', label: 'Nombre de ESS', type: 'text', grid: 1, required: true },
     { key: 'incidencia', label: 'Número de Incidencia', type: 'text', grid: 1, required: true },
     { key: 'resolucion', label: 'Resolución', type: 'date', grid: 1 },

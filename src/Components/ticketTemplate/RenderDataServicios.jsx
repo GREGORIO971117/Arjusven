@@ -35,7 +35,7 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
     
     const gridKeys = [
         'direccion', 
-         'guiaDeEncomienda',
+        'guiaDeEncomienda',
         'observaciones',
         'motivoDeServicio',
         'motivoReal'];

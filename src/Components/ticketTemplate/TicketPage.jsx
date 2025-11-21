@@ -61,18 +61,14 @@ function TicketPage() {
                 link.href = url;
                 
                 const contentDisposition = response.headers.get('Content-Disposition');
-                
-                // --- Fallback para el nombre del archivo si la cabecera no se lee correctamente ---
                 let filename = `${selectedTicket.servicios.incidencia}_${selectedTicket.servicios.nombreDeEss}_${templateName}.docx`; 
 
                 if (contentDisposition) {
-                    // Intenta leer el nombre del archivo del encabezado (método moderno y seguro)
                     const encodedMatch = contentDisposition.match(/filename\*=UTF-8''(.+)/i);
                     
                     if (encodedMatch && encodedMatch.length > 1) {
                         filename = decodeURIComponent(encodedMatch[1]);
                     } else {
-                        // Fallback para nombres simples
                         const filenameMatch = contentDisposition.match(/filename="(.+)"/);
                         if (filenameMatch && filenameMatch.length > 1) {
                             filename = filenameMatch[1];
@@ -107,7 +103,6 @@ function TicketPage() {
                 setError("");
                 try {
                     const response = await apiRequest(API_BASE_URL, { method: 'GET' }); 
-                    console.log(response);
                     if (!response.ok) {
                         throw new Error(`Error ${response.status}: ${response.statusText}.`);
                     }
@@ -185,13 +180,11 @@ function TicketPage() {
 
         if (!response.ok) {
             let errorMsg = `Error ${response.status} al actualizar el servicio.`;
-            // Intenta leer el JSON de error solo si la respuesta tiene contenido
             if (response.headers.get('content-length') > 0 || response.headers.get('content-type')?.includes('application/json')) {
                  try {
                     const errorData = await response.json();
                     errorMsg = errorData.message || errorData.error || errorMsg;
                 } catch (e) {
-                    // Ignora el error de JSON si el cuerpo no es JSON (ej: HTML de error)
                 }
             }
             throw new Error(errorMsg);
@@ -224,60 +217,60 @@ function TicketPage() {
 };
 
 
-const handleAdicionalPatch = async (updatedServiceData) => {
-
+const handleAdicionalPatch = async (updatedAdicionalData) => {
     setIsSaving(true);
     setSaveError(null);
 
-    const idAdicionales = updatedServiceData.idAdicionales; 
+    const idAdicionales = updatedAdicionalData.idAdicionales; 
     
     if (!idAdicionales) {
-        setSaveError("Error: El campo 'idServicio' no fue encontrado para realizar la actualización.");
+        const msg = "Error: El campo 'idAdicionales' no fue encontrado.";
+        setSaveError(msg);
         setIsSaving(false);
-        return { success: false };
+        return { success: false, error: msg };
     }
 
     try {
         const response = await apiRequest(`${API_ADICIONALES_URL}/${idAdicionales}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedServiceData),
+            body: JSON.stringify(updatedAdicionalData),
         });
 
         if (!response.ok) {
-            let errorMsg = `Error ${response.status} al actualizar el servicio.`;
-            // Intenta leer el JSON de error solo si la respuesta tiene contenido
-            if (response.headers.get('content-length') > 0 || response.headers.get('content-type')?.includes('application/json')) {
-                 try {
-                    const errorData = await response.json();
-                    errorMsg = errorData.message || errorData.error || errorMsg;
-                } catch (e) {
-                    // Ignora el error de JSON si el cuerpo no es JSON (ej: HTML de error)
-                }
+            let errorMsg = `Error ${response.status}`;
+            
+            try {
+                const errorData = await response.json();
+                if (errorData.error) errorMsg = errorData.error;
+                else if (errorData.message) errorMsg = errorData.message;
+            } catch (e) {
+                console.log("No se pudo parsear el JSON de error del servidor");
             }
+
             throw new Error(errorMsg);
         }
 
-        let newServiceData = updatedServiceData;
-      
+        let newAdicionalData = updatedAdicionalData;
         if (response.status !== 204) {
-            newServiceData = await response.json();
-            
+            try {
+                newAdicionalData = await response.json();
+            } catch(e) {}
         } 
         
         setSelectedTicket(prevTicket => {
             if (!prevTicket) return null;
             return {
                 ...prevTicket,
-                adicionales: newServiceData, 
+                adicionales: { ...prevTicket.adicionales,
+                     ...newAdicionalData }
             };
         });
         
         return { success: true };
         
     } catch (err) {
-        console.error("Fallo la operación de guardado de Servicio:", err);
-        setSaveError(err.message || "Fallo la conexión o la actualización del servicio.");
+        console.error("Error en PATCH Adicionales:", err);
         return { success: false, error: err.message };
     } finally {
         setIsSaving(false);

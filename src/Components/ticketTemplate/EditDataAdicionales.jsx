@@ -29,23 +29,30 @@ const RenderEditarDatosAdicionales = ({ data, onCancelEdit, onSaveEdit, onDelete
         setIsSubmitting(true);
         
         try {
+            const sale = formData.serieLogicaSale ? formData.serieLogicaSale.trim() : "";
+            const entra = formData.serieLogicaEntra ? formData.serieLogicaEntra.trim() : "";
+
+            // --- NUEVA VALIDACIÓN DE IGUALDAD ---
+            if (sale && entra && sale === entra) {
+                throw new Error("Los números de serie de Salida y Entrada no pueden ser iguales.");
+            }
             const result = await onSaveEdit(formData); 
             
             if (result && result.success) {
                 if (onCancelEdit) onCancelEdit(); 
             } else {
-                throw new Error(result?.error || "Error desconocido al guardar. Verifica el ID del servicio.");
+                throw new Error(result?.error || "Error desconocido al guardar.");
             }
         } catch (err) {
-            console.error("Fallo al ejecutar onSaveEdit:", err);
-            setLocalError(err.message || "Fallo la operación de guardado.");
+            console.error("Error en validación o guardado:", err);
+            setLocalError(err.message); 
         } finally {
             setIsSubmitting(false);
         }
     };
     
     if (!formData || Object.keys(formData).length === 0) {
-        return <div>Cargando datos de Servicio...</div>;
+        return <div>Cargando datos...</div>;
     }
 
     return(
@@ -66,14 +73,24 @@ const RenderEditarDatosAdicionales = ({ data, onCancelEdit, onSaveEdit, onDelete
                     </label>
                 ))}
                 
-                {/* El campo oculto se mantiene si es necesario para el ID */}
-                <input type="hidden" name="idServicios" value={formData.idServicios || ''} />
+                <input type="hidden" name="idAdicionales" value={formData.idAdicionales || ''} />
 
             </div>
             
-            {localError && <div style={styles.error}>{localError}</div>}
+            {localError && (
+                <div style={{ 
+                    color: '#721c24', 
+                    backgroundColor: '#f8d7da', 
+                    borderColor: '#f5c6cb', 
+                    padding: '10px', 
+                    marginTop: '10px', 
+                    borderRadius: '5px',
+                    border: '1px solid transparent' 
+                }}>
+                    <strong>Error: </strong> {localError}
+                </div>
+            )}
 
-            {/* Botones de Acción (Se mantienen iguales) */}
             <div style={{ marginTop: 20, display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
                 <button 
                     type="button" 
@@ -97,7 +114,7 @@ const RenderEditarDatosAdicionales = ({ data, onCancelEdit, onSaveEdit, onDelete
                     style={styles.buttonPrimary} 
                     disabled={isSubmitting} 
                 >
-                    {isSubmitting ? "Guardando..." : "Guardar Cambios"}
+                    {isSubmitting ? "Validando..." : "Guardar Cambios"}
                 </button>
             </div>
         </div>
