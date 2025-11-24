@@ -18,6 +18,53 @@ function TicketPage() {
     const [isSaving, setIsSaving] = useState(false); 
     const [saveError, setSaveError] = useState  (null); 
 
+
+    const [searchQuery, setSearchQuery] = useState("");
+
+    useEffect(() => {
+        const controller = new AbortController();
+        const q = searchQuery?.trim();
+        const timer = setTimeout(async () => {
+            if (!q) {
+                try {
+                    await fetchTickets();
+                } catch (e) {
+                    console.error("Error al recargar tickets vacíos:", e);
+                }
+                return;
+            }
+
+            setIsLoading(true);
+            setError("");
+            try {
+                const response = await apiRequest(`${API_BASE_URL}/search?query=${encodeURIComponent(q)}`, {
+                    method: "GET",
+                    signal: controller.signal,
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                setTicketsData(Array.isArray(data) ? data : []);
+            } catch (err) {
+                if (err.name === "AbortError") return;
+                console.error("Error buscando tickets:", err);
+                setError(err.message || "No se pudo conectar al servidor de búsqueda.");
+                setTicketsData([]);
+            } finally {
+                setIsLoading(false);
+            }
+        }, 300);
+
+        return () => {
+            clearTimeout(timer);
+            controller.abort();
+        };
+    }, [searchQuery]);
+
+
     const handleDownload = async (type) => {
             const id = selectedTicket.idTickets;
 
@@ -293,6 +340,8 @@ const handleAdicionalPatch = async (updatedAdicionalData) => {
                             tickets={ticketsData}
                             onSelectTicket={setSelectedTicket}
                             setShowFilterPanel={setShowFilterPanel}
+                            searchQuery={searchQuery}
+                            setSearchQuery={setSearchQuery} 
                         />
                     )}
                 </div>

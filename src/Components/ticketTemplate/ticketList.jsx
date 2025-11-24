@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
-function TicketList({ tickets, onSelectTicket, setShowFilterPanel }) {
+function TicketList({ tickets, onSelectTicket, setShowFilterPanel, searchQuery, setSearchQuery }) {
 
     const [currentPage, setCurrentPage] = useState(0);
+
     const itemsPerPage = 15;
     const totalPages = Math.ceil(tickets.length / itemsPerPage);
     const currentItems = tickets.slice(
@@ -24,8 +25,10 @@ function TicketList({ tickets, onSelectTicket, setShowFilterPanel }) {
     };
 
     const getServiceValue = (ticket, key) => {
+        // Aseguramos que 'servicios' exista antes de intentar acceder a sus propiedades
         return ticket.servicios ? ticket.servicios[key] || 'N/A' : 'N/A';
     };
+
 
     return ( 	
         <div className="ticket-list">
@@ -33,7 +36,10 @@ function TicketList({ tickets, onSelectTicket, setShowFilterPanel }) {
                 <input
                     type="text"
                     placeholder="Buscar tickets..."
-                    className='search-input' />
+                    className='search-input'
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                     />
                 
                 <button 
                     className="filter-toggle-button"
@@ -93,4 +99,4 @@ function TicketList({ tickets, onSelectTicket, setShowFilterPanel }) {
     );
 };
 
-export default TicketList; 
+export default TicketList; // Asegúrate de exportar con el nombre correcto
