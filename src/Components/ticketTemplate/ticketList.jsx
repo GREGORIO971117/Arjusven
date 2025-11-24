@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 
-// El nombre del componente debe ser TicketList (PascalCase), no ticketList
 function TicketList({ tickets, onSelectTicket, setShowFilterPanel }) {
 
     const [currentPage, setCurrentPage] = useState(0);
-
     const itemsPerPage = 15;
     const totalPages = Math.ceil(tickets.length / itemsPerPage);
     const currentItems = tickets.slice(
@@ -25,9 +23,7 @@ function TicketList({ tickets, onSelectTicket, setShowFilterPanel }) {
         if (currentPage > 0) setCurrentPage(prev => prev - 1);
     };
 
-    // Función para obtener el valor de un campo anidado de forma segura
     const getServiceValue = (ticket, key) => {
-        // Aseguramos que 'servicios' exista antes de intentar acceder a sus propiedades
         return ticket.servicios ? ticket.servicios[key] || 'N/A' : 'N/A';
     };
 
@@ -97,4 +93,4 @@ function TicketList({ tickets, onSelectTicket, setShowFilterPanel }) {
     );
 };
 
-export default TicketList; // Asegúrate de exportar con el nombre correcto
+export default TicketList; 
