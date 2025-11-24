@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../Inventario/InventarioList.css'
 
-export default function EstacionesList ({ estaciones, onSelectEstacion, setShowFilterPanel, isLoading, selectedEstacionId }) {
+export default function EstacionesList ({ estaciones, onSelectEstacion, setShowFilterPanel, isLoading, selectedEstacionId, searchQuery, setSearchQuery, handleSearchSubmit }) {
     const [currentPage, setCurrentPage] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
     const itemsPerPage = 15;
@@ -19,6 +19,14 @@ export default function EstacionesList ({ estaciones, onSelectEstacion, setShowF
         currentPage * itemsPerPage,
         (currentPage + 1) * itemsPerPage
     );
+
+     const handleKeyDown = (event) => {
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            event.preventDefault(); 
+            handleSearchSubmit();
+            setCurrentPage(0);
+        }
+    };
 
     const handleEstacionClick = (estacion) => {
         onSelectEstacion(estacion);
@@ -39,11 +47,9 @@ export default function EstacionesList ({ estaciones, onSelectEstacion, setShowF
                     type="text"
                     placeholder="Buscar estación..."
                     className="search-input"
-                    value={searchTerm}
-                    onChange={(e) => {
-                        setSearchTerm(e.target.value);
-                        setCurrentPage(0); // Reiniciar paginación al buscar
-                    }}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={handleKeyDown}
                 />
                 <button 
                     className="filter-toggle-button"

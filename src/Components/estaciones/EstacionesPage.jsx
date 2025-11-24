@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import EstacionesList from './EstacionesList'; 
 import EstacionesTemplate from './EstacionesTemplate';
 import RenderFiltroEstaciones from './RenderFiltroEstaciones'; 
 import '../Inventario/InventarioList.css';
 import { apiRequest } from '../login/Api';
+
 
 const API_URL = '/estaciones'; 
 
@@ -18,25 +19,60 @@ export default function EstacionesPage() {
     const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isEditing, setIsEditing] = useState(false); 
+    const [searchQuery, setSearchQuery] = useState("");
     
     // --- 2. LÓGICA DE LECTURA (R) ---
-    const loadEstaciones = async () => {
-        setIsLoading(true);
-        setError("");
-        try {
-            const response = await apiRequest(API_URL, {method: "GET"});
-            if (!response.ok) {
-                throw new Error('Error al cargar los datos de las estaciones');
+     const loadEstaciones = useCallback(async () => {
+            setIsLoading(true);
+            try {
+                const response = await apiRequest(API_URL, {method: "GET"});
+                if (!response.ok) {
+                    throw new Error('Error al cargar los datos de las estaciones');
+                }
+                const data = await response.json();
+                setEstacionesData(data);
+            } catch (error) {
+                console.error('Error al cargar los datos:', error);
+                alert(`Error de carga: ${error.message}`);
+            } finally {
+                setIsLoading(false);
             }
-            const data = await response.json();
-            setEstacionesData(data);
-        } catch (error) {
-            console.error('Error al cargar los datos:', error);
-            setError(`Error de carga: ${error.message}`);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+        }, [apiRequest]);
+
+
+
+          const handleSearchSubmit = useCallback(async () => {
+        
+                const q = searchQuery?.trim();
+        
+                if (!q) {
+                    try {
+                        await loadEstaciones();
+                    } catch (e) {
+                        console.error("Error al recargar tickets vacíos:", e);
+                    }
+                    return;
+                }
+                setIsLoading(true);
+            
+                
+                try {
+                    const endpoint = `${API_URL}/search?query=${encodeURIComponent(q)}`;
+                    const response = await apiRequest(endpoint, { method: "GET" });
+        
+                    if (!response.ok) {
+                        throw new Error(`Error ${response.status}: ${response.statusText}`);
+                    }
+        
+                    const data = await response.json();
+                    setEstacionesData(Array.isArray(data) ? data : []);
+                } catch (err) {
+                    console.error("Error buscando Estaciones:", err);
+                    setEstacionesData([]);
+                } finally {
+                    setIsLoading(false);
+                }
+            }, [searchQuery, apiRequest, loadEstaciones]);
     
     // Cargar datos al iniciar
     useEffect(() => {
@@ -150,7 +186,10 @@ async function handleRemove() {
                         onSelectEstacion={setSelectedEstacion}
                         setShowFilterPanel={setShowFilterPanel}
                         isLoading={isLoading}
-                        selectedEstacionId={selectedEstacion ? selectedEstacion.idMerchant : null}
+                        selectedEstacionId={selectedEstacion}
+                        searchQuery={searchQuery}
+                        setSearchQuery={setSearchQuery}
+                        handleSearchSubmit={handleSearchSubmit}
                     />
                 </div>
 

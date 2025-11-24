@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function TicketList({ tickets, onSelectTicket, setShowFilterPanel, searchQuery, setSearchQuery }) {
+function TicketList({ tickets, onSelectTicket, setShowFilterPanel, searchQuery, setSearchQuery, onSearchSubmit }) {
 
     const [currentPage, setCurrentPage] = useState(0);
 
@@ -10,7 +10,14 @@ function TicketList({ tickets, onSelectTicket, setShowFilterPanel, searchQuery, 
         currentPage * itemsPerPage,
         (currentPage + 1) * itemsPerPage
     );
-
+  
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            event.preventDefault(); 
+            onSearchSubmit();
+            setCurrentPage(0);
+        }
+    };
 
     const handleTicketClick = (ticket) => {
         onSelectTicket(ticket);
@@ -25,12 +32,11 @@ function TicketList({ tickets, onSelectTicket, setShowFilterPanel, searchQuery, 
     };
 
     const getServiceValue = (ticket, key) => {
-        // Aseguramos que 'servicios' exista antes de intentar acceder a sus propiedades
         return ticket.servicios ? ticket.servicios[key] || 'N/A' : 'N/A';
     };
 
 
-    return ( 	
+    return (  
         <div className="ticket-list">
             <div className="filter-button-container">
                 <input
@@ -39,7 +45,8 @@ function TicketList({ tickets, onSelectTicket, setShowFilterPanel, searchQuery, 
                     className='search-input'
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                     />
+                    onKeyDown={handleKeyDown}
+                    />
                 
                 <button 
                     className="filter-toggle-button"
@@ -47,6 +54,7 @@ function TicketList({ tickets, onSelectTicket, setShowFilterPanel, searchQuery, 
                 >
                     Filtro
                 </button>
+            
             </div>
             {tickets.length === 0 ? (
                 <p>No hay tickets para mostrar.</p>
@@ -99,4 +107,4 @@ function TicketList({ tickets, onSelectTicket, setShowFilterPanel, searchQuery, 
     );
 };
 
-export default TicketList; // Asegúrate de exportar con el nombre correcto
+export default TicketList;

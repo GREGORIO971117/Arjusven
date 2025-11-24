@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import TicketList from '../ticketTemplate/ticketList';
 import TicketTemplate from './TicketTemplate';
 import RenderFiltro from './RenderFiltro';
@@ -16,317 +16,302 @@ function TicketPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const [isSaving, setIsSaving] = useState(false); 
-    const [saveError, setSaveError] = useState  (null); 
-
-
+    const [saveError, setSaveError] = useState(null); 
     const [searchQuery, setSearchQuery] = useState("");
 
-    useEffect(() => {
-        const controller = new AbortController();
+    const fetchTickets = useCallback(async () => {
+        setIsLoading(true);
+        setError("");
+        try {
+            const response = await apiRequest(API_BASE_URL, { method: 'GET' }); 
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}: ${response.statusText}.`);
+            }
+            const data = await response.json();
+            setTicketsData(Array.isArray(data) ? data : []); 
+        } catch (err) {
+            console.error('Error al cargar los tickets:', err);
+            setError(err.message || "No se pudo conectar al servidor de tickets.");
+            setTicketsData([]);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [apiRequest]);
+
+    const handleSearchSubmit = useCallback(async () => {
         const q = searchQuery?.trim();
-        const timer = setTimeout(async () => {
-            if (!q) {
-                try {
-                    await fetchTickets();
-                } catch (e) {
-                    console.error("Error al recargar tickets vacíos:", e);
-                }
-                return;
-            }
 
-            setIsLoading(true);
-            setError("");
+        if (!q) {
             try {
-                const response = await apiRequest(`${API_BASE_URL}/search?query=${encodeURIComponent(q)}`, {
-                    method: "GET",
-                    signal: controller.signal,
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Error ${response.status}: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                setTicketsData(Array.isArray(data) ? data : []);
-            } catch (err) {
-                if (err.name === "AbortError") return;
-                console.error("Error buscando tickets:", err);
-                setError(err.message || "No se pudo conectar al servidor de búsqueda.");
-                setTicketsData([]);
-            } finally {
-                setIsLoading(false);
+                await fetchTickets();
+            } catch (e) {
+                console.error("Error al recargar tickets vacíos:", e);
             }
-        }, 300);
+            return;
+        }
 
-        return () => {
-            clearTimeout(timer);
-            controller.abort();
-        };
-    }, [searchQuery]);
+        setIsLoading(true);
+        setError("");
+        
+        try {
+            const endpoint = `${API_BASE_URL}/search?query=${encodeURIComponent(q)}`;
+            const response = await apiRequest(endpoint, { method: "GET" });
 
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            setTicketsData(Array.isArray(data) ? data : []);
+        } catch (err) {
+            console.error("Error buscando tickets:", err);
+            setError(err.message || "No se pudo conectar al servidor de búsqueda.");
+            setTicketsData([]);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [searchQuery, apiRequest, fetchTickets]);
+
+    useEffect(() => {
+        fetchTickets();
+    }, [fetchTickets]);
+
+    const handleSave = useCallback(async () => {
+        try {
+
+            await fetchTickets(); 
+        } catch (err) {
+            console.error("Fallo la recarga de inventario después de guardar.", err);
+        }
+    }, [fetchTickets]);
 
     const handleDownload = async (type) => {
-            const id = selectedTicket.idTickets;
+        const id = selectedTicket.idTickets;
+        if (!id) {
+            alert('Error: ID del ticket no encontrado.');
+            return;
+        }
+        
+        let templateType = 'intercambio'; 
+        let templateName = 'Intercambio';
 
-            if (!id) {
-                alert('Error: ID del ticket no encontrado.');
-                return;
+        switch (type) {
+            case 'mantenimiento': 
+                templateType = 'mantenimiento';
+                templateName = 'Mantenimiento';
+                break;
+            case 'retiro': 
+                templateType = 'retiro';
+                templateName = 'Retiro';
+                break;
+            case 'intercambio': 
+            default:
+                templateType = 'intercambio';
+                templateName = 'Intercambio';
+                break;
+        }
+
+        const URL = `/tickets/download/${id}?type=${templateType}`; 
+
+        try {
+            const response = await apiRequest(URL, { method: 'GET' });
+
+            if (!response.ok) {
+                throw new Error(`Error del servidor: ${response.statusText}`);
             }
 
-           
-            let templateType = 'intercambio'; 
-            let templateName = 'Intercambio';
-
-            switch (type) {
-                case 'mantenimiento': 
-                    templateType = 'mantenimiento';
-                    templateName = 'Mantenimiento';
-                    break;
-                case 'retiro': 
-                    templateType = 'retiro';
-                    templateName = 'Retiro';
-                    break;
-                case 'intercambio': 
-                default:
-                    templateType = 'intercambio';
-                    templateName = 'Intercambio';
-                    break;
-            }
-
-            const URL = `/tickets/download/${id}?type=${templateType}`; 
-
-            try {
-                const response = await apiRequest(URL, { method: 'GET' });
-
-                if (!response.ok) {
-                    throw new Error(`Error del servidor: ${response.statusText}`);
-                }
-
-                const blob = await response.blob(); 
-                const url = window.URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                
-                const contentDisposition = response.headers.get('Content-Disposition');
-                let filename = `${selectedTicket.servicios.incidencia}_${selectedTicket.servicios.nombreDeEss}_${templateName}.docx`; 
-
-                if (contentDisposition) {
-                    const encodedMatch = contentDisposition.match(/filename\*=UTF-8''(.+)/i);
-                    
-                    if (encodedMatch && encodedMatch.length > 1) {
-                        filename = decodeURIComponent(encodedMatch[1]);
-                    } else {
-                        const filenameMatch = contentDisposition.match(/filename="(.+)"/);
-                        if (filenameMatch && filenameMatch.length > 1) {
-                            filename = filenameMatch[1];
-                        }
-                    }
-                }
-
-                link.setAttribute('download', filename);
-                document.body.appendChild(link);
-                
-                link.click();
-                link.remove();
-                window.URL.revokeObjectURL(url);
-
-            } catch (error) {
-                console.error('Error durante la descarga del documento:', error);
-                alert('No se pudo descargar el documento. Verifique la conexión al servidor.');
-            }
-        }; 
-
+            const blob = await response.blob(); 
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
             
-            const handleSave = async () => {
-                try {
-                    await fetchTickets(); 
-                } catch (err) {
-                    console.error("Fallo la recarga de inventario después de guardar.", err);
-                }
-            };
+            const contentDisposition = response.headers.get('Content-Disposition');
+            let filename = `${selectedTicket.servicios.incidencia}_${selectedTicket.servicios.nombreDeEss}_${templateName}.docx`; 
 
-            const fetchTickets = async () => {
-                setIsLoading(true);
-                setError("");
-                try {
-                    const response = await apiRequest(API_BASE_URL, { method: 'GET' }); 
-                    if (!response.ok) {
-                        throw new Error(`Error ${response.status}: ${response.statusText}.`);
-                    }
-                    
-                    const data = await response.json();
-                    setTicketsData(Array.isArray(data) ? data : []); 
-                } catch (err) {
-                    console.error('Error al cargar los tickets:', err);
-                    setError(err.message || "No se pudo conectar al servidor de tickets.");
-                    setTicketsData([]);
-                } finally {
-                    setIsLoading(false);
-                }
-            };
-
-
-    async function handleServiceDelete() {
-
-            setIsSaving(true);
-            setSaveError(null);
-            const idTickets = selectedTicket.idTickets;
-    
-            if (!idTickets) {
-                setError("Error: ID del ticket no ha sido encontrado para borrar.");
-                return;
-            }
-    
-            if (!window.confirm(`¿Estás seguro de que quieres BORRAR permanentemente el Ticket?`)) {
-                return;
-            }
-    
-           
-    
-            try {
-                const response = await apiRequest(`${API_BASE_URL}/${idTickets}`, {
-                    method: 'DELETE',
-                });
+            if (contentDisposition) {
+                const encodedMatch = contentDisposition.match(/filename\*=UTF-8''(.+)/i);
                 
-                if (!response.ok) {
-                    let errorMsg = `Error al borrar el inventario. Estado: ${response.status}`;
+                if (encodedMatch && encodedMatch.length > 1) {
+                    filename = decodeURIComponent(encodedMatch[1]);
+                } else {
+                    const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+                    if (filenameMatch && filenameMatch.length > 1) {
+                        filename = filenameMatch[1];
+                    }
+                }
+            }
+
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+
+        } catch (error) {
+            console.error('Error durante la descarga del documento:', error);
+            alert('No se pudo descargar el documento. Verifique la conexión al servidor.');
+        }
+    }; 
+    
+    async function handleServiceDelete() {
+        // ... (Lógica de handleServiceDelete) ...
+        setIsSaving(true);
+        setSaveError(null);
+        const idTickets = selectedTicket.idTickets;
+
+        if (!idTickets) {
+            setError("Error: ID del ticket no ha sido encontrado para borrar.");
+            return;
+        }
+
+        if (!window.confirm(`¿Estás seguro de que quieres BORRAR permanentemente el Ticket?`)) {
+            return;
+        }
+    
+        try {
+            const response = await apiRequest(`${API_BASE_URL}/${idTickets}`, {
+                method: 'DELETE',
+            });
+            
+            if (!response.ok) {
+                let errorMsg = `Error al borrar el inventario. Estado: ${response.status}`;
+                try {
+                    const errorData = await response.json();
+                    errorMsg = errorData.message || errorData.error || errorMsg;
+                } catch {}
+                throw new Error(errorMsg);
+            }
+
+            await handleSave(); 
+            
+        } catch (err) {
+            setError(err.message || "Fallo la conexión con el servidor al intentar borrar.");
+        } finally {
+            setIsSaving(false);
+        }
+    }
+
+    const handleServicePatch = async (updatedServiceData) => {
+        // ... (Lógica de handleServicePatch) ...
+        setIsSaving(true);
+        setSaveError(null);
+
+        const idServicio = updatedServiceData.idServicios; 
+        
+        if (!idServicio) {
+            setSaveError("Error: El campo 'idServicio' no fue encontrado para realizar la actualización.");
+            setIsSaving(false);
+            return { success: false };
+        }
+
+        try {
+            const response = await apiRequest(`${API_SERVICIOS_URL}/${idServicio}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedServiceData),
+            });
+
+            if (!response.ok) {
+                let errorMsg = `Error ${response.status} al actualizar el servicio.`;
+                if (response.headers.get('content-length') > 0 || response.headers.get('content-type')?.includes('application/json')) {
                     try {
                         const errorData = await response.json();
                         errorMsg = errorData.message || errorData.error || errorMsg;
-                    } catch {}
-                    throw new Error(errorMsg);
+                    } catch (e) {
+                    }
                 }
-    
-                await handleSave(); 
+                throw new Error(errorMsg);
+            }
+
+            let newServiceData = updatedServiceData;
+            
+            if (response.status !== 204) {
+                newServiceData = await response.json();
                 
-            } catch (err) {
-                setError(err.message || "Fallo la conexión con el servidor al intentar borrar.");
-            } finally {
-                setIsSaving(false);
-            }
+            } 
+            
+            setSelectedTicket(prevTicket => {
+                if (!prevTicket) return null;
+                return {
+                    ...prevTicket,
+                    servicios: newServiceData, 
+                };
+            });
+            
+            return { success: true };
+            
+        } catch (err) {
+            console.error("Fallo la operación de guardado de Servicio:", err);
+            setSaveError(err.message || "Fallo la conexión o la actualización del servicio.");
+            return { success: false, error: err.message };
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+
+    const handleAdicionalPatch = async (updatedAdicionalData) => {
+        // ... (Lógica de handleAdicionalPatch) ...
+        setIsSaving(true);
+        setSaveError(null);
+
+        const idAdicionales = updatedAdicionalData.idAdicionales; 
+        
+        if (!idAdicionales) {
+            const msg = "Error: El campo 'idAdicionales' no fue encontrado.";
+            setSaveError(msg);
+            setIsSaving(false);
+            return { success: false, error: msg };
         }
 
-   const handleServicePatch = async (updatedServiceData) => {
-    setIsSaving(true);
-    setSaveError(null);
+        try {
+            const response = await apiRequest(`${API_ADICIONALES_URL}/${idAdicionales}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedAdicionalData),
+            });
 
-    const idServicio = updatedServiceData.idServicios; 
-    
-    if (!idServicio) {
-        setSaveError("Error: El campo 'idServicio' no fue encontrado para realizar la actualización.");
-        setIsSaving(false);
-        return { success: false };
-    }
-
-    try {
-        const response = await apiRequest(`${API_SERVICIOS_URL}/${idServicio}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedServiceData),
-        });
-
-        if (!response.ok) {
-            let errorMsg = `Error ${response.status} al actualizar el servicio.`;
-            if (response.headers.get('content-length') > 0 || response.headers.get('content-type')?.includes('application/json')) {
-                 try {
+            if (!response.ok) {
+                let errorMsg = `Error ${response.status}`;
+                
+                try {
                     const errorData = await response.json();
-                    errorMsg = errorData.message || errorData.error || errorMsg;
+                    if (errorData.error) errorMsg = errorData.error;
+                    else if (errorData.message) errorMsg = errorData.message;
                 } catch (e) {
+                    console.log("No se pudo parsear el JSON de error del servidor");
                 }
-            }
-            throw new Error(errorMsg);
-        }
 
-        let newServiceData = updatedServiceData;
-      
-        if (response.status !== 204) {
-            newServiceData = await response.json();
-            
-        } 
-        
-        setSelectedTicket(prevTicket => {
-            if (!prevTicket) return null;
-            return {
-                ...prevTicket,
-                servicios: newServiceData, 
-            };
-        });
-        
-        return { success: true };
-        
-    } catch (err) {
-        console.error("Fallo la operación de guardado de Servicio:", err);
-        setSaveError(err.message || "Fallo la conexión o la actualización del servicio.");
-        return { success: false, error: err.message };
-    } finally {
-        setIsSaving(false);
-    }
-};
-
-
-const handleAdicionalPatch = async (updatedAdicionalData) => {
-    setIsSaving(true);
-    setSaveError(null);
-
-    const idAdicionales = updatedAdicionalData.idAdicionales; 
-    
-    if (!idAdicionales) {
-        const msg = "Error: El campo 'idAdicionales' no fue encontrado.";
-        setSaveError(msg);
-        setIsSaving(false);
-        return { success: false, error: msg };
-    }
-
-    try {
-        const response = await apiRequest(`${API_ADICIONALES_URL}/${idAdicionales}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedAdicionalData),
-        });
-
-        if (!response.ok) {
-            let errorMsg = `Error ${response.status}`;
-            
-            try {
-                const errorData = await response.json();
-                if (errorData.error) errorMsg = errorData.error;
-                else if (errorData.message) errorMsg = errorData.message;
-            } catch (e) {
-                console.log("No se pudo parsear el JSON de error del servidor");
+                throw new Error(errorMsg);
             }
 
-            throw new Error(errorMsg);
+            let newAdicionalData = updatedAdicionalData;
+            if (response.status !== 204) {
+                try {
+                    newAdicionalData = await response.json();
+                } catch(e) {}
+            } 
+            
+            setSelectedTicket(prevTicket => {
+                if (!prevTicket) return null;
+                return {
+                    ...prevTicket,
+                    adicionales: { ...prevTicket.adicionales,
+                        ...newAdicionalData }
+                };
+            });
+            
+            return { success: true };
+            
+        } catch (err) {
+            console.error("Error en PATCH Adicionales:", err);
+            return { success: false, error: err.message };
+        } finally {
+            setIsSaving(false);
         }
-
-        let newAdicionalData = updatedAdicionalData;
-        if (response.status !== 204) {
-            try {
-                newAdicionalData = await response.json();
-            } catch(e) {}
-        } 
-        
-        setSelectedTicket(prevTicket => {
-            if (!prevTicket) return null;
-            return {
-                ...prevTicket,
-                adicionales: { ...prevTicket.adicionales,
-                     ...newAdicionalData }
-            };
-        });
-        
-        return { success: true };
-        
-    } catch (err) {
-        console.error("Error en PATCH Adicionales:", err);
-        return { success: false, error: err.message };
-    } finally {
-        setIsSaving(false);
-    }
-};
+    };
     
-    useEffect(() => {
-        fetchTickets();
-    }, []);
 
     return (
         <>
@@ -342,6 +327,7 @@ const handleAdicionalPatch = async (updatedAdicionalData) => {
                             setShowFilterPanel={setShowFilterPanel}
                             searchQuery={searchQuery}
                             setSearchQuery={setSearchQuery} 
+                            onSearchSubmit={handleSearchSubmit} 
                         />
                     )}
                 </div>

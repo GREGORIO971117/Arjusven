@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useCallback } from 'react';
 import InventarioList from './InventarioList';
 import InventarioTemplate from './InventarioTemplate';
 import RenderFiltro from './RenderFiltro';
@@ -12,12 +12,13 @@ function InventarioPage() {
     const [inventarioData, setInventarioData] = useState([]);
     const [selectedInventario, setSelectedInventario] = useState(null);
     const [showFilterPanel, setShowFilterPanel] = useState(false);
-    const [isLoading, setIsLoading] = useState(false); // Nuevo estado de carga
+    const [isLoading, setIsLoading] = useState(false); 
     const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isEditing, setIsEditing] = useState(false); 
+    const [searchQuery, setSearchQuery] = useState("");
     
-    const loadInventario = async () => {
+    const loadInventario = useCallback(async () => {
         setIsLoading(true);
         try {
             const response = await apiRequest(API_URL, {method: "GET"});
@@ -32,8 +33,41 @@ function InventarioPage() {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [apiRequest]);
 
+
+    const handleSearchSubmit = useCallback(async () => {
+
+        const q = searchQuery?.trim();
+
+        if (!q) {
+            try {
+                await loadInventario();
+            } catch (e) {
+                console.error("Error al recargar tickets vacíos:", e);
+            }
+            return;
+        }
+        setIsLoading(true);
+    
+        
+        try {
+            const endpoint = `${API_URL}/search?query=${encodeURIComponent(q)}`;
+            const response = await apiRequest(endpoint, { method: "GET" });
+
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            setInventarioData(Array.isArray(data) ? data : []);
+        } catch (err) {
+            console.error("Error buscando Inventario:", err);
+            setInventarioData([]);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [searchQuery, apiRequest, loadInventario]);
 
     const handleUpdate = async (dataToUpdate) => {
     try {
@@ -136,6 +170,9 @@ function InventarioPage() {
                         onSelectTicket={setSelectedInventario}
                         setShowFilterPanel={setShowFilterPanel}
                         isLoading={isLoading}
+                        searchQuery={searchQuery}
+                        setSearchQuery={setSearchQuery}
+                        onSearchSubmit={handleSearchSubmit} 
                     />
                 </div>
 
