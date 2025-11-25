@@ -65,7 +65,7 @@ function RenderDatosInventario({ data, onEdit, loadHistorial }) {
                     <InfoItem label="Estado" value={estado} />
                     <InfoItem label="Responsable" value={responsable} />
                     <InfoItem label="Cliente" value={cliente} />
-                    <InfoItem label="Plaza" value={plaza} />
+                    <InfoItem label="Plaza Actual" value={plaza} />
                     <InfoItem label="Técnico de Campo" value={tecnico} /> 
                     <InfoItem label="Número de Incidencia" value={numeroDeIncidencia} />
                     <InfoItem label="Código de Email" value={codigoEmail} />
