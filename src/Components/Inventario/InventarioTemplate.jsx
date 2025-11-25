@@ -22,6 +22,7 @@ function InventarioTemplate({handleRemove,handleEnterEditMode, handleCancel,isEd
         setIsLoading(true);
         try {
             const response = await apiRequest(`${API_URL}/${idInventario}`, {method: "GET"});
+            
             if (!response.ok) {
                 const errorBody = await response.text(); 
                 throw new Error(`Error al cargar los datos del inventario: ${response.status} - ${errorBody}`);

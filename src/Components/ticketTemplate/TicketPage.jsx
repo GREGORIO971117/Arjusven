@@ -28,6 +28,7 @@ function TicketPage() {
                 throw new Error(`Error ${response.status}: ${response.statusText}.`);
             }
             const data = await response.json();
+            console.log("Tickets cargados:", data);
             setTicketsData(Array.isArray(data) ? data : []); 
         } catch (err) {
             console.error('Error al cargar los tickets:', err);
@@ -252,7 +253,6 @@ function TicketPage() {
 
 
     const handleAdicionalPatch = async (updatedAdicionalData) => {
-        // ... (Lógica de handleAdicionalPatch) ...
         setIsSaving(true);
         setSaveError(null);
 

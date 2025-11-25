@@ -69,9 +69,9 @@ function TicketList({ tickets, onSelectTicket, setShowFilterPanel, searchQuery, 
                             >
                                 <div className="ticket-info">
 
-                                    <span className="incidence-number">
+                                    <strong className="incidence-number">
                                         {getServiceValue(ticket, 'incidencia')}
-                                    </span>
+                                    </strong>
                                     
                                     <span className="station-name">
                                         {getServiceValue(ticket, 'nombreDeEss')}

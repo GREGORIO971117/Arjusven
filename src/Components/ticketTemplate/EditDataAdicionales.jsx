@@ -32,7 +32,6 @@ const RenderEditarDatosAdicionales = ({ data, onCancelEdit, onSaveEdit, onDelete
             const sale = formData.serieLogicaSale ? formData.serieLogicaSale.trim() : "";
             const entra = formData.serieLogicaEntra ? formData.serieLogicaEntra.trim() : "";
 
-            // --- NUEVA VALIDACIÓN DE IGUALDAD ---
             if (sale && entra && sale === entra) {
                 throw new Error("Los números de serie de Salida y Entrada no pueden ser iguales.");
             }
