@@ -9,13 +9,12 @@ const RenderFiltro = ({
 
     const handleSetStatus = (status) => {
 if (botonesModal === status) {
-            setBotonesModal(''); // Desactiva el botón (vuelve a la normalidad)
+            setBotonesModal(''); 
         } else {
-            setBotonesModal(status); // Activa el nuevo botón
+            setBotonesModal(status); 
         }    }
   
     return (
-        // CLASE CORREGIDA: Usa 'modal-overlay' para el fondo oscuro y fijo.
         <div className="modal-overlay"> 
             
             <div className="filter-panel">
@@ -48,7 +47,7 @@ if (botonesModal === status) {
                         <label htmlFor="technician">Técnico de Campo:</label>
                         <select className="form-input">
                             <option value="">Selecciona un técnico</option>
-                            {options.tecnicos.map(tecnico => (
+                            {options.tecnicoCampo.map(tecnico => (
                                 <option key={tecnico} value={tecnico}>{tecnico}</option>
                             ))}
                         </select>
@@ -74,28 +73,25 @@ if (botonesModal === status) {
                         </select>
                     </div>
                     
-                    <div className="info-item"> 
-                        <label htmlFor="assignDate">Fecha de Asignación:</label>
-                        <input
-                            type="date"
-                            id="assignDate"
-                            name="assignDate"
-                            className="form-input" // CLASE CORREGIDA
-                        />
-                    </div>
-                    
-                    <div className="info-item"> 
-                        <label htmlFor="sentDate">Fecha de Envío:</label>
+                      <div className="info-item"> 
+                        <label htmlFor="sentDate">Fecha inicio:</label>
                         <input
                             type="date"
                             id="sentDate"
                             name="sentDate"
-                            className="form-input" // CLASE CORREGIDA
+                            className="form-input"
                         />
+                        <label htmlFor="sentDate">Fecha fin:</label>
+                        <input
+                            type="date"
+                            id="sentDate"
+                            name="sentDate"
+                            className="form-input" 
+                        />
+
                     </div>
                 </div>
                 
-                {/* CLASE CORREGIDA: Usa 'ticket-tabs' para los botones de estado/filtrado. */}
                 <div className="modal-button-container">
                     <button
                         className={`modal-button ${botonesModal === 'todos' ? 'active' : ''}`}
@@ -111,11 +107,6 @@ if (botonesModal === status) {
                         onClick={ () => handleSetStatus('cerrado')}>
                         Cerrados
                     </button>
-                    
-                        <button className={`modal-button ${botonesModal === 'repetidos' ? 'active' : ''}`}
-                        onClick={ () => handleSetStatus('repetidos')}>
-                            Repetidos
-                        </button>
                         
                         
                 </div>
@@ -125,11 +116,7 @@ if (botonesModal === status) {
                 <button className="btn btn-primary" onClick={() => setShowFilterPanel(false)}> {/* CLASE CORREGIDA: Usa 'btn btn-primary' */}
                         Aplicar Filtros
                     </button>
-                    
-                    <button className="btn ">
-                            Eliminar Repetidos
-                    </button>
-
+            
                     <button className="btn btn-secondary" onClick={() => setShowFilterPanel(false)}> {/* CLASE CORREGIDA: Usa 'btn btn-secondary' */}
                         Cerrar
                     </button>

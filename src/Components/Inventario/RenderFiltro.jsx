@@ -34,7 +34,7 @@ if (botonesModal === status) {
                         <label htmlFor="technician">Técnico de Campo:</label>
                         <select className="form-input">
                             <option value="">Selecciona un técnico</option>
-                            {options.tecnicos.map(tecnico => (
+                            {options.tecnicoCampo.map(tecnico => (
                                 <option key={tecnico} value={tecnico}>{tecnico}</option>
                             ))}
                         </select>
