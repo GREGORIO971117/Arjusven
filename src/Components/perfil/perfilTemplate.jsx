@@ -237,7 +237,6 @@ export default function PerfilTemplate() {
                         <input
                             name="contraseña"
                             type="password"
-                            // No precargar el valor real de la contraseña, mantener vacío
                             value={''} 
                             onChange={handleChange}
                             style={styles.input}

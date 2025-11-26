@@ -21,7 +21,6 @@
   /* Usa un ancho flexible para adaptarse al móvil */
   width: 100%; 
   max-width: 350px; /* Ancho máximo para pantallas medianas/móviles grandes */
-  
   padding: 25px; /* Ligeramente reducido para móviles */
   border-radius: 10px;
   background-color: white;

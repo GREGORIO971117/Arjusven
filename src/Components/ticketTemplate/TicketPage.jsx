@@ -18,7 +18,10 @@ function TicketPage() {
     const [isSaving, setIsSaving] = useState(false); 
     const [saveError, setSaveError] = useState(null); 
     const [searchQuery, setSearchQuery] = useState("");
-    const [filterCriteria, setFilterCriteria] = useState({situacion:'todos'});
+
+    const [filterCriteria, setFilterCriteria] = useState({
+                                                situacion:'todos',
+                                                sla:'todos'});
 
     const fetchFilteredTickets = async () => {
         setIsLoading(true);
@@ -29,6 +32,9 @@ function TicketPage() {
             
             if (filterCriteria.situacion) {
                 params.append('situacion', filterCriteria.situacion);
+            }
+            if (filterCriteria.sla) {
+                params.append('sla', filterCriteria.sla);
             }
 
             const endpoint = `${API_BASE_URL}/filter?${params.toString()}`;
