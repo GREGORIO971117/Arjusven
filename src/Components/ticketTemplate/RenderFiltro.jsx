@@ -1,28 +1,33 @@
-import React, {useState} from 'react';
+import React from 'react'; // Ya no necesitamos useState aquí
 import options from '../../assets/datos.json';
 
 const RenderFiltro = ({
-    setShowFilterPanel
+    setShowFilterPanel,
+    filterCriteria,    
+    setFilterCriteria,  
+    onApply             
 }) => {
 
-    const[botonesModal,setBotonesModal]=useState('Todos');
+    // 1. Usamos el estado del padre directamente
+    const botonesModal = filterCriteria.situacion;
 
     const handleSetStatus = (status) => {
-if (botonesModal === status) {
-            setBotonesModal(''); 
-        } else {
-            setBotonesModal(status); 
-        }    }
-  
-    return (
+        // Lógica: Si le das click al que ya está activo, lo pones en 'todos', si no, pones el nuevo
+        const newStatus = (botonesModal === status) ? 'todos' : status;
+
+        setFilterCriteria(prev => ({
+            ...prev,
+            situacion: newStatus
+        }));
+    }
+return (
         <div className="modal-overlay"> 
             
             <div className="filter-panel">
                 <h2 className="title">Opciones de Filtro y Búsqueda</h2>
-
+                
                 <div className="grid-container grid-cols-2">
                     
-                    {/* Estructura para cada campo de selección */}
                     <div className="info-item">
                         <label htmlFor="supervisor">Supervisor:</label>
                         <select className="form-input">
@@ -90,8 +95,7 @@ if (botonesModal === status) {
                         />
 
                     </div>
-                </div>
-                
+                </div>                
                 <div className="modal-button-container">
                     <button
                         className={`modal-button ${botonesModal === 'todos' ? 'active' : ''}`}
@@ -107,23 +111,21 @@ if (botonesModal === status) {
                         onClick={ () => handleSetStatus('cerrado')}>
                         Cerrados
                     </button>
-                        
-                        
                 </div>
 
                 <div className="pagination-controls">
-
-                <button className="btn btn-primary" onClick={() => setShowFilterPanel(false)}> {/* CLASE CORREGIDA: Usa 'btn btn-primary' */}
+                    {/* 2. CONECTAR EL BOTÓN A LA FUNCIÓN DE BÚSQUEDA */}
+                    <button className="btn btn-primary" onClick={onApply}> 
                         Aplicar Filtros
                     </button>
             
-                    <button className="btn btn-secondary" onClick={() => setShowFilterPanel(false)}> {/* CLASE CORREGIDA: Usa 'btn btn-secondary' */}
+                    <button className="btn btn-secondary" onClick={() => setShowFilterPanel(false)}>
                         Cerrar
                     </button>
                 </div>
                     
-                </div>
             </div>
+        </div>
     );
 };
 

@@ -18,6 +18,45 @@ function TicketPage() {
     const [isSaving, setIsSaving] = useState(false); 
     const [saveError, setSaveError] = useState(null); 
     const [searchQuery, setSearchQuery] = useState("");
+    const [filterCriteria, setFilterCriteria] = useState({situacion:'todos'});
+
+    const fetchFilteredTickets = async () => {
+        setIsLoading(true);
+        setError("");
+        
+        try {
+            const params = new URLSearchParams();
+            
+            if (filterCriteria.situacion) {
+                params.append('situacion', filterCriteria.situacion);
+            }
+
+            const endpoint = `${API_BASE_URL}/filter?${params.toString()}`;
+            
+            const response = await apiRequest(endpoint, 
+                { method: 'GET' });
+            
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            console.log("Tickets filtrados:", data);
+            setTicketsData(Array.isArray(data) ? data : []);
+
+        } catch (err) {
+            console.error("Error filtrando tickets:", err);
+            setError(err.message || "Error al aplicar filtros.");
+            setTicketsData([]);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleApplyFilters = () => {
+        fetchFilteredTickets();
+        setShowFilterPanel(false); 
+    };
 
     const fetchTickets = useCallback(async () => {
         setIsLoading(true);
@@ -156,7 +195,6 @@ function TicketPage() {
     }; 
     
     async function handleServiceDelete() {
-        // ... (Lógica de handleServiceDelete) ...
         setIsSaving(true);
         setSaveError(null);
         const idTickets = selectedTicket.idTickets;
@@ -335,6 +373,9 @@ function TicketPage() {
                 {showFilterPanel && (
                     <RenderFiltro
                         setShowFilterPanel={setShowFilterPanel}
+                        filterCriteria={filterCriteria}
+                        setFilterCriteria={setFilterCriteria}
+                        onApply={handleApplyFilters}
                     />
                 )}
                 

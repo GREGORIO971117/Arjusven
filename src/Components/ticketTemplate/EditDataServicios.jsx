@@ -62,11 +62,9 @@ function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveE
     const grid1Fields = serviciosConfig.filter(field => field.grid === 1);
     const grid2Fields = serviciosConfig.filter(field => field.grid === 2);
 
-
     return (
         <div style={{...styles.card, padding: 0}}> 
 
-            {/* --- GRUPO DE CAMPOS PRINCIPALES (GRID 1) --- */}
             <div style={styles.row}> 
                 {grid1Fields.map(field => (
                     <label key={field.key} style={styles.label}>
