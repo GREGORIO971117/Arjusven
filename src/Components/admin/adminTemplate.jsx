@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {apiRequest} from '../login/Api'; 
 import UsuariosList from './usuariosList'; 
 import UsuariosEdit from './usuariosedit';
-import UsuariosUpload from './usuariosUpload';
 
 const API_BASE_URL = '/usuarios'; 
 
@@ -148,7 +147,6 @@ export default function AdminTemplate() {
                     onCancel={handleCancelEdit}
                     onSave={handleCancelEdit}
                     validateForm={validateForm}
-                    
                 />
             );
         }
@@ -189,10 +187,10 @@ export const styles = {
             fontWeight: 'bold',
             transition: 'background-color 0.3s',
             marginRight: 'auto', 
-        },    
+        },  
     navButton: { 
         padding: "10px 15px", 
-        borderWidth: 1,      
+        borderWidth: 1,  
         borderStyle: "solid", 
         borderColor: "#ccc", 
         borderRadius: 4, 
@@ -208,7 +206,7 @@ export const styles = {
     table: { width: "100%", borderCollapse: "collapse", marginTop: 8 },
     error: { color: "#b00020", marginTop: 8 },
     th: {
-        textAlign: 'left',
+        textAlign: 'center',
         padding: '12px',
         borderBottom: '2px solid #ddd',
         backgroundColor: '#f8f8f8',

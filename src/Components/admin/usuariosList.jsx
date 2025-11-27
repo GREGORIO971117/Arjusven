@@ -25,7 +25,7 @@ export default function UsuariosList({ users, isLoading, removeUser,currentPage,
                 ) : (users && users.length === 0 && currentPage === 1) ? ( 
                     <div>No hay usuarios registrados.</div>
                 ) : (
-                    <div style={{ overflowX: "auto" }}>
+                    <div>
                         <table style={styles.table}>
                             <thead>
                                 <tr>
