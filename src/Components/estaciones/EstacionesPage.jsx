@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import EstacionesList from './EstacionesList'; 
 import EstacionesTemplate from './EstacionesTemplate';
-import RenderFiltroEstaciones from './RenderFiltroEstaciones'; 
+import RenderFiltroEstaciones from './RenderFiltro'; 
 import '../Inventario/InventarioList.css';
 import { apiRequest } from '../login/Api';
 
@@ -20,6 +20,49 @@ export default function EstacionesPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isEditing, setIsEditing] = useState(false); 
     const [searchQuery, setSearchQuery] = useState("");
+    const [filterCriteria, setFilterCriteria] = useState({
+                                                         supervisorArjus: "todos",
+                                                         });
+
+
+const fetchFilteredEstaciones = async () => {
+        setIsLoading(true);
+        setError("");
+        
+        try {
+            const params = new URLSearchParams();
+            
+            if (filterCriteria.supervisorArjus) {
+                params.append('supervisorArjus', filterCriteria.supervisorArjus);
+            }
+
+            const endpoint = `${API_URL}/filter?${params.toString()}`;
+            
+            const response = await apiRequest(endpoint, 
+                { method: 'GET' });
+            
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            console.log("Estaciones filtradas:", data);
+            setEstacionesData(Array.isArray(data) ? data : []);
+
+        } catch (err) {
+            console.error("Error filtrando estaciones:", err);
+            setError(err.message || "Error al aplicar filtros.");
+            setEstacionesData([]);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleApplyFilters = () => {
+        fetchFilteredEstaciones();
+        setShowFilterPanel(false); 
+    };
+                                
     
     // --- 2. LÓGICA DE LECTURA (R) ---
      const loadEstaciones = useCallback(async () => {
@@ -197,6 +240,9 @@ async function handleRemove() {
                 {showFilterPanel && (
                     <RenderFiltroEstaciones
                         setShowFilterPanel={setShowFilterPanel}
+                        filterCriteria={filterCriteria}
+                        setFilterCriteria={setFilterCriteria}
+                        onApply={handleApplyFilters}
                     />
                 )}
 
