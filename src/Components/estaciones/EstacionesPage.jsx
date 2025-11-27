@@ -22,6 +22,7 @@ export default function EstacionesPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [filterCriteria, setFilterCriteria] = useState({
                                                          supervisorArjus: "todos",
+                                                         estado: "todos"
                                                          });
 
 
@@ -32,8 +33,11 @@ const fetchFilteredEstaciones = async () => {
         try {
             const params = new URLSearchParams();
             
-            if (filterCriteria.supervisorArjus) {
+            if (filterCriteria.supervisorArjus && filterCriteria.supervisorArjus !== "todos") {
                 params.append('supervisorArjus', filterCriteria.supervisorArjus);
+            }
+            if (filterCriteria.estado && filterCriteria.estado !== "todos") {
+                params.append('estado', filterCriteria.estado);
             }
 
             const endpoint = `${API_URL}/filter?${params.toString()}`;

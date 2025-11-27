@@ -21,7 +21,7 @@ function Login({ onLoginSuccess }) {
 
     const handleSubmit = async (e) => { 
         e.preventDefault();
-        setLoginError(''); // Limpiar errores previos de la API
+        setLoginError('');
         let valid = true;
 
         // --- 1. Validación del Front-end ---
@@ -70,11 +70,8 @@ function Login({ onLoginSuccess }) {
             // --- 3. Autenticación Exitosa --
 
             if (data.accessToken) {
-                // El token se guarda en el "bolsillo" del navegador.
                 localStorage.setItem('jwtToken', data.accessToken); 
-                console.log("Token JWT guardado exitosamente.");
             } else {
-                // Manejar si el backend no devuelve el token
                 throw new Error('Login exitoso, pero el servidor no envió el token JWT.');
             }
 
@@ -87,8 +84,6 @@ function Login({ onLoginSuccess }) {
             
             // Notificar al componente App.js
             onLoginSuccess(userNameForDisplay); 
-
-            console.log("Acceso válido. Redirigiendo a /Home...");
             navigate('/Home'); 
 
         } catch (err) {
@@ -108,7 +103,7 @@ function Login({ onLoginSuccess }) {
                 </div>
                 <form className="login-form" onSubmit={handleSubmit}>
                     
-                    <label htmlFor="username">Usuario (Correo)</label>
+                    <label htmlFor="username">Usuario</label>
                     <input
                         type="text"
                         id="username"

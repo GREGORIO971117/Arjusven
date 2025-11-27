@@ -122,10 +122,8 @@ export default function RenderEditDatosEstacion({
                     </label>
                 </div>
 
-                {/* FILA 2: Ubicación (3 columnas) */}
                 <div style={row}>
-                    <label style={label}>Estado (Ubicación)
-                        {/* SELECT: Estado (asume datosEstaticos.estadosMx) */}
+                    <label style={label}>Estado
                         <select name="estado" value={formData.estado} onChange={handleChange} style={input}>
                              <option value="">Seleccione Estado</option>
                             {datosEstaticos?.estadosMx?.map((opcion) => (
