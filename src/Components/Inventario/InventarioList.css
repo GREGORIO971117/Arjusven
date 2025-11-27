@@ -1,6 +1,25 @@
 /* ==========================================================================
    Estilos de Controles y Formularios
    ========================================================================== */
+.date-range-container {
+    display: flex;
+    gap: 10px; /* Espacio entre los dos inputs de fecha */
+    align-items: center; /* Centra verticalmente etiquetas e inputs */
+    margin: 15px;
+}
+
+.date-range-container label {
+    white-space: nowrap; /* Evita que el texto de la etiqueta se rompa */
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #34495e;
+}
+
+.date-range-container .form-input {
+    flex-grow: 1; /* Permite que el input ocupe el espacio restante */
+    min-width: 0; /* Necesario para que flexbox funcione correctamente */
+}
+
 .form-input {
     width: 100%;
     border: 1px solid #dcdfe6;
@@ -26,6 +45,9 @@ textarea.form-input {
     min-height: 100px;
     resize: vertical;
 }
+
+
+
 
 
 

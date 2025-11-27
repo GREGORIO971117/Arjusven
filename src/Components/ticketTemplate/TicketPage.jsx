@@ -23,7 +23,9 @@ function TicketPage() {
                                                 situacion:'todos',
                                                 sla:'todos',
                                                 tipoDeServicio:'todos',
-                                                supervisor:'todos'
+                                                supervisor:'todos',
+                                                fechaInicio: '',
+                                                fechaFin: ''
                                                 });
 
     const fetchFilteredTickets = async () => {
@@ -44,6 +46,12 @@ function TicketPage() {
             }
             if (filterCriteria.supervisor) {
                 params.append('supervisor', filterCriteria.supervisor);
+            }
+            if (filterCriteria.fechaInicio) {
+                params.append('fechaInicio', filterCriteria.fechaInicio);
+            }
+            if (filterCriteria.fechaFin) {
+                params.append('fechaFin', filterCriteria.fechaFin);
             }
 
             const endpoint = `${API_BASE_URL}/filter?${params.toString()}`;
