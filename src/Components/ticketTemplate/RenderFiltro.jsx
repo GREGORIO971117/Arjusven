@@ -17,7 +17,7 @@ const RenderFiltro = ({
         <div className="modal-overlay"> 
             
             <div className="filter-panel">
-                <h2 className="title">Opciones de Filtro y Búsqueda</h2>
+                <h2 className="title">Filtro y Búsqueda</h2>
 
                 <div className="grid-container grid-cols-2">
                     

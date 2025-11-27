@@ -17,6 +17,60 @@ function InventarioPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isEditing, setIsEditing] = useState(false); 
     const [searchQuery, setSearchQuery] = useState("");
+   const [filterCriteria, setFilterCriteria] = useState({
+                                                        estado: "todos",
+                                                        plaza: "todos",
+                                                        fechaInicio: '',
+                                                        fechaFin: ''  
+                                                        });
+
+const fetchFilteredInventario = async () => {
+        setIsLoading(true);
+        setError("");
+        
+        try {
+            const params = new URLSearchParams();
+            
+            if (filterCriteria.estado) {
+                params.append('estado', filterCriteria.estado);
+            }
+            if (filterCriteria.plaza) {
+                params.append('plaza', filterCriteria.plaza);
+            }
+            if (filterCriteria.fechaInicio) {
+                params.append('fechaInicio', filterCriteria.fechaInicio);
+            }
+            if (filterCriteria.fechaFin) {
+                params.append('fechaFin', filterCriteria.fechaFin);
+            }
+
+            const endpoint = `${API_URL}/filter?${params.toString()}`;
+            
+            const response = await apiRequest(endpoint, 
+                { method: 'GET' });
+            
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            console.log("Inventario filtrado:", data);
+            setInventarioData(Array.isArray(data) ? data : []);
+
+        } catch (err) {
+            console.error("Error filtrando inventario:", err);
+            setError(err.message || "Error al aplicar filtros.");
+            setInventarioData([]);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleApplyFilters = () => {
+        fetchFilteredInventario();
+        setShowFilterPanel(false); 
+    };
+
     
     const loadInventario = useCallback(async () => {
         setIsLoading(true);
@@ -179,6 +233,9 @@ function InventarioPage() {
                 {showFilterPanel && (
                     <RenderFiltro
                         setShowFilterPanel={setShowFilterPanel}
+                        filterCriteria={filterCriteria}
+                        setFilterCriteria={setFilterCriteria}
+                        onApply={handleApplyFilters}
                     />
                 )}
 

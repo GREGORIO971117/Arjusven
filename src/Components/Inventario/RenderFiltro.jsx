@@ -1,89 +1,70 @@
 import React, {useState} from 'react';
 import options from '../../assets/datos.json';
 
-const RenderFiltro = ({setShowFilterPanel}) => {
+const RenderFiltro = ({
+    setShowFilterPanel,
+    filterCriteria,
+    setFilterCriteria,
+    onApply
+}) => {
 
-    const[botonesModal,setBotonesModal]=useState('Todos');
-
-    const handleSetStatus = (status) => {
-if (botonesModal === status) {
-            setBotonesModal(''); // Desactiva el botón (vuelve a la normalidad)
-        } else {
-            setBotonesModal(status); // Activa el nuevo botón
-        }    }
-  
     return (
         <div className="modal-overlay"> 
             
             <div className="filter-panel">
-                <h2 className="title">Opciones de Filtro y Búsqueda</h2>
+                <h2 className="title">Filtro y Búsqueda</h2>
 
                 <div className="grid-container grid-cols-2">
-
-                    <div className="info-item"> 
-                        <label htmlFor="estadosMx">Plaza:</label>
-                        <select className="form-input">
-                            <option value="">Selecciona un estado</option>
-                            {options.estadosMx.map(estado => (
-                                <option key={estado} value={estado}>{estado}</option>
-                            ))}
-                        </select>
-                    </div>
-                    
-                    <div className="info-item"> 
-                        <label htmlFor="technician">Técnico de Campo:</label>
-                        <select className="form-input">
-                            <option value="">Selecciona un técnico</option>
-                            {options.tecnicoCampo.map(tecnico => (
-                                <option key={tecnico} value={tecnico}>{tecnico}</option>
-                            ))}
-                        </select>
-                    </div>
                     
                     <div className="info-item"> 
                         <label htmlFor="serviceType">Estado:</label>
-                        <select className="form-input">
+                        <select 
+                            className="form-input"
+                            value={filterCriteria.estado}
+                            onChange={e => setFilterCriteria({...filterCriteria, estado: e.target.value})}
+                        >
                             <option value="">Selecciona el estado</option>
                             {options.estado.map(servicio => (
                                 <option key={servicio} value={servicio}>{servicio}</option>
                             ))}
                         </select>
-                    </div>
-                    
-                    <div className="info-item"> 
-                        <label htmlFor="sla">Cliente:</label>
-                        <select className="form-input">
-                            <option value="">Selecciona un cliente</option>
-                            {options.cliente.map(sla => (
-                                <option key={sla} value={sla}>{sla}</option>
+
+                        <label htmlFor="serviceType">Plaza:</label>
+                        <select 
+                            className="form-input"
+                            value={filterCriteria.plaza}
+                            onChange={e => setFilterCriteria({...filterCriteria, plaza: e.target.value})}
+                        >
+                            <option value="">Selecciona el estado</option>
+                            {options.estadosMx.map(plaza => (
+                                <option key={plaza} value={plaza}>{plaza}</option>
                             ))}
                         </select>
+
+
+
+
                     </div>
                     
-                    <div className="info-item"> 
-                        <label htmlFor="assignDate">Fecha de actualización:</label>
+                            <div className="date-range-container"> 
+                        <label htmlFor="fechaInicio">Fecha inicio:</label>
                         <input
                             type="date"
-                            id="assignDate"
-                            name="assignDate"
-                            className="form-input" 
+                            id="fechaInicio"
+                            name="fechaInicio"
+                            className="form-input"
+                            value={filterCriteria.fechaInicio || ''}
+                            onChange={(e) => setFilterCriteria({...filterCriteria, fechaInicio: e.target.value})}
                         />
-                    </div>
-
-                    <div className="info-item"> 
-                        <label htmlFor="dateInicio">Fecha de inicio:</label>
+                        
+                        <label htmlFor="fechaFin">Fecha fin:</label>
                         <input
                             type="date"
-                            id="dateInicio"
-                            name="dateInicio"
+                            id="fechaFin"
+                            name="fechaFin"
                             className="form-input" 
-                        />
-                        <label htmlFor="dateFinal">Fecha de fin:</label>
-                        <input
-                            type="date"
-                            id="dateFinal"
-                            name="dateFinal"
-                            className="form-input" 
+                            value={filterCriteria.fechaFin || ''}
+                            onChange={(e) => setFilterCriteria({...filterCriteria, fechaFin: e.target.value})}
                         />
                     </div>
                 
@@ -91,16 +72,14 @@ if (botonesModal === status) {
             
 
                 <div className="pagination-controls">
+                    <button className="btn btn-primary" onClick={onApply}> 
+                            Aplicar Filtros
+                        </button>
 
-                <button className="btn btn-primary" onClick={() => setShowFilterPanel(false)}> 
-                        Aplicar Filtros
-                    </button>
-
-                    <button className="btn btn-secondary" onClick={() => setShowFilterPanel(false)}> 
-                        Cerrar
-                    </button>
-                </div>
-                    
+                        <button className="btn btn-secondary" onClick={() => setShowFilterPanel(false)}> 
+                            Cerrar
+                        </button>
+                    </div>           
                 </div>
             </div>
     );
