@@ -1,8 +1,8 @@
 {
     "supervisores": [
-        "David",
-        "Ernesto",
-        "Eduardo"
+        "DAVID ESCALANTE",
+        "ERNESTO TREJO",
+        "EDUARDO TREJO"
     ],
     "estadosMx": [
         "Aguascalientes",
@@ -44,14 +44,13 @@
         "Tecnico3"
     ],
     "servicio": [
-        "Sin categoria",
         "Mantenimiento Correctivo",
         "Mantenimiento Preventivo",
         "Mantenimiento Evolutivo",
-        "Instalación",
+        "Instalacion",
         "Migración",
         "Entrenamiento",
-        "Soporte Remotor",
+        "Soporte Remoto",
         "Retiro de terminal",
         "Suministro de rollos"
     ],

@@ -38,6 +38,18 @@ const RenderFiltro = ({
                                 <option key={sla} value={sla}>{sla}</option>
                             ))}
                         </select>
+
+                        <label htmlFor="tipoDeServicio">Tipo de Servicio:</label>
+                        <select 
+                            className="form-input"
+                            onChange={(e) => setFilterCriteria({...filterCriteria, tipoDeServicio: e.target.value})}
+                            value={filterCriteria.tipoDeServicio || ''}
+                        >
+                            <option value="todos">Selecciona un tipo de servicio</option>
+                            {options.servicio.map(tipoDeServicio => (
+                                <option key={tipoDeServicio} value={tipoDeServicio}>{tipoDeServicio}</option>
+                            ))}
+                        </select>
                     </div>
 
                     {/* Botones de estado */}

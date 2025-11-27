@@ -4,7 +4,7 @@ export const serviciosConfig = [
     { key: 'incidencia', label: 'Número de Incidencia', type: 'text', grid: 1, required: true },
     { key: 'resolucion', label: 'Resolución', type: 'date', grid: 1 },
     { key: 'situacionActual', label: 'Situación Actual', type: 'select', optionsKey: 'situacion', grid: 1 },
-    { key: 'supervisor', label: 'Supervisor', type: 'text', grid: 1 },
+    { key: 'supervisor', label: 'Supervisor', type: 'select', optionsKey: 'supervisores', grid: 1 },
     { key: 'idMerchant', label: 'ID Merchant', type: 'text', grid: 1 },
     { key: 'tipoDeServicio', label: 'Tipo de Servicio', type: 'select', optionsKey: 'servicio', grid: 1 },
     { key: 'fechaDeEnvio', label: 'Fecha de envío de guía', type: 'date', grid: 1 },

@@ -21,7 +21,9 @@ function TicketPage() {
 
     const [filterCriteria, setFilterCriteria] = useState({
                                                 situacion:'todos',
-                                                sla:'todos'});
+                                                sla:'todos',
+                                                tipoDeServicio:'todos'
+                                                });
 
     const fetchFilteredTickets = async () => {
         setIsLoading(true);
@@ -35,6 +37,9 @@ function TicketPage() {
             }
             if (filterCriteria.sla) {
                 params.append('sla', filterCriteria.sla);
+            }
+            if (filterCriteria.tipoDeServicio) {
+                params.append('tipoDeServicio', filterCriteria.tipoDeServicio);
             }
 
             const endpoint = `${API_BASE_URL}/filter?${params.toString()}`;
@@ -238,7 +243,6 @@ function TicketPage() {
     }
 
     const handleServicePatch = async (updatedServiceData) => {
-        // ... (Lógica de handleServicePatch) ...
         setIsSaving(true);
         setSaveError(null);
 
