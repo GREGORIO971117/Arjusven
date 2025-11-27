@@ -22,7 +22,8 @@ function TicketPage() {
     const [filterCriteria, setFilterCriteria] = useState({
                                                 situacion:'todos',
                                                 sla:'todos',
-                                                tipoDeServicio:'todos'
+                                                tipoDeServicio:'todos',
+                                                supervisor:'todos'
                                                 });
 
     const fetchFilteredTickets = async () => {
@@ -40,6 +41,9 @@ function TicketPage() {
             }
             if (filterCriteria.tipoDeServicio) {
                 params.append('tipoDeServicio', filterCriteria.tipoDeServicio);
+            }
+            if (filterCriteria.supervisor) {
+                params.append('supervisor', filterCriteria.supervisor);
             }
 
             const endpoint = `${API_BASE_URL}/filter?${params.toString()}`;

@@ -50,6 +50,18 @@ const RenderFiltro = ({
                                 <option key={tipoDeServicio} value={tipoDeServicio}>{tipoDeServicio}</option>
                             ))}
                         </select>
+
+                        <label htmlFor="supervisor">supervisores:</label>
+                        <select 
+                            className="form-input"
+                            onChange={(e) => setFilterCriteria({...filterCriteria, supervisor: e.target.value})}
+                            value={filterCriteria.supervisor || ''}
+                        >
+                            <option value="todos">Selecciona un supervisor</option>
+                            {options.supervisores.map(supervisor => (
+                                <option key={supervisor} value={supervisor}>{supervisor}</option>
+                            ))}
+                        </select>
                     </div>
 
                     {/* Botones de estado */}
