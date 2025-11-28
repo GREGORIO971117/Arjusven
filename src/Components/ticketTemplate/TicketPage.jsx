@@ -58,6 +58,12 @@ function TicketPage() {
             
             const response = await apiRequest(endpoint, 
                 { method: 'GET' });
+
+            if (response.status === 204) {
+            setTicketsData([]); 
+            setIsLoading(false);
+            return;
+        }
             
             if (!response.ok) {
                 throw new Error(`Error ${response.status}: ${response.statusText}`);

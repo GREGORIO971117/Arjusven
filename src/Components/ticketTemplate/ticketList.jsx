@@ -57,7 +57,7 @@ function TicketList({ tickets, onSelectTicket, setShowFilterPanel, searchQuery, 
             
             </div>
             {tickets.length === 0 ? (
-                <p>No hay tickets para mostrar.</p>
+                <p>No hay tickets disponibles o no coinciden con la búsqueda.</p>
             ) : (
                 <>
                     <ul>

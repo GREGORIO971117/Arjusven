@@ -29,46 +29,56 @@ export default function EstacionesPage() {
 
 
 const fetchFilteredEstaciones = async () => {
-        setIsLoading(true);
-        setError("");
+    setIsLoading(true);
+    setError("");
+    
+    try {
+        const params = new URLSearchParams();
         
-        try {
-            const params = new URLSearchParams();
-            
-            if (filterCriteria.supervisorArjus && filterCriteria.supervisorArjus !== "todos") {
-                params.append('supervisorArjus', filterCriteria.supervisorArjus);
-            }
-            if (filterCriteria.estado && filterCriteria.estado !== "todos") {
-                params.append('estado', filterCriteria.estado);
-            }
-             if (filterCriteria.cobertura && filterCriteria.cobertura !== "todos") {
-                params.append('cobertura', filterCriteria.cobertura);
-            }
-            if (filterCriteria.plazaDeAtencion && filterCriteria.plazaDeAtencion !== "todos") {
-                params.append('plazaDeAtencion', filterCriteria.plazaDeAtencion);
-            }
-
-            const endpoint = `${API_URL}/filter?${params.toString()}`;
-            
-            const response = await apiRequest(endpoint, 
-                { method: 'GET' });
-            
-            if (!response.ok) {
-                throw new Error(`Error ${response.status}: ${response.statusText}`);
-            }
-            
-            const data = await response.json();
-            console.log("Estaciones filtradas:", data);
-            setEstacionesData(Array.isArray(data) ? data : []);
-
-        } catch (err) {
-            console.error("Error filtrando estaciones:", err);
-            setError(err.message || "Error al aplicar filtros.");
-            setEstacionesData([]);
-        } finally {
-            setIsLoading(false);
+        if (filterCriteria.supervisorArjus && filterCriteria.supervisorArjus !== "todos") {
+            params.append('supervisorArjus', filterCriteria.supervisorArjus);
         }
-    };
+        if (filterCriteria.estado && filterCriteria.estado !== "todos") {
+            params.append('estado', filterCriteria.estado);
+        }
+        if (filterCriteria.cobertura && filterCriteria.cobertura !== "todos") {
+            params.append('cobertura', filterCriteria.cobertura);
+        }
+        if (filterCriteria.plazaDeAtencion && filterCriteria.plazaDeAtencion !== "todos") {
+            params.append('plazaDeAtencion', filterCriteria.plazaDeAtencion);
+        }
+
+        const endpoint = `${API_URL}/filter?${params.toString()}`;
+        
+        const response = await apiRequest(endpoint, { method: 'GET' });
+        
+        // --- CORRECCIÓN AQUÍ ---
+        
+        // 1. Manejar caso 204 No Content (Búsqueda exitosa pero sin resultados)
+        if (response.status === 204) {
+            setEstacionesData([]); // Limpiamos la lista
+            setIsLoading(false);
+            return; // Salimos de la función para no intentar leer JSON
+        }
+
+        // 2. Manejar errores reales (400, 500, etc.)
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+        
+        // 3. Si hay contenido (200 OK), procesamos el JSON
+        const data = await response.json();
+        console.log("Estaciones filtradas:", data);
+        setEstacionesData(Array.isArray(data) ? data : []);
+
+    } catch (err) {
+        console.error("Error filtrando estaciones:", err);
+        setError(err.message || "Error al aplicar filtros.");
+        setEstacionesData([]);
+    } finally {
+        setIsLoading(false);
+    }
+};
 
     const handleApplyFilters = () => {
         fetchFilteredEstaciones();

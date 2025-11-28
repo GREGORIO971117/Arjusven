@@ -50,7 +50,7 @@ const InventarioList = ({ Inventario, onSelectTicket,setShowFilterPanel, searchQ
       </div>
 
       {Inventario.length === 0 ? (
-        <p>Cargando datos de inventario</p>
+        <p>No hay inventario disponible o no coincide con la búsqueda.</p>
       ) : (
         <>
           <ul>

@@ -46,15 +46,20 @@ const fetchFilteredInventario = async () => {
 
             const endpoint = `${API_URL}/filter?${params.toString()}`;
             
-            const response = await apiRequest(endpoint, 
-                { method: 'GET' });
+            const response = await apiRequest(endpoint, { method: 'GET' });
+            
+            if (response.status === 204) {
+            setInventarioData([]); 
+            setIsLoading(false);
+            return;
+        }
+
             
             if (!response.ok) {
                 throw new Error(`Error ${response.status}: ${response.statusText}`);
             }
             
             const data = await response.json();
-            console.log("Inventario filtrado:", data);
             setInventarioData(Array.isArray(data) ? data : []);
 
         } catch (err) {
