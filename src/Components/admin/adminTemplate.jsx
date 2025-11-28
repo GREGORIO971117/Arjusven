@@ -45,7 +45,6 @@ export default function AdminTemplate() {
         }
     };
 
-    // Carga inicial de usuarios al montar el componente
     useEffect(() => {
         fetchUsers();
     }, []); 

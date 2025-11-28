@@ -22,8 +22,7 @@ export default function PerfilTemplate() {
 
     // 2. Construcción de la URL
     const API_BASE_URL = '/usuarios/';
-    // 🔑 OBTENEMOS el ID del usuario logueado
-    const idEditUsuario = localStorage.getItem('idUsuario'); // NOTA: Cambié de 'idUsuario' a 'userId'
+    const idEditUsuario = localStorage.getItem('idUsuario'); 
     const EditUsuarioURL = `${API_BASE_URL}${idEditUsuario}`;
 
     // 3. Función de validación (debe estar dentro o importarse)
@@ -51,12 +50,11 @@ export default function PerfilTemplate() {
             const response = await apiRequest(EditUsuarioURL, { method: 'GET' });
 
             if (!response.ok) {
-                // Si el token expiró, esto puede ayudar al manejo de sesión
                 throw new Error(`Error ${response.status}: Por favor, inicie sesión de nuevo.`);
             }
             
             const data = await response.json();
-            // 🔑 Se establece el estado con los datos del perfil
+            //Se establece el estado con los datos del perfil
             setProfile(data); 
 
         } catch (err) {
@@ -82,8 +80,6 @@ export default function PerfilTemplate() {
         const err = validate(profile);
         setErrors(err);
         if (Object.keys(err).length > 0) return;
-        
-        // 🔑 Llamar a la función de actualización 🔑
         handleProfileUpdate(profile);
     };
 
@@ -217,16 +213,7 @@ export default function PerfilTemplate() {
                 {/* Rol */}
                 <div style={styles.row}>
                     <label style={styles.label}>Rol</label>
-                    {editing ? (
-                        <select name="rol" value={profile.rol} onChange={handleChange} style={styles.input}>
-                            <option value="ADMINISTRADOR">ADMINISTRADOR</option>
-                            <option value="TECNICO">TECNICO</option>
-                            <option value="SUPERVISOR">SUPERVISOR</option>
-                            <option value="USUARIO">USUARIO</option>
-                        </select>
-                    ) : (
                         <div style={styles.value}>{profile.rol}</div>
-                    )}
                     {errors.rol && <div style={styles.error}>{errors.rol}</div>}
                 </div>
 
