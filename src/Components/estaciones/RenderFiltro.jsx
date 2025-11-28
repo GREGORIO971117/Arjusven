@@ -29,18 +29,6 @@ const RenderFiltro = ({
                             ))}
                         </select>
 
-                        <label htmlFor="estado">Estado:</label>
-                        <select 
-                            className="form-input"
-                            value={filterCriteria.estado}
-                            onChange={e => setFilterCriteria({...filterCriteria, estado: e.target.value})}
-                        >
-                            <option value="todos">Selecciona el estado</option>
-                            {options.estadosMx.map(estado => (
-                                <option key={estado} value={estado}>{estado}</option>
-                            ))}
-                        </select>
-
                         <label htmlFor="cobertura">Cobertura:</label>
                         <select 
                             className="form-input"
@@ -53,7 +41,7 @@ const RenderFiltro = ({
                             ))}
                         </select>
 
-                        <label htmlFor="plazaDeAtencion">Seleccione plaza de atención:</label>
+                        <label htmlFor="plazaDeAtencion">Plaza de atención:</label>
                         <select 
                             className="form-input"
                             value={filterCriteria.plazaDeAtencion}

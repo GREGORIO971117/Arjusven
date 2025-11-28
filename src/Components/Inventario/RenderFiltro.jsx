@@ -35,9 +35,21 @@ const RenderFiltro = ({
                             value={filterCriteria.plaza}
                             onChange={e => setFilterCriteria({...filterCriteria, plaza: e.target.value})}
                         >
-                            <option value="">Selecciona la Plaza</option>
+                            <option value="todos">Selecciona la Plaza</option>
                             {options.plazaDeAtencion.map(plaza => (
                                 <option key={plaza} value={plaza}>{plaza}</option>
+                            ))}
+                        </select>
+
+                        <label htmlFor="serviceType">Equipo:</label>
+                        <select 
+                            className="form-input"
+                            value={filterCriteria.equipo}
+                            onChange={e => setFilterCriteria({...filterCriteria, equipo: e.target.value})}
+                        >
+                            <option value="todos">Selecciona el equipo</option>
+                            {options.equipos.map(equipo => (
+                                <option key={equipo} value={equipo}>{equipo}</option>
                             ))}
                         </select>
 

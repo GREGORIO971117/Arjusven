@@ -20,6 +20,7 @@ function InventarioPage() {
    const [filterCriteria, setFilterCriteria] = useState({
                                                         estado: "todos",
                                                         plaza: "todos",
+                                                        equipo: "todos",
                                                         fechaInicio: '',
                                                         fechaFin: ''  
                                                         });
@@ -36,6 +37,9 @@ const fetchFilteredInventario = async () => {
             }
             if (filterCriteria.plaza) {
                 params.append('plaza', filterCriteria.plaza);
+            }
+            if (filterCriteria.equipo) {
+                params.append('equipo', filterCriteria.equipo);
             }
             if (filterCriteria.fechaInicio) {
                 params.append('fechaInicio', filterCriteria.fechaInicio);
