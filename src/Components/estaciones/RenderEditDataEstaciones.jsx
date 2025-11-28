@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../Inventario/InventarioList.css'; // Mantiene el CSS para clases generales
 import { styles } from '../admin/adminTemplate'; // Importa los estilos en línea
+import datosEstaticos from '../../assets/datos.json';
 
 const formatInitialValue = (value) => value === null || value === undefined ? '' : String(value);
 
@@ -48,8 +49,7 @@ export default function RenderEditDatosEstacion({
     onCancelEdit, 
     data, 
     handleRemove, 
-    isSubmitting = false,
-    datosEstaticos 
+    isSubmitting = false
 }) {
     
     const { card, form, row, label, input, buttonDanger, buttonPrimary, navButton, error } = styles;
@@ -109,7 +109,6 @@ export default function RenderEditDatosEstacion({
                 
                 {localError && <div style={error}>{localError}</div>} 
 
-                {/* FILA 1: Identificación Principal (3 columnas) */}
                 <div style={row}>
                     <label style={label}>ID Merchant
                         <input name="idMerchant" value={formData.idMerchant} style={input} disabled readOnly /> 
@@ -194,11 +193,23 @@ export default function RenderEditDatosEstacion({
 
                 {/* FILA 7: Gestión y Logística (3 columnas) */}
                 <div style={row}>
+                    
                     <label style={label}>Plaza de Atención
-                        <input name="plazaDeAtencion" value={formData.plazaDeAtencion} onChange={handleChange} style={input} />
+                        <select name="plazaDeAtencion" value={formData.plazaDeAtencion} onChange={handleChange} style={input}>
+                             <option value="">Seleccione plaza de atención</option>
+                            {datosEstaticos?.plazaDeAtencion?.map((opcion) => (
+                                <option key={opcion} value={opcion}>{opcion}</option>
+                            ))}
+                        </select>
                     </label>
+
                     <label style={label}>Cobertura
-                        <input name="cobertura" value={formData.cobertura} onChange={handleChange} style={input} />
+                        <select name="cobertura" value={formData.cobertura} onChange={handleChange} style={input}>
+                             <option value="">Seleccione cobertura</option>
+                            {datosEstaticos?.sla?.map((opcion) => (
+                                <option key={opcion} value={opcion}>{opcion}</option>
+                            ))}
+                        </select>
                     </label>
                     <label style={label}>Prioridad
                         <input name="prioridad" value={formData.prioridad} onChange={handleChange} style={input} />

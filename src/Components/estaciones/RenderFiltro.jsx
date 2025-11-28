@@ -41,6 +41,32 @@ const RenderFiltro = ({
                             ))}
                         </select>
 
+                        <label htmlFor="cobertura">Cobertura:</label>
+                        <select 
+                            className="form-input"
+                            value={filterCriteria.cobertura}
+                            onChange={e => setFilterCriteria({...filterCriteria, cobertura: e.target.value})}
+                        >
+                            <option value="todos">Selecciona la cobertura</option>
+                            {options.sla.map(cobertura => (
+                                <option key={cobertura} value={cobertura}>{cobertura}</option>
+                            ))}
+                        </select>
+
+                        <label htmlFor="plazaDeAtencion">Seleccione plaza de atención:</label>
+                        <select 
+                            className="form-input"
+                            value={filterCriteria.plazaDeAtencion}
+                            onChange={e => setFilterCriteria({...filterCriteria, plazaDeAtencion: e.target.value})}
+                        >
+                            <option value="todos">Seleccione plaza de atención:</option>
+                            {options.plazaDeAtencion.map(plaza => (
+                                <option key={plaza} value={plaza}>{plaza}</option>
+                            ))}
+                        </select>
+                       
+                       
+
 
                     </div>
                 

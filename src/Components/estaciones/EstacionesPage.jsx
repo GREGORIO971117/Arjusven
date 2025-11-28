@@ -22,7 +22,9 @@ export default function EstacionesPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [filterCriteria, setFilterCriteria] = useState({
                                                          supervisorArjus: "todos",
-                                                         estado: "todos"
+                                                         estado: "todos",
+                                                         cobertura: "todos",
+                                                         plazaDeAtencion: "todos"
                                                          });
 
 
@@ -38,6 +40,12 @@ const fetchFilteredEstaciones = async () => {
             }
             if (filterCriteria.estado && filterCriteria.estado !== "todos") {
                 params.append('estado', filterCriteria.estado);
+            }
+             if (filterCriteria.cobertura && filterCriteria.cobertura !== "todos") {
+                params.append('cobertura', filterCriteria.cobertura);
+            }
+            if (filterCriteria.plazaDeAtencion && filterCriteria.plazaDeAtencion !== "todos") {
+                params.append('plazaDeAtencion', filterCriteria.plazaDeAtencion);
             }
 
             const endpoint = `${API_URL}/filter?${params.toString()}`;
@@ -96,7 +104,7 @@ const fetchFilteredEstaciones = async () => {
                     try {
                         await loadEstaciones();
                     } catch (e) {
-                        console.error("Error al recargar tickets vacíos:", e);
+                        console.error("Error al recargar estaciones vacías:", e);
                     }
                     return;
                 }
