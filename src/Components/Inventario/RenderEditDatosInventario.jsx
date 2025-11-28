@@ -149,7 +149,7 @@ function RenderEditDatosInventario({handleUpdate, onCancelEdit, data,handleRemov
                     <label style={styles.label}>Plaza
                         <select name="plaza" value={formData.plaza} onChange={handleChange} style={styles.input}>
                             <option value="">Seleccione Plaza</option>
-                            {datosEstaticos.estadosMx?.map((opcion) => (
+                            {datosEstaticos.plazaDeAtencion?.map((opcion) => (
                                 <option key={opcion} value={opcion}>{opcion}</option>
                             ))}
                         </select>

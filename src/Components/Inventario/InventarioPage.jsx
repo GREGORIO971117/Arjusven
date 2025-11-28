@@ -215,7 +215,7 @@ const fetchFilteredInventario = async () => {
     const handleEnterEditMode = () => {
         setIsEditing(true);
     };
-    
+    console.log(inventarioData)
     useEffect(() => {
         loadInventario();
     }, []);

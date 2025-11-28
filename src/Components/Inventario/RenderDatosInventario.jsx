@@ -37,7 +37,6 @@ function RenderDatosInventario({ data, onEdit, loadHistorial }) {
         responsable,
         codigoEmail,
         numeroDeSerie,
-        titulo,
         descripcion,
         equipo,
         numeroDeIncidencia,
@@ -52,7 +51,7 @@ function RenderDatosInventario({ data, onEdit, loadHistorial }) {
         <> 
             <div className="ticket-header">
                 <h2 className="ticket-title">
-                    {titulo}
+                    {numeroDeSerie} - {equipo}
                         <button onClick={onEdit} className="edit-button">Editar</button>
                         <button onClick={loadHistorial} className="delete-button">Historial</button>
                 </h2>

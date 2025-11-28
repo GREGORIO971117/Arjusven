@@ -57,6 +57,18 @@ const RenderFiltro = ({
                                 <option key={supervisor} value={supervisor}>{supervisor}</option>
                             ))}
                         </select>
+
+                        <label htmlFor="plaza">plaza:</label>
+                        <select 
+                            className="form-input"
+                            onChange={(e) => setFilterCriteria({...filterCriteria, plaza: e.target.value})}
+                            value={filterCriteria.plaza || 'todos'}
+                        >
+                            <option value="todos">Selecciona una plaza</option>
+                            {options.plazaDeAtencion.map(plaza => (
+                                <option key={plaza} value={plaza}>{plaza}</option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="date-range-container"> 

@@ -63,6 +63,10 @@ export default function EstacionesList ({ estaciones, onSelectEstacion, setShowF
                 <p>No hay estaciones disponibles o no coinciden con la búsqueda.</p>
             ) : (
                 <>
+
+                 <div className="list-header-row">
+                    <span className="header-column-title">Id merchant | Nombre comercial</span>
+                </div>
                     <ul>
                         {currentItems.map(estacion => (
                             <li

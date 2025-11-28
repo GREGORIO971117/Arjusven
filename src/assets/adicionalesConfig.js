@@ -3,7 +3,6 @@ export const adicionalesConfig = [
     // --- SECCIÓN DE DATOS GENERALES ---
     { key: 'ciudad', label: 'Ciudad', type: 'text', section: 'General' },
     { key: 'plaza', label: 'Plaza', type: 'text', section: 'General' },
-    { key: 'tecnico', label: 'Técnico', type: 'text', section: 'General' },
     { key: 'cerroEnPuntoClave', label: 'Cerro en Punto Clave', type: 'text', section: 'General' },
     { key: 'atencionEnPunto', label: 'Atención en Punto', type: 'text', section: 'General' },
     { key: 'firmaEnEstacion', label: 'Firma en Estación', type: 'text', section: 'General' },

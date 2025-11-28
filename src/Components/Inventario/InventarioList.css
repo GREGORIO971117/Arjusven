@@ -48,7 +48,23 @@ textarea.form-input {
 
 
 
+/* Estilos para el nuevo encabezado de la lista */
+.list-header-row {
+    padding: 10px 15px; /* Ajusta el padding para que coincida con el li */
+    font-weight: bold;
+    color: #555; /* Color sutil */
+    border-bottom: 2px solid #ddd; /* Línea separadora */
+    text-transform: uppercase;
+    font-size: 0.8em;
+    background-color: #f7f7f7; /* Fondo ligero para destacarlo */
+    margin-bottom: 5px; /* Pequeño espacio antes del ul */
+}
 
+/* Asegúrate de que los ítems de la lista tengan el mismo padding horizontal */
+.ticket-item {
+    /* ... otros estilos ... */
+    padding: 10px 15px; /* Ejemplo de padding */
+}
 
 
 .formGrid {

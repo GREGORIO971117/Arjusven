@@ -50,19 +50,25 @@ const InventarioList = ({ Inventario, onSelectTicket,setShowFilterPanel, searchQ
       </div>
 
       {Inventario.length === 0 ? (
-        <p>No hay inventario disponible o no coincide con la búsqueda.</p>
+        <p className="no-results-message">No hay estaciones disponibles o no coinciden con la búsqueda.</p>
       ) : (
         <>
+         
+          <div className="list-header-row">
+             <span className="header-column-title">Numero de serie | Equipo</span>
+          </div>
+
           <ul>
-            {currentItems.map(ticket => (
+            {currentItems.map(Inventario => (
+              
               <li
-                key={ticket.numeroIncidencia + ticket.titulo}
+                key={Inventario.idInventario}
                 className="ticket-item"
-                onClick={() => handleTicketClick(ticket)}
+                onClick={() => handleTicketClick(Inventario)}
               >
                 <div className="ticket-info">
-                  <strong>{ticket.numeroDeSerie}</strong>
-                {ticket.titulo}
+                  <strong>{Inventario.numeroDeSerie}</strong>
+                  {Inventario.equipo}
                 </div>
               </li>
             ))}
@@ -90,7 +96,7 @@ const InventarioList = ({ Inventario, onSelectTicket,setShowFilterPanel, searchQ
         </>
       )}
     </div>
-  );
+);
 };
 
 export default InventarioList;

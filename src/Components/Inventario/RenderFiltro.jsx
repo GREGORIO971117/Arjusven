@@ -35,8 +35,8 @@ const RenderFiltro = ({
                             value={filterCriteria.plaza}
                             onChange={e => setFilterCriteria({...filterCriteria, plaza: e.target.value})}
                         >
-                            <option value="">Selecciona el estado</option>
-                            {options.estadosMx.map(plaza => (
+                            <option value="">Selecciona la Plaza</option>
+                            {options.plazaDeAtencion.map(plaza => (
                                 <option key={plaza} value={plaza}>{plaza}</option>
                             ))}
                         </select>

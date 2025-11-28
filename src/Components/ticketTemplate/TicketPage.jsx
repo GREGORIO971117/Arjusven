@@ -24,6 +24,7 @@ function TicketPage() {
                                                 sla:'todos',
                                                 tipoDeServicio:'todos',
                                                 supervisor:'todos',
+                                                plaza:'todos',
                                                 fechaInicio: '',
                                                 fechaFin: ''
                                                 });
@@ -46,6 +47,9 @@ function TicketPage() {
             }
             if (filterCriteria.supervisor) {
                 params.append('supervisor', filterCriteria.supervisor);
+            }
+            if (filterCriteria.plaza) {
+                params.append('plaza', filterCriteria.plaza);
             }
             if (filterCriteria.fechaInicio) {
                 params.append('fechaInicio', filterCriteria.fechaInicio);

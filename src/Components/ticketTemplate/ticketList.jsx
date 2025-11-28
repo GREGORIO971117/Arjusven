@@ -60,6 +60,10 @@ function TicketList({ tickets, onSelectTicket, setShowFilterPanel, searchQuery, 
                 <p>No hay tickets disponibles o no coinciden con la búsqueda.</p>
             ) : (
                 <>
+
+                 <div className="list-header-row">
+                    <span className="header-column-title">Incidencia | Estación</span>
+                </div>
                     <ul>
                         {currentItems.map(ticket => (
                             <li
