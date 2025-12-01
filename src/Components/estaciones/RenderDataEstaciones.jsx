@@ -62,7 +62,7 @@ export default function RenderDatosEstacion({ data, onEdit }) {
         <> 
             <div className="ticket-header">
                 <h2 className="ticket-title">
-                  {data.idMerchant}  Estación: {data.nombreComercial} 
+                  {data.idMerchant}  - {data.nombreComercial} 
                     
                     <button onClick={onEdit} className="edit-button">Editar</button>
                 </h2>
@@ -82,9 +82,6 @@ export default function RenderDatosEstacion({ data, onEdit }) {
                                  value={data[key]} 
                         />;
                     })}
-                </div>
-                <div className="grid">
-                    <InfoItem label="Dirección" value={data.direccion} />
                 </div>
             </div>
 

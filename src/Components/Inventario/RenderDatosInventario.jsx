@@ -27,9 +27,7 @@ function RenderDatosInventario({ data, onEdit, loadHistorial }) {
     };
 
     const gri2dKeys = [
-        'titulo',
         'numeroDeSerie',
-        'responsable',
         'codigoEmail',
         'cliente',
         'plaza',

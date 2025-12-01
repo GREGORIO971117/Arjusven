@@ -111,7 +111,7 @@ export default function RenderEditDatosEstacion({
 
     return (
         <section style={styles.card}>
-            <h3>Editar Estación: {formData.nombreComercial}</h3>
+            <h3>{formData.idMerchant} - {formData.nombreComercial}</h3>
             
             <form onSubmit={handleSubmit} style={styles.form}>
                 {localError && <div style={styles.error}>{localError}</div>}

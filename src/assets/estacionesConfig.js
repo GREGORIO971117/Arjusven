@@ -31,13 +31,13 @@ export const estacionesConfig = [
     { key: 'supervisorArjus', label: 'Supervisor ARJUS', type: 'text', grid: 1 },
     { key: 'tecnicoAsignado', label: 'Técnico Asignado', type: 'text', grid: 1 },
     { key: 'transporte', label: 'Transporte ($$)', type: 'number', grid: 1 },
-    { key: 'rollos', label: 'Rollos (Cantidad)', type: 'number', grid: 1 },
+    { key: 'rollos', label: 'Rollos', type: 'number', grid: 1 },
     { key: 'km', label: 'KM', type: 'number', grid: 1 },
     { key: 'telefono1', label: 'Teléfono 1', type: 'text', grid: 1 },
     { key: 'telefono2', label: 'Teléfono 1', type: 'text', grid: 1 },
     { key: 'soporteNoviembre2022', label: 'Soporte (Nov 2022)', type: 'text', grid: 1 },
     
     // --- Sección 4: Textos Largos (grid: 4) ---
-    { key: 'direccion', label: 'Dirección Completa', type: 'text', grid: 1 },
+    { key: 'direccion', label: 'Dirección', type: 'text', grid: 1 },
     { key: 'referencias', label: 'Referencias', type: 'text', grid: 1 },
 ];

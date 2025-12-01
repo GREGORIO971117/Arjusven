@@ -9,7 +9,7 @@ export const serviciosConfig = [
     { key: 'tipoDeServicio', label: 'Tipo de Servicio', type: 'select', optionsKey: 'servicio', grid: 1 },
     { key: 'fechaDeEnvio', label: 'Fecha de envío de guía', type: 'date', grid: 1 },
     { key: 'direccion', label: 'Dirección', type: 'text', grid: 1 },
-    { key: 'tecnico', label: 'Técnico de Campo', type: 'text', grid: 1 },
+    { key: 'tecnico', label: 'Técnico de Campo', type: 'select', optionsKey: 'tecnicoCampo', grid: 1 },
     { key: 'sla', label: 'SLA', type: 'select', optionsKey: 'sla', grid: 1 },
     { key: 'fechaDeAsignacion', label: 'Fecha de Asignación', type: 'date', grid: 1 },
     { key: 'guiaDeEncomienda', label: 'Guía de Encomienda', type: 'text', grid: 1 },

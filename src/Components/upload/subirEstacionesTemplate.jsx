@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { apiRequest } from '../login/Api'; 
 import { styles } from '../admin/adminTemplate'; 
+import datosEstaticos from '../../assets/datos.json';
 
 const API_URL = '/estaciones'; 
 
@@ -21,12 +22,10 @@ export default function SubirEstacionTemplate() {
     const [isSubmitting, setIsSubmitting] = useState(false); 
     const [successMessage, setSuccessMessage] = useState("");
 
-
     function handleChange(e) {
         const { name, value } = e.target;
         setForm((prev) => ({ 
             ...prev, 
-            // Convierte el ID Merchant a número si es ese campo
             [name]: name === 'idMerchant' ? (value ? Number(value) : '') : value 
         }));
         // Limpiar errores al cambiar
@@ -48,9 +47,7 @@ export default function SubirEstacionTemplate() {
         if (!form.direccion || form.direccion.trim() === "") {
             errs.direccion = "La Dirección es requerida.";
         }
-        if (!form.estado || form.estado.trim() === "") {
-            errs.estado = "El Estado es requerido.";
-        }
+        
         if (!form.plazaDeAtencion || form.plazaDeAtencion.trim() === "") {
             errs.plazaDeAtencion = "La Plaza de Atención es requerida.";
         }
@@ -138,33 +135,41 @@ export default function SubirEstacionTemplate() {
                     </label>
                 </div>
                 
-                {/* Fila 2: Dirección y Estado */}
+              
+
+                {/* Fila 3: Plaza de Atención y Cobertura */}
+                <div style={styles.row}>
+                    <label style={styles.label}>
+                        Plaza de Atención 
+                      <select name="plazaDeAtencion" value={form.plazaDeAtencion} onChange={handleChange} style={styles.input}>
+                            <option value="">Seleccione plaza</option>
+                                {datosEstaticos.plazaDeAtencion?.map((opcion) => (
+                                    <option key={opcion} value={opcion}>{opcion}</option>
+                                ))}
+                        </select>  
+                        {formErrors.plazaDeAtencion && <div style={styles.errorTextRow}>{formErrors.plazaDeAtencion}</div>}
+                    </label>
+
+                    <label style={styles.label}>Cobertura
+                        <select name="cobertura" value={form.cobertura} onChange={handleChange} style={styles.input}>
+                            <option value="">Seleccione cobertura</option>
+                                {datosEstaticos.sla?.map((opcion) => (
+                                    <option key={opcion} value={opcion}>{opcion}</option>
+                                ))}
+                        </select>                       
+                         {formErrors.cobertura && <div style={styles.errorTextRow}>{formErrors.cobertura}</div>} 
+
+                    </label>
+                </div>
+
+                  {/* Fila 2: Dirección y Estado */}
                 <div style={styles.row}>
                     <label style={styles.label}>
                         Dirección 
                         <input name="direccion" value={form.direccion} onChange={handleChange} style={styles.input} />
                         {formErrors.direccion && <div style={styles.errorTextRow}>{formErrors.direccion}</div>}
                     </label>
-                    <label style={styles.label}>
-                        Estado 
-                        <input name="estado" value={form.estado} onChange={handleChange} style={styles.input} />
-                        {formErrors.estado && <div style={styles.errorTextRow}>{formErrors.estado}</div>}
-                    </label>
-                </div>
-
-                {/* Fila 3: Plaza de Atención y Cobertura */}
-                <div style={styles.row}>
-                    <label style={styles.label}>
-                        Plaza de Atención 
-                        <input name="plazaDeAtencion" value={form.plazaDeAtencion} onChange={handleChange} style={styles.input} />
-                        {formErrors.plazaDeAtencion && <div style={styles.errorTextRow}>{formErrors.plazaDeAtencion}</div>}
-                    </label>
-                    <label style={styles.label}>
-                        Cobertura
-                        <input name="cobertura" value={form.cobertura} onChange={handleChange} style={styles.input} />
-                        {/* Se puede dejar sin validación si no es un campo MÍNIMO, pero se incluye para consistencia con el render */}
-                        {formErrors.cobertura && <div style={styles.errorTextRow}>{formErrors.cobertura}</div>} 
-                    </label>
+                    
                 </div>
 
                 {successMessage && (

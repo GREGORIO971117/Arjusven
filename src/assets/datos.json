@@ -182,6 +182,12 @@
     "VERACRUZ",
     "VILLAHERMOSA",
     "ZACATECAS"
+  ],
+  "roles": [
+    "ADMINISTRADOR",
+    "TECNICO",
+    "SUPERVISOR",
+    "USUARIO"
   ]
     
 }

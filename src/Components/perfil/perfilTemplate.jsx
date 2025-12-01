@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { apiRequest } from '../login/Api'; 
+import datosEstaticos from '../../assets/datos.json';
 
 const DEFAULT_PROFILE = {
     idUsuarios: "", // Debería ser String o Number, pero vacío para el estado inicial
@@ -37,7 +38,6 @@ export default function PerfilTemplate() {
     };
     
     const fetchProfile = async () => {
-        // Manejo de caso si el ID no existe (no logueado)
         if (!idEditUsuario) {
              setError("ID de usuario no encontrado. Por favor, inicie sesión.");
              setIsLoading(false);
@@ -67,7 +67,6 @@ export default function PerfilTemplate() {
     // 5. useEffect: Ejecutar el fetch al cargar el componente
     useEffect(() => {
         fetchProfile();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // 6. Handlers de UI
@@ -90,7 +89,7 @@ export default function PerfilTemplate() {
     setError("");
     
     // 2. Definir la URL de actualización
-    const updateURL = `${API_BASE_URL}${idEditUsuario}`; // Ej: /usuarios/5
+    const updateURL = `${API_BASE_URL}${idEditUsuario}`; 
 
     try {
 
@@ -125,14 +124,11 @@ export default function PerfilTemplate() {
     
 
     const handleCancel = () => {
-        // Para cancelar, volvemos a hacer un fetch o usamos una copia guardada del original
         fetchProfile(); 
         setErrors({});
         setEditing(false);
     };
     
-
-    // 8. Renderizado del Template (usando el estado 'profile')
     return (
         <div style={styles.container}>
             <div style={styles.card}>
@@ -180,12 +176,12 @@ export default function PerfilTemplate() {
                 <div style={styles.row}>
                     <label style={styles.label}>Estado de residencia</label>
                     {editing ? (
-                        <input
-                            name="estadoDeResidencia"
-                            value={profile.estadoDeResidencia}
-                            onChange={handleChange}
-                            style={styles.input}
-                        />
+                        <select name="estadoDeResidencia" value={profile.estadoDeResidencia} onChange={handleChange} style={styles.input}>
+                            <option value="">Seleccione estado de residencia</option>
+                                {datosEstaticos.estadosMx?.map((opcion) => (
+                                    <option key={opcion} value={opcion}>{opcion}</option>
+                                ))}
+                        </select> 
                     ) : (
                         <div style={styles.value}>{profile.estadoDeResidencia}</div>
                     )}
