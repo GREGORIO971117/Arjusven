@@ -4,7 +4,7 @@ import '../Inventario/InventarioList.css'
 export default function EstacionesList ({ estaciones, onSelectEstacion, setShowFilterPanel, isLoading, selectedEstacionId, searchQuery, setSearchQuery, handleSearchSubmit }) {
     const [currentPage, setCurrentPage] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
-    const itemsPerPage = 15;
+    const itemsPerPage = 20;
 
     // 1. Filtrado en memoria
     const filteredEstaciones = estaciones.filter(estacion => 

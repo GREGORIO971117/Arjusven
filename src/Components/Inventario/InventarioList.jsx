@@ -3,7 +3,7 @@ import './InventarioList.css';
 
 const InventarioList = ({ Inventario, onSelectTicket,setShowFilterPanel, searchQuery, setSearchQuery, onSearchSubmit }) => {
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 15;
+  const itemsPerPage = 20;
 
   const totalPages = Math.ceil(Inventario.length / itemsPerPage);
 

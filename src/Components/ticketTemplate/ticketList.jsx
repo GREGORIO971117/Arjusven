@@ -4,7 +4,7 @@ function TicketList({ tickets, onSelectTicket, setShowFilterPanel, searchQuery, 
 
     const [currentPage, setCurrentPage] = useState(0);
 
-    const itemsPerPage = 15;
+    const itemsPerPage = 20;
     const totalPages = Math.ceil(tickets.length / itemsPerPage);
     const currentItems = tickets.slice(
         currentPage * itemsPerPage,

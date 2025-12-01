@@ -9,10 +9,14 @@ function Login({ onLoginSuccess }) {
     // Estados para los campos de formulario
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    
+    // NOTA: Si quieres limpiar más la interfaz, podrías unificar estos errores,
+    // pero mantendré las validaciones de formato por separado como las tenías.
     const [usernameError, setUsernameError] = useState('');
     const [passwordError, setPasswordError] = useState('');
-    const [loginError, setLoginError] = useState(''); // Para errores de la API
-    const [isLoading, setIsLoading] = useState(false); // Para el estado del botón
+    
+    const [loginError, setLoginError] = useState(''); 
+    const [isLoading, setIsLoading] = useState(false); 
 
     const navigate = useNavigate();
 
@@ -24,31 +28,27 @@ function Login({ onLoginSuccess }) {
         setLoginError('');
         let valid = true;
 
-        // --- 1. Validación del Front-end ---
-        
-        // Validación del usuario
+        // --- 1. Validación del Front-end (Formato) ---
         if (!usernameRegex.test(username)) {
-            setUsernameError('El usuario no es válido.');
+            setUsernameError('El formato del usuario no es correcto.');
             valid = false;
         } else {
             setUsernameError('');
         }
 
-        // Validación de la contraseña
         if (!passwordRegex.test(password)) {
-            setPasswordError('La contraseña no es válida.');
+            setPasswordError('El formato de la contraseña no es correcto.');
             valid = false;
         } else {
             setPasswordError('');
         }
 
-        if (!valid) return; // Detener si la validación falla
+        if (!valid) return; 
 
-        // --- 2. Llamada a la API para Autenticación ---
+        // --- 2. Llamada a la API ---
         setIsLoading(true);
         
         try {
-            // Objeto de credenciales con las claves que espera el backend
             const credentials = {
                 correo: username, 
                 contraseña: password,
@@ -60,35 +60,44 @@ function Login({ onLoginSuccess }) {
                 body: JSON.stringify(credentials), 
             });
 
-            const data = await response.json(); 
-
-            if (!response.ok) {
-                const errorMessage = data.message || 'Credenciales incorrectas. Inténtelo de nuevo.';
-                throw new Error(errorMessage);
+            // Intentamos parsear, pero si falla no rompemos el flujo inmediatamente
+            let data = {};
+            try {
+                data = await response.json(); 
+            } catch (jsonError) {
+                // Si la respuesta no es JSON, seguimos manejando el error por status
             }
 
-            // --- 3. Autenticación Exitosa --
+            // --- AQUÍ ESTÁ EL CAMBIO PRINCIPAL ---
+            if (!response.ok) {
+                throw new Error('Lo sentimos, no pudimos validar tu acceso. Por favor, verifica tus datos e inténtalo nuevamente.');
+            }
 
+            // --- 3. Autenticación Exitosa ---
             if (data.accessToken) {
                 localStorage.setItem('jwtToken', data.accessToken); 
             } else {
-                throw new Error('Login exitoso, pero el servidor no envió el token JWT.');
+                throw new Error('Ocurrió un inconveniente al procesar tu ingreso. Por favor, contacta a soporte.');
             }
 
-            // Usamos el nombre del usuario si el backend lo devuelve, si no, el correo.
-            const userNameForDisplay = data.userName; 
             
+            const userNameForDisplay = data.userName; 
+
             localStorage.setItem('isLoggedIn', 'true'); 
             localStorage.setItem('userName', userNameForDisplay);
-            localStorage.setItem('idUsuario',data.userId);
+            localStorage.setItem('idUsuario', data.userId);
             
-            // Notificar al componente App.js
             onLoginSuccess(userNameForDisplay); 
             navigate('/Home'); 
 
         } catch (err) {
-            // Manejar errores de red o errores lanzados
-            setLoginError(err.message || 'Error de conexión con el servidor. Verifique que la API esté activa.');
+            // Si es un error de conexión (fetch falla), mostramos algo distinto pero amable.
+            // Si es el error que lanzamos arriba, mostramos ese.
+            if (err.message === 'Failed to fetch' || err.message.includes('NetworkError')) {
+                setLoginError('Parece que no hay conexión con el servidor. Por favor, revisa tu internet.');
+            } else {
+                setLoginError(err.message);
+            }
         } finally {
             setIsLoading(false);
         }
@@ -107,7 +116,7 @@ function Login({ onLoginSuccess }) {
                     <input
                         type="text"
                         id="username"
-                        placeholder="Usuario"
+                        placeholder="Ingresa tu correo"
                         value={username}
                         onChange={(e)=> setUsername(e.target.value)}
                         disabled={isLoading}
@@ -118,13 +127,14 @@ function Login({ onLoginSuccess }) {
                     <input
                         type="password"
                         id="password"
-                        placeholder="Contraseña"
+                        placeholder="Ingresa tu contraseña"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         disabled={isLoading}
                     />
                     {passwordError && <p className="error-message">{passwordError}</p>}
                     
+                    {/* Mensaje de error general de login */}
                     {loginError && <p className="error-message api-error">{loginError}</p>}
 
                     <button 
@@ -132,7 +142,7 @@ function Login({ onLoginSuccess }) {
                         className="login-button" 
                         disabled={isLoading}
                     >
-                        {isLoading ? 'Verificando credenciales...' : 'Entrar'}
+                        {isLoading ? 'Verificando...' : 'Entrar'}
                     </button>
                 </form>
             </div>
@@ -141,3 +151,5 @@ function Login({ onLoginSuccess }) {
 }
 
 export default Login;
+
+
