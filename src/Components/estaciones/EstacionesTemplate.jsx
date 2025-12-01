@@ -10,7 +10,8 @@ function EstacionesTemplate({
     data, 
     handleUpdate,
     isSubmitting,
-    error 
+    error,
+    datosEstaticos
 }) {
 
     return (
@@ -26,6 +27,7 @@ function EstacionesTemplate({
                     onCancelEdit={handleCancel} 
                     handleUpdate={handleUpdate}
                     isSubmitting={isSubmitting} 
+                    datosEstaticos={datosEstaticos}
                 />
             ) : (
                 <RenderDatosEstacion

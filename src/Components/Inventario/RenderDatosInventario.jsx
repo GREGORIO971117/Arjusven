@@ -1,13 +1,8 @@
 import React from 'react';
 import './InventarioList.css';
+import { inventarioConfig } from '../../assets/inventarioConfig';
 
-/**
- * Función auxiliar para formatear fechas.
- * @param {string | LocalDate} dateString - Cadena de fecha (YYYY-MM-DD o formato largo).
- * @returns {string} Fecha formateada o una cadena vacía.
- */
 const formatDate = (dateString) => {
-    // Si Java devuelve LocalDate, el string ya será YYYY-MM-DD.
     if (typeof dateString === 'string') {
         return dateString.slice(0, 10);
     }
@@ -18,34 +13,40 @@ const formatDate = (dateString) => {
 function RenderDatosInventario({ data, onEdit, loadHistorial }) {
 
     if (!data) {
-        return null;
+        return <div>No hay datos disponibles.</div>;
     }
 
     const InfoItem = ({ label, value }) => {
+        const displayValue = value === undefined || value === null || value === '' ? '—' : value;
+
         return (
             <div className='infoItem'>
-                <strong>{label}:<span>{value || 'Vacio'}</span></strong> 
+                <strong>{label}:<span>{displayValue}</span></strong> 
             </div>
         );
     };
 
-    const {
-        fechaDeInicioPrevista,
-        fechaDeFinPrevista, 
-        fechaDeFin, 
-        ultimaActualizacion, 
-        responsable,
-        codigoEmail,
-        numeroDeSerie,
-        descripcion,
-        equipo,
-        numeroDeIncidencia,
-        estado,
-        cliente,
-        plaza,
-        guias,
-        tecnico
-    } = data;
+    const gri2dKeys = [
+        'titulo',
+        'numeroDeSerie',
+        'responsable',
+        'codigoEmail',
+        'cliente',
+        'plaza',
+        'numeroDeIncidencia',
+        'guias',
+        'equipo',
+        'estado',
+        'tecnicoCampo',
+        'fechaInicioPrevista',
+        'fechaFinPrevista',
+        'fechaActualizacion',
+        'fechaFin',
+        'descripcion'
+    ];
+
+    const getConfig = (key) => inventarioConfig.find(field => field.key === key);
+    const { numeroDeSerie, equipo } = data;
 
     return (
         <> 
@@ -59,21 +60,17 @@ function RenderDatosInventario({ data, onEdit, loadHistorial }) {
 
             <div className="detalleGridContainer">
                 <div className="grid2">
-                    <InfoItem label="Número de Serie" value={numeroDeSerie} />
-                    <InfoItem label="Equipo" value={equipo} />
-                    <InfoItem label="Estado" value={estado} />
-                    <InfoItem label="Responsable" value={responsable} />
-                    <InfoItem label="Cliente" value={cliente} />
-                    <InfoItem label="Plaza Actual" value={plaza} />
-                    <InfoItem label="Técnico de Campo" value={tecnico} /> 
-                    <InfoItem label="Número de Incidencia" value={numeroDeIncidencia} />
-                    <InfoItem label="Código de Email" value={codigoEmail} />
-                    <InfoItem label="Guías" value={guias} />
-                    <InfoItem label="Fecha de Inicio Prevista" value={formatDate(fechaDeInicioPrevista)} />
-                    <InfoItem label="Fecha de Fin Prevista" value={formatDate(fechaDeFinPrevista)} />
-                    <InfoItem label="Fecha de Fin" value={formatDate(fechaDeFin)} />
-                    <InfoItem label="Última Actualización" value={formatDate(ultimaActualizacion)} />
-                    <InfoItem label="Descripción" value={descripcion} /> 
+                    {gri2dKeys.map((key) => {
+                        const field = getConfig(key);
+                        const label = field ? field.label : key; 
+                        return (
+                            <InfoItem 
+                                key={key} 
+                                label={label}
+                                value={data[key]}
+                                />
+                        );
+                    })}
                 </div>
             </div>
 

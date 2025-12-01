@@ -66,7 +66,6 @@ function InventarioTemplate({handleRemove,handleEnterEditMode, handleCancel,isEd
                             handleUpdate={handleUpdate}
                         />
                     ) : (
-                        // MODO DE VISUALIZACIÓN
                         <RenderDatosInventario
                             data={data}
                             onGoBack={onGoBack}

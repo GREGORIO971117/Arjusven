@@ -5,7 +5,7 @@ import EstacionesTemplate from './EstacionesTemplate';
 import RenderFiltroEstaciones from './RenderFiltro'; 
 import '../Inventario/InventarioList.css';
 import { apiRequest } from '../login/Api';
-
+import datosEstaticos from '../../assets/datos.json';
 
 const API_URL = '/estaciones'; 
 
@@ -282,6 +282,7 @@ async function handleRemove() {
                             handleUpdate={handleUpdate}
                             isSubmitting={isSubmitting} 
                             error={error} 
+                            datosEstaticos={datosEstaticos}
                         />
                     ) : (
                         <div className="no-selection-message">

@@ -3,8 +3,6 @@ import { serviciosConfig } from '../../assets/serviciosConfig';
 
 const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEditing }) => {
     
-        
-
     if (!data) {
         return <div className="no-data-message">No se encontraron datos de Servicio para este ticket.</div>;
     }
