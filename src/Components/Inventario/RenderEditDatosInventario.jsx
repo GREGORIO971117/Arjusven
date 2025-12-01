@@ -87,26 +87,31 @@ function RenderEditDatosInventario({
         return <input type={field.type} {...commonProps} />;
     };
 
-    // Estilos para Grid (Sistema de rejilla ordenado)
-    const gridStyle = {
+    const gridContainerStyle = {
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)', // 3 columnas por defecto
+        gridTemplateColumns: 'repeat(3, 1fr)',
         gap: '15px',
-        marginBottom: '20px'
+        marginBottom: '20px',
+        padding: '10px',
+        borderBottom: '1px solid #eee' 
     };
 
     return (
         <section style={styles.card}>
-            <h3>Editar: {formData.titulo}</h3>
+            <h3>{formData.numeroDeSerie} - {formData.equipo}</h3>
             
             <form onSubmit={handleSubmit} style={styles.form}>
-                {error && <div style={{...styles.error, marginBottom: 15}}>{error}</div>}
+                {error && <div style={styles.error}>{error}</div>}
                 
-                <div style={gridStyle}>
+                <div style={gridContainerStyle}>
                     {inventarioConfig.map(field => (
-                        <div key={field.key} style={{ gridColumn: field.fullWidth ? 'span 3' : 'span 1' }}>
+                        <div key={field.key} style={{ 
+                                    gridColumn: field.fullWidth ? 'span 3' : 'span 1',
+                                    display: 'flex',
+                                    flexDirection: 'column'
+                                }}>
                             <label style={styles.label}>
-                                {field.label} {field.required && "*"}
+                                {field.label}
                             </label>
                             {renderField(field)}
                         </div>

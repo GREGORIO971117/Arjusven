@@ -37,7 +37,7 @@ function RenderDatosInventario({ data, onEdit, loadHistorial }) {
         'guias',
         'equipo',
         'estado',
-        'tecnicoCampo',
+        'tecnico',
         'fechaInicioPrevista',
         'fechaFinPrevista',
         'fechaActualizacion',

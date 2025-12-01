@@ -52,13 +52,12 @@ const fetchFilteredEstaciones = async () => {
         
         const response = await apiRequest(endpoint, { method: 'GET' });
         
-        // --- CORRECCIÓN AQUÍ ---
         
         // 1. Manejar caso 204 No Content (Búsqueda exitosa pero sin resultados)
         if (response.status === 204) {
-            setEstacionesData([]); // Limpiamos la lista
+            setEstacionesData([]);
             setIsLoading(false);
-            return; // Salimos de la función para no intentar leer JSON
+            return; 
         }
 
         // 2. Manejar errores reales (400, 500, etc.)
@@ -257,8 +256,6 @@ async function handleRemove() {
                         handleSearchSubmit={handleSearchSubmit}
                     />
                 </div>
-
-                {/* PANEL DE FILTRO (si está visible) */}
                 {showFilterPanel && (
                     <RenderFiltroEstaciones
                         setShowFilterPanel={setShowFilterPanel}
