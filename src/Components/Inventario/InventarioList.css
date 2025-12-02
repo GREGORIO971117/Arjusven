@@ -60,10 +60,8 @@ textarea.form-input {
     margin-bottom: 5px; /* Pequeño espacio antes del ul */
 }
 
-/* Asegúrate de que los ítems de la lista tengan el mismo padding horizontal */
 .ticket-item {
-    /* ... otros estilos ... */
-    padding: 10px 15px; /* Ejemplo de padding */
+    padding: 10px 15px; 
 }
 
 

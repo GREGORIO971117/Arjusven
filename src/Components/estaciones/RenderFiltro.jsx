@@ -8,6 +8,8 @@ const RenderFiltro = ({
     onApply
 }) => {
 
+    
+
     return (
         <div className="modal-overlay"> 
             

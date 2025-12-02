@@ -1,32 +1,29 @@
 import React, { useState } from 'react';
 import '../Inventario/InventarioList.css'
 
-export default function EstacionesList ({ estaciones, onSelectEstacion, setShowFilterPanel, isLoading, selectedEstacionId, searchQuery, setSearchQuery, handleSearchSubmit }) {
-    const [currentPage, setCurrentPage] = useState(0);
-    const [searchTerm, setSearchTerm] = useState('');
+export default function EstacionesList ({
+     estaciones,
+     onSelectEstacion, 
+     setShowFilterPanel, 
+     isLoading, 
+     selectedEstacionId, 
+     searchQuery, 
+     setSearchQuery, 
+     currentPage,
+     setCurrentPage,
+     handleKeyDown
+     }) {
+
     const itemsPerPage = 20;
 
-    // 1. Filtrado en memoria
-    const filteredEstaciones = estaciones.filter(estacion => 
-        estacion.nombreComercial.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        estacion.idMerchant.toString().includes(searchTerm)
-    );
-
     // 2. Lógica de Paginación
-    const totalPages = Math.ceil(filteredEstaciones.length / itemsPerPage);
+    const totalPages = Math.ceil(estaciones.length / itemsPerPage);
 
-    const currentItems = filteredEstaciones.slice(
+    const currentItems = estaciones.slice(
         currentPage * itemsPerPage,
         (currentPage + 1) * itemsPerPage
     );
 
-     const handleKeyDown = (event) => {
-        if (event.key === 'Enter' || event.keyCode === 13) {
-            event.preventDefault(); 
-            handleSearchSubmit();
-            setCurrentPage(0);
-        }
-    };
 
     const handleEstacionClick = (estacion) => {
         onSelectEstacion(estacion);
@@ -59,7 +56,7 @@ export default function EstacionesList ({ estaciones, onSelectEstacion, setShowF
 
             {isLoading ? (
                 <p>Cargando datos de estaciones...</p>
-            ) : filteredEstaciones.length === 0 ? (
+            ) : estaciones.length === 0 ? (
                 <p>No hay estaciones disponibles o no coinciden con la búsqueda.</p>
             ) : (
                 <>

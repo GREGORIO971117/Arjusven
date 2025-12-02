@@ -20,6 +20,7 @@ export default function EstacionesPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isEditing, setIsEditing] = useState(false); 
     const [searchQuery, setSearchQuery] = useState("");
+    const [currentPage, setCurrentPage] = useState(0);
     const [filterCriteria, setFilterCriteria] = useState({
                                                          supervisorArjus: "todos",
                                                          estado: "todos",
@@ -79,9 +80,18 @@ const fetchFilteredEstaciones = async () => {
     }
 };
 
+        const handleKeyDown = (event) => {
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            event.preventDefault(); 
+            handleSearchSubmit();
+            setCurrentPage(0);
+        }
+    };
+
     const handleApplyFilters = () => {
         fetchFilteredEstaciones();
         setShowFilterPanel(false); 
+        setCurrentPage(0);
     };
                                 
     
@@ -254,6 +264,9 @@ async function handleRemove() {
                         searchQuery={searchQuery}
                         setSearchQuery={setSearchQuery}
                         handleSearchSubmit={handleSearchSubmit}
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
+                        handleKeyDown={handleKeyDown}
                     />
                 </div>
                 {showFilterPanel && (
@@ -262,6 +275,8 @@ async function handleRemove() {
                         filterCriteria={filterCriteria}
                         setFilterCriteria={setFilterCriteria}
                         onApply={handleApplyFilters}
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
                     />
                 )}
 
