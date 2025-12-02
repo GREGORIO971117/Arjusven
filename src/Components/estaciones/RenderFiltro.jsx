@@ -7,7 +7,6 @@ const RenderFiltro = ({
     setFilterCriteria,
     onApply
 }) => {
-
     
 
     return (

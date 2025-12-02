@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import TicketList from '../ticketTemplate/ticketList';
+import Lista from '../listas/estacionesList';
 import TicketTemplate from './TicketTemplate';
 import RenderFiltro from './RenderFiltro';
 import { apiRequest } from '../login/Api';
@@ -17,6 +18,7 @@ function TicketPage() {
     const [error, setError] = useState("");
     const [isSaving, setIsSaving] = useState(false); 
     const [saveError, setSaveError] = useState(null); 
+    const [currentPage, setCurrentPage] = useState(0);
     const [searchQuery, setSearchQuery] = useState("");
 
     const [filterCriteria, setFilterCriteria] = useState({
@@ -86,9 +88,18 @@ function TicketPage() {
         }
     };
 
+      const handleKeyDown = (event) => {
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            event.preventDefault(); 
+            onSearchSubmit();
+            setCurrentPage(0);
+        }
+    };
+
     const handleApplyFilters = () => {
         fetchFilteredTickets();
         setShowFilterPanel(false); 
+        setCurrentPage(0);
     };
 
     const fetchTickets = useCallback(async () => {
@@ -387,19 +398,18 @@ function TicketPage() {
         <>
             <div className='ticket-content-flex'>
                 <div className="ticket-list-column">
-
-                    {isLoading && <p>Cargando tickets...</p>}
-                    {error && <div className="error-message"> Error: {error}</div>}
-                    {!isLoading && !error && (
-                        <TicketList
-                            tickets={ticketsData}
-                            onSelectTicket={setSelectedTicket}
+                        <Lista
+                            items={ticketsData}
+                            onSelectEstacion={setSelectedTicket}
                             setShowFilterPanel={setShowFilterPanel}
+                            isLoading={isLoading}
                             searchQuery={searchQuery}
                             setSearchQuery={setSearchQuery} 
-                            onSearchSubmit={handleSearchSubmit} 
+                            handleSearchSubmit={handleSearchSubmit} 
+                            currentPage={currentPage}
+                            setCurrentPage={setCurrentPage}
+                            handleKeyDown={handleKeyDown}
                         />
-                    )}
                 </div>
                 
                 {showFilterPanel && (

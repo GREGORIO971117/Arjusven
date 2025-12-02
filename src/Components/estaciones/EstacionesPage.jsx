@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import EstacionesList from './EstacionesList'; 
+import Lista from '../listas/EstacionesList';
 import EstacionesTemplate from './EstacionesTemplate';
 import RenderFiltroEstaciones from './RenderFiltro'; 
 import '../Inventario/InventarioList.css';
@@ -80,14 +80,14 @@ const fetchFilteredEstaciones = async () => {
     }
 };
 
-        const handleKeyDown = (event) => {
+const handleKeyDown = (event) => {
         if (event.key === 'Enter' || event.keyCode === 13) {
             event.preventDefault(); 
             handleSearchSubmit();
             setCurrentPage(0);
         }
     };
-
+    
     const handleApplyFilters = () => {
         fetchFilteredEstaciones();
         setShowFilterPanel(false); 
@@ -255,19 +255,19 @@ async function handleRemove() {
                 
                 {/* COLUMNA DE LA LISTA */}
                 <div className="ticket-list-column"> 
-                    <EstacionesList
-                        estaciones={estacionesData} 
+
+                    <Lista
+                        items={estacionesData} 
                         onSelectEstacion={setSelectedEstacion}
                         setShowFilterPanel={setShowFilterPanel}
                         isLoading={isLoading}
-                        selectedEstacionId={selectedEstacion}
                         searchQuery={searchQuery}
                         setSearchQuery={setSearchQuery}
                         handleSearchSubmit={handleSearchSubmit}
                         currentPage={currentPage}
                         setCurrentPage={setCurrentPage}
-                        handleKeyDown={handleKeyDown}
-                    />
+                        />
+                    
                 </div>
                 {showFilterPanel && (
                     <RenderFiltroEstaciones
@@ -275,8 +275,6 @@ async function handleRemove() {
                         filterCriteria={filterCriteria}
                         setFilterCriteria={setFilterCriteria}
                         onApply={handleApplyFilters}
-                        currentPage={currentPage}
-                        setCurrentPage={setCurrentPage}
                     />
                 )}
 

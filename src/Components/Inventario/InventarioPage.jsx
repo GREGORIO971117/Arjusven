@@ -1,5 +1,5 @@
 import React, { useState, useEffect,useCallback } from 'react';
-import InventarioList from './InventarioList';
+import Lista from '../listas/estacionesList';
 import InventarioTemplate from './InventarioTemplate';
 import RenderFiltro from './RenderFiltro';
 import './InventarioList.css';
@@ -17,7 +17,8 @@ function InventarioPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isEditing, setIsEditing] = useState(false); 
     const [searchQuery, setSearchQuery] = useState("");
-   const [filterCriteria, setFilterCriteria] = useState({
+    const [currentPage, setCurrentPage] = useState(0);
+    const [filterCriteria, setFilterCriteria] = useState({
                                                         estado: "todos",
                                                         plaza: "todos",
                                                         equipo: "todos",
@@ -74,10 +75,18 @@ const fetchFilteredInventario = async () => {
             setIsLoading(false);
         }
     };
+     const handleKeyDown = (event) => {
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            event.preventDefault(); 
+            onSearchSubmit();
+            setCurrentPage(0);
+        }
+    };
 
     const handleApplyFilters = () => {
         fetchFilteredInventario();
         setShowFilterPanel(false); 
+        setCurrentPage(0);
     };
 
     
@@ -228,15 +237,17 @@ const fetchFilteredInventario = async () => {
         <div className="ticket-page-container">
             <div className="ticket-content-flex">
                 <div className="ticket-list-column">
-                    <InventarioList
-                        Inventario={inventarioData}
-                        onSelectTicket={setSelectedInventario}
+                    <Lista
+                        items={inventarioData}
+                        onSelectEstacion={setSelectedInventario}
                         setShowFilterPanel={setShowFilterPanel}
                         isLoading={isLoading}
                         searchQuery={searchQuery}
                         setSearchQuery={setSearchQuery}
-                        onSearchSubmit={handleSearchSubmit} 
-                    />
+                        handleSearchSubmit={handleSearchSubmit} 
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
+                        />
                 </div>
 
                 {showFilterPanel && (
@@ -245,6 +256,8 @@ const fetchFilteredInventario = async () => {
                         filterCriteria={filterCriteria}
                         setFilterCriteria={setFilterCriteria}
                         onApply={handleApplyFilters}
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
                     />
                 )}
 

@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import './InventarioList.css';
 
-const InventarioList = ({ Inventario, onSelectTicket,setShowFilterPanel, searchQuery, setSearchQuery, onSearchSubmit }) => {
+const InventarioList = ({ 
+  Inventario,
+  onSelectTicket,
+  setShowFilterPanel, 
+  searchQuery, 
+  setSearchQuery, 
+  onSearchSubmit,
+  
+}) => {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 20;
 
@@ -11,14 +19,7 @@ const InventarioList = ({ Inventario, onSelectTicket,setShowFilterPanel, searchQ
     currentPage * itemsPerPage,
     (currentPage + 1) * itemsPerPage
   );
-  
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter' || event.keyCode === 13) {
-            event.preventDefault(); 
-            onSearchSubmit();
-            setCurrentPage(0);
-        }
-    };
+
 
   const handleTicketClick = (ticket) => {
     onSelectTicket(ticket);

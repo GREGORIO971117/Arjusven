@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
-function TicketList({ tickets, onSelectTicket, setShowFilterPanel, searchQuery, setSearchQuery, onSearchSubmit }) {
+function TicketList({ 
+    tickets,
+    onSelectTicket, setShowFilterPanel, searchQuery, setSearchQuery, onSearchSubmit }) {
 
-    const [currentPage, setCurrentPage] = useState(0);
 
     const itemsPerPage = 20;
     const totalPages = Math.ceil(tickets.length / itemsPerPage);
@@ -11,13 +12,7 @@ function TicketList({ tickets, onSelectTicket, setShowFilterPanel, searchQuery, 
         (currentPage + 1) * itemsPerPage
     );
   
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter' || event.keyCode === 13) {
-            event.preventDefault(); 
-            onSearchSubmit();
-            setCurrentPage(0);
-        }
-    };
+  
 
     const handleTicketClick = (ticket) => {
         onSelectTicket(ticket);
