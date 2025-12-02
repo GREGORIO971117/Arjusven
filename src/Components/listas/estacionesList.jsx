@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../Inventario/InventarioList.css'
 
 export default function EstacionesList ({
@@ -28,7 +28,6 @@ export default function EstacionesList ({
         }
     };
 
-
     const handleEstacionClick = (items) => {
         onSelectEstacion(items);
     };
@@ -40,6 +39,23 @@ export default function EstacionesList ({
     const handlePrevPage = () => {
         if (currentPage > 0) setCurrentPage(prev => prev - 1);
     };
+
+    const selectEncabezado = (items = []) => {
+    const first = items[0];
+    if (!first) return "";
+
+    if (first.idMerchant != null) {
+        return "Id merchant | Nombre comercial";
+    }
+    if (first.idInventario != null) {
+        return "Número de serie | Equipo";
+    }
+    if (first.idTickets != null) {
+        return "Incidencia | Nombre de Ess";
+    }
+
+    return "";
+};
 
     return (
         <div className="ticket-list">
@@ -66,7 +82,10 @@ export default function EstacionesList ({
                 <>
 
                  <div className="list-header-row">
-                    <span className="header-column-title">Id merchant | Nombre comercial</span>
+                   
+                    <span className="header-column-title">
+                        {selectEncabezado(items)}
+                    </span>
                 </div>
                     <ul>
                         {currentItems.map(items => (
@@ -76,8 +95,10 @@ export default function EstacionesList ({
                                 onClick={() => handleEstacionClick(items)}
                             >
                                 <div className="ticket-info">
+
                                     <strong> {items.idMerchant || items.numeroDeSerie || items.servicios.incidencia}</strong> 
                                     {items.nombreComercial || items.equipo || items.servicios.nombreDeEss}
+
                                 </div>
                             </li>
                         ))}
