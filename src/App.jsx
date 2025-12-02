@@ -10,6 +10,7 @@ import Upload from './components/upload/subirArchivos';
 import Admin from './components/admin/adminPage';
 import Perfil from './components/perfil/perfilPage';
 import Estaciones from './Components/estaciones/EstacionesPage';
+import PlaneacionPage from './Components/planeacion/planeacionPage';
 import './App.css'; 
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
         {id: 5, text: "Usuarios", url: "/Usuarios"},
         {id: 6, text: "Perfil", url: "/Perfil"},
         {id: 7, text: "Subir", url: "/SubirIncidencias" },
+        {id: 8, text: "Planeación", url: "/Planeacion" }
     ];
 
     return (
@@ -74,6 +76,7 @@ function App() {
                     <Route path="/Usuarios" element={<Admin/>}/>
                     <Route path="/Perfil" element={<Perfil/>}/>
                     <Route path="/SubirIncidencias" element={<Upload/>} />
+                    <Route path="/Planeacion" element={<PlaneacionPage/>}/>
                 </Route>
                 
                 <Route path="*" element={<h1>404: Página no encontrada</h1>} />

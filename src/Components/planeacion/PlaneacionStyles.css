@@ -1,0 +1,168 @@
+/* src/components/PlaneacionStyles.css */
+
+/* --- Layout Principal --- */
+.planeacion-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Ocupa toda la pantalla */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f3f4f6;
+  overflow: hidden;
+}
+
+.planeacion-header-area {
+  flex: none;
+  background-color: white;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 30;
+}
+
+.planeacion-table-wrapper {
+  flex: 1;
+  overflow: auto; /* Permite scroll vertical y horizontal */
+  position: relative;
+  background-color: white;
+  margin: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* --- Tabla --- */
+.data-table {
+  width: 100%;
+  border-collapse: separate; /* Necesario para sticky headers */
+  border-spacing: 0;
+}
+
+/* Encabezado Fijo (Sticky) */
+.th-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: #1e3a8a; /* Azul oscuro */
+  color: white;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: left;
+  border-right: 1px solid #3b82f6;
+  user-select: none;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.header-content:hover {
+  opacity: 0.9;
+}
+
+/* Fila de Filtros (Debajo del encabezado) */
+.th-filter {
+  position: sticky;
+  top: 35px; /* Altura aproximada del header de arriba */
+  z-index: 19;
+  background-color: #f3f4f6;
+  padding: 4px;
+  border-bottom: 2px solid #d1d5db;
+  border-right: 1px solid #e5e7eb;
+}
+
+/* Celdas del Cuerpo */
+.td-cell {
+  border-bottom: 1px solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
+  font-size: 12px;
+  color: #374151;
+  padding: 0; /* Padding 0 para que el input llene la celda */
+  height: 30px;
+  white-space: nowrap;
+}
+
+.tr-row:hover .td-cell {
+  background-color: #eff6ff; /* Azul muy claro al pasar mouse */
+}
+
+.no-data {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+}
+
+/* --- Inputs y Controles --- */
+.input-filter, .select-filter {
+  width: 100%;
+  padding: 4px;
+  font-size: 11px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+}
+
+.btn-config {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-config:hover {
+  background-color: #1d4ed8;
+}
+
+/* Menú Dropdown de Columnas */
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 5px;
+  background: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+  border-radius: 6px;
+  padding: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 50;
+  width: 250px;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 13px;
+}
+
+.dropdown-item input {
+  margin-right: 8px;
+}
+
+/* Celda Editable */
+.cell-viewer {
+  padding: 6px 8px;
+  width: 100%;
+  height: 100%;
+  cursor: text;
+  display: block;
+}
+
+.input-editable {
+  width: 100%;
+  height: 100%;
+  border: 2px solid #2563eb; /* Borde azul al editar */
+  padding: 4px 8px;
+  outline: none;
+  font-size: 12px;
+  background-color: #fff;
+}
