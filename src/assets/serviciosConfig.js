@@ -11,7 +11,7 @@ export const serviciosConfig = [
     { key: 'direccion', label: 'Dirección', type: 'text', grid: 1 },
     { key: 'tecnico', label: 'Técnico de Campo', type: 'select', optionsKey: 'tecnicoCampo', grid: 1 },
     { key: 'sla', label: 'SLA', type: 'select', optionsKey: 'sla', grid: 1 },
-    { key: 'fechaDeAsignacion', label: 'Fecha de Asignación', type: 'date', grid: 1 },
+    { key: 'fechaDeAsignacion', label: 'Fecha de Asignación', type: 'date', grid: 1 , readOnly: true},
     { key: 'guiaDeEncomienda', label: 'Guía de Encomienda', type: 'text', grid: 1 },
     { key: 'motivoDeServicio', label: 'Motivo del Servicio', type: 'text', grid: 1 },
     { key: 'motivoReal', label: 'Motivo real en sitio', type: 'textarea', grid: 2 },

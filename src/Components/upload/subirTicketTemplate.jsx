@@ -54,10 +54,7 @@ export default function SubirTicketTemplate() {
                     "observaciones": observaciones.trim(),
                     "incidencia": incidencia.trim(), 
                     "idMerchant": Number(idMerchant.trim()),
-                },
-                "adicionales":{ 
-                    "ciudad":"Puebla"
-                 }
+                }
             };
         
         setLoading(true);

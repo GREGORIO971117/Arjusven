@@ -1,165 +1,180 @@
 import React, { useState, useEffect } from 'react';
-import { styles} from '../admin/adminTemplate';
+import { styles } from '../admin/adminTemplate';
 import { serviciosConfig } from '../../assets/serviciosConfig';
 
-function RenderEditarDatosServicio({ data, onCancelEdit, datosEstaticos, onSaveEdit, onDeleteEdit }) { 
-    
+function RenderEditarDatosServicio({ 
+    data, 
+    onCancelEdit, 
+    datosEstaticos, 
+    onSaveEdit, 
+    onDeleteEdit 
+}) {
+
+    const formatDate = (dateString) => dateString ? String(dateString).slice(0, 10) : '';
+
+    // 1. Inicializar estado dinámicamente basado en la config y data
     const [formData, setFormData] = useState({});
+    const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [localError, setLocalError] = useState(null);
 
     useEffect(() => {
-        if (data) { 
-            setFormData(data);
+        if (data) {
+            const initialState = {};
+            serviciosConfig.forEach(field => {
+                let value = data[field.key] || "";
+                if (field.type === 'date') value = formatDate(value);
+                initialState[field.key] = value;
+            });
+            // Mantener cualquier ID u otros datos que no estén en la config pero vengan en data
+            setFormData({ ...data, ...initialState });
         }
     }, [data]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
-        setLocalError(null);
+        setError(""); // Limpiar error al escribir
     };
 
-    const handleSave = async () => {
-        setLocalError(null);
+    // 2. Validación dinámica
+    const validateForm = () => {
+        for (const field of serviciosConfig) {
+            if (field.required && !String(formData[field.key]).trim()) {
+                return `El campo ${field.label} es requerido.`;
+            }
+        }
+        return "";
+    };
+
+    // 3. Manejo del envío (Submit)
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        const validationError = validateForm();
+        if (validationError) {
+            setError(validationError);
+            return;
+        }
+        setError("");
         setIsSubmitting(true);
 
-        let dataToSend = { ...formData };
-
-        if (dataToSend.ticket) {
-        delete dataToSend.ticket; 
-    }
-
-    if (dataToSend.estaciones) {
-        delete dataToSend.estaciones; 
-    }
-        
         try {
-        const result = await onSaveEdit(dataToSend); 
-        
-        if (result && result.success) {
-            if (onCancelEdit) onCancelEdit(); 
-        } else {
-            throw new Error(result?.error || "Error desconocido al guardar. Verifica la API.");
+            // Lógica específica de limpieza de datos de Servicios
+            let dataToSend = { ...formData };
+            if (dataToSend.ticket) delete dataToSend.ticket;
+            if (dataToSend.estaciones) delete dataToSend.estaciones;
+
+            const result = await onSaveEdit(dataToSend);
+
+            if (result && result.success) {
+                if (onCancelEdit) onCancelEdit();
+            } else {
+                setError(result?.error || "Error desconocido al guardar.");
+            }
+        } catch (err) {
+            console.error("Fallo al ejecutar onSaveEdit:", err);
+            setError(err.message || "Falló la operación de guardado.");
+        } finally {
+            setIsSubmitting(false);
         }
-    } catch (err) {
-        console.error("Fallo al ejecutar onSaveEdit:", err);
-        setLocalError(err.message || "Fallo la operación de guardado.");
-    } finally {
-        setIsSubmitting(false);
-    }
     };
 
-    const handleCancel = () => {
-        if (onCancelEdit) onCancelEdit();
+    // 4. Renderizador de inputs dinámico (Igual que en Inventario)
+    const renderField = (field) => {
+        const commonProps = {
+            name: field.key,
+            value: formData[field.key] || "",
+            onChange: handleChange,
+            disabled: field.readOnly || isSubmitting, // field.disabled no existe en serviciosConfig, pero lo dejamos preparado
+            style: field.type === 'textarea' 
+                   ? { ...styles.input, minHeight: '80px', width: '100%' } 
+                   : styles.input
+        };
+
+        if (field.type === 'select') {
+            const options = datosEstaticos[field.optionsKey] || [];
+            return (
+                <select {...commonProps}>
+                    <option value="">Seleccione...</option>
+                    {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                </select>
+            );
+        }
+
+        if (field.type === 'textarea') {
+            return <textarea {...commonProps} rows="3" />;
+        }
+
+        return <input type={field.type} {...commonProps} />;
+    };
+
+    // Estilo para Grid de 2 columnas (para acomodar grid:1 y grid:2 de tu config)
+    const gridContainerStyle = {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)', 
+        gap: '5px',
+        marginBottom: '10px',
+        padding: '10px',
+        borderBottom: '1px solid #eee' 
     };
 
     if (!formData || Object.keys(formData).length === 0) {
-        return <div>Cargando datos de Servicio...</div>;
+        return <div>Cargando datos...</div>;
     }
-    
-    // Filtramos los campos por su sección de grid
-    const grid1Fields = serviciosConfig.filter(field => field.grid === 1);
-    const grid2Fields = serviciosConfig.filter(field => field.grid === 2);
 
     return (
-        <div style={{...styles.card, padding: 0}}> 
-
-            <div style={styles.row}> 
-                {grid1Fields.map(field => (
-                    <label key={field.key} style={styles.label}>
-                        <strong>{field.label}:</strong>
-                        {field.type === 'select' ? (
-                            <select 
-                                id={field.key} 
-                                name={field.key} 
-                                value={formData[field.key] || ''} 
-                                onChange={handleChange} 
-                                style={styles.input}
-                            >
-                                <option value="">{`Seleccione ${field.label}:`}</option>
-                                {datosEstaticos[field.optionsKey]?.map((opcion) => (
-                                    <option key={opcion} value={opcion}>{opcion}</option>
-                                ))}
-                            </select>
-                        ) : (
-                            <input 
-                                type={field.type} 
-                                id={field.key} 
-                                name={field.key} 
-                                value={formData[field.key] || ''} 
-                                onChange={handleChange} 
-                                style={styles.input}
-                            />
-                        )}
-                    </label>
-                ))}
-            </div>
-
-            <div style={{ ...styles.row, flexDirection: 'column', width: '100%', marginTop: '10px' }}>
-                
-                {grid2Fields.map(field => (
-                    <React.Fragment key={field.key}>
-                        {field.type === 'textarea' ? (
-                            <>
-                                <label style={styles.fullWidthLabel}>
-                                    <strong>{field.label}:</strong>
-                                </label>
-                                <textarea 
-                                    id={field.key} 
-                                    name={field.key} 
-                                    value={formData[field.key] || ''} 
-                                    onChange={handleChange} 
-                                    rows="3"
-                                    style={{ ...styles.input, minHeight: '40px', width: '100%', boxSizing: 'border-box' }}
-                                />
-                            </>
-                        ) : (
-                            <label style={styles.fullWidthLabel}>
-                                <strong>{field.label}:</strong>
-                                <input 
-                                    type={field.type} 
-                                    id={field.key} 
-                                    name={field.key} 
-                                    value={formData[field.key] || ''} 
-                                    onChange={handleChange} 
-                                    style={styles.input}
-                                />
-                            </label>
-                        )}
-                    </React.Fragment>
-                ))}
-            </div>
+        <section style={styles.card}>
+            {/* Título dinámico basado en datos disponibles */}
+            <h3>{formData.nombreDeEss} - {formData.incidencia}</h3>
             
-            {localError && <div style={styles.error}>{localError}</div>}
+            <form onSubmit={handleSubmit} style={styles.form}>
+                {error && <div style={styles.error}>{error}</div>}
+                
+                <div style={gridContainerStyle}>
+                    {serviciosConfig.map(field => (
+                        <div key={field.key} style={{ 
+                            gridColumn: field.grid === 2 ? 'span 2' : 'span 1',
+                            display: 'flex',
+                            flexDirection: 'column'
+                        }}>
+                            <label style={styles.label}>
+                                {field.label}
+                            </label>
+                            {renderField(field)}
+                        </div>
+                    ))}
+                </div>
 
-            <div style={{ marginTop: 20, display: 'flex', gap: 10, justifyContent: 'flex-end', padding: '0 20px 20px 20px' }}>
-                <button 
-                    type="button" 
-                    onClick={onDeleteEdit}
-                    style={styles.buttonDanger}
-                    disabled={isSubmitting}
-                >
-                    Borrar Incidencia
-                </button>
-                <button 
-                    type="button" 
-                    onClick={handleCancel}
-                    style={styles.navButton} 
-                    disabled={isSubmitting}
-                >
-                    Cancelar
-                </button>
-                <button 
-                    type="button" 
-                    onClick={handleSave}
-                    style={styles.buttonPrimary} 
-                    disabled={isSubmitting} 
-                >
-                    {isSubmitting ? "Guardando..." : "Guardar Cambios"}
-                </button>
-            </div>
-        </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 20 }}>
+                    <button 
+                        type="button" 
+                        onClick={onDeleteEdit} 
+                        style={styles.buttonDanger} 
+                        disabled={isSubmitting}
+                    >
+                        Borrar Incidencia
+                    </button>
+                    
+                    <div style={{ display: 'flex', gap: 10 }}>
+                        <button 
+                            type="button" 
+                            onClick={onCancelEdit} 
+                            style={styles.navButton} 
+                            disabled={isSubmitting}
+                        >
+                            Cancelar
+                        </button>
+                        <button 
+                            type="submit" 
+                            style={styles.buttonPrimary} 
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting ? "Guardando..." : "Guardar Cambios"}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </section>
     );
 }
 
