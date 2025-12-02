@@ -11,7 +11,7 @@ export const inventarioConfig = [
     { key: 'tecnico', label: 'Técnico Campo', type: 'select', optionsKey: 'tecnicoCampo', grid: 2 }, 
     { key: 'fechaInicioPrevista', label: 'Fecha Inicio Prevista', type: 'date', grid: 2 },
     { key: 'fechaFinPrevista', label: 'Fecha Fin Prevista', type: 'date', grid: 2 },
-    { key: 'fechaActualizacion', label: 'Fecha Actualización', type: 'date', grid: 2, disabled: true },
+    { key: 'ultimaActualizacion', label: 'Fecha Actualización', type: 'date', grid: 2, readOnly: true },
     { key: 'fechaFin', label: 'Fecha Fin', type: 'date', grid: 2 },
     { key: 'guias', label: 'Guías', type: 'text', grid: 2, fullWidth: true  },
     { key: 'descripcion', label: 'Descripción', type: 'textarea', grid: 2, fullWidth: true },

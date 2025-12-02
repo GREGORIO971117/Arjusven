@@ -67,7 +67,7 @@ function RenderEditDatosInventario({
             style: field.type === 'textarea' 
                    ? { ...styles.input, minHeight: '80px', width: '100%' } 
                    : styles.input,
-            disabled: field.readOnly || isSubmitting
+            disabled: field.disabled || field.readOnly || isSubmitting
         };
 
         if (field.type === 'select') {

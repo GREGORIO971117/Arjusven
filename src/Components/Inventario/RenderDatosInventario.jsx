@@ -38,7 +38,7 @@ function RenderDatosInventario({ data, onEdit, loadHistorial }) {
         'tecnico',
         'fechaInicioPrevista',
         'fechaFinPrevista',
-        'fechaActualizacion',
+        'ultimaActualizacion',
         'fechaFin',
         'descripcion'
     ];

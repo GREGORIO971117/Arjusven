@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import TicketList from '../ticketTemplate/ticketList';
 import Lista from '../listas/estacionesList';
 import TicketTemplate from './TicketTemplate';
 import RenderFiltro from './RenderFiltro';
