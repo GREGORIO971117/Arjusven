@@ -241,7 +241,8 @@ export default function SubirTicketTemplate() {
                 <div style={{ marginTop: 20, display: 'flex', gap: '10px' }}>
                     <button 
                     type="submit" 
-                    style={styles.buttonPrimary} disabled={loading}>
+                    style={styles.buttonPrimary}
+                    disabled={loading}>
                         {loading ? "Procesando..." : "Publicar Ticket"}
                     </button>
 

@@ -1,25 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { apiRequest } from '../login/Api'; 
 import { styles } from '../admin/adminTemplate';
 
-// Endpoints
 const INVENTARIO_API_URL = '/inventario';
-
 const initialFormState = {
-    titulo: "",
     numeroDeSerie: "",
     equipo: "",
-    estado: "",
-    cliente: "",
-    plaza: "",
-    tecnico: "",
-    numeroDeIncidencia: "",
-    codigoEmail: "",
-    guias: "",
-    fechaDeInicioPrevista: "",
-    fechaDeFinPrevista: "",
-    fechaDeFin: "",
-    ultimaActualizacion: "",
     descripcion: "",
 };
 
@@ -30,6 +16,8 @@ export default function SubirInventarioTemplate({datosEstaticos}) {
     const [artErrors, setArtErrors] = useState({}); 
     const [error, setError] = useState(""); 
     const [isSubmitting, setIsSubmitting] = useState(false); 
+    const fileInputRef = useRef(null); 
+    
 
 
     // --- HANDLERS Y UTILIDADES ---
@@ -37,6 +25,25 @@ export default function SubirInventarioTemplate({datosEstaticos}) {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     }
+
+    const triggerFileInput = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (!file.name.endsWith('.xls') && !file.name.endsWith('.xlsx')) {
+            setError("Solo se permiten archivos Excel (.xls, .xlsx)");
+            return;
+        }
+
+        //await uploadExcel(file);
+        
+        e.target.value = null; 
+    };
+
 
     function validateForm() {
         const errs = {};
@@ -91,7 +98,7 @@ export default function SubirInventarioTemplate({datosEstaticos}) {
             }
 
             const nuevoArticulo = await response.json();
-            setInventario((prev) => [nuevoArticulo, ...prev]);
+            setInventario((prev) => [rticulnuevoAo, ...prev]);
             resetForm();
             setError("✅ Artículo de inventario creado correctamente."); 
 
@@ -150,15 +157,34 @@ export default function SubirInventarioTemplate({datosEstaticos}) {
                         </div>
                     )}
 
-                    <div style={{ marginTop: 8 }}>
-                        <button type="submit" style={styles.buttonPrimary} disabled={isSubmitting}>
+                      <div style={{ marginTop: 20, display: 'flex', gap: '10px' }}>
+                        <button
+                        type="submit" 
+                        style={styles.buttonPrimary} 
+                        disabled={isSubmitting}>
                             {isSubmitting ? "Creando artículo..." : "Crear artículo"}
                         </button>
+
+
+                        <input 
+                            type="file" 
+                            ref={fileInputRef}
+                            style={{ display: 'none' }} 
+                            onChange={handleFileChange}
+                            accept=".xls,.xlsx"
+                        />
+
+                        <button 
+                            type="button" 
+                            style={{...styles.buttonPrimary, backgroundColor: '#28a745'}}
+                            disabled={isSubmitting}
+                            onClick={triggerFileInput}
+                        >
+                            {isSubmitting ? "Subiendo..." : "Subir Excel Inventario"}
+                        </button>
+
                     </div>
                 </form>
-    
-
         </div>
     );
 }
-
