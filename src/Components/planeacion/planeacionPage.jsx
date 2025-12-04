@@ -7,16 +7,13 @@ import {
     getPaginationRowModel,
 } from '@tanstack/react-table';
 
-// Importaciones locales
 import { mockData } from '../../assets/mockData';
 import { ColumnConfig } from '../../assets/servicios';
 import PlaneacionTemplate from './planeacionTemplate';
 
 export default function PlaneacionPage() {
-    // 1. Estado de los Datos
-    const [data, setData] = useState(mockData);
     
-    // 2. Estados de la Tabla
+    const [data, setData] = useState(mockData);
     const [columnFilters, setColumnFilters] = useState([]);
     const [sorting, setSorting] = useState([]);
     const [columnVisibility, setColumnVisibility] = useState({});
@@ -27,11 +24,9 @@ export default function PlaneacionPage() {
             accessorKey: cfg.accessorKey,
             header: cfg.header,
             size: cfg.size,
-            // Guardamos metadatos extra para usarlos en el componente de Filtro
             meta: {
                 filterType: cfg.filterType 
             },
-            // Todas usan EditableCell por defecto
             cell: (props) => props.getValue(), 
         }));
     }, []);
@@ -64,7 +59,7 @@ export default function PlaneacionPage() {
         
         // Modelos requeridos
         getCoreRowModel: getCoreRowModel(),
-        getFilteredRowModel: getFilteredRowModel(), // ¡IMPORTANTE para que funcionen los filtros!
+        getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
 
