@@ -1,25 +1,23 @@
-/* src/components/PlaneacionStyles.css */
 
-/* --- Layout Principal --- */
 .planeacion-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh; /* Ocupa toda la pantalla */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f3f4f6;
-  overflow: hidden;
+ display: flex;
+ flex-direction: column;
+ height: 100vh;
+ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ background-color: #f3f4f6;
 }
 
 .planeacion-header-area {
   flex: none;
-  background-color: white;
-  padding: 1rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  border-bottom: 1px solid #e5e7eb;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 30;
+ background-color: white;
+ padding: 1rem;
+ box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+ border-bottom: 1px solid #e5e7eb;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+  z-index: 1000;
+  overflow: visible;
 }
 
 .planeacion-table-wrapper {
@@ -123,18 +121,18 @@
 /* Menú Dropdown de Columnas */
 .dropdown-menu {
   position: absolute;
-  right: 0;
-  top: 100%;
-  margin-top: 5px;
-  background: white;
-  border: 1px solid #ddd;
-  box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-  border-radius: 6px;
-  padding: 10px;
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 50;
-  width: 250px;
+ right: 0;
+ top: 100%;
+ margin-top: 5px;
+ background: white;
+ border: 1px solid #ddd;
+ box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+ border-radius: 6px;
+ padding: 10px;
+ max-height: 300px; 
+ overflow-y: auto; 
+ z-index: 101; 
+ width: 250px;
 }
 
 .dropdown-item {

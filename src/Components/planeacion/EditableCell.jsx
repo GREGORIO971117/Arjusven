@@ -1,14 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import './PlaneacionStyles.css'; // Asegúrate de importar el CSS
+import React, { useState, useEffect } from "react";
+import "./PlaneacionStyles.css";
 
 export default function EditableCell({ getValue, row, column, table }) {
-    const initialValue = getValue();
+    let rawValue = getValue();
+
+    // Normalizar: evitar null / undefined en inputs controlados
+    const normalize = (val) => {
+        if (val === null || val === undefined) return "";
+        return String(val);
+    };
+
+    const initialValue = normalize(rawValue);
     const [value, setValue] = useState(initialValue);
     const [isEditing, setIsEditing] = useState(false);
 
+    // Se actualiza cuando cambian los datos de la tabla
     useEffect(() => {
-        setValue(initialValue);
-    }, [initialValue]);
+        setValue(normalize(getValue()));
+    }, [getValue]);
 
     const onBlur = () => {
         setIsEditing(false);
@@ -16,34 +25,32 @@ export default function EditableCell({ getValue, row, column, table }) {
     };
 
     const onKeyDown = (e) => {
-        if (e.key === 'Enter') {
+        if (e.key === "Enter") {
+            e.preventDefault();
             e.target.blur();
-        } else if (e.key === 'Escape') {
+        }
+        if (e.key === "Escape") {
             setValue(initialValue);
             setIsEditing(false);
         }
     };
 
-    if (isEditing) {
-        return (
-            <input
-                value={value}
-                onChange={e => setValue(e.target.value)}
-                onBlur={onBlur}
-                onKeyDown={onKeyDown}
-                className="input-editable" 
-                autoFocus
-            />
-        );
-    }
-
-    return (
-        <span 
-            onDoubleClick={() => setIsEditing(true)} 
+    return isEditing ? (
+        <input
+            value={value}
+            onChange={e => setValue(e.target.value)}
+            onBlur={onBlur}
+            onKeyDown={onKeyDown}
+            className="input-editable"
+            autoFocus
+        />
+    ) : (
+        <span
+            onDoubleClick={() => setIsEditing(true)}
             className="cell-viewer"
-            title={value}
+            title={value || ""}
         >
-            {value}
+            {value || ""}
         </span>
     );
 }

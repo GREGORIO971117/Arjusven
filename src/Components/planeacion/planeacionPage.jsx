@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useEffect } from 'react'; // 1. Agregamos useEffect
-import {apiRequest} from '../login/Api'
+import React, { useState, useMemo, useEffect } from 'react';
+import { apiRequest } from '../login/Api';
 
 import {
     useReactTable,
@@ -12,15 +12,11 @@ import {
 import { ColumnConfig } from '../../assets/servicios';
 import PlaneacionTemplate from './planeacionTemplate';
 
-// Ajusta esta URL a tu puerto real
-const API_URL = '/tickets/planeacion'; 
+const API_URL = '/planeacion';
 
 export default function PlaneacionPage() {
-    
-    // 3. Inicializamos data como array vacío [] en lugar de mockData
+
     const [data, setData] = useState([]);
-    
-    // 4. Estados para manejar la experiencia de usuario (Carga y Errores)
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -28,7 +24,6 @@ export default function PlaneacionPage() {
     const [sorting, setSorting] = useState([]);
     const [columnVisibility, setColumnVisibility] = useState({});
 
-    // 5. EFECTO: Cargar datos al montar el componente
     useEffect(() => {
         fetchPlaneacionData();
     }, []);
@@ -36,20 +31,20 @@ export default function PlaneacionPage() {
     const fetchPlaneacionData = async () => {
         setIsLoading(true);
         setError(null);
+
         try {
-            
-            const response = await apiRequest(API_URL, {method: "GET"});
+            const response = await apiRequest(API_URL, { method: "GET" });
 
             if (!response.ok) {
-                if(response.status === 204) {
-                     setData([]); // No hay contenido, dejamos tabla vacía
-                     return;
+                if (response.status === 204) {
+                    setData([]);
+                    return;
                 }
-                throw new Error('Error al obtener datos del servidor.');
+                throw new Error("Error al obtener datos del servidor");
             }
 
             const result = await response.json();
-            setData(result); // Guardamos los datos planos (DTOs) en el estado
+            setData(result);
 
         } catch (err) {
             console.error("Error fetch:", err);
@@ -59,34 +54,68 @@ export default function PlaneacionPage() {
         }
     };
 
-    // 6. Definición de Columnas (Se mantiene igual, solo asegura que ColumnConfig coincida con los nombres del DTO)
     const columns = useMemo(() => {
         return ColumnConfig.map(cfg => ({
-            accessorKey: cfg.accessorKey, // DEBE COINCIDIR con los nombres en PlaneacionDTO.java
+            id: cfg.accessorKey,
+            accessorKey: cfg.accessorKey,
             header: cfg.header,
             size: cfg.size,
-            meta: {
-                filterType: cfg.filterType 
-            },
-            cell: (props) => props.getValue(), 
+            meta: { filterType: cfg.filterType },
+            cell: (props) => props.getValue(),
         }));
     }, []);
 
-    // 7. Función de Guardado (Optimista) - Se mantiene igual
-    const updateData = (rowIndex, columnId, value) => {
-        setData(old =>
-            old.map((row, index) => {
-                if (index === rowIndex) {
-                    return { ...old[rowIndex], [columnId]: value };
-                }
-                return row;
-            })
-        );
-        console.log(`Guardado local: Fila ${rowIndex}, Col ${columnId} -> ${value}`);
-        // TODO: Aquí podrías agregar una llamada a la API para guardar el cambio real en BD
-    };
+   const updateData = async (rowIndex, columnId, value) => {
 
-    // 8. Inicialización de TanStack Table
+    setData(old =>
+        old.map((row, index) => {
+            if (index === rowIndex) {
+                return { ...row, [columnId]: value };
+            }
+            return row;
+        })
+    );
+
+    const updatedRow = data[rowIndex];
+
+    if (!updatedRow) {
+        console.error("Fila no encontrada");
+        return;
+    }
+
+    const idTicket = updatedRow.incidencia;
+
+    if (!idTicket) {
+        console.error("idTicket NO EXISTE en el DTO");
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/planeacion/${idTicket}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ [columnId]: value })
+        });
+
+        if (!response.ok) {
+            let message = "Error al guardar en el servidor.";
+
+            try {
+                const json = await response.json();
+                message = json.message || message;
+            } catch (e) {
+                // No viene JSON en la respuesta → ignorar
+            }
+
+            throw new Error(message);
+        }
+
+    } catch (error) {
+        console.error("Error al guardar en el servidor:", error);
+    }
+};
+
+
     const table = useReactTable({
         data,
         columns,
@@ -98,7 +127,7 @@ export default function PlaneacionPage() {
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         onColumnVisibilityChange: setColumnVisibility,
-        
+
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
@@ -107,15 +136,14 @@ export default function PlaneacionPage() {
         meta: {
             updateData,
         },
-        
+
         initialState: {
             pagination: { pageSize: 500 },
         }
     });
 
-    // 9. Renderizado condicional para carga y errores
     if (isLoading) {
-        return <div style={{ padding: '20px', textAlign: 'center' }}>Cargando datos de planeación...</div>;
+        return <div style={{ padding: '20px', textAlign: 'center' }}>Cargando datos...</div>;
     }
 
     if (error) {

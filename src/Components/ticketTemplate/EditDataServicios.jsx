@@ -12,7 +12,6 @@ function RenderEditarDatosServicio({
 
     const formatDate = (dateString) => dateString ? String(dateString).slice(0, 10) : '';
 
-    // 1. Inicializar estado dinámicamente basado en la config y data
     const [formData, setFormData] = useState({});
     const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
