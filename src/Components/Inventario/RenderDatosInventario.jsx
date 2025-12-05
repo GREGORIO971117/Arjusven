@@ -28,7 +28,6 @@ function RenderDatosInventario({ data, onEdit, loadHistorial }) {
 
     const gri2dKeys = [
         'numeroDeSerie',
-        'codigoEmail',
         'cliente',
         'plaza',
         'numeroDeIncidencia',
@@ -36,10 +35,7 @@ function RenderDatosInventario({ data, onEdit, loadHistorial }) {
         'equipo',
         'estado',
         'tecnico',
-        'fechaInicioPrevista',
-        'fechaFinPrevista',
         'ultimaActualizacion',
-        'fechaFin',
         'descripcion'
     ];
 

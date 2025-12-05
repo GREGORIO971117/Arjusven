@@ -75,13 +75,6 @@ const fetchFilteredInventario = async () => {
             setIsLoading(false);
         }
     };
-     const handleKeyDown = (event) => {
-        if (event.key === 'Enter' || event.keyCode === 13) {
-            event.preventDefault(); 
-            onSearchSubmit();
-            setCurrentPage(0);
-        }
-    };
 
     const handleApplyFilters = () => {
         fetchFilteredInventario();

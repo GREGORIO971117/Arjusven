@@ -9,7 +9,6 @@ import {
     getPaginationRowModel,
 } from '@tanstack/react-table';
 
-// import { mockData } from '../../assets/mockData'; // 2. Ya no usamos mockData
 import { ColumnConfig } from '../../assets/servicios';
 import PlaneacionTemplate from './planeacionTemplate';
 

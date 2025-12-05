@@ -100,14 +100,17 @@
         "Foraneo",
         "Migración",
         "Instalación",
-        "Crítica",
-        "Alta",
-        "Media",
-        "Baja"
+        "Crítica"
     ],
     "situacion":[
         "Abierto",
-        "Cerrado"
+        "Cerrado",
+        "Cancelada por PC",
+        "En mensajeria",
+        "Retiro",
+        "Stock",
+        "Visita sin stock",
+        "N/D"
     ],
     "estado":[
         "Dañado",
