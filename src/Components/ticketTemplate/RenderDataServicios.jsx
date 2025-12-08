@@ -19,6 +19,7 @@ const RenderDatosServicio = ({ data, activeTab, setActiveTab, isEditing, setIsEd
         
     const grid2Keys = [
         'fechaDeAsignacion',
+        'fechaReporte',
         'resolucion', 
         'situacionActual', 
         'nombreDeEss', 

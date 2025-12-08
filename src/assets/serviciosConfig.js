@@ -2,7 +2,7 @@
 export const serviciosConfig = [
     { key: 'nombreDeEss', label: 'Nombre de ESS', type: 'text', grid: 1, required: true },
     { key: 'incidencia', label: 'Número de Incidencia', type: 'text', grid: 1, required: true },
-    { key: 'resolucion', label: 'Resolución', type: 'date', grid: 1 },
+    { key: 'resolucion', label: 'Fecha de resolución', type: 'date', grid: 1 },
     { key: 'situacionActual', label: 'Situación Actual', type: 'select', optionsKey: 'situacion', grid: 1 },
     { key: 'supervisor', label: 'Supervisor', type: 'select', optionsKey: 'supervisores', grid: 1 },
     { key: 'idMerchant', label: 'ID Merchant', type: 'text', grid: 1 },
@@ -14,6 +14,8 @@ export const serviciosConfig = [
     { key: 'fechaDeAsignacion', label: 'Fecha de Asignación', type: 'date', grid: 1 , readOnly: true},
     { key: 'guiaDeEncomienda', label: 'Guía de Encomienda', type: 'text', grid: 1 },
     { key: 'motivoDeServicio', label: 'Motivo del Servicio', type: 'text', grid: 1 },
+    { key: 'descripcion', label: 'Descripción', type: 'textarea', grid: 2 },
+    { key: 'fechaReporte', label: 'Fecha de asignacion de reporte', type: 'date', grid: 1, readOnly: true },
     { key: 'motivoReal', label: 'Motivo real en sitio', type: 'textarea', grid: 2 },
     { key: 'observaciones', label: 'Observaciones ARJUSVEN', type: 'textarea', grid: 2 },
 ];
