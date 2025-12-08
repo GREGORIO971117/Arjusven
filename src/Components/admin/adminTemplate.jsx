@@ -214,5 +214,47 @@ export const styles = {
     td: {
         padding: '10px 12px',
         borderBottom: '1px solid #eee',
-    }
+    },
+    downloadDropdownContainer: {
+    position: "relative", 
+    display: "inline-block",
+    marginLeft: 10, 
+},
+downloadButton: {
+    paddingRight: 25, 
+},
+dropdownMenu: {
+    position: "absolute",
+    top: "100%", 
+    right: 0,
+    zIndex: 20, 
+    backgroundColor: "#ffffff",
+    border: "1px solid #e0e6ed",
+    borderRadius: 8,
+    minWidth: 180,
+    boxShadow: "0 6px 15px rgba(0, 0, 0, 0.1)", 
+    display: "flex",
+    flexDirection: "column",
+    padding: 0, 
+    marginTop: 5, 
+    overflow: "hidden",
+},
+dropdownItem: {
+    background: "none",
+    border: "none",
+    width: "100%",  
+    padding: "10px 15px",
+    textAlign: "left", 
+    cursor: "pointer",
+    fontSize: "0.95rem",
+    color: "#34495e",
+    transition: "background-color 0.2s",
+    whiteSpace: "nowrap",
+},
+dropdownItemHover: {
+    backgroundColor: "#f0f0f0", 
+},
+dropdownItemNotLastChild: {
+    borderBottom: "1px solid #f5f5f5",
+}
 };

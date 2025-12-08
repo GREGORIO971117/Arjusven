@@ -1,7 +1,14 @@
 import {useState} from 'react';
 import {adicionalesConfig} from '../../assets/adicionalesConfig';
 
-function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setIsEditing,handleDownload }) {
+function RenderDatosAdicionales({ 
+    data, 
+    activeTab,
+    setActiveTab, 
+    isEditing, 
+    setIsEditing,
+    handleDownload,
+    styles}) {
 
 
     const [isOpen, setIsOpen] = useState(false);
@@ -55,24 +62,24 @@ function RenderDatosAdicionales({ data, activeTab, setActiveTab, isEditing, setI
                     )}
                     
                     {/* --- Dropdown de Descarga IMPLEMENTADO --- */}
-                    <div className="download-dropdown-container">
+                    <div style={styles.downloadDropdownContainer}>
                         <button 
-                            className="download-button"
+                            style={styles.downloadButton}
                             onClick={() => setIsOpen(!isOpen)} // Alterna el estado del menú
                         > 
-                            Descargar <span className="dropdown-arrow">{isOpen ? '▲' : '▼'}</span>
+                            Descargar <span style={styles.dropdownArrow}>{isOpen ? '▲' : '▼'}</span>
                         </button>
                         
                         {isOpen && (
-                            <div className="dropdown-menu">
+                            <div style={styles.dropdownMenu}>
                                 {/* Botones configurados para usar los nombres de plantillas del backend */}
-                                <button className="dropdown-item" onClick={() => handleAction('intercambio')}>
+                                <button style={styles.dropdownItem} onClick={() => handleAction('intercambio')}>
                                     Descargar Cambio
                                 </button>
-                                <button className="dropdown-item" onClick={() => handleAction('mantenimiento')}>
+                                <button style={styles.dropdownItem} onClick={() => handleAction('mantenimiento')}>
                                     Descargar Mantenimiento
                                 </button>
-                                <button className="dropdown-item" onClick={() => handleAction('retiro')}>
+                                <button style={styles.dropdownItem} onClick={() => handleAction('retiro')}>
                                     Descargar Retiro
                                 </button>
                             </div>

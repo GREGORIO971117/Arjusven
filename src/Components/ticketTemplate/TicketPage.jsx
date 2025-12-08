@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { styles } from '../admin/adminTemplate'; 
 import Lista from '../listas/estacionesList';
 import TicketTemplate from './TicketTemplate';
 import RenderFiltro from './RenderFiltro';
@@ -426,6 +427,7 @@ function TicketPage() {
                     
                     {selectedTicket ? (
                         <TicketTemplate
+                            styles={styles}
                             data = {selectedTicket}
                             onGoBack = {() => setSelectedTicket(null)}
                             onSaveService = {handleServicePatch} 

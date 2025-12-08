@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { styles } from '../admin/adminTemplate';
 import { serviciosConfig } from '../../assets/serviciosConfig';
 
 function RenderEditarDatosServicio({ 
@@ -7,7 +6,8 @@ function RenderEditarDatosServicio({
     onCancelEdit, 
     datosEstaticos, 
     onSaveEdit, 
-    onDeleteEdit 
+    onDeleteEdit,
+    styles
 }) {
 
     const formatDate = (dateString) => dateString ? String(dateString).slice(0, 10) : '';

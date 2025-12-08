@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { styles } from '../admin/adminTemplate'; 
 import { adicionalesConfig } from '../../assets/adicionalesConfig'; 
 
-const RenderEditarDatosAdicionales = ({ data, onCancelEdit, onSaveEdit, onDeleteEdit }) => {
+const RenderEditarDatosAdicionales = ({ 
+    data, 
+    onCancelEdit, 
+    onSaveEdit, 
+    onDeleteEdit,
+    styles }) => {
     
     const [formData, setFormData] = useState({});
     const [localError, setLocalError] = useState(null);
