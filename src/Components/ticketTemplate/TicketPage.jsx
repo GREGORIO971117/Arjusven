@@ -4,6 +4,7 @@ import Lista from '../listas/estacionesList';
 import TicketTemplate from './TicketTemplate';
 import RenderFiltro from './RenderFiltro';
 import { apiRequest } from '../login/Api';
+import { format } from 'date-fns'; // 👈 Importante: Asegúrate de tener date-fns instalado
 
 const API_BASE_URL = '/tickets';
 const API_SERVICIOS_URL = '/servicio'; 
@@ -21,116 +22,97 @@ function TicketPage() {
     const [currentPage, setCurrentPage] = useState(0);
     const [searchQuery, setSearchQuery] = useState("");
 
+    // Estado inicial de filtros
     const [filterCriteria, setFilterCriteria] = useState({
-                                                situacion:'todos',
-                                                sla:'todos',
-                                                tipoDeServicio:'todos',
-                                                supervisor:'todos',
-                                                plaza:'todos',
-                                                fechaInicio: '',
-                                                fechaFin: ''
-                                                });
+        situacion: 'todos',
+        sla: 'todos',
+        tipoDeServicio: 'todos',
+        supervisor: 'todos',
+        plaza: 'todos',
+        fechaInicio: null, // Cambiado a null para mejor manejo con DatePicker
+        fechaFin: null
+    });
 
-    const fetchFilteredTickets = async () => {
+    // -----------------------------------------------------------------------
+    // 🔍 FUNCIÓN PRINCIPAL DE CARGA (Con y Sin Filtros)
+    // -----------------------------------------------------------------------
+    const fetchTickets = useCallback(async (applyFilters = false) => {
         setIsLoading(true);
         setError("");
         
         try {
-            const params = new URLSearchParams();
+            let endpoint = API_BASE_URL;
             
-            if (filterCriteria.situacion) {
-                params.append('situacion', filterCriteria.situacion);
-            }
-            if (filterCriteria.sla) {
-                params.append('sla', filterCriteria.sla);
-            }
-            if (filterCriteria.tipoDeServicio) {
-                params.append('tipoDeServicio', filterCriteria.tipoDeServicio);
-            }
-            if (filterCriteria.supervisor) {
-                params.append('supervisor', filterCriteria.supervisor);
-            }
-            if (filterCriteria.plaza) {
-                params.append('plaza', filterCriteria.plaza);
-            }
-            if (filterCriteria.fechaInicio) {
-                params.append('fechaInicio', filterCriteria.fechaInicio);
-            }
-            if (filterCriteria.fechaFin) {
-                params.append('fechaFin', filterCriteria.fechaFin);
+            // Si se deben aplicar filtros, construimos los Query Params
+            if (applyFilters) {
+                const params = new URLSearchParams();
+                
+                if (filterCriteria.situacion && filterCriteria.situacion !== 'todos') 
+                    params.append('situacion', filterCriteria.situacion);
+                
+                if (filterCriteria.sla && filterCriteria.sla !== 'todos') 
+                    params.append('sla', filterCriteria.sla);
+                
+                if (filterCriteria.tipoDeServicio && filterCriteria.tipoDeServicio !== 'todos') 
+                    params.append('tipoDeServicio', filterCriteria.tipoDeServicio);
+                
+                if (filterCriteria.supervisor && filterCriteria.supervisor !== 'todos') 
+                    params.append('supervisor', filterCriteria.supervisor);
+                
+                if (filterCriteria.plaza && filterCriteria.plaza !== 'todos') 
+                    params.append('plaza', filterCriteria.plaza);
+
+                // Manejo y formateo de fechas (YYYY-MM-DD)
+                if (filterCriteria.fechaInicio) {
+                    // Mapeamos 'fechaInicio' del front a 'startDate' del back (o el nombre que definiste)
+                    // Si tu backend espera "fechaInicio", cambia "startDate" por "fechaInicio" abajo.
+                    params.append('startDate', format(new Date(filterCriteria.fechaInicio), 'yyyy-MM-dd'));
+                }
+                
+                if (filterCriteria.fechaFin) {
+                    params.append('endDate', format(new Date(filterCriteria.fechaFin), 'yyyy-MM-dd'));
+                }
+
+                const queryString = params.toString();
+                if (queryString) {
+                    endpoint = `${API_BASE_URL}?${queryString}`; // 👈 CORRECCIÓN: Usar '?'
+                }
             }
 
-            const endpoint = `${API_BASE_URL}/filter?${params.toString()}`;
-            
-            const response = await apiRequest(endpoint, 
-                { method: 'GET' });
+            const response = await apiRequest(endpoint, { method: 'GET' });
 
             if (response.status === 204) {
-            setTicketsData([]); 
-            setIsLoading(false);
-            return;
-        }
+                setTicketsData([]); 
+                return;
+            }
             
             if (!response.ok) {
                 throw new Error(`Error ${response.status}: ${response.statusText}`);
             }
             
             const data = await response.json();
-            console.log("Tickets filtrados:", data);
+            console.log(applyFilters ? "Tickets filtrados:" : "Tickets cargados:", data);
             setTicketsData(Array.isArray(data) ? data : []);
 
         } catch (err) {
-            console.error("Error filtrando tickets:", err);
-            setError(err.message || "Error al aplicar filtros.");
+            console.error("Error cargando tickets:", err);
+            setError(err.message || "Error al cargar datos.");
             setTicketsData([]);
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [filterCriteria]); // Dependencia: filterCriteria
 
-      const handleKeyDown = (event) => {
-        if (event.key === 'Enter' || event.keyCode === 13) {
-            event.preventDefault(); 
-            onSearchSubmit();
-            setCurrentPage(0);
-        }
-    };
-
-    const handleApplyFilters = () => {
-        fetchFilteredTickets();
-        setShowFilterPanel(false); 
-        setCurrentPage(0);
-    };
-
-    const fetchTickets = useCallback(async () => {
-        setIsLoading(true);
-        setError("");
-        try {
-            const response = await apiRequest(API_BASE_URL, { method: 'GET' }); 
-            if (!response.ok) {
-                throw new Error(`Error ${response.status}: ${response.statusText}.`);
-            }
-            const data = await response.json();
-            console.log("Tickets cargados:", data);
-            setTicketsData(Array.isArray(data) ? data : []); 
-        } catch (err) {
-            console.error('Error al cargar los tickets:', err);
-            setError(err.message || "No se pudo conectar al servidor de tickets.");
-            setTicketsData([]);
-        } finally {
-            setIsLoading(false);
-        }
-    }, [apiRequest]);
-
+    // -----------------------------------------------------------------------
+    // 🔎 BÚSQUEDA POR TEXTO
+    // -----------------------------------------------------------------------
     const handleSearchSubmit = useCallback(async () => {
         const q = searchQuery?.trim();
 
         if (!q) {
-            try {
-                await fetchTickets();
-            } catch (e) {
-                console.error("Error al recargar tickets vacíos:", e);
-            }
+            // Si la búsqueda está vacía, recargamos la lista normal (sin filtros aplicados o con filtros previos)
+            // Aquí decido recargar sin filtros para "resetear" la vista de búsqueda
+            fetchTickets(false); 
             return;
         }
 
@@ -154,21 +136,46 @@ function TicketPage() {
         } finally {
             setIsLoading(false);
         }
-    }, [searchQuery, apiRequest, fetchTickets]);
+    }, [searchQuery, fetchTickets]);
 
+    // -----------------------------------------------------------------------
+    // 🎮 MANEJADORES DE EVENTOS
+    // -----------------------------------------------------------------------
+
+    const handleApplyFilters = () => {
+        // Llamamos a fetchTickets indicando TRUE para que use el estado filterCriteria
+        fetchTickets(true);
+        setShowFilterPanel(false); 
+        setCurrentPage(0);
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            event.preventDefault(); 
+            handleSearchSubmit(); // 👈 CORRECCIÓN: Nombre correcto de la función
+            setCurrentPage(0);
+        }
+    };
+
+    // Carga inicial (sin filtros)
     useEffect(() => {
-        fetchTickets();
-    }, [fetchTickets]);
+        fetchTickets(false); 
+    }, []); // Array vacío para que solo corra al montar el componente
 
     const handleSave = useCallback(async () => {
         try {
-
-            await fetchTickets(); 
+            // Recargar datos manteniendo el contexto actual (si había búsqueda o filtros, idealmente deberíamos persistirlos)
+            // Por simplicidad, recargamos la vista por defecto o aplicamos filtros si el panel estaba activo
+            fetchTickets(false); 
         } catch (err) {
             console.error("Fallo la recarga de inventario después de guardar.", err);
         }
     }, [fetchTickets]);
 
+
+    // -----------------------------------------------------------------------
+    // ⬇️ LÓGICA DE DESCARGA Y EDICIÓN (Mantenida igual)
+    // -----------------------------------------------------------------------
     const handleDownload = async (type) => {
         const id = selectedTicket.idTickets;
         if (!id) {
@@ -210,7 +217,11 @@ function TicketPage() {
             link.href = url;
             
             const contentDisposition = response.headers.get('Content-Disposition');
-            let filename = `${selectedTicket.servicios.incidencia}_${selectedTicket.servicios.nombreDeEss}_${templateName}.docx`; 
+            // Safely accessing properties
+            const incidencia = selectedTicket.servicios ? selectedTicket.servicios.incidencia : 'Ticket';
+            const nombreEss = selectedTicket.servicios ? selectedTicket.servicios.nombreDeEss : 'SinNombre';
+
+            let filename = `${incidencia}_${nombreEss}_${templateName}.docx`; 
 
             if (contentDisposition) {
                 const encodedMatch = contentDisposition.match(/filename\*=UTF-8''(.+)/i);
@@ -267,6 +278,7 @@ function TicketPage() {
             }
 
             await handleSave(); 
+            setSelectedTicket(null); // Deseleccionar tras borrar
             
         } catch (err) {
             setError(err.message || "Fallo la conexión con el servidor al intentar borrar.");

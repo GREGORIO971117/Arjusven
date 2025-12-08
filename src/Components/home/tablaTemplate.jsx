@@ -4,106 +4,114 @@ import { Box, Grid, Card, CardContent, FormControl, InputLabel, Select, MenuItem
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { apiRequest } from '../login/Api';
 import datos from '../../assets/datos.json';
+import { format } from 'date-fns';
 
 const API_BASE_URL = '/tickets';
-
-const normalizeDate = (date) => {
-    if (!date) return null;
-    const normalized = new Date(date);
-    return normalized;
-};
-
-const parseTicketDate = (dateString) => {
-    if (!dateString) return null;
-    return normalizeDate(new Date(dateString));
-};
-
 
 function tablaTemplate() {
     const [ticketsData, setTicketsData] = useState([]);
     const [supervisorTickets, setSupervisorTickets] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
+    
+    // Obtener la lista de supervisores
     const nameSup = datos.supervisores || []; 
+
+    // 🎯 AJUSTE 1: Inicialización de Fechas al inicio del día de hoy
+    const today = new Date();
+    // Clona y resetea la hora para evitar problemas de zona horaria al formatear
+    const startOfToday = new Date(today.setHours(0, 0, 0, 0)); 
+    
     const [selectedSupervisor, setSelectedSupervisor] = useState(nameSup.length > 0 ? nameSup[0] : '');
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
+    const [startDate, setStartDate] = useState(startOfToday); 
+    const [endDate, setEndDate] = useState(startOfToday); 
 
 
+    // 🎯 fetchTickets: Correcto uso de useCallback y URLSearchParams
     const fetchTickets = useCallback(async () => {
         setIsLoading(true);
         setError("");
+
+        // 1. Formatear las fechas a 'YYYY-MM-DD'
+        // NOTA: Si startDate o endDate son null, format() lanzará un error. 
+        // Ya que el estado se inicializa a startOfToday, esto no debería pasar.
+        const startParam = startDate ? format(startDate, 'yyyy-MM-dd') : null;
+        const endParam = endDate ? format(endDate, 'yyyy-MM-dd') : null;
+
+        // 2. Construir el objeto URLSearchParams para manejar los parámetros de consulta
+        const queryParams = new URLSearchParams();
+
+        if (startParam) {
+            // Se usa 'startDate' y 'endDate' para coincidir con el backend
+            queryParams.append('startDate', startParam); 
+        }
+        if (endParam) {
+            queryParams.append('endDate', endParam);
+        }
+
+        // 3. Construir la URL final con los parámetros de consulta
+        const queryString = queryParams.toString();
+        // Si hay query string, se agrega con ?, si no, se usa solo la base URL.
+        const finalURL = queryString ? `${API_BASE_URL}?${queryString}` : API_BASE_URL;
+
         try {
-        
-            const response = await apiRequest(API_BASE_URL, { method: 'GET' }); 
+            const response = await apiRequest(finalURL, { 
+                method: 'GET'
+            }); 
+            
             if (!response.ok) {
-                throw new Error(`Error ${response.status}: ${response.statusText}.`);
+                // Intenta leer el cuerpo de la respuesta en caso de un error HTTP
+                const errorBody = await response.text(); 
+                throw new Error(`Error ${response.status}: ${response.statusText}. Respuesta del servidor: ${errorBody}`);
             }
             const data = await response.json();
+            // Asegurarse de que data sea un array, si no, usar un array vacío.
             setTicketsData(Array.isArray(data) ? data : []); 
+            
         } catch (err) {
             console.error('Error al cargar los tickets:', err);
-            setError(err.message || "No se pudo conectar al servidor de tickets.");
+            // Mostrar un mensaje de error más específico
+            setError(err.message || "No se pudo conectar al servidor de tickets o la respuesta no es válida.");
             setTicketsData([]);
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    }, [startDate, endDate]); // Dependencia: El fetch se ejecuta cuando las fechas cambian
 
+    // 🎯 useEffect para disparar fetchTickets
     useEffect(() => {
         fetchTickets();
-    }, [fetchTickets]);
+    }, [fetchTickets]); // Se dispara al montar y cuando fetchTickets cambie (es decir, cuando cambien startDate/endDate)
 
+    // 🎯 Filtro local: Filtramos por supervisor sobre los datos ya filtrados por fecha del backend
     useEffect(() => {
-        let filteredByDate = ticketsData;
-        
-        // Normalizar las fechas del filtro una sola vez
-        const normStartDate = normalizeDate(startDate);
-        const normEndDate = normalizeDate(endDate);
-
-
-        if (normStartDate && normEndDate) {
-            filteredByDate = ticketsData.filter(t => {
-                
-                const ticketDate = parseTicketDate(t.servicios.fechaDeAsignacion); 
-                
-                if (!ticketDate) return false; 
-
-                const endOfDay = new Date(normEndDate);
-                endOfDay.setDate(endOfDay.getDate() + 1);
-
-                return ticketDate.getTime() >= normStartDate.getTime() && ticketDate.getTime() < endOfDay.getTime();
-            });
-        }
-        
-        const finalFilteredTickets = filteredByDate.filter(t => t.servicios.supervisor === selectedSupervisor);
+        const finalFilteredTickets = ticketsData.filter(t => t.servicios.supervisor === selectedSupervisor);
         setSupervisorTickets(finalFilteredTickets);
 
-    }, [selectedSupervisor, ticketsData, startDate, endDate]);
+    }, [selectedSupervisor, ticketsData]); 
 
     const handleSupervisorChange = (event) => {
         setSelectedSupervisor(event.target.value);
     };
 
-    // Cálculos de métricas
+    // Cálculos de métricas (mantener como está)
     const totalTickets = supervisorTickets.length;
     const openTickets = supervisorTickets.filter(t => t.servicios.situacionActual === 'Abierta').length;
     const closedTickets = supervisorTickets.filter(t => t.servicios.situacionActual === 'Cerrado').length;
     
-    // Datos para el gráfico
+    // Datos para el gráfico (mantener como está)
     const chartData = [
         { name: 'Abiertos', value: openTickets, color: '#FF9800' },
         { name: 'Cerrados', value: closedTickets, color: '#4CAF50' },
     ];
     
-    
-    // Mantenemos el resto de tu código JSX y estilos sin cambios para no romper la estructura visual.
+    // ... (Estilos y getTitle se mantienen) ...
     const cardStyle = {
         backgroundColor: '#f5f5f5',
         borderLeft: '5px solid',
@@ -124,6 +132,10 @@ function tablaTemplate() {
         if (startDate && endDate) {
             const startString = startDate.toLocaleDateString();
             const endString = endDate.toLocaleDateString();
+            // Mostrar solo una fecha si es el mismo día
+            if (startString === endString) {
+                return `Dashboard de Tickets del ${startString}`;
+            }
             return `Dashboard de Tickets del ${startString} al ${endString}`;
         }
         return 'Dashboard de Tickets';
@@ -146,7 +158,7 @@ function tablaTemplate() {
                             onChange={(newValue) => setStartDate(newValue)}
                             renderInput={(params) => <TextField {...params} />}
                         />
-                        <Typography variant="body1"></Typography>
+                        <Typography variant="body1">al</Typography>
                         <DatePicker
                             label="Fecha de fin"
                             value={endDate}
@@ -157,6 +169,7 @@ function tablaTemplate() {
                 </LocalizationProvider>
             </Box>
             
+            {/* ... Cards de métricas ... */}
             <Grid container spacing={3} justifyContent="center">
                 <Grid item xs={12} sm={6} md={4}>
                     <Card sx={{ ...cardStyle, borderColor: '#1976D2' }}>
@@ -187,6 +200,7 @@ function tablaTemplate() {
                 </Grid>
             </Grid>
 
+            {/* ... Sección de gráfico ... */}
             <Box sx={{ mt: 5, p: 3, backgroundColor: '#f9f9f9', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 2 }}>
                     <Typography variant="h6" component="h2" sx={{ mr: 2 }}>
@@ -210,7 +224,11 @@ function tablaTemplate() {
                         <XAxis dataKey="name" />
                         <YAxis />
                         <Tooltip />
-                        <Bar dataKey="value" fill="#1976D2" /> {/* Usa el color definido en chartData */}
+                        <Bar dataKey="value">
+                            {chartData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                        </Bar>
                     </BarChart>
                 </ResponsiveContainer>
             </Box>
