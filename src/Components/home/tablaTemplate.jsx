@@ -153,9 +153,7 @@ function TablaTemplate() { // Capitalicé el nombre del componente (Convención 
                     </Box>
                 </LocalizationProvider>
             </Box>
-            
-            {/* 2. RENDERIZADO CONDICIONAL: Cargando vs Sin Datos vs Dashboard */}
-            
+                    
             {isLoading ? (
                 <Typography sx={{ textAlign: 'center', mt: 4, color: '#666' }}>
                     Cargando información...
@@ -179,7 +177,6 @@ function TablaTemplate() { // Capitalicé el nombre del componente (Convención 
                     </Typography>
                 </Box>
             ) : (
-                // 🎯 DASHBOARD (Cuando sí hay datos)
                 <>
                     <Grid container spacing={3} justifyContent="center">
                         <Grid item xs={12} sm={6} md={4}>

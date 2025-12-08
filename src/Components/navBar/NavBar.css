@@ -1,91 +1,243 @@
+/* Variables para facilitar cambios futuros */
+:root {
+    --nav-bg: #ffffff;
+    --nav-text: #444;
+    --nav-hover: #1a73e8;
+    --nav-danger: #ff6b6b;
+    --nav-danger-hover: #ff5252;
+    --nav-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
 
-nav {
+/* Contenedor Principal Sticky */
+.navbar {
+    background-color: var(--nav-bg);
+    box-shadow: var(--nav-shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: all 0.3s ease;
+}
+
+.navbar-container {
     display: flex;
     justify-content: space-between;
-    align-items: center; 
-    width: 100%;
-    padding: 15px; 
-    background-color: #ffffff; 
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
-    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    align-items: center;
+    height: 80px; /* Altura fija elegante */
+    max-width: 1200px; /* Contenedor centrado para pantallas muy anchas */
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
-.logos {
+/* Logo */
+.navbar-logo img {
+    height: 50px;
+    width: auto;
+    transition: transform 0.3s ease;
+}
+
+.navbar-logo:hover img {
+    transform: scale(1.05);
+}
+
+/* Menú Principal (Escritorio) */
+.navbar-menu {
     display: flex;
     align-items: center;
+    gap: 40px;
 }
 
-.logos img {
-    height: 45px;
-  }
-
-.navigation {
+.nav-links {
     display: flex;
-    gap: 30px; 
+    gap: 25px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-.navigation a {
-    text-decoration: none; 
-    color: #444; 
-    font-size: 1rem;
+/* Enlaces */
+.nav-link {
+    text-decoration: none;
+    color: var(--nav-text);
+    font-size: 0.95rem;
     font-weight: 600;
     text-transform: uppercase;
-    padding: 5px;
+    letter-spacing: 0.5px;
     position: relative;
+    padding: 5px 0;
+    transition: color 0.3s ease;
 }
 
-.navigation a:hover {
-    color: #1a73e8; 
+/* Animación de subrayado elegante */
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--nav-hover);
+    transition: width 0.3s ease-in-out;
 }
 
-.navigation div {
-    padding: 15px 0;
-    position: relative;
-    border-right: 1px solid #ffffff; 
-    padding-right: 30px;
+.nav-link:hover {
+    color: var(--nav-hover);
 }
 
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* Sección de Usuario */
 .user-section {
     display: flex;
     align-items: center;
-    gap: 15px; 
-    margin-left: auto; 
-    padding-right: 20px;
+    gap: 20px;
+    border-left: 1px solid #eee;
+    padding-left: 20px;
 }
 
-.user-name {
-    font-size: 1em;
-    font-weight: 500; 
-    color: black;
+.user-greeting {
+    font-size: 0.9rem;
+    color: var(--nav-text);
 }
 
+.user-greeting strong {
+    color: #000;
+}
 
+/* Botón Logout */
 .logout-button {
-    background-color: transparent; 
-    color: #ff6b6b; 
-    border: 1px solid #ff6b6b;
-    padding: 8px 15px;
-    border-radius: 20px; 
+    background-color: transparent;
+    color: var(--nav-danger);
+    border: 1px solid var(--nav-danger);
+    padding: 8px 20px;
+    border-radius: 50px;
     cursor: pointer;
-    font-size: 0.9em;
+    font-size: 0.85rem;
     font-weight: 600;
-    transition: all 0.2s ease-in-out; 
+    transition: all 0.3s ease;
+    text-transform: uppercase;
 }
 
 .logout-button:hover {
-    background-color: #ff6b6b;
+    background-color: var(--nav-danger);
     color: white;
-    box-shadow: 0 4px 10px rgba(255, 107, 107, 0.4); 
-    transform: translateY(-1px);
+    border-color: var(--nav-danger);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
 }
 
-/* Estilo Activo */
 .logout-button:active {
-    background-color: #e65c5c; 
-    box-shadow: 0 2px 5px rgba(255, 107, 107, 0.5); 
     transform: translateY(0);
 }
 
+/* Icono Hamburguesa (Oculto en escritorio) */
+.menu-icon {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+}
 
+.menu-icon span {
+    height: 3px;
+    width: 25px;
+    background-color: var(--nav-text);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
 
+/* Animación del Icono Hamburguesa */
+.menu-icon.open span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 6px);
+}
+.menu-icon.open span:nth-child(2) {
+    opacity: 0;
+}
+.menu-icon.open span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -6px);
+}
 
+/* =========================================
+   MEDIA QUERY: RESPONSIVIDAD (Móviles)
+   ========================================= */
+@media screen and (max-width: 960px) {
+    .navbar-container {
+        padding: 0 15px;
+        position: relative;
+    }
+
+    .menu-icon {
+        display: flex; /* Mostrar icono hamburguesa */
+        z-index: 1001;
+    }
+
+    .navbar-menu {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        height: 100vh; /* Ocupar toda la pantalla */
+        position: absolute;
+        top: 0; /* Empieza desde arriba */
+        left: -100%; /* Oculto a la izquierda */
+        background-color: var(--nav-bg);
+        transition: all 0.4s ease;
+        padding-top: 100px; /* Espacio para que no choque con el logo */
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+
+    .navbar-menu.active {
+        left: 0; /* Deslizar hacia adentro */
+    }
+
+    .nav-links {
+        flex-direction: column;
+        width: 100%;
+        gap: 0;
+        text-align: center;
+    }
+
+    .nav-item {
+        width: 100%;
+    }
+
+    .nav-link {
+        display: block;
+        padding: 20px 0;
+        width: 100%;
+        font-size: 1.2rem;
+        border-bottom: 1px solid #f0f0f0; /* Separadores sutiles */
+    }
+
+    .nav-link::after {
+        display: none; /* Quitar animación de subrayado en móvil */
+    }
+
+    .nav-link:hover {
+        background-color: #f9f9f9;
+        color: var(--nav-hover);
+    }
+
+    .user-section {
+        flex-direction: column;
+        border-left: none;
+        padding: 30px 0;
+        gap: 20px;
+        width: 100%;
+        border-top: 1px solid #eee;
+    }
+
+    .user-greeting {
+        font-size: 1.1rem;
+    }
+
+    .logout-button {
+        width: 80%;
+        padding: 12px;
+        font-size: 1rem;
+    }
+}
