@@ -11,7 +11,6 @@ function RenderEditarDatosServicio({
 }) {
 
     const formatDate = (dateString) => dateString ? String(dateString).slice(0, 10) : '';
-
     const [formData, setFormData] = useState({});
     const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);

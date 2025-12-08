@@ -542,22 +542,6 @@ textarea.form-input {
     transform: translateY(-2px);
 }
 
-.ticket-actions .download-button {
-    background-color: #2ecc71;
-    color: #fff;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.2s, transform 0.2s;
-}
-
-.ticket-actions .download-button:hover {
-    background-color: #27ae60;
-    transform: translateY(-2px);
-}
-
 .ticket-tabs {
     display: flex;
     justify-content: flex-start;
