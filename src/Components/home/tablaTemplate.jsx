@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Typography from '@mui/material/Typography';
 import { Box, Grid, Card, CardContent, FormControl, InputLabel, Select, MenuItem, TextField } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -8,76 +8,107 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recha
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { apiRequest } from '../login/Api';
+import datos from '../../assets/datos.json';
 
-function tablaTemplate({loadTickets}) {
+const API_BASE_URL = '/tickets';
+
+const normalizeDate = (date) => {
+    if (!date) return null;
+    const normalized = new Date(date);
+    return normalized;
+};
+
+const parseTicketDate = (dateString) => {
+    if (!dateString) return null;
+    return normalizeDate(new Date(dateString));
+};
+
+
+function tablaTemplate() {
     const [ticketsData, setTicketsData] = useState([]);
     const [supervisorTickets, setSupervisorTickets] = useState([]);
-    const nameSup = ["Sin asignar", "David", "Eduardo"];
-    const [selectedSupervisor, setSelectedSupervisor] = useState(nameSup[0]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
+    const nameSup = datos.supervisores || []; 
+    const [selectedSupervisor, setSelectedSupervisor] = useState(nameSup.length > 0 ? nameSup[0] : '');
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
 
-    // Efecto para cargar los datos del localStorage al inicio
-    useEffect(() => {
+
+    const fetchTickets = useCallback(async () => {
+        setIsLoading(true);
+        setError("");
         try {
-            const storedData = localStorage.getItem('excelData');
-            if (storedData) {
-                const parsedData = JSON.parse(storedData);
-                setTicketsData(parsedData);
+        
+            const response = await apiRequest(API_BASE_URL, { method: 'GET' }); 
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}: ${response.statusText}.`);
             }
-        } catch (error) {
-            console.error("Error al cargar los datos de localStorage:", error);
+            const data = await response.json();
+            setTicketsData(Array.isArray(data) ? data : []); 
+        } catch (err) {
+            console.error('Error al cargar los tickets:', err);
+            setError(err.message || "No se pudo conectar al servidor de tickets.");
+            setTicketsData([]);
+        } finally {
+            setIsLoading(false);
         }
     }, []);
 
-    // Efecto para filtrar los tickets según las selecciones del usuario
     useEffect(() => {
-        
+        fetchTickets();
+    }, [fetchTickets]);
+
+    useEffect(() => {
         let filteredByDate = ticketsData;
         
-        if (startDate && endDate) {
-            filteredByDate = ticketsData.filter(t => {
+        // Normalizar las fechas del filtro una sola vez
+        const normStartDate = normalizeDate(startDate);
+        const normEndDate = normalizeDate(endDate);
 
-                // Se parsea la fecha de la cadena "DD/MM/YYYY" para crear un objeto Date válido
-                const [day, month, year] = t.currentDate.split('/');
-                const ticketDate = new Date(`${year}-${month}-${day}`); 
+
+        if (normStartDate && normEndDate) {
+            filteredByDate = ticketsData.filter(t => {
                 
-                const normalizedStartDate = new Date(startDate);
-                normalizedStartDate.setHours(0, 0, 0, 0);
+                const ticketDate = parseTicketDate(t.servicios.fechaDeAsignacion); 
                 
-                const normalizedEndDate = new Date(endDate);
-                normalizedEndDate.setHours(0, 0, 0, 0);
-                
-                return ticketDate >= normalizedStartDate && ticketDate <= normalizedEndDate;
+                if (!ticketDate) return false; 
+
+                const endOfDay = new Date(normEndDate);
+                endOfDay.setDate(endOfDay.getDate() + 1);
+
+                return ticketDate.getTime() >= normStartDate.getTime() && ticketDate.getTime() < endOfDay.getTime();
             });
         }
         
-        // Se utiliza la clave "supervisor" para el filtro, que es la correcta
-        const finalFilteredTickets = filteredByDate.filter(t => t.supervisor === selectedSupervisor);
+        const finalFilteredTickets = filteredByDate.filter(t => t.servicios.supervisor === selectedSupervisor);
         setSupervisorTickets(finalFilteredTickets);
+
     }, [selectedSupervisor, ticketsData, startDate, endDate]);
 
     const handleSupervisorChange = (event) => {
         setSelectedSupervisor(event.target.value);
     };
 
+    // Cálculos de métricas
     const totalTickets = supervisorTickets.length;
-    const openTickets = supervisorTickets.filter(t => t.currentStatus === 'Abierto').length;
-    const closedTickets = supervisorTickets.filter(t => t.currentStatus === 'Cerrado').length;
+    const openTickets = supervisorTickets.filter(t => t.servicios.situacionActual === 'Abierta').length;
+    const closedTickets = supervisorTickets.filter(t => t.servicios.situacionActual === 'Cerrado').length;
     
+    // Datos para el gráfico
     const chartData = [
-
         { name: 'Abiertos', value: openTickets, color: '#FF9800' },
         { name: 'Cerrados', value: closedTickets, color: '#4CAF50' },
-
     ];
-
+    
+    
+    // Mantenemos el resto de tu código JSX y estilos sin cambios para no romper la estructura visual.
     const cardStyle = {
         backgroundColor: '#f5f5f5',
         borderLeft: '5px solid',
         borderColor: '#4CAF50',
         borderRadius: '8px',
-        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
         display: 'flex',
         alignItems: 'center',
         padding: '16px',
@@ -98,15 +129,14 @@ function tablaTemplate({loadTickets}) {
         return 'Dashboard de Tickets';
     };
 
+    if (isLoading) return <Typography sx={{ p: 4 }}>Cargando datos del servidor...</Typography>;
+    if (error) return <Typography color="error" sx={{ p: 4 }}>Error al cargar: {error}</Typography>;
+
     return (
-
-
         <Box sx={{ p: 4 }}>
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', mb: 4 }}>
                 <Typography variant="h4" sx={{ mb: 2, textAlign: 'center', color: '#333' }}>
                     {getTitle()}
-                    
-
                 </Typography>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -180,7 +210,7 @@ function tablaTemplate({loadTickets}) {
                         <XAxis dataKey="name" />
                         <YAxis />
                         <Tooltip />
-                        <Bar dataKey="value" fill="#8884d8" />
+                        <Bar dataKey="value" fill="#1976D2" /> {/* Usa el color definido en chartData */}
                     </BarChart>
                 </ResponsiveContainer>
             </Box>
