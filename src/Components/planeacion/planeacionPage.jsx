@@ -116,11 +116,9 @@ export default function PlaneacionPage() {
             alert("Actualización masiva exitosa.");
         }
     } catch (error) {
-        // Esto solo atraparía un error si una de las promesas fallara antes de ser devuelta.
         console.error("Error grave en Promise.all:", error);
         alert("Ocurrió un error inesperado durante la actualización masiva.");
     } finally {
-        // Opcional: Recargar los datos después de un tiempo o si hubo errores
         fetchPlaneacionData(); 
     }
 };
@@ -179,10 +177,7 @@ export default function PlaneacionPage() {
             accessorKey: cfg.accessorKey,
             header: cfg.header,
             size: cfg.size,
-            
-            // Usamos TU componente EditableCell
-            cell: EditableCell,
-            
+            cell: EditableCell,            
             meta: { 
                 filterType: cfg.filterType 
             }
