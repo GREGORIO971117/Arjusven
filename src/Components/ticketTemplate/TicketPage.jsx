@@ -4,7 +4,7 @@ import Lista from '../listas/estacionesList';
 import TicketTemplate from './TicketTemplate';
 import RenderFiltro from './RenderFiltro';
 import { apiRequest } from '../login/Api';
-import { format } from 'date-fns'; // 👈 Importante: Asegúrate de tener date-fns instalado
+import { format } from 'date-fns';
 
 const API_BASE_URL = '/tickets';
 const API_SERVICIOS_URL = '/servicio'; 
@@ -29,13 +29,10 @@ function TicketPage() {
         tipoDeServicio: 'todos',
         supervisor: 'todos',
         plaza: 'todos',
-        fechaInicio: null, // Cambiado a null para mejor manejo con DatePicker
+        fechaInicio: null,
         fechaFin: null
     });
 
-    // -----------------------------------------------------------------------
-    // 🔍 FUNCIÓN PRINCIPAL DE CARGA (Con y Sin Filtros)
-    // -----------------------------------------------------------------------
     const fetchTickets = useCallback(async (applyFilters = false) => {
         setIsLoading(true);
         setError("");
@@ -64,8 +61,6 @@ function TicketPage() {
 
                 // Manejo y formateo de fechas (YYYY-MM-DD)
                 if (filterCriteria.fechaInicio) {
-                    // Mapeamos 'fechaInicio' del front a 'startDate' del back (o el nombre que definiste)
-                    // Si tu backend espera "fechaInicio", cambia "startDate" por "fechaInicio" abajo.
                     params.append('startDate', format(new Date(filterCriteria.fechaInicio), 'yyyy-MM-dd'));
                 }
                 
@@ -75,7 +70,7 @@ function TicketPage() {
 
                 const queryString = params.toString();
                 if (queryString) {
-                    endpoint = `${API_BASE_URL}?${queryString}`; // 👈 CORRECCIÓN: Usar '?'
+                    endpoint = `${API_BASE_URL}?${queryString}`;
                 }
             }
 
@@ -101,17 +96,14 @@ function TicketPage() {
         } finally {
             setIsLoading(false);
         }
-    }, [filterCriteria]); // Dependencia: filterCriteria
+    }, [filterCriteria]);
 
-    // -----------------------------------------------------------------------
     // 🔎 BÚSQUEDA POR TEXTO
-    // -----------------------------------------------------------------------
+
     const handleSearchSubmit = useCallback(async () => {
         const q = searchQuery?.trim();
 
         if (!q) {
-            // Si la búsqueda está vacía, recargamos la lista normal (sin filtros aplicados o con filtros previos)
-            // Aquí decido recargar sin filtros para "resetear" la vista de búsqueda
             fetchTickets(false); 
             return;
         }
@@ -138,12 +130,7 @@ function TicketPage() {
         }
     }, [searchQuery, fetchTickets]);
 
-    // -----------------------------------------------------------------------
-    // 🎮 MANEJADORES DE EVENTOS
-    // -----------------------------------------------------------------------
-
     const handleApplyFilters = () => {
-        // Llamamos a fetchTickets indicando TRUE para que use el estado filterCriteria
         fetchTickets(true);
         setShowFilterPanel(false); 
         setCurrentPage(0);
@@ -152,30 +139,23 @@ function TicketPage() {
     const handleKeyDown = (event) => {
         if (event.key === 'Enter' || event.keyCode === 13) {
             event.preventDefault(); 
-            handleSearchSubmit(); // 👈 CORRECCIÓN: Nombre correcto de la función
+            handleSearchSubmit();
             setCurrentPage(0);
         }
     };
 
-    // Carga inicial (sin filtros)
     useEffect(() => {
         fetchTickets(false); 
-    }, []); // Array vacío para que solo corra al montar el componente
+    }, []); 
 
     const handleSave = useCallback(async () => {
         try {
-            // Recargar datos manteniendo el contexto actual (si había búsqueda o filtros, idealmente deberíamos persistirlos)
-            // Por simplicidad, recargamos la vista por defecto o aplicamos filtros si el panel estaba activo
             fetchTickets(false); 
         } catch (err) {
             console.error("Fallo la recarga de inventario después de guardar.", err);
         }
     }, [fetchTickets]);
 
-
-    // -----------------------------------------------------------------------
-    // ⬇️ LÓGICA DE DESCARGA Y EDICIÓN (Mantenida igual)
-    // -----------------------------------------------------------------------
     const handleDownload = async (type) => {
         const id = selectedTicket.idTickets;
         if (!id) {
