@@ -7,25 +7,21 @@ function NavBar({ links, onLogout }) {
     const [isOpen, setIsOpen] = useState(false);
     const userName = localStorage.getItem('userName') || 'Usuario';
 
-    // Función para cerrar el menú al hacer click en un enlace (útil en móvil)
     const closeMenu = () => setIsOpen(false);
 
     return (
         <header className="navbar">
             <nav className="navbar-container">
-                {/* Logo */}
                 <Link to="/" className="navbar-logo" onClick={closeMenu}>
                     <img src={logo} alt="Arjus Logo" />
                 </Link>
 
-                {/* Botón Hamburguesa (Móvil) */}
                 <div className={`menu-icon ${isOpen ? 'open' : ''}`} onClick={() => setIsOpen(!isOpen)}>
                     <span></span>
                     <span></span>
                     <span></span>
                 </div>
 
-                {/* Contenedor de Enlaces y Usuario */}
                 <div className={`navbar-menu ${isOpen ? 'active' : ''}`}>
                     <ul className="nav-links">
                         {links.map((link) => (

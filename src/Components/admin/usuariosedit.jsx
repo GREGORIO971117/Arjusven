@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { styles } from './adminTemplate'; // Importamos los estilos compartidos
 import { apiRequest } from '../login/Api';
+import datos from '../../assets/datos.json';
 
 const API_BASE_URL = '/usuarios';
 
@@ -109,20 +110,18 @@ export default function UsuariosEdit({ user, onSave, onCancel, validateForm}) {
                 
                 <div style={styles.row}>
                     <label style={styles.label}>Estado de residencia
-                        <input name="estadoDeResidencia" value={formData.estadoDeResidencia} onChange={handleChange} style={styles.input}  />
+                        <input name="estadoDeResidencia" value={formData.estadoDeResidencia} onChange={handleChange} style={styles.input} />
                     </label>
                     <label style={styles.label}>Edad
-                        <input name="edad" value={formData.edad} onChange={handleChange} style={styles.input} inputMode="numeric"  />
+                        <input name="edad" value={formData.edad} onChange={handleChange} style={styles.input} inputMode="numeric" />
                     </label>
                 </div>
                 
                 <div style={styles.row}>
                     <label style={styles.label}>Rol
                         <select name="rol" value={formData.rol} onChange={handleChange} style={styles.input} >
-                            <option value="ADMINISTRADOR">ADMINISTRADOR</option>
-                            <option value="TECNICO">TECNICO</option>
-                            <option value="SUPERVISOR">SUPERVISOR</option>
-                            <option value="USUARIO">USUARIO</option>
+                           <option value="">Seleccione...</option>
+                            {datos.roles.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                         </select>
                     </label>
                     <label style={styles.label}>Contraseña (Dejar vacío para no cambiar)
