@@ -164,3 +164,57 @@
   font-size: 12px;
   background-color: #fff;
 }
+/* Barra de Edición Masiva */
+.mass-edit-bar {
+    position: sticky; /* Fija la barra al scroll de la tabla */
+    top: 0;
+    z-index: 10;
+    background-color: #f3f4f6; /* Fondo gris claro */
+    border: 1px solid #d1d5db;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.input-mass-edit {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex-grow: 1; /* Permite que el input crezca */
+}
+
+.btn-apply {
+    background-color: #10b981; /* Verde */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-cancel {
+    background-color: #ef4444; /* Rojo */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.mass-edit-indicator {
+    color: #10b981;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+/* Resaltar celdas de la columna en edición masiva */
+.td-cell.highlight-mass-edit {
+    background-color: #d1fae5; /* Fondo verde muy claro para indicar la columna activa */
+    /* Opcional: añade un borde izquierdo o derecho */
+    border-right: 2px solid #10b981;
+}
