@@ -2,7 +2,7 @@ export const ColumnConfig = [
     // Columnas con Filtros (Select o Texto)
     { accessorKey: 'fechaAsignacion', header: 'FECHA ASIGNACION', filterType: 'text', size: 120 },
     { accessorKey: 'incidencia', header: 'INCIDENCIA', filterType: 'text', size: 100 },
-    { accessorKey: 'cliente', header: 'CLIENTE', filterType: 'select', size: 150 }, // Select
+    { accessorKey: 'cliente', header: 'CLIENTE', filterType: 'select', size: 150 }, 
     { accessorKey: 'estadoGuia', header: 'ESTADO GUIA', filterType: 'select', size: 130 },
     { accessorKey: 'fechaDeEnvio', header: 'FECHA DE ENVIO PAQUETERIA', filterType: 'text', size: 130 },
     { accessorKey: 'fechaLlegada', header: 'FECHA LLEGADA', filterType: 'text', size: 110 },
@@ -10,9 +10,9 @@ export const ColumnConfig = [
     { accessorKey: 'guiaDhl', header: 'GUIA DHL', filterType: 'text', size: 150 },
     { accessorKey: 'direccion', header: 'DIRECCION', filterType: 'none', size: 200 },
     { accessorKey: 'colonia', header: 'COLONIA', filterType: 'none', size: 150 },
-    { accessorKey: 'ciudad', header: 'CIUDAD', filterType: 'select', size: 120 }, // Select
-    { accessorKey: 'estadoMx', header: 'ESTADO', filterType: 'select', size: 120 }, // Select
-    { accessorKey: 'tipoServicio', header: 'TIPO SERVICIO', filterType: 'select', size: 250 }, // Select
+    { accessorKey: 'ciudad', header: 'CIUDAD', filterType: 'select', size: 120 },
+    { accessorKey: 'estadoMx', header: 'ESTADO', filterType: 'select', size: 120 },
+    { accessorKey: 'tipoServicio', header: 'TIPO SERVICIO', filterType: 'select', size: 250 }, 
     { accessorKey: 'descripcion', header: 'DESCRIPCION', filterType: 'none', size: 250 },
     { accessorKey: 'equipoReportado', header: 'EQ. REPORTADO', filterType: 'select', size: 120 },
     { accessorKey: 'equipoEnviado', header: 'EQ. ENVIADO', filterType: 'select', size: 120 },

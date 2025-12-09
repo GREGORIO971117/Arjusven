@@ -1,7 +1,8 @@
 
 export const serviciosConfig = [
     { key: 'nombreDeEss', label: 'Nombre de ESS', type: 'text', grid: 1, required: true },
-    { key: 'incidencia', label: 'Número de Incidencia', type: 'text', grid: 1, required: true },    { key: 'fechaReporte', label: 'Fecha de asignacion de reporte', type: 'date', grid: 1, readOnly: true },
+    { key: 'incidencia', label: 'Número de Incidencia', type: 'text', grid: 1, required: true },    
+    { key: 'fechaReporte', label: 'Fecha de asignacion de reporte', type: 'date', grid: 1, readOnly: true },
     { key: 'resolucion', label: 'Fecha de resolución', type: 'date', grid: 1 },
     { key: 'situacionActual', label: 'Situación Actual', type: 'select', optionsKey: 'situacion', grid: 1 },
     { key: 'supervisor', label: 'Supervisor', type: 'select', optionsKey: 'supervisores', grid: 1 },
