@@ -1,0 +1,111 @@
+/* ------------------------------------- */
+/* Fondo y Contenedor Principal */
+/* ------------------------------------- */
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Asegura que esté por encima de todo */
+}
+
+.modal-container {
+    background: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px; /* Tamaño típico de una alerta */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* ------------------------------------- */
+/* Estructura del Modal */
+/* ------------------------------------- */
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-icon {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 1.25rem;
+    flex-grow: 1;
+}
+
+.modal-close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #999;
+}
+
+.modal-body {
+    padding: 15px;
+    color: #333;
+}
+
+.modal-body p {
+    margin: 0;
+    line-height: 1.4;
+}
+
+.modal-footer {
+    padding: 15px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* ------------------------------------- */
+/* Estilos de Botones (simples) */
+/* ------------------------------------- */
+
+.btn {
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-secondary {
+    background-color: #f3f4f6;
+    color: #4b5563;
+    border: 1px solid #d1d5db;
+}
+
+.btn-primary {
+    color: white;
+    border: none;
+}
+
+/* ------------------------------------- */
+/* Colores por Tipo de Modal */
+/* ------------------------------------- */
+
+.modal-type-success .btn-primary { background-color: #10b981; } /* Verde */
+.modal-type-error .btn-primary { background-color: #ef4444; }   /* Rojo */
+.modal-type-warning .btn-primary { background-color: #f59e0b; } /* Amarillo */
+.modal-type-confirm .btn-primary { background-color: #3b82f6; } /* Azul */
+.modal-type-info .btn-primary { background-color: #6366f1; }    /* Índigo */

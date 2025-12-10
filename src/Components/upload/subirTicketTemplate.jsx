@@ -1,63 +1,57 @@
-import React, { useState, useRef } from "react"; // Agregamos useRef
+import React, { useState, useRef } from "react";
 import { apiRequest } from "../login/Api"; 
 import { styles } from '../admin/adminTemplate';
 
 const API_TICKETS_URL = '/tickets';
 const ADMIN_ID_DEFAULT = localStorage.getItem("idUsuario"); 
 
-export default function SubirTicketTemplate() { 
+export default function SubirTicketTemplate({ showModal , closeModal,ModalTemplate,modalConfig }) { 
     
-    // --- ESTADOS EXISTENTES ---
     const [idMerchant, setIdMerchant] = useState("");
     const [motivoServicio, setMotivoServicio] = useState("");
     const [observaciones, setObservaciones] = useState("");
     const [incidencia, setIncidencia] = useState("");
     const [loading, setLoading] = useState(false);
-    const [mensaje, setMensaje] = useState(null);
-    const [error, setError] = useState(null);
     const [formErrors, setFormErrors] = useState({});
-
-    // --- NUEVO: ESTADOS PARA CARGA MASIVA ---
     const fileInputRef = useRef(null); 
     const [uploadResult, setUploadResult] = useState(null); 
 
     function validateForm() {
         const errs = {};
         if(!incidencia.trim()) errs.incidencia = "Número de incidencia es requerido.";
-        if (!idMerchant || idMerchant === "") errs.idMerchant="Ese IdMerchant no existe";
+        if (!idMerchant || String(idMerchant).trim() === "") errs.idMerchant="El IdMerchant es requerido.";
         
-        if (Object.keys(errs).length > 0) setError(null); 
+        if (Object.keys(errs).length > 0) {
+            showModal({
+                title: "Error de Validación",
+                message: "Por favor, revisa los campos marcados en rojo.",
+                type: "warning",
+            });
+        }
         setFormErrors(errs);
         return Object.keys(errs).length === 0;
     }
     
-    // --- LOGICA DE CREACIÓN MANUAL (Tu código existente) ---
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setMensaje(null);
-        setError(null);
         setUploadResult(null); 
 
         if (!validateForm()) {
-            if (Object.keys(formErrors).length === 0) {
-                 setError("Por favor, rellena todos los campos obligatorios.");
-            }
             return;
         }
         
         const payload = {
-                "administrador": {
-                     "idUsuarios": Number(ADMIN_ID_DEFAULT)
-                     },
-                "servicios": {
-                    "motivoDeServicio": motivoServicio.trim(),
-                    "observaciones": observaciones.trim(),
-                    "incidencia": incidencia.trim(), 
-                    "idMerchant": Number(idMerchant.trim()),
-                },
-                "adicionales": {
-                }
-            };
+            "administrador": {
+                 "idUsuarios": Number(ADMIN_ID_DEFAULT)
+            },
+            "servicios": {
+                "motivoDeServicio": motivoServicio.trim(),
+                "observaciones": observaciones.trim(),
+                "incidencia": incidencia.trim(), 
+                "idMerchant": Number(idMerchant.trim()),
+            },
+            "adicionales": {}
+        };
         
         setLoading(true);
 
@@ -75,7 +69,15 @@ export default function SubirTicketTemplate() {
             
             const newTicket = await response.json();
             const displayId = newTicket?.idTickets || 'desconocido'; 
-            setMensaje(`✅ Ticket ${displayId} creado con éxito.`); 
+            
+            // 💡 Mostrar Modal de éxito
+            showModal({
+                title: "Ticket Creado con Éxito",
+                message: `El Ticket ${displayId} ha sido publicado.`,
+                type: "success",
+            });
+            
+            // Limpiar formulario
             setIncidencia("");
             setObservaciones("");
             setMotivoServicio("");
@@ -84,19 +86,26 @@ export default function SubirTicketTemplate() {
             
         } catch (err) {
             console.error("Error al publicar ticket:", err);
-            setError(err.message || "Error desconocido al publicar el ticket.");
+            showModal({
+                title: "Error al Publicar Ticket",
+                message: err.message || "Error desconocido al publicar el ticket.",
+                type: "error",
+            });
         } finally {
             setLoading(false);
         }
     };
 
- 
     const handleFileChange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
         if (!file.name.endsWith('.xls') && !file.name.endsWith('.xlsx')) {
-            setError("Solo se permiten archivos Excel (.xls, .xlsx)");
+            showModal({
+                title: "Formato de Archivo Inválido",
+                message: "Solo se permiten archivos Excel (.xls, .xlsx).",
+                type: "error",
+            });
             return;
         }
 
@@ -107,8 +116,6 @@ export default function SubirTicketTemplate() {
 
     const uploadExcel = async (file) => {
         setLoading(true);
-        setError(null);
-        setMensaje(null);
         setUploadResult(null);
 
         const formData = new FormData();
@@ -116,34 +123,57 @@ export default function SubirTicketTemplate() {
         formData.append("idAdministrador", ADMIN_ID_DEFAULT);
 
         try {
-            
             const uploadUrl = `http://localhost:8080/api/tickets/upload`; 
             const token = localStorage.getItem("jwtToken"); 
             const response = await fetch(uploadUrl, { 
                 method: "POST",
                 headers: {
-                     "Authorization": `Bearer ${token}` 
+                    "Authorization": `Bearer ${token}` 
                 },
                 body: formData
             });
 
             const data = await response.json();
 
-            if (!response.ok && response.status !== 200) {
-                throw new Error(data.message || "Error al subir el archivo");
+            if (!response.ok) {
+                throw new Error(data.message || `Error ${response.status}: Falló la carga masiva.`);
             }
 
             setUploadResult(data);
             
+            let modalTitle = "Carga Masiva Exitosa";
+            let modalType = "success";
+            let modalMessage = `Se procesaron ${data.totalProcesados} tickets. ${data.totalExitosos} creados.`;
+
+            if (data.totalFallidos > 0) {
+                modalTitle = "Carga con Fallos";
+                modalType = "warning";
+                modalMessage += ` Hubo ${data.totalFallidos} fallidos. Revisa el detalle en el resumen.`;
+            } else if (data.advertencias.length > 0) {
+                 modalTitle = "Carga con Advertencias";
+                 modalType = "info";
+            }
+            
+            showModal({
+                title: modalTitle,
+                message: modalMessage,
+                type: modalType
+            });
+            
         } catch (err) {
             console.error("Error upload:", err);
-            setError(err.message || "Error de conexión al subir Excel.");
+            showModal({
+                title: "Error de Carga Masiva",
+                message: err.message || "Error de conexión al subir el archivo Excel.",
+                type: "error",
+            });
         } finally {
             setLoading(false);
         }
     };
 
     const triggerFileInput = () => {
+        setUploadResult(null); 
         fileInputRef.current.click();
     };
 
@@ -199,12 +229,7 @@ export default function SubirTicketTemplate() {
                         />
                     </label>
                 </div>
-                
-                <div style={{...styles.row, flexWrap: 'nowrap'}}>
-                    {mensaje && <div style={{...styles.success, flex: '1 1 100%' }}>{mensaje}</div>}
-                    {error && <div style={{...styles.error, flex: '1 1 100%'}}>🚨 {error}</div>}
-                </div>
-
+            
                 {uploadResult && (
                     <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f9f9f9', borderRadius: '5px', width: '100%' }}>
                         <h4 style={{ margin: '0 0 10px 0' }}>Resumen de Carga Masiva:</h4>
@@ -215,7 +240,7 @@ export default function SubirTicketTemplate() {
                         {uploadResult.errores.length > 0 && (
                             <div style={{ marginTop: '10px', color: 'red', fontSize: '0.9em' }}>
                                 <strong>Errores:</strong>
-                                <ul>
+                                <ul style={{maxHeight: '100px', overflowY: 'auto'}}>
                                     {uploadResult.errores.map((err, idx) => (
                                         <li key={idx}>{err}</li>
                                     ))}
@@ -226,7 +251,7 @@ export default function SubirTicketTemplate() {
                         {uploadResult.advertencias.length > 0 && (
                             <div style={{ marginTop: '10px', color: '#e67e22', fontSize: '0.9em' }}>
                                 <strong>Advertencias:</strong>
-                                <ul>
+                                <ul style={{maxHeight: '100px', overflowY: 'auto'}}>
                                     {uploadResult.advertencias.map((adv, idx) => (
                                         <li key={idx}>{adv}</li>
                                     ))}
@@ -237,7 +262,6 @@ export default function SubirTicketTemplate() {
                 )}
 
 
-                {/* --- BOTONES --- */}
                 <div style={{ marginTop: 20, display: 'flex', gap: '10px' }}>
                     <button 
                     type="submit" 
@@ -263,6 +287,14 @@ export default function SubirTicketTemplate() {
                         {loading ? "Subiendo..." : "Subir Excel Ticket"}
                     </button>
                 </div>
+                
+                <ModalTemplate
+                isOpen={modalConfig.isOpen}
+                onClose={closeModal}
+                title={modalConfig.title}
+                message={modalConfig.message}
+                type={modalConfig.type}
+            />
             </form>
         </div>
     );

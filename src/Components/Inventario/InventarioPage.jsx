@@ -4,6 +4,7 @@ import InventarioTemplate from './InventarioTemplate';
 import RenderFiltro from './RenderFiltro';
 import './InventarioList.css';
 import { apiRequest } from '../login/Api';
+import ModalTemplate from '../modal/modalTemplate';
 
 const API_URL = '/inventario';
 
@@ -25,6 +26,25 @@ function InventarioPage() {
                                                         fechaInicio: '',
                                                         fechaFin: ''  
                                                         });
+     const [modalConfig, setModalConfig] = useState({
+         isOpen: false,
+         title: '',
+         message: '',
+         type: 'info',
+     });
+
+     const closeModal = () => {
+         setModalConfig(prev => ({ ...prev, isOpen: false }));
+     };
+
+     const showModal = ({ title, message, type }) => {
+             setModalConfig({
+                 isOpen: true,
+                 title,
+                 message,
+                 type,
+             });
+         };                                                    
 
 const fetchFilteredInventario = async () => {
         setIsLoading(true);
@@ -266,6 +286,11 @@ const fetchFilteredInventario = async () => {
                             handleCancel={handleCancel}
                             handleRemove={handleRemove}
                             handleUpdate={handleUpdate}
+                            ModalTemplate={ModalTemplate}
+                            showModal={showModal}
+                            closeModal={closeModal}
+                            modalConfig={modalConfig}
+                            
                         />
                     ) : (
                         <div className="no-selection-message">

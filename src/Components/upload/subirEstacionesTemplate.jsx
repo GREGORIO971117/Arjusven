@@ -6,21 +6,19 @@ import datosEstaticos from '../../assets/datos.json';
 const API_URL = '/estaciones'; 
 
 const initialEstacionFormState = {
-    idMerchant: '',        
+    idMerchant: '',         
     nombreComercial: '',   
-    direccion: '',         
-    estado: '',            
+    direccion: '',          
+    estado: '',             
     plazaDeAtencion: '',
-    cobertura: ''        
+    cobertura: ''         
 };
 
-export default function SubirEstacionTemplate() {
+export default function SubirEstacionTemplate({ ModalTemplate,showModal, closeModal,modalConfig}) {
 
     const [form, setForm] = useState(initialEstacionFormState); 
     const [formErrors, setFormErrors] = useState({}); 
-    const [error, setError] = useState(""); 
-    const [isSubmitting, setIsSubmitting] = useState(false); 
-    const [successMessage, setSuccessMessage] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -28,7 +26,7 @@ export default function SubirEstacionTemplate() {
             ...prev, 
             [name]: name === 'idMerchant' ? (value ? Number(value) : '') : value 
         }));
-        // Limpiar errores al cambiar
+        
         if (formErrors[name]) {
             setFormErrors(prev => ({ ...prev, [name]: "" }));
         }
@@ -51,10 +49,15 @@ export default function SubirEstacionTemplate() {
         if (!form.plazaDeAtencion || form.plazaDeAtencion.trim() === "") {
             errs.plazaDeAtencion = "La Plaza de Atención es requerida.";
         }
-       
-        if (Object.keys(errs).length > 0) setError("Por favor, rellena los campos obligatorios.");
-        else setError(""); 
-
+        
+        if (Object.keys(errs).length > 0) {
+             showModal({
+                title: "Error de Validación",
+                message: "Por favor, revisa y rellena los campos obligatorios.",
+                type: "warning", 
+            });
+        }
+        
         setFormErrors(errs);
         return Object.keys(errs).length === 0;
     }
@@ -62,22 +65,19 @@ export default function SubirEstacionTemplate() {
     function resetForm() {
         setForm(initialEstacionFormState); 
         setFormErrors({});
-        setSuccessMessage("");
     }
 
     async function submitEstacion(e) {
         e.preventDefault();
-        setSuccessMessage(""); 
+        closeModal(); // Asegurarse de que cualquier modal anterior esté cerrado
         
         if (!validateForm()) {
             return;
         }
 
         setIsSubmitting(true);
-        setError(""); 
         
         try {
-            // El API_URL completo es /api/estaciones
             const response = await apiRequest(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -90,7 +90,6 @@ export default function SubirEstacionTemplate() {
                 
                 if (isJson) {
                     const errorData = await response.json();
-                    // Capturar el mensaje de error de Spring (ej. duplicado de ID Merchant)
                     errorMsg += errorData.message || response.statusText; 
                 } else {
                     errorMsg += await response.text();
@@ -99,11 +98,20 @@ export default function SubirEstacionTemplate() {
             }
 
             const nuevaEstacion = await response.json();
-            resetForm();
-            setSuccessMessage(`✅ Estación creada. ID Merchant: ${nuevaEstacion.idMerchant}`); 
+            
+            showModal({
+                title: "Estación Creada Exitosamente",
+                message: `La Estación ha sido registrada. ID Merchant: ${nuevaEstacion.idMerchant}.`,
+                type: "success",
+            });
+            resetForm(); 
 
         } catch (err) {
-            setError("Error: " + err.message);
+            showModal({
+                title: "Error al Guardar Estación",
+                message: err.message,
+                type: "error",
+            });
         } finally {
             setIsSubmitting(false);
         }
@@ -135,8 +143,6 @@ export default function SubirEstacionTemplate() {
                     </label>
                 </div>
                 
-              
-
                 {/* Fila 3: Plaza de Atención y Cobertura */}
                 <div style={styles.row}>
                     <label style={styles.label}>
@@ -146,7 +152,7 @@ export default function SubirEstacionTemplate() {
                                 {datosEstaticos.plazaDeAtencion?.map((opcion) => (
                                     <option key={opcion} value={opcion}>{opcion}</option>
                                 ))}
-                        </select>  
+                        </select> 
                         {formErrors.plazaDeAtencion && <div style={styles.errorTextRow}>{formErrors.plazaDeAtencion}</div>}
                     </label>
 
@@ -156,13 +162,11 @@ export default function SubirEstacionTemplate() {
                                 {datosEstaticos.sla?.map((opcion) => (
                                     <option key={opcion} value={opcion}>{opcion}</option>
                                 ))}
-                        </select>                       
-                         {formErrors.cobertura && <div style={styles.errorTextRow}>{formErrors.cobertura}</div>} 
-
+                        </select>            
+                           {formErrors.cobertura && <div style={styles.errorTextRow}>{formErrors.cobertura}</div>} 
                     </label>
                 </div>
 
-                  {/* Fila 2: Dirección y Estado */}
                 <div style={styles.row}>
                     <label style={styles.label}>
                         Dirección 
@@ -170,26 +174,27 @@ export default function SubirEstacionTemplate() {
                         {formErrors.direccion && <div style={styles.errorTextRow}>{formErrors.direccion}</div>}
                     </label>
                     
+                     <label style={styles.label}>
+                        Estado 
+                        <input name="estado" value={form.estado} onChange={handleChange} style={styles.input} />
+                        {formErrors.estado && <div style={styles.errorTextRow}>{formErrors.estado}</div>}
+                    </label>
                 </div>
-
-                {successMessage && (
-                    <div style={{ ...styles.success, marginBottom: '10px' }}>
-                        {successMessage}
-                    </div>
-                )}
-                {error && (
-                    <div style={styles.error}>
-                        {error}
-                    </div>
-                )}
 
                 <div style={{ marginTop: 15 }}>
                     <button type="submit" style={styles.buttonPrimary} disabled={isSubmitting}>
                         {isSubmitting ? "Guardando Estación..." : "Guardar Estación"}
                     </button>
-                    
                 </div>
             </form>
+            
+            <ModalTemplate
+                isOpen={modalConfig.isOpen}
+                onClose={closeModal}
+                title={modalConfig.title}
+                message={modalConfig.message}
+                type={modalConfig.type}
+            />
         </div>
     );
 }

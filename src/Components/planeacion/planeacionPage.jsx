@@ -125,7 +125,6 @@ export default function PlaneacionPage() {
 
 
 
-    // 🔹 FUNCIÓN UPDATE DATA (Conectada a tu EditableCell)
     const updateData = async (rowIndex, columnId, value) => {
         
         const rowData = data[rowIndex];
@@ -133,7 +132,6 @@ export default function PlaneacionPage() {
         if (!rowData) return;
         if (rowData[columnId] === value) return;
 
-        // 2. Actualización Optimista (UI instantánea)
         setData(old =>
             old.map((row, index) => {
                 if (index === rowIndex) {
@@ -146,7 +144,6 @@ export default function PlaneacionPage() {
         const idTicket = rowData.incidencia; 
 
         try {
-            // Encodeamos por si la incidencia tiene caracteres como '/'
             const encodedId = encodeURIComponent(idTicket);
 
             const response = await apiRequest(`${API_URL}/${encodedId}`, {
@@ -164,13 +161,11 @@ export default function PlaneacionPage() {
 
         } catch (error) {
             console.error("Error al guardar:", error);
-            // Opcional: Revertir el cambio en la UI o mostrar alerta
             alert(`Error al guardar: ${error.message}`);
-            fetchPlaneacionData(); // Podrías recargar la tabla para asegurar consistencia
+            fetchPlaneacionData();
         }
     };
 
-    // 🔹 CONFIGURACIÓN DE COLUMNAS
     const columns = useMemo(() => {
         return ColumnConfig.map(cfg => ({
             id: cfg.accessorKey,
