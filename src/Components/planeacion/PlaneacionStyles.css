@@ -1,33 +1,125 @@
-
-.planeacion-container {
- display: flex;
- flex-direction: column;
- height: 100vh;
- font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
- background-color: #f3f4f6;
+:root {
+  /* Paleta de Colores Moderna (Estilo Slate/Blue) */
+  --primary-color: #3b82f6; /* Azul brillante para acciones */
+  --primary-hover: #2563eb;
+  --bg-body: #f8fafc;       /* Fondo general muy suave */
+  --bg-surface: #ffffff;    /* Fondo de la tabla */
+  --header-bg: #f1f5f9;     /* Fondo de cabeceras (gris claro elegante) */
+  --header-text: #475569;   /* Texto de cabecera gris oscuro */
+  --text-main: #334155;     /* Texto principal */
+  --border-color: #e2e8f0;  /* Bordes sutiles */
+  --highlight-bg: #eff6ff;  /* Fondo al pasar el mouse */
+  --input-bg: #ffffff;
+  
+  /* Dimensiones */
+  --row-height: 40px;
+  --header-height: 45px;
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
+/* --- Layout Principal --- */
+.planeacion-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: var(--font-family);
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  overflow: hidden; /* Evita doble scroll */
+}
+
+/* --- Encabezado Superior (Título y Botón) --- */
 .planeacion-header-area {
   flex: none;
- background-color: white;
- padding: 1rem;
- box-shadow: 0 1px 3px rgba(0,0,0,0.1);
- border-bottom: 1px solid #e5e7eb;
- display: flex;
- justify-content: space-between;
- align-items: center;
-  z-index: 1000;
-  overflow: visible;
+  background-color: var(--bg-surface);
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  z-index: 50;
 }
 
+.planeacion-header-area h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  letter-spacing: -0.025em;
+}
+
+/* --- Botón de Configuración --- */
+.btn-config {
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.btn-config:hover {
+  background-color: var(--highlight-bg);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* --- Dropdown Menu --- */
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 120%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  padding: 8px;
+  width: 260px;
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.dropdown-item {
+  padding: 6px 8px;
+  font-size: 0.875rem;
+  border-radius: 4px;
+}
+
+.dropdown-item:hover {
+  background-color: var(--bg-body);
+}
+
+/* --- Contenedor de la Tabla --- */
 .planeacion-table-wrapper {
   flex: 1;
-  overflow: auto; /* Permite scroll vertical y horizontal */
-  position: relative;
-  background-color: white;
-  margin: 10px;
+  overflow: auto; /* Scroll interno */
+  margin: 1rem;
+  background-color: var(--bg-surface);
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Estilo para Scrollbars modernas */
+.planeacion-table-wrapper::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.planeacion-table-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+.planeacion-table-wrapper::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 4px;
+}
+.planeacion-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8;
 }
 
 /* --- Tabla --- */
@@ -35,186 +127,207 @@
   width: 100%;
   border-collapse: separate; /* Necesario para sticky headers */
   border-spacing: 0;
+  min-width: 1000px; /* Asegura scroll horizontal en móviles */
 }
 
-/* Encabezado Fijo (Sticky) */
+/* --- Headers (TH) --- */
 .th-header {
   position: sticky;
   top: 0;
-  z-index: 20;
-  background-color: #1e3a8a; /* Azul oscuro */
-  color: white;
-  padding: 8px 12px;
-  font-size: 12px;
-  font-weight: bold;
+  z-index: 30;
+  background-color: var(--header-bg);
+  color: var(--header-text);
+  padding: 0 12px;
+  height: var(--header-height);
+  font-size: 0.75rem;
+  font-weight: 700;
   text-transform: uppercase;
   text-align: left;
-  border-right: 1px solid #3b82f6;
+  border-bottom: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
   user-select: none;
+  transition: background-color 0.2s;
 }
 
 .header-content {
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  height: 100%;
   cursor: pointer;
 }
 
 .header-content:hover {
-  opacity: 0.9;
+  color: var(--primary-color);
 }
 
-/* Fila de Filtros (Debajo del encabezado) */
+/* --- Filtros (Segunda fila del header) --- */
 .th-filter {
   position: sticky;
-  top: 35px; /* Altura aproximada del header de arriba */
-  z-index: 19;
-  background-color: #f3f4f6;
-  padding: 4px;
-  border-bottom: 2px solid #d1d5db;
-  border-right: 1px solid #e5e7eb;
+  top: var(--header-height);
+  z-index: 29;
+  background-color: var(--bg-surface);
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
 }
 
-/* Celdas del Cuerpo */
-.td-cell {
-  border-bottom: 1px solid #e5e7eb;
-  border-right: 1px solid #e5e7eb;
-  font-size: 12px;
-  color: #374151;
-  padding: 0; /* Padding 0 para que el input llene la celda */
-  height: 30px;
-  white-space: nowrap;
+.input-filter, .select-filter {
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 0.8rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--bg-body);
+  transition: all 0.2s;
+  outline: none;
+}
+
+.input-filter:focus, .select-filter:focus {
+  border-color: var(--primary-color);
+  background-color: var(--bg-surface);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+/* --- Celdas (TD) --- */
+.tr-row {
+  transition: background-color 0.1s;
 }
 
 .tr-row:hover .td-cell {
-  background-color: #eff6ff; /* Azul muy claro al pasar mouse */
+  background-color: var(--highlight-bg);
 }
 
-.no-data {
-  text-align: center;
-  padding: 2rem;
-  color: #6b7280;
+.td-cell {
+  border-bottom: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  font-size: 0.85rem;
+  color: var(--text-main);
+  padding: 0; /* Padding controlado por el hijo (EditableCell) */
+  height: var(--row-height);
+  background-color: var(--bg-surface);
+  vertical-align: middle;
 }
 
-/* --- Inputs y Controles --- */
-.input-filter, .select-filter {
-  width: 100%;
-  padding: 4px;
-  font-size: 11px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-}
-
-.btn-config {
-  background-color: #2563eb;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.btn-config:hover {
-  background-color: #1d4ed8;
-}
-
-/* Menú Dropdown de Columnas */
-.dropdown-menu {
-  position: absolute;
- right: 0;
- top: 100%;
- margin-top: 5px;
- background: white;
- border: 1px solid #ddd;
- box-shadow: 0 10px 15px rgba(0,0,0,0.1);
- border-radius: 6px;
- padding: 10px;
- max-height: 300px; 
- overflow-y: auto; 
- z-index: 101; 
- width: 250px;
-}
-
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  padding: 4px 0;
-  font-size: 13px;
-}
-
-.dropdown-item input {
-  margin-right: 8px;
-}
-
-/* Celda Editable */
+/* --- Celda Editable (Vista y Edición) --- */
 .cell-viewer {
-  padding: 6px 8px;
-  width: 100%;
-  height: 100%;
-  cursor: text;
   display: block;
+  padding: 0 12px;
+  height: 100%;
+  line-height: var(--row-height);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: text;
 }
 
 .input-editable {
   width: 100%;
   height: 100%;
-  border: 2px solid #2563eb; /* Borde azul al editar */
-  padding: 4px 8px;
+  border: 2px solid var(--primary-color) !important;
+  padding: 0 10px;
   outline: none;
-  font-size: 12px;
-  background-color: #fff;
+  font-size: 0.85rem;
+  font-family: inherit;
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Elevación al editar */
 }
-/* Barra de Edición Masiva */
+
+/* --- Barra de Edición Masiva (Flotante) --- */
 .mass-edit-bar {
-    position: sticky; /* Fija la barra al scroll de la tabla */
-    top: 0;
-    z-index: 10;
-    background-color: #f3f4f6; /* Fondo gris claro */
-    border: 1px solid #d1d5db;
-    padding: 10px 15px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%); /* Centrado aunque sea sticky relativo */
+  width: fit-content;
+  min-width: 400px;
+  z-index: 100; /* Por encima de headers */
+  background-color: #1e293b; /* Oscuro para contraste */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 50px; /* Estilo píldora */
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { transform: translate(-50%, -20px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.mass-edit-bar span {
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .input-mass-edit {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    flex-grow: 1; /* Permite que el input crezca */
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  outline: none;
+  flex-grow: 1;
+}
+
+.input-mass-edit:focus {
+  background: rgba(255,255,255,0.2);
+  border-color: white;
 }
 
 .btn-apply {
-    background-color: #10b981; /* Verde */
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
 }
+.btn-apply:hover { background-color: var(--primary-hover); }
 
 .btn-cancel {
-    background-color: #ef4444; /* Rojo */
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
+  background: transparent;
+  color: #94a3b8;
+  border: 1px solid #475569;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  cursor: pointer;
 }
+.btn-cancel:hover { color: white; border-color: white; }
 
+/* --- Indicadores Visuales --- */
 .mass-edit-indicator {
-    color: #10b981;
-    font-weight: bold;
-    margin-left: 5px;
+  background-color: var(--primary-color);
+  color: white;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  margin-left: 6px;
 }
 
-/* Resaltar celdas de la columna en edición masiva */
 .td-cell.highlight-mass-edit {
-    background-color: #d1fae5; /* Fondo verde muy claro para indicar la columna activa */
-    /* Opcional: añade un borde izquierdo o derecho */
-    border-right: 2px solid #10b981;
+  background-color: #eff6ff !important;
+  border-left: 2px solid var(--primary-color); /* Borde izquierdo para marcar columna */
+}
+
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: #94a3b8;
 }

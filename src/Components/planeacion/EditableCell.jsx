@@ -4,7 +4,6 @@ import "./PlaneacionStyles.css";
 export default function EditableCell({ getValue, row, column, table }) {
     let rawValue = getValue();
 
-    // Normalizar: evitar null / undefined en inputs controlados
     const normalize = (val) => {
         if (val === null || val === undefined) return "";
         return String(val);

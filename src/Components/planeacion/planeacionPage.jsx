@@ -53,14 +53,12 @@ export default function PlaneacionPage() {
     };
 
     const updateColumnData = async (columnId, newValue) => {
-    // 1. **Identificar los ítems a actualizar**
-    // Usaremos los datos filtrados/ordenados si la tabla los tiene aplicados.
-    // table.getRowModel().rows solo tiene las filas visibles, lo cual es ideal.
+
     const rowsToUpdate = table.getRowModel().rows.map(row => ({
-        idTicket: row.original.incidencia, // Asumiendo que 'incidencia' es tu ID
+        idTicket: row.original.incidencia, 
         currentValue: row.original[columnId],
         newValue: newValue,
-    })).filter(item => item.currentValue !== newValue); // Solo actualizar si el valor ha cambiado.
+    })).filter(item => item.currentValue !== newValue); 
 
     if (rowsToUpdate.length === 0) {
         alert("El nuevo valor es igual al actual para todas las celdas visibles o no hay filas.");
@@ -73,10 +71,8 @@ export default function PlaneacionPage() {
 
     console.log(`Iniciando actualización masiva de ${rowsToUpdate.length} elementos en columna ${columnId}.`);
     
-    // 2. **Actualización Optimista (UI instantánea)**
     setData(old =>
         old.map(row => {
-            // Encuentra si la fila actual está en las filas visibles a actualizar
             const item = rowsToUpdate.find(r => r.idTicket === row.incidencia);
             if (item) {
                 return { ...row, [columnId]: newValue };
@@ -85,8 +81,6 @@ export default function PlaneacionPage() {
         })
     );
 
-    // 3. **Llamadas Concurrentes al Backend**
-    // Creamos un array de promesas de las llamadas PATCH individuales
     const updatePromises = rowsToUpdate.map(async (item) => {
         const encodedId = encodeURIComponent(item.idTicket);
         try {
@@ -101,7 +95,6 @@ export default function PlaneacionPage() {
             return { id: item.idTicket, status: 'success' };
         } catch (error) {
             console.error(error.message);
-            // Devolver un error para un manejo posterior, pero no detener Promise.all
             return { id: item.idTicket, status: 'error', message: error.message };
         }
     });
@@ -112,9 +105,8 @@ export default function PlaneacionPage() {
         
         if (errors.length > 0) {
             alert(`Actualización masiva finalizada con ${errors.length} errores. Consulta la consola para detalles.`);
-        } else {
-            alert("Actualización masiva exitosa.");
         }
+        
     } catch (error) {
         console.error("Error grave en Promise.all:", error);
         alert("Ocurrió un error inesperado durante la actualización masiva.");
@@ -122,7 +114,6 @@ export default function PlaneacionPage() {
         fetchPlaneacionData(); 
     }
 };
-
 
 
     const updateData = async (rowIndex, columnId, value) => {
@@ -190,9 +181,7 @@ export default function PlaneacionPage() {
         getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        
-        // Pasamos updateData a meta para que EditableCell lo consuma
-        meta: {
+            meta: {
             updateData, 
             updateColumnData,
         },

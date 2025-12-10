@@ -3,8 +3,8 @@ export const inventarioConfig = [
     // --- Sección 1: Identificación y Estado ---
     { key: 'numeroDeSerie', label: 'Número de Serie', type: 'text', grid: 2, required: true, readOnly: true }, 
     { key: 'numeroDeIncidencia', label: 'Número Incidencia', type: 'text', grid: 2, readOnly: true },
-    { key: 'ultimaActualizacion', label: 'Fecha Actualización', type: 'date', grid: 2, readOnly: true },// Marcado como disabled
-    { key: 'cliente', label: 'Cliente', type: 'select', optionsKey: 'cliente', grid: 2},
+    { key: 'ultimaActualizacion', label: 'Fecha Actualización', type: 'date', grid: 2, readOnly: true },
+    //{ key: 'cliente', label: 'Cliente', type: 'select', optionsKey: 'cliente', grid: 2},
     { key: 'plaza', label: 'Plaza', type: 'select', optionsKey: 'plazaDeAtencion', grid: 2}, 
     { key: 'equipo', label: 'Equipo', type: 'select', optionsKey: 'equipos', grid: 2 },
     { key: 'estado', label: 'Estado', type: 'select', optionsKey: 'estado', grid: 2},

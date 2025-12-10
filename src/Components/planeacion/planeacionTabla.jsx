@@ -1,22 +1,19 @@
 import React, { useState } from 'react';
 import FilterComponent from './FilterComponent';
 import EditableCell from './editableCell';
-import './PlaneacionStyles.css'; // Asegúrate de tener los estilos para .mass-edit-bar
+import './PlaneacionStyles.css'; 
 
 export default function PlaneacionTabla({ table }) {
-    if (!table) return <div>Cargando tabla...</div>;
+    if (!table) return <div className="no-data">Cargando tabla...</div>;
 
-    // Estados para la edición masiva
-    const [isMassEditing, setIsMassEditing] = useState(null); // Contiene el ID de la columna
+    const [isMassEditing, setIsMassEditing] = useState(null); 
     const [massEditValue, setMassEditValue] = useState("");
 
     const handleMassEditStart = (columnId) => {
-        // No permitir edición masiva en columnas que no son editables (ej. 'incidencia' o IDs)
-        // Puedes refinar esto agregando una propiedad 'massEditable: true' en ColumnConfig
         if (columnId === 'incidencia' || columnId === 'id') return; 
 
         setIsMassEditing(columnId);
-        setMassEditValue(""); // Limpiar el valor anterior
+        setMassEditValue(""); 
     };
 
     const handleMassEditSubmit = () => {
@@ -25,32 +22,28 @@ export default function PlaneacionTabla({ table }) {
             return;
         }
 
-        // 💡 Llama a la nueva función updateColumnData que se pasa por 'meta'
         table.options.meta?.updateColumnData(isMassEditing, massEditValue);
-        
-        // Finalizar edición masiva (ocultar la UI)
         setIsMassEditing(null);
         setMassEditValue("");
     };
 
-    // Usamos `getFilteredRowModel().rows.length` para saber cuántas filas están visibles
     const rowsToUpdateCount = table.getFilteredRowModel().rows.length;
 
     return (
         <div className="planeacion-table-wrapper">
             
-            {/* 💡 UI de Edición Masiva (Flotante o Fija encima de la tabla) */}
+            {/* Barra de Edición Masiva - Estilo Flotante */}
             {isMassEditing && (
                 <div className="mass-edit-bar">
-                    <span>
-                        Editando columna **{isMassEditing}**. Aplicar valor:
-                    </span>
+                    <span style={{opacity: 0.8}}>Editar Columna:</span>
+                    <strong>{table.getColumn(isMassEditing)?.columnDef.header}</strong>
+                    
                     <input
                         type="text"
                         value={massEditValue}
                         onChange={e => setMassEditValue(e.target.value)}
                         onKeyDown={e => { if (e.key === 'Enter') handleMassEditSubmit(); }}
-                        placeholder={`Nuevo valor para ${rowsToUpdateCount} filas...`}
+                        placeholder={`Valor para ${rowsToUpdateCount} filas...`}
                         className="input-mass-edit"
                         autoFocus
                     />
@@ -59,10 +52,10 @@ export default function PlaneacionTabla({ table }) {
                         className="btn-apply"
                         disabled={massEditValue === ""}
                     >
-                        Aplicar a {rowsToUpdateCount} filas
+                        Aplicar
                     </button>
                     <button onClick={() => setIsMassEditing(null)} className="btn-cancel">
-                        Cancelar
+                        ✕
                     </button>
                 </div>
             )}
@@ -78,31 +71,34 @@ export default function PlaneacionTabla({ table }) {
                                         key={header.id}
                                         style={{ width: header.column.columnDef.size }}
                                         className="th-header"
-                                        // ✅ SOLUCIÓN AL CONFLICTO: onDoubleClick aquí
                                         onDoubleClick={() => handleMassEditStart(header.column.id)} 
                                     >
                                         <div 
                                             className="header-content"
-                                            // 💡 onClick para el ordenamiento
                                             onClick={header.column.getToggleSortingHandler()}
                                         >
                                             {header.isPlaceholder ? null : header.column.columnDef.header}
-                                            <span>
-                                                {{
-                                                    asc: ' 🔼',
-                                                    desc: ' 🔽',
-                                                }[header.column.getIsSorted()] ?? null}
-                                            </span>
-                                            {/* 💡 Indicador de Edición Masiva */}
-                                            {isMassEditing === header.column.id && (
-                                                <span className="mass-edit-indicator">✎</span>
-                                            )}
+                                            
+                                            <div style={{display: 'flex', alignItems: 'center'}}>
+                                                {/* Indicador de Edición Activa */}
+                                                {isMassEditing === header.column.id && (
+                                                    <span className="mass-edit-indicator" title="Edición masiva activa">✎</span>
+                                                )}
+                                                
+                                                {/* Indicador de Sort */}
+                                                <span style={{marginLeft: '4px', fontSize: '10px', opacity: 0.6}}>
+                                                    {{
+                                                        asc: '▲',
+                                                        desc: '▼',
+                                                    }[header.column.getIsSorted()] ?? ''}
+                                                </span>
+                                            </div>
                                         </div>
                                     </th>
                                 ))}
                             </tr>
                             
-                            {/* Fila 2: Filtros */}
+                            {/* Fila 2: Filtros - Ahora integrados visualmente */}
                             <tr>
                                 {headerGroup.headers.map(header => (
                                     <th key={`${header.id}-filter`} className="th-filter">
@@ -139,7 +135,8 @@ export default function PlaneacionTabla({ table }) {
             
             {rowsToUpdateCount === 0 && (
                 <div className="no-data">
-                    No se encontraron registros.
+                    <span style={{fontSize: '2rem', marginBottom: '10px'}}>📭</span>
+                    <span>No se encontraron registros.</span>
                 </div>
             )}
         </div>

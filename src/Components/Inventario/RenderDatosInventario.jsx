@@ -20,7 +20,6 @@ function RenderDatosInventario({ data, onEdit, loadHistorial }) {
 
     const gri2dKeys = [
         'numeroDeSerie',
-        'cliente',
         'plaza',
         'numeroDeIncidencia',
         'guias',

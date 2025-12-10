@@ -1,5 +1,3 @@
-// PlaneacionEncabezado.jsx
-
 import React, { useState } from 'react';
 import './PlaneacionStyles.css';
 
@@ -11,13 +9,13 @@ export default function PlaneacionEncabezado({ table }) {
     return (
         <div className="planeacion-header-area">
             <div>
-                <h2 style={{ margin: 0, color: '#111827' }}>Planeación Operativa</h2>
-                <small style={{ color: '#6b7280' }}>
-                    Mostrando {table.getRowModel().rows.length} registros
+                <h2>Planeación Operativa</h2>
+                <small style={{ color: '#64748b', fontSize: '0.8rem' }}>
+                    <strong>{table.getRowModel().rows.length}</strong> registros encontrados
                 </small>
             </div>
 
-            <div style={{ position: 'relative', zIndex: 101 }}>
+            <div style={{ position: 'relative' }}>
                 <button 
                     className="btn-config"
                     onClick={() => setShowMenu(!showMenu)}
@@ -26,38 +24,43 @@ export default function PlaneacionEncabezado({ table }) {
                 </button>
                 
                 {showMenu && (
-                    <div className="dropdown-menu">
+                    <>
+                        {/* Overlay invisible para cerrar al hacer clic fuera */}
+                        <div 
+                            style={{position: 'fixed', top:0, left:0, right:0, bottom:0, zIndex: 90}} 
+                            onClick={() => setShowMenu(false)}
+                        />
+                        <div className="dropdown-menu">
+                            <div className="dropdown-item" style={{ borderBottom: '1px solid #e2e8f0', marginBottom: '4px', fontWeight: 600 }}>
+                                <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', width: '100%' }}>
+                                    <input
+                                        type="checkbox"
+                                        checked={table.getIsAllColumnsVisible()}
+                                        onChange={table.getToggleAllColumnsVisibilityHandler()}
+                                        style={{marginRight: '8px'}}
+                                    />
+                                    Mostrar Todo
+                                </label>
+                            </div>
 
-                        {/* 1. Opción para Alternar Todas las Columnas */}
-                        <div className="dropdown-item" style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '8px', marginBottom: '8px' }}>
-                            <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', width: '100%', fontWeight: 'bold' }}>
-                                <input
-                                    type="checkbox"
-                                    checked={table.getIsAllColumnsVisible()}
-                                    onChange={table.getToggleAllColumnsVisibilityHandler()}
-                                />
-                                Ocultar / Mostrar Todas
-                            </label>
+                            {table.getAllColumns()
+                                .filter(column => column.columnDef.header)
+                                .map(column => (
+                                    <div key={column.id} className="dropdown-item">
+                                        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', width: '100%' }}>
+                                            <input
+                                                type="checkbox"
+                                                checked={column.getIsVisible()}
+                                                onChange={column.getToggleVisibilityHandler()}
+                                                style={{marginRight: '8px'}}
+                                            />
+                                            {column.columnDef.header}
+                                        </label>
+                                    </div>
+                                ))
+                            }
                         </div>
-
-                        {/* 2. Lista de Columnas Individuales - Usa getAllColumns y un filtro robusto */}
-                        {table.getAllColumns()
-                            .filter(column => column.columnDef.header !== undefined && column.columnDef.header !== null && column.id !== 'select')
-                            .map(column => (
-                                <div key={column.id} className="dropdown-item">
-                                    <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', width: '100%' }}>
-                                        <input
-                                            type="checkbox"
-                                            checked={column.getIsVisible()}
-                                            onChange={column.getToggleVisibilityHandler()}
-                                        />
-                                        {/* Usamos el header para el nombre de la opción */}
-                                        {column.columnDef.header}
-                                    </label>
-                                </div>
-                            ))
-                        }
-                    </div>
+                    </>
                 )}
             </div>
         </div>
