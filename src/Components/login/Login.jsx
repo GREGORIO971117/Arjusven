@@ -6,12 +6,8 @@ import Logo from '../../assets/Arjus.png';
 const API_LOGIN_URL = 'http://localhost:8080/api/usuarios/login'; 
 
 function Login({ onLoginSuccess }) {
-    // Estados para los campos de formulario
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    
-    // NOTA: Si quieres limpiar más la interfaz, podrías unificar estos errores,
-    // pero mantendré las validaciones de formato por separado como las tenías.
     const [usernameError, setUsernameError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     
@@ -28,7 +24,6 @@ function Login({ onLoginSuccess }) {
         setLoginError('');
         let valid = true;
 
-        // --- 1. Validación del Front-end (Formato) ---
         if (!usernameRegex.test(username)) {
             setUsernameError('El formato del usuario no es correcto.');
             valid = false;
@@ -45,7 +40,6 @@ function Login({ onLoginSuccess }) {
 
         if (!valid) return; 
 
-        // --- 2. Llamada a la API ---
         setIsLoading(true);
         
         try {
@@ -60,20 +54,16 @@ function Login({ onLoginSuccess }) {
                 body: JSON.stringify(credentials), 
             });
 
-            // Intentamos parsear, pero si falla no rompemos el flujo inmediatamente
             let data = {};
             try {
                 data = await response.json(); 
             } catch (jsonError) {
-                // Si la respuesta no es JSON, seguimos manejando el error por status
             }
 
-            // --- AQUÍ ESTÁ EL CAMBIO PRINCIPAL ---
             if (!response.ok) {
                 throw new Error('Lo sentimos, no pudimos validar tu acceso. Por favor, verifica tus datos e inténtalo nuevamente.');
             }
 
-            // --- 3. Autenticación Exitosa ---
             if (data.accessToken) {
                 localStorage.setItem('jwtToken', data.accessToken); 
             } else {
@@ -91,8 +81,7 @@ function Login({ onLoginSuccess }) {
             navigate('/Home'); 
 
         } catch (err) {
-            // Si es un error de conexión (fetch falla), mostramos algo distinto pero amable.
-            // Si es el error que lanzamos arriba, mostramos ese.
+       
             if (err.message === 'Failed to fetch' || err.message.includes('NetworkError')) {
                 setLoginError('Parece que no hay conexión con el servidor. Por favor, revisa tu internet.');
             } else {
@@ -134,7 +123,6 @@ function Login({ onLoginSuccess }) {
                     />
                     {passwordError && <p className="error-message">{passwordError}</p>}
                     
-                    {/* Mensaje de error general de login */}
                     {loginError && <p className="error-message api-error">{loginError}</p>}
 
                     <button 

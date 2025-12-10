@@ -44,7 +44,7 @@ function InventarioPage() {
                  message,
                  type,
              });
-         };                                                    
+    };                                                    
 
 const fetchFilteredInventario = async () => {
         setIsLoading(true);

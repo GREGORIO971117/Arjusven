@@ -2,14 +2,6 @@ import React from 'react';
 import './InventarioList.css';
 import { inventarioConfig } from '../../assets/inventarioConfig';
 
-const formatDate = (dateString) => {
-    if (typeof dateString === 'string') {
-        return dateString.slice(0, 10);
-    }
-    return dateString || '';
-};
-
-
 function RenderDatosInventario({ data, onEdit, loadHistorial }) {
 
     if (!data) {
