@@ -1,106 +1,174 @@
-import {useState} from 'react';
-import {adicionalesConfig} from '../../assets/adicionalesConfig';
+import React, { useState } from 'react';
+import { adicionalesConfig } from '../../assets/adicionalesConfig'; // Asegúrate de la ruta correcta
+import '../Inventario/InventarioList.css';
 
-function RenderDatosAdicionales({ 
+const RenderDatosAdicionales = ({ 
     data, 
     activeTab,
     setActiveTab, 
     isEditing, 
     setIsEditing,
-    handleDownload,
-    styles}) {
+    handleDownload
+}) => {
 
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-    const [isOpen, setIsOpen] = useState(false);
-
-    const handleAction = (type) => {
-        handleDownload(type); 
-        setIsOpen(false); 
-    }
-
-    if (!data.adicionales) {
-        return <div>No hay datos adicionales disponibles.</div>;
+    if (!data || !data.adicionales) {
+        return (
+            <div className="no-data-container">
+                <div className="no-data-icon">📋</div>
+                <div className="no-data-text">No hay datos adicionales disponibles.</div>
+            </div>
+        );
     }
 
     const { nombreDeEss } = data.servicios || {};
 
+    // Helper para filtrar campos por sección
+    const getFieldsBySection = (sectionName) => {
+        return adicionalesConfig.filter(field => field.section === sectionName);
+    };
+
+    const handleAction = (type) => {
+        handleDownload(type); 
+        setIsDropdownOpen(false); 
+    }
+
+    // Componente de Item (Reutilizado para consistencia visual)
     const InfoItem = ({ label, value }) => {
         const displayValue = value ? value : "—"; 
         return (
-            <div className="infoItem">
-                <strong>{label}:</strong><span>{displayValue} </span>
+            <div className="modern-info-item">
+                <span className="info-label">{label}</span>
+                <span className="info-value compact">{displayValue}</span>
             </div>
         );
     };
 
     return (
-        <>
-            <div className="ticket-tabs">
+        <div className="modern-service-container">
+            <header className="service-header">
+                <div className="header-titles">
+                    <h1 className="service-title">{nombreDeEss || 'Sin Nombre'}</h1>
+                    <div className="service-meta">
+                        <span className="meta-tag">Sección: <strong>Adicionales</strong></span>
+                    </div>
+                </div>
+
+                <div className="header-actions">
+                    {!isEditing && (
+                        <button onClick={() => setIsEditing(true)} className="btn-modern btn-primary">
+                            Editar
+                        </button>
+                    )}
+                    
+                    <div className="modern-dropdown-container">
+                        <button 
+                            className={`btn-modern btn-secondary ${isDropdownOpen ? 'active' : ''}`}
+                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        >
+                            Descargar ▾
+                        </button>
+                        
+                        {isDropdownOpen && (
+                            <>
+                                <div className="dropdown-overlay" onClick={() => setIsDropdownOpen(false)}/>
+                                <div className="modern-dropdown-menu">
+                                    <button className="dropdown-item" onClick={() => handleAction('intercambio')}>
+                                        📥 Formato Cambio
+                                    </button>
+                                    <button className="dropdown-item" onClick={() => handleAction('mantenimiento')}>
+                                        🛠️ Formato Mantenimiento
+                                    </button>
+                                    <button className="dropdown-item" onClick={() => handleAction('retiro')}>
+                                        📤 Formato Retiro
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+            </header>
+
+            {/* --- Tabs --- */}
+            <nav className="modern-tabs">
                 <button
-                    className={`tab-button ${activeTab === 'servicio' ? 'active' : ''}`}
+                    className={`modern-tab ${activeTab === 'servicio' ? 'active' : ''}`}
                     onClick={() => setActiveTab('servicio')}
                 >
                     Datos de Servicio
                 </button>
                 <button
-                    className={`tab-button ${activeTab === 'adicionales' ? 'active' : ''}`}
+                    className={`modern-tab ${activeTab === 'adicionales' ? 'active' : ''}`}
                     onClick={() => setActiveTab('adicionales')}
                 >
                     Datos Adicionales
                 </button>
+            </nav>
 
-                <h2 className="title">
-                    <strong>{nombreDeEss}</strong>
-                </h2>
-                
-                {/* Contenedor de Acciones del Ticket */}
-                <div className="ticket-actions">
-                    {!isEditing && (
-                        <button onClick={() => setIsEditing(true)} className="edit-button">
-                            Editar
-                        </button>
-                    )}
+            {/* --- Contenido Principal (Alta Densidad) --- */}
+            <div className="service-content-area">
+                <div className="info-grid-wrapper animate-fade-in">
                     
-                    {/* --- Dropdown de Descarga IMPLEMENTADO --- */}
-                    <div style={styles.downloadDropdownContainer}>
-                        <button 
-                            style={styles.downloadButton}
-                            onClick={() => setIsOpen(!isOpen)} // Alterna el estado del menú
-                        > 
-                            Descargar <span style={styles.dropdownArrow}>{isOpen ? '▲' : '▼'}</span>
-                        </button>
-                        
-                        {isOpen && (
-                            <div style={styles.dropdownMenu}>
-                                {/* Botones configurados para usar los nombres de plantillas del backend */}
-                                <button style={styles.dropdownItem} onClick={() => handleAction('intercambio')}>
-                                    Descargar Cambio
-                                </button>
-                                <button style={styles.dropdownItem} onClick={() => handleAction('mantenimiento')}>
-                                    Descargar Mantenimiento
-                                </button>
-                                <button style={styles.dropdownItem} onClick={() => handleAction('retiro')}>
-                                    Descargar Retiro
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                    {/* -------------------------------------- */}
-                </div>
-            </div>
+                    {/* Sección 1: General */}
+                    <section className="data-section">
+                        <div className="modern-grid-4">
+                            {getFieldsBySection('General').map(field => (
+                                <InfoItem 
+                                    key={field.key} 
+                                    label={field.label} 
+                                    value={data.adicionales[field.key]} 
+                                />
+                            ))}
+                        </div>
+                    </section>
 
-            <div className="detalleGridContainer">
-                <div className="grid3">
-                    {adicionalesConfig.map(field => (
-                        <InfoItem 
-                            key={field.key} 
-                            label={field.label} 
-                            value={data.adicionales[field.key]} 
-                        />
-                    ))}
+                    <div className="divider"></div>
+
+                    <div className="comparison-wrapper">
+                        <section className="data-section">
+                            <div className="modern-grid-2-dense">
+                                {getFieldsBySection('Entra').map(field => (
+                                    <InfoItem 
+                                        key={field.key} 
+                                        label={field.label} 
+                                        value={data.adicionales[field.key]} 
+                                    />
+                                ))}
+                            </div>
+                        </section>
+
+                        <section className="data-section">
+                            <div className="modern-grid-2-dense">
+                                {getFieldsBySection('Sale').map(field => (
+                                    <InfoItem 
+                                        key={field.key} 
+                                        label={field.label} 
+                                        value={data.adicionales[field.key]} 
+                                    />
+                                ))}
+                            </div>
+                        </section>
+                    </div>
+
+                    <div className="divider"></div>
+
+                    {/* Sección 3: Stock */}
+                    <section className="data-section">
+                        <div className="modern-grid-4">
+                            {getFieldsBySection('Stock').map(field => (
+                                <InfoItem 
+                                    key={field.key} 
+                                    label={field.label} 
+                                    value={data.adicionales[field.key]} 
+                                />
+                            ))}
+                        </div>
+                    </section>
+
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 

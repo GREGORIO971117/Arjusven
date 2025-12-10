@@ -635,5 +635,355 @@ section h4 {
   gap: 1rem;
 }
 
+/* =========================================
+   DISEÑO MODERNO DE SERVICIOS (Estilo Dashboard)
+   ========================================= */
+
+:root {
+    --primary-color: #3b82f6;
+    --primary-hover: #2563eb;
+    --bg-body: #f8fafc;
+    --text-main: #334155;
+    --text-light: #64748b;
+    --border-color: #e2e8f0;
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.modern-service-container {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden; /* Para que el contenido haga scroll dentro */
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* --- Header --- */
+.service-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: #ffffff;
+}
+
+.service-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1.2;
+}
+
+.service-meta {
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.meta-tag {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    background-color: #f1f5f9;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* Badge de Estado Dinámico */
+.status-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: #e2e8f0; /* Default */
+    color: #475569;
+}
+
+/* Colores de estado (ejemplos) */
+.status-badge.abierta, .status-badge.en-progreso {
+    background-color: #fedbdb; 
+    color: #af1e1e;
+}
+.status-badge.cerrado, .status-badge.resuelto {
+    background-color: #dcfce7; 
+    color: #166534;
+}
+.status-badge.pendiente {
+    background-color: #fef9c3; 
+    color: #854d0e;
+}
+
+/* --- Botones --- */
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-modern {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+.btn-primary:hover { background-color: var(--primary-hover); }
+
+.btn-secondary {
+    background-color: white;
+    border-color: var(--border-color);
+    color: var(--text-main);
+}
+.btn-secondary:hover { background-color: #f8fafc; border-color: #cbd5e1; }
+
+
+/* --- Tabs Modernas --- */
+.modern-tabs {
+    display: flex;
+    padding: 0 2rem;
+    border-bottom: 1px solid var(--border-color);
+    background-color: #f8fafc;
+}
+
+.modern-tab {
+    padding: 1rem 0;
+    margin-right: 2rem;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-light);
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.modern-tab:hover { color: var(--primary-color); }
+
+.modern-tab.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+
+/* --- Contenido y Grids --- */
+.service-content-area {
+    padding: 2rem;
+    overflow-y: auto; /* Scroll interno elegante */
+    flex: 1;
+}
+
+.info-grid-wrapper {
+    max-width: 1200px; /* Evita que se estire demasiado en pantallas 4k */
+}
+
+/* Grid System Responsivo */
+.modern-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem 2rem;
+}
+
+.modern-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 1.5rem 2rem;
+}
+
+/* Separador sutil */
+.divider {
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 2rem 0;
+}
+
+
+/* --- Info Item (Tarjeta de Dato) --- */
+.modern-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.modern-info-item.full-width {
+    grid-column: 1 / -1; /* Ocupa todo el ancho disponible */
+}
+
+.info-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+.info-value {
+    font-size: 1rem;
+    color: #1e293b;
+    font-weight: 400;
+    line-height: 1.5;
+    word-break: break-word; /* Evita desbordamientos de texto largo */
+}
+
+
+/* --- Animaciones --- */
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* --- Estado Vacío --- */
+.no-data-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-light);
+    text-align: center;
+    padding: 2rem;
+}
+
+.no-data-icon { 
+    font-size: 3rem;
+     margin-bottom: 1rem;
+      opacity: 0.5; 
+    }
+
+    /* ... (Estilos previos del Modern Dashboard) ... */
+
+/* --- Estilos Específicos para Adicionales (Alta Densidad) --- */
+
+/* Títulos de Sección Internos */
+.section-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-left: 0.5rem;
+    border-left: 3px solid var(--primary-color);
+}
+
+.section-title.text-green { border-color: #10b981; color: #065f46; }
+.section-title.text-red { border-color: #ef4444; color: #991b1b; }
+
+.data-section {
+    margin-bottom: 1.5rem;
+}
+
+/* Grid de 4 Columnas (Para datos generales cortos) */
+.modern-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Más estrecho para caber más */
+    gap: 1rem 1.5rem;
+}
+
+/* Wrapper para poner Entra y Sale lado a lado en pantallas grandes */
+.comparison-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Mitad y mitad */
+    gap: 2rem;
+}
+
+/* Grid denso para las columnas de comparación */
+.modern-grid-2-dense {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 0.8rem 1.2rem;
+}
+
+/* Ajuste de tipografía para alta densidad */
+.info-value.compact {
+    font-size: 0.95rem; /* Un poco más pequeño que el estándar */
+    font-weight: 500;
+}
+
+/* --- Dropdown Moderno Personalizado --- */
+.modern-dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+.btn-modern.active {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+.modern-dropdown-menu {
+    position: absolute;
+    top: 110%;
+    right: 0;
+    background-color: white;
+    min-width: 220px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.5rem;
+    z-index: 50;
+    animation: fadeIn 0.15s ease-out;
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 1rem;
+    text-align: left;
+    background: none;
+    border: none;
+    font-size: 0.875rem;
+    color: var(--text-main);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.15s;
+}
+
+.dropdown-item:hover {
+    background-color: #f1f5f9;
+    color: var(--primary-color);
+}
+
+.dropdown-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 40; /* Justo debajo del menú */
+    background: transparent;
+    cursor: default;
+}
+
+/* --- Responsive para Adicionales --- */
+@media (max-width: 1024px) {
+    .comparison-wrapper {
+        grid-template-columns: 1fr; /* Apilar Entra y Sale en tablets */
+    }
+}
+
+@media (max-width: 640px) {
+    .modern-grid-4, .modern-grid-2-dense {
+        grid-template-columns: 1fr; /* Una columna en móvil */
+    }
+}
+
 
 

@@ -1,21 +1,4 @@
-:root {
-  /* Paleta de Colores Moderna (Estilo Slate/Blue) */
-  --primary-color: #3b82f6; /* Azul brillante para acciones */
-  --primary-hover: #2563eb;
-  --bg-body: #f8fafc;       /* Fondo general muy suave */
-  --bg-surface: #ffffff;    /* Fondo de la tabla */
-  --header-bg: #f1f5f9;     /* Fondo de cabeceras (gris claro elegante) */
-  --header-text: #475569;   /* Texto de cabecera gris oscuro */
-  --text-main: #334155;     /* Texto principal */
-  --border-color: #e2e8f0;  /* Bordes sutiles */
-  --highlight-bg: #eff6ff;  /* Fondo al pasar el mouse */
-  --input-bg: #ffffff;
-  
-  /* Dimensiones */
-  --row-height: 40px;
-  --header-height: 45px;
-  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
+
 
 /* --- Layout Principal --- */
 .planeacion-container {
