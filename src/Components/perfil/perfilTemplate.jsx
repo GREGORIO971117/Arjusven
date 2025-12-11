@@ -1,32 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { apiRequest } from '../login/Api'; 
 import datosEstaticos from '../../assets/datos.json';
+import '../Inventario/InventarioList.css'; 
 
 const DEFAULT_PROFILE = {
-    idUsuarios: "", // Debería ser String o Number, pero vacío para el estado inicial
+    idUsuarios: "",
     nombre: "",
     correo: "",
     estadoDeResidencia: "",
     edad: 0,
-    rol: "USUARIO", // Valor por defecto
-    contraseña: "", // Solo para edición, no para mostrar
+    rol: "USUARIO", 
+    contraseña: "",
 };
 
-export default function PerfilTemplate() {
+export default function PerfilTemplate({ showModal }) {
     
-    // 1. Estados para manejo de datos y UI
-    const [profile, setProfile] = useState(DEFAULT_PROFILE); // Almacenará los datos del perfil
+    const [profile, setProfile] = useState(DEFAULT_PROFILE); 
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [editing, setEditing] = useState(false);
     const [errors, setErrors] = useState({});
 
-    // 2. Construcción de la URL
     const API_BASE_URL = '/usuarios/';
     const idEditUsuario = localStorage.getItem('idUsuario'); 
     const EditUsuarioURL = `${API_BASE_URL}${idEditUsuario}`;
 
-    // 3. Función de validación (debe estar dentro o importarse)
     const validate = (currentProfile) => {
         const err = {};
         if (!currentProfile.nombre || currentProfile.nombre.trim().length < 2) err.nombre = "Nombre inválido.";
@@ -46,7 +44,6 @@ export default function PerfilTemplate() {
 
         setIsLoading(true);
         try {
-            // Se asume que apiRequest maneja el token JWT
             const response = await apiRequest(EditUsuarioURL, { method: 'GET' });
 
             if (!response.ok) {
@@ -54,7 +51,6 @@ export default function PerfilTemplate() {
             }
             
             const data = await response.json();
-            //Se establece el estado con los datos del perfil
             setProfile(data); 
 
         } catch (err) {
@@ -64,12 +60,10 @@ export default function PerfilTemplate() {
         }
     };
 
-    // 5. useEffect: Ejecutar el fetch al cargar el componente
     useEffect(() => {
         fetchProfile();
     }, []);
 
-    // 6. Handlers de UI
     const handleChange = (e) => {
         const { name, value } = e.target;
         setProfile((p) => ({ ...p, [name]: name === "edad" ? Number(value) : value }));
@@ -83,45 +77,50 @@ export default function PerfilTemplate() {
     };
 
     const handleProfileUpdate = async (updatedProfile) => {
-    
-    // 1. Ocultar los errores previos
-    setErrors({});
-    setError("");
-    
-    // 2. Definir la URL de actualización
-    const updateURL = `${API_BASE_URL}${idEditUsuario}`; 
-
-    try {
-
-        setIsLoading(true);
-        const response = await apiRequest(updateURL, {
-            method: 'PATCH', 
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedProfile),
-        });
-
-        // 4. Manejo de respuesta
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ message: 'Error desconocido' }));
-            throw new Error(errorData.message || `Error ${response.status}: No se pudo actualizar el perfil.`);
-        }
-
-  
-        const updatedData = await response.json();
-        setProfile(updatedData); 
-        setEditing(false); 
+        setErrors({});
+        setError("");
         
-    } catch (err) {
-        setError(err.message);
-        setEditing(true); 
+        const updateURL = `${API_BASE_URL}${idEditUsuario}`; 
 
-    } finally {
-        setIsLoading(false);
-    }
-};
+        try {
+            setIsLoading(true);
+            const response = await apiRequest(updateURL, {
+                method: 'PATCH', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedProfile),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ message: 'Error desconocido' }));
+                throw new Error(errorData.message || `Error ${response.status}: No se pudo actualizar el perfil.`);
+            }
     
+            const updatedData = await response.json();
+            setProfile(updatedData); 
+            setEditing(false); 
+            
+            if(showModal) {
+                showModal({
+                    title: "Perfil Actualizado",
+                    message: "Tus datos han sido guardados exitosamente.",
+                    type: "success"
+                });
+            }
+            
+        } catch (err) {
+            setError(err.message);
+            setEditing(true); 
+            if(showModal) {
+                showModal({
+                    title: "Error al Guardar",
+                    message: err.message,
+                    type: "error"
+                });
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const handleCancel = () => {
         fetchProfile(); 
@@ -129,244 +128,141 @@ export default function PerfilTemplate() {
         setEditing(false);
     };
     
+    // Componente auxiliar para visualizar datos (Read-Only)
+    const InfoItem = ({ label, value }) => (
+        <div className="modern-info-item">
+            <span className="info-label">{label}</span>
+            <span className="info-value">{value}</span>
+        </div>
+    );
+
+    // Componente auxiliar para inputs (Editable)
+    const InputItem = ({ label, name, type="text", value, options, placeholder, min }) => (
+        <div className="modern-info-item">
+            <label className="info-label">{label}</label>
+            {options ? (
+                <select 
+                    name={name} 
+                    value={value} 
+                    onChange={handleChange} 
+                    className="form-input modern-input"
+                >
+                    <option value="">Seleccione...</option>
+                    {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                </select>
+            ) : (
+                <input
+                    name={name}
+                    type={type}
+                    value={value}
+                    onChange={handleChange}
+                    className="form-input modern-input"
+                    placeholder={placeholder}
+                    min={min}
+                />
+            )}
+            {errors[name] && <span className="error-message-text">{errors[name]}</span>}
+        </div>
+    );
+
+    if (isLoading && !profile.idUsuarios) return <div className="loading-state">Cargando perfil...</div>;
+
     return (
-        <div style={styles.container}>
-            <div style={styles.card}>
-                <h2 style={styles.title}>Perfil de usuario</h2>
+        <div className="profile-page-wrapper">
+            <div className="modern-service-container profile-card">
                 
-                {/* ID */}
-                <div style={styles.row}>
-                    <label style={styles.label}>ID</label>
-                    <div style={styles.value}>{profile.idUsuarios}</div>
-                </div>
-
-                {/* Nombre */}
-                <div style={styles.row}>
-                    <label style={styles.label}>Nombre</label>
-                    {editing ? (
-                        <input
-                            name="nombre"
-                            value={profile.nombre}
-                            onChange={handleChange}
-                            style={styles.input}
-                        />
-                    ) : (
-                        <div style={styles.value}>{profile.nombre}</div>
-                    )}
-                    {errors.nombre && <div style={styles.error}>{errors.nombre}</div>}
-                </div>
-                
-                {/* Correo */}
-                <div style={styles.row}>
-                    <label style={styles.label}>Correo</label>
-                    {editing ? (
-                        <input
-                            name="correo"
-                            value={profile.correo}
-                            onChange={handleChange}
-                            style={styles.input}
-                        />
-                    ) : (
-                        <div style={styles.value}>{profile.correo}</div>
-                    )}
-                    {errors.correo && <div style={styles.error}>{errors.correo}</div>}
-                </div>
-
-                {/* Estado de residencia */}
-                <div style={styles.row}>
-                    <label style={styles.label}>Estado de residencia</label>
-                    {editing ? (
-                        <select name="estadoDeResidencia" value={profile.estadoDeResidencia} onChange={handleChange} style={styles.input}>
-                            <option value="">Seleccione estado de residencia</option>
-                                {datosEstaticos.estadosMx?.map((opcion) => (
-                                    <option key={opcion} value={opcion}>{opcion}</option>
-                                ))}
-                        </select> 
-                    ) : (
-                        <div style={styles.value}>{profile.estadoDeResidencia}</div>
-                    )}
-                    {errors.estadoDeResidencia && <div style={styles.error}>{errors.estadoDeResidencia}</div>}
-                </div>
-
-                {/* Edad */}
-                <div style={styles.row}>
-                    <label style={styles.label}>Edad</label>
-                    {editing ? (
-                        <input
-                            name="edad"
-                            type="number"
-                            min="0"
-                            value={profile.edad}
-                            onChange={handleChange}
-                            style={styles.input}
-                        />
-                    ) : (
-                        <div style={styles.value}>{profile.edad}</div>
-                    )}
-                    {errors.edad && <div style={styles.error}>{errors.edad}</div>}
-                </div>
-
-                {/* Rol */}
-                <div style={styles.row}>
-                    <label style={styles.label}>Rol</label>
-                        <div style={styles.value}>{profile.rol}</div>
-                    {errors.rol && <div style={styles.error}>{errors.rol}</div>}
-                </div>
-
-                {/* Contraseña */}
-                <div style={styles.row}>
-                    <label style={styles.label}>Contraseña</label>
-                    {editing ? (
-                        <input
-                            name="contraseña"
-                            type="password"
-                            value={''} 
-                            onChange={handleChange}
-                            style={styles.input}
-                            placeholder="Dejar vacío para no cambiar"
-                        />
-                    ) : (
-                        <div style={styles.value}>••••••••</div>
-                    )}
-                </div>
-
-                <div style={styles.actions}>
-                    {editing ? (
-                        <>
-                            <button onClick={handleSave} style={styles.btnPrimary}>
-                                Guardar
+                {/* Header del Perfil */}
+                <header className="service-header">
+                    <div className="header-titles">
+                        <h1 className="service-title">Mi Perfil</h1>
+                        <div className="service-meta">
+                            <span className="meta-tag">Rol: <strong>{profile.rol}</strong></span>
+                            <span className="meta-tag">ID: <strong>{profile.idUsuarios}</strong></span>
+                        </div>
+                    </div>
+                    
+                    <div className="header-actions">
+                        {!editing ? (
+                            <button onClick={() => setEditing(true)} className="btn-modern btn-primary">
+                                ✎ Editar Perfil
                             </button>
-                            <button onClick={handleCancel} style={styles.btnSecondary}>
-                                Cancelar
-                            </button>
-                        </>
-                    ) : (
-                        <button onClick={() => setEditing(true)} style={styles.btnPrimary}>
-                            Editar
-                        </button>
-                    )}
+                        ) : (
+                            <>
+                                <button onClick={handleCancel} className="btn-modern btn-secondary">
+                                    Cancelar
+                                </button>
+                                <button onClick={handleSave} className="btn-modern btn-primary" disabled={isLoading}>
+                                    {isLoading ? 'Guardando...' : 'Guardar Cambios'}
+                                </button>
+                            </>
+                        )}
+                    </div>
+                </header>
+
+                {/* Contenido del Perfil */}
+                <div className="service-content-area">
+                    <div className="info-grid-wrapper animate-fade-in">
+                        
+                        {/* Mensaje de Error General */}
+                        {error && (
+                            <div className="alert-box error">
+                                {error}
+                            </div>
+                        )}
+
+                        <section className="data-section">
+                            <h3 className="subsection-title">Información Personal</h3>
+                            <div className="modern-grid-2">
+                                {editing ? (
+                                    <>
+                                        <InputItem label="Nombre Completo" name="nombre" value={profile.nombre} />
+                                        <InputItem label="Correo Electrónico" name="correo" value={profile.correo} />
+                                        <InputItem label="Edad" name="edad" type="number" value={profile.edad} min="0" />
+                                        <InputItem 
+                                            label="Estado de Residencia" 
+                                            name="estadoDeResidencia" 
+                                            value={profile.estadoDeResidencia} 
+                                            options={datosEstaticos.estadosMx}
+                                        />
+                                    </>
+                                ) : (
+                                    <>
+                                        <InfoItem label="Nombre Completo" value={profile.nombre} />
+                                        <InfoItem label="Correo Electrónico" value={profile.correo} />
+                                        <InfoItem label="Edad" value={`${profile.edad} años`} />
+                                        <InfoItem label="Estado de Residencia" value={profile.estadoDeResidencia} />
+                                    </>
+                                )}
+                            </div>
+                        </section>
+
+                        <div className="divider"></div>
+
+                        <section className="data-section">
+                            <div className="modern-grid-2">
+                                {editing ? (
+                                    <div className="modern-info-item span-2">
+                                        <label className="info-label">Nueva Contraseña</label>
+                                        <input
+                                            name="contraseña"
+                                            type="password"
+                                            value={''}
+                                            onChange={handleChange}
+                                            className="form-input modern-input"
+                                            placeholder="Dejar en blanco para mantener la actual"
+                                        />
+                                        <small style={{color:'#64748b', marginTop:'4px'}}>
+                                            Solo llena este campo si deseas cambiar tu contraseña.
+                                        </small>
+                                    </div>
+                                ) : (null) 
+                                }
+                            </div>
+                        </section>
+
+                    </div>
                 </div>
             </div>
         </div>
     );
 }
-const styles = {
-
-    container: {
-        display: "flex",
-        justifyContent: "center",
-        padding: 20,
-
-    },
-
-    card: {
-        width: 520,
-        border: "1px solid #e0e0e0",
-        borderRadius: 8,
-        padding: 18,
-        boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
-        background: "#fff",
-    },
-
-    title: {
-        margin: "0 0 12px 0",
-        fontSize: 20,
-    },
-
-    row: {
-
-        display: "flex",
-
-        flexDirection: "column",
-
-        marginBottom: 12,
-
-    },
-
-    label: {
-
-        fontSize: 13,
-
-        color: "#444",
-
-        marginBottom: 6,
-
-    },
-
-    value: {
-
-        fontSize: 15,
-
-        padding: "8px 10px",
-
-        background: "#f9f9f9",
-
-        borderRadius: 4,
-
-    },
-
-    input: {
-
-        padding: "8px 10px",
-
-        fontSize: 15,
-
-        borderRadius: 4,
-
-        border: "1px solid #ccc",
-
-    },
-
-    actions: {
-
-        marginTop: 14,
-
-        display: "flex",
-
-        gap: 8,
-
-    },
-
-    btnPrimary: {
-
-        background: "#0b5fff",
-
-        color: "#fff",
-
-        border: "none",
-
-        padding: "8px 14px",
-
-        borderRadius: 6,
-
-        cursor: "pointer",
-
-    },
-
-    btnSecondary: {
-
-        background: "#f3f4f6",
-
-        color: "#111827",
-
-        border: "none",
-
-        padding: "8px 12px",
-
-        borderRadius: 6,
-
-        cursor: "pointer",
-
-    },
-
-    error: {
-
-        color: "#b00020",
-
-        marginTop: 6,
-
-        fontSize: 13,
-
-    },
-
-};

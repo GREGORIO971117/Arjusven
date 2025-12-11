@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { apiRequest } from '../login/Api'; 
-import { styles } from '../admin/adminTemplate'; 
+import '../Inventario/InventarioList.css';
 import datosEstaticos from '../../assets/datos.json';
 
 const API_URL = '/estaciones'; 
 
 const initialEstacionFormState = {
-    idMerchant: '',         
+    idMerchant: '',        
     nombreComercial: '',   
-    direccion: '',          
-    estado: '',             
+    direccion: '',         
+    estado: '',            
     plazaDeAtencion: '',
-    cobertura: ''         
+    cobertura: ''          
 };
 
-export default function SubirEstacionTemplate({ ModalTemplate,showModal, closeModal,modalConfig}) {
+export default function SubirEstacionTemplate({ ModalTemplate, showModal, closeModal, modalConfig }) {
 
     const [form, setForm] = useState(initialEstacionFormState); 
     const [formErrors, setFormErrors] = useState({}); 
@@ -27,6 +27,7 @@ export default function SubirEstacionTemplate({ ModalTemplate,showModal, closeMo
             [name]: name === 'idMerchant' ? (value ? Number(value) : '') : value 
         }));
         
+        // Limpiar error al cambiar el valor
         if (formErrors[name]) {
             setFormErrors(prev => ({ ...prev, [name]: "" }));
         }
@@ -35,27 +36,23 @@ export default function SubirEstacionTemplate({ ModalTemplate,showModal, closeMo
     function validateForm() {
         const errs = {};
         
-        // --- VALIDACIONES DE CAMPOS MÍNIMOS ---
+        // VALIDACIONES DE CAMPOS MÍNIMOS
         if (!form.idMerchant || form.idMerchant <= 0) {
             errs.idMerchant = "El ID Merchant es requerido y debe ser un número positivo.";
         }
         if (!form.nombreComercial || form.nombreComercial.trim() === "") {
             errs.nombreComercial = "El Nombre Comercial es requerido.";
         }
-        if (!form.direccion || form.direccion.trim() === "") {
-            errs.direccion = "La Dirección es requerida.";
-        }
-        
         if (!form.plazaDeAtencion || form.plazaDeAtencion.trim() === "") {
             errs.plazaDeAtencion = "La Plaza de Atención es requerida.";
         }
         
         if (Object.keys(errs).length > 0) {
              showModal({
-                title: "Error de Validación",
-                message: "Por favor, revisa y rellena los campos obligatorios.",
-                type: "warning", 
-            });
+                 title: "Error de Validación",
+                 message: "Por favor, revisa y rellena los campos obligatorios.",
+                 type: "warning", 
+             });
         }
         
         setFormErrors(errs);
@@ -69,7 +66,7 @@ export default function SubirEstacionTemplate({ ModalTemplate,showModal, closeMo
 
     async function submitEstacion(e) {
         e.preventDefault();
-        closeModal(); // Asegurarse de que cualquier modal anterior esté cerrado
+        closeModal(); 
         
         if (!validateForm()) {
             return;
@@ -117,76 +114,108 @@ export default function SubirEstacionTemplate({ ModalTemplate,showModal, closeMo
         }
     }
 
-    // --- RENDERIZADO ---
+    const FormField = ({ label, name, type = 'text', value, options, placeholder, min }) => (
+        <div className="form-group">
+            <label htmlFor={name} className="form-label">{label}</label>
+            {options ? (
+                <select 
+                    id={name}
+                    name={name} 
+                    value={value} 
+                    onChange={handleChange} 
+                    className="form-input modern-input"
+                >
+                    <option value="">Seleccione...</option>
+                    {options.map((opcion) => (
+                        <option key={opcion} value={opcion}>{opcion}</option>
+                    ))}
+                </select>
+            ) : (
+                <input 
+                    id={name}
+                    name={name} 
+                    type={type} 
+                    value={value} 
+                    onChange={handleChange} 
+                    className="form-input modern-input"
+                    placeholder={placeholder}
+                    min={min}
+                />
+            )}
+            {formErrors[name] && <span className="error-message-text">{formErrors[name]}</span>}
+        </div>
+    );
+
     return (
-        <div style={styles.container}>
-            <form onSubmit={submitEstacion} style={styles.form}>
+        <div className="profile-page-wrapper"> 
+            <div className="modern-service-container form-card">
                 
-                {/* Fila 1: ID Merchant y Nombre Comercial */}
-                <div style={styles.row}>
-                    <label style={styles.label}>
-                        ID Merchant
-                        <input 
-                            name="idMerchant" 
-                            type="number" 
-                            value={form.idMerchant} 
-                            onChange={handleChange} 
-                            style={styles.input} 
-                            min="1"
-                        />
-                        {formErrors.idMerchant && <div style={styles.errorTextRow}>{formErrors.idMerchant}</div>}
-                    </label>
-                    <label style={styles.label}>
-                        Nombre Comercial 
-                        <input name="nombreComercial" value={form.nombreComercial} onChange={handleChange} style={styles.input} />
-                        {formErrors.nombreComercial && <div style={styles.errorTextRow}>{formErrors.nombreComercial}</div>}
-                    </label>
-                </div>
+                <header className="service-header">
+                    <div className="header-titles">
+                        <h1 className="service-title">Registro de Nueva Estación</h1>
+                    </div>
+                </header>
                 
-                {/* Fila 3: Plaza de Atención y Cobertura */}
-                <div style={styles.row}>
-                    <label style={styles.label}>
-                        Plaza de Atención 
-                      <select name="plazaDeAtencion" value={form.plazaDeAtencion} onChange={handleChange} style={styles.input}>
-                            <option value="">Seleccione plaza</option>
-                                {datosEstaticos.plazaDeAtencion?.map((opcion) => (
-                                    <option key={opcion} value={opcion}>{opcion}</option>
-                                ))}
-                        </select> 
-                        {formErrors.plazaDeAtencion && <div style={styles.errorTextRow}>{formErrors.plazaDeAtencion}</div>}
-                    </label>
+                <form onSubmit={submitEstacion} className="service-content-area">
+                    <div className="info-grid-wrapper animate-fade-in">
+                        
+                        <section className="data-section">
+                            <div className="modern-grid-2">
+                                <FormField 
+                                    label="ID Merchant" 
+                                    name="idMerchant" 
+                                    type="number" 
+                                    value={form.idMerchant} 
+                                    min="1"
+                                />
+                                <FormField 
+                                    label="Nombre Comercial" 
+                                    name="nombreComercial" 
+                                    value={form.nombreComercial} 
+                                />
+                                
+                                <FormField 
+                                    label="Dirección Completa" 
+                                    name="direccion" 
+                                    value={form.direccion} 
+                                />
+                                <FormField 
+                                    label="Estado" 
+                                    name="estado" 
+                                    value={form.estado}
+                                    options={datosEstaticos.estadosMx} 
+                                />
+                            </div>
+                        </section>
 
-                    <label style={styles.label}>Cobertura
-                        <select name="cobertura" value={form.cobertura} onChange={handleChange} style={styles.input}>
-                            <option value="">Seleccione cobertura</option>
-                                {datosEstaticos.sla?.map((opcion) => (
-                                    <option key={opcion} value={opcion}>{opcion}</option>
-                                ))}
-                        </select>            
-                           {formErrors.cobertura && <div style={styles.errorTextRow}>{formErrors.cobertura}</div>} 
-                    </label>
-                </div>
+                        <div className="divider"></div>
 
-                <div style={styles.row}>
-                    <label style={styles.label}>
-                        Dirección 
-                        <input name="direccion" value={form.direccion} onChange={handleChange} style={styles.input} />
-                        {formErrors.direccion && <div style={styles.errorTextRow}>{formErrors.direccion}</div>}
-                    </label>
-                    
-                     <label style={styles.label}>
-                        Estado 
-                        <input name="estado" value={form.estado} onChange={handleChange} style={styles.input} />
-                        {formErrors.estado && <div style={styles.errorTextRow}>{formErrors.estado}</div>}
-                    </label>
-                </div>
+                        <section className="data-section">
+                            <div className="modern-grid-2">
+                                {/* Fila 3: Plaza de Atención y Cobertura */}
+                                <FormField 
+                                    label="Plaza de Atención" 
+                                    name="plazaDeAtencion" 
+                                    value={form.plazaDeAtencion} 
+                                    options={datosEstaticos.plazaDeAtencion}
+                                />
+                                <FormField 
+                                    label="Cobertura (SLA)" 
+                                    name="cobertura" 
+                                    value={form.cobertura} 
+                                    options={datosEstaticos.sla}
+                                />
+                            </div>
+                        </section>
 
-                <div style={{ marginTop: 15 }}>
-                    <button type="submit" style={styles.buttonPrimary} disabled={isSubmitting}>
-                        {isSubmitting ? "Guardando Estación..." : "Guardar Estación"}
-                    </button>
-                </div>
-            </form>
+                        <div className="form-actions-footer">
+                            <button type="submit" className="btn-modern btn-primary large-button" disabled={isSubmitting}>
+                                {isSubmitting ? "Guardando Estación..." : "Guardar Nueva Estación"}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
             
             <ModalTemplate
                 isOpen={modalConfig.isOpen}
