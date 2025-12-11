@@ -5,7 +5,6 @@ import RenderTicket from './subirTicketTemplate';
 import RenderEstaciones from './subirEstacionesTemplate';
 import RenderUsuarios from './SubirUsuarioTemplate';
 import ModalTemplate from '../modal/modalTemplate'; 
-
 import { styles } from '../admin/adminTemplate';
 
 export default function subirArchivos() {

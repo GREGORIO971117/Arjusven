@@ -2,7 +2,7 @@
   margin: 0 auto;
   padding: 0rem;
   text-align: center;
-    --primary-color: #3b82f6; /* Azul brillante para acciones */
+  --primary-color: #3b82f6; /* Azul brillante para acciones */
   --primary-hover: #2563eb;
   --bg-body: #f8fafc;       /* Fondo general muy suave */
   --bg-surface: #ffffff;    /* Fondo de la tabla */

@@ -1,25 +1,19 @@
-/* ==========================================================================
-   Estilos de Controles y Formularios
-   ========================================================================== */
 .date-range-container {
     display: flex;
     gap: 10px; /* Espacio entre los dos inputs de fecha */
     align-items: center; /* Centra verticalmente etiquetas e inputs */
     margin: 15px;
 }
-
 .date-range-container label {
     white-space: nowrap; /* Evita que el texto de la etiqueta se rompa */
     font-size: 0.9rem;
     font-weight: bold;
     color: #34495e;
 }
-
 .date-range-container .form-input {
     flex-grow: 1; /* Permite que el input ocupe el espacio restante */
     min-width: 0; /* Necesario para que flexbox funcione correctamente */
 }
-
 .form-input {
     width: 100%;
     border: 1px solid #dcdfe6;
@@ -45,10 +39,6 @@ textarea.form-input {
     min-height: 100px;
     resize: vertical;
 }
-
-
-
-/* Estilos para el nuevo encabezado de la lista */
 .list-header-row {
     padding: 10px 15px; /* Ajusta el padding para que coincida con el li */
     font-weight: bold;
@@ -59,34 +49,24 @@ textarea.form-input {
     background-color: #f7f7f7; /* Fondo ligero para destacarlo */
     margin-bottom: 5px; /* Pequeño espacio antes del ul */
 }
-
 .ticket-item {
     padding: 10px 15px; 
 }
-
-
 .formGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
 }
-
 .formItem {
   display: flex;
   flex-direction: column;
   
 }
-
 .infoSection {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
 }
-
-
-/* ==========================================================================
-   Estilos de Botones de Acciones
-   ========================================================================== */
 .action-button {
     border: none;
     padding: 0.75rem 1.5rem;
@@ -97,30 +77,24 @@ textarea.form-input {
     transition: all 0.2s ease-in-out;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-
 .action-button:hover {
     transform: translateY(-2px);
 }
-
 .save-button {
     background-color: #3498db;
     color: #fff;
 }
-
 .save-button:hover {
     background-color: #2980b9;
 }
-
 .cancel-button {
     background-color: #ecf0f1;
     color: #34495e;
 }
-
 .cancel-button:hover {
     background-color: #bdc3c7;
     color: #2c3e50;
 }
-
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -134,7 +108,6 @@ textarea.form-input {
     z-index: 1000;
     backdrop-filter: blur(4px);
 }
-
 .modal-button-container{
 
     display: flex;
@@ -149,10 +122,7 @@ textarea.form-input {
     border-radius: 4px;
 
 }
-
 .modal-button{
-
-    
     padding: 8px 15px;
     border: 1px solid #ccc;
     background-color: #f0f0f0; /* Fondo normal */
@@ -161,16 +131,12 @@ textarea.form-input {
     border-radius: 4px;
     transition: background-color 0.2s;
 }
-
 .modal-button.active{
-
-     background-color: #007bff; 
+    background-color: #007bff; 
     color: white; 
     border-color: #007bff;
     font-weight: bold;
-
 }
-
 .modal,
 .filter-panel {
     background-color: #ffffff;
@@ -182,7 +148,6 @@ textarea.form-input {
     width: 90%;
     transition: transform 0.3s ease-in-out;
 }
-
 .modal h3,
 .filter-panel h2 {
     margin-top: 0;
@@ -190,8 +155,6 @@ textarea.form-input {
     font-size: 1.8rem;
     font-weight: 600;
 }
-
-
 .actemplate-container {
     border: 1px solid #e0e6ed;
     border-radius: 12px;
@@ -203,13 +166,11 @@ textarea.form-input {
     display: flex;
     flex-direction: column;
 }
-
 .ticket-content-flex {
     display: flex;
     gap: 2rem;
     height: calc(100vh - 200px);
 }
-
 .ticket-list-column {
     flex: 1;
     min-width: 300px;
@@ -221,11 +182,9 @@ textarea.form-input {
     height: 100%;
     overflow-y: auto;
 }
-
 .ticket-template-column {
     flex: 3;
 }
-
 .no-selection-message {
     text-align: center;
     padding: 2rem;
@@ -239,14 +198,12 @@ textarea.form-input {
     font-style: italic;
     font-size: 1.1rem;
 }
-
 .ticket-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin:20px;
 }
-
 .ticket-title,
 .title {
     font-size: 1.7rem;
@@ -254,7 +211,6 @@ textarea.form-input {
     margin: 10px;
     font-weight: 600;
 }
-
 .infoSection,
 .info-section {
     display: flex;
@@ -262,15 +218,11 @@ textarea.form-input {
     gap: 2.5rem;
     margin-bottom: 2rem;
 }
-
 .infoColumn,
 .info-column {
     flex: 1 1 45%;
     min-width: 250px;
 }
-
-
-
 .infoItem strong,
 .info-column p strong,
 .full-width-section p strong,
@@ -278,24 +230,20 @@ textarea.form-input {
     color: #444;
     font-weight: 600;
 }
-
 .infoItem {
   display: flex;
   justify-content: justify;
   padding: 1px;
   font-size: 0.95rem;
 }
-
 .infoItem label {
     font-weight: 600;
     color: #444;
 }
-
 .infoItem input,
 .infoItem textarea {
     flex-grow: 1;
 }
-
 .infoItem span,
 .info-column p,
 .full-width-section p {
@@ -303,12 +251,10 @@ textarea.form-input {
     font-size: 0.95rem;
     line-height: 1.5;
 }
-
 .fullWidthSection,
 .full-width-section {
     margin-bottom: 2rem;
 }
-
 .ticket-item {
     display: flex;
     justify-content: space-between;
@@ -319,25 +265,21 @@ textarea.form-input {
     transition: all 0.2s ease-in-out;
     text-align: left;
 }
-
 .ticket-item:hover {
     background-color: #f8f9fa;
     transform: translateY(-2px);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
-
 .ticket-item.selected {
     background-color: #eaf6ff;
     border-left: 5px solid #3498db;
     padding-left: 1.25rem;
 }
-
 .ticket-info {
     display: flex;
     flex-direction: row;
     gap: 1.5rem;
 }
-
 .controls-container {
     display: flex;
     flex-direction: column;
@@ -634,11 +576,6 @@ section h4 {
   justify-content: flex-end;
   gap: 1rem;
 }
-
-/* =========================================
-   DISEÑO MODERNO DE SERVICIOS (Estilo Dashboard)
-   ========================================= */
-
 :root {
     --primary-color: #3b82f6;
     --primary-hover: #2563eb;
@@ -659,8 +596,6 @@ section h4 {
     overflow: hidden; /* Para que el contenido haga scroll dentro */
     font-family: 'Inter', system-ui, sans-serif;
 }
-
-/* --- Header --- */
 .service-header {
     padding: 1.5rem 2rem;
     border-bottom: 1px solid var(--border-color);
@@ -705,7 +640,6 @@ section h4 {
     color: #475569;
 }
 
-/* Colores de estado (ejemplos) */
 .status-badge.abierta, .status-badge.en-progreso {
     background-color: #fedbdb; 
     color: #af1e1e;
@@ -719,7 +653,6 @@ section h4 {
     color: #854d0e;
 }
 
-/* --- Botones --- */
 .header-actions {
     display: flex;
     gap: 10px;
@@ -748,8 +681,6 @@ section h4 {
 }
 .btn-secondary:hover { background-color: #f8fafc; border-color: #cbd5e1; }
 
-
-/* --- Tabs Modernas --- */
 .modern-tabs {
     display: flex;
     padding: 0 2rem;
@@ -776,9 +707,6 @@ section h4 {
     color: var(--primary-color);
     border-bottom-color: var(--primary-color);
 }
-
-
-/* --- Contenido y Grids --- */
 .service-content-area {
     padding: 2rem;
     overflow-y: auto; /* Scroll interno elegante */
@@ -788,8 +716,6 @@ section h4 {
 .info-grid-wrapper {
     max-width: 1200px; /* Evita que se estire demasiado en pantallas 4k */
 }
-
-/* Grid System Responsivo */
 .modern-grid-3 {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -801,16 +727,11 @@ section h4 {
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     gap: 1.5rem 2rem;
 }
-
-/* Separador sutil */
 .divider {
     height: 1px;
     background-color: var(--border-color);
     margin: 2rem 0;
 }
-
-
-/* --- Info Item (Tarjeta de Dato) --- */
 .modern-info-item {
     display: flex;
     flex-direction: column;
@@ -818,9 +739,8 @@ section h4 {
 }
 
 .modern-info-item.full-width {
-    grid-column: 1 / -1; /* Ocupa todo el ancho disponible */
+    grid-column: 1 / -1; 
 }
-
 .info-label {
     font-size: 0.75rem;
     text-transform: uppercase;
@@ -828,7 +748,6 @@ section h4 {
     color: var(--text-light);
     font-weight: 600;
 }
-
 .info-value {
     font-size: 1rem;
     color: #1e293b;
@@ -836,9 +755,6 @@ section h4 {
     line-height: 1.5;
     word-break: break-word; /* Evita desbordamientos de texto largo */
 }
-
-
-/* --- Animaciones --- */
 .animate-fade-in {
     animation: fadeIn 0.3s ease-in-out;
 }
@@ -847,9 +763,6 @@ section h4 {
     from { opacity: 0; transform: translateY(5px); }
     to { opacity: 1; transform: translateY(0); }
 }
-
-
-/* --- Estado Vacío --- */
 .no-data-container {
     display: flex;
     flex-direction: column;
@@ -866,12 +779,6 @@ section h4 {
      margin-bottom: 1rem;
       opacity: 0.5; 
     }
-
-    /* ... (Estilos previos del Modern Dashboard) ... */
-
-/* --- Estilos Específicos para Adicionales (Alta Densidad) --- */
-
-/* Títulos de Sección Internos */
 .section-title {
     font-size: 0.85rem;
     font-weight: 700;
@@ -890,34 +797,28 @@ section h4 {
     margin-bottom: 1.5rem;
 }
 
-/* Grid de 4 Columnas (Para datos generales cortos) */
 .modern-grid-4 {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Más estrecho para caber más */
     gap: 1rem 1.5rem;
 }
 
-/* Wrapper para poner Entra y Sale lado a lado en pantallas grandes */
 .comparison-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr; /* Mitad y mitad */
     gap: 2rem;
 }
 
-/* Grid denso para las columnas de comparación */
 .modern-grid-2-dense {
     display: grid;
     grid-template-columns: 1fr 1fr; 
     gap: 0.8rem 1.2rem;
 }
 
-/* Ajuste de tipografía para alta densidad */
 .info-value.compact {
     font-size: 0.95rem; /* Un poco más pequeño que el estándar */
     font-weight: 500;
 }
-
-/* --- Dropdown Moderno Personalizado --- */
 .modern-dropdown-container {
     position: relative;
     display: inline-block;
@@ -927,7 +828,6 @@ section h4 {
     background-color: #f1f5f9;
     border-color: #cbd5e1;
 }
-
 .modern-dropdown-menu {
     position: absolute;
     top: 110%;
@@ -941,7 +841,6 @@ section h4 {
     z-index: 50;
     animation: fadeIn 0.15s ease-out;
 }
-
 .dropdown-item {
     display: block;
     width: 100%;
@@ -955,12 +854,10 @@ section h4 {
     border-radius: 4px;
     transition: background-color 0.15s;
 }
-
 .dropdown-item:hover {
     background-color: #f1f5f9;
     color: var(--primary-color);
 }
-
 .dropdown-overlay {
     position: fixed;
     top: 0;
@@ -971,25 +868,17 @@ section h4 {
     background: transparent;
     cursor: default;
 }
-
-/* --- Responsive para Adicionales --- */
 @media (max-width: 1024px) {
     .comparison-wrapper {
         grid-template-columns: 1fr; /* Apilar Entra y Sale en tablets */
     }
 }
-
 @media (max-width: 640px) {
     .modern-grid-4, .modern-grid-2-dense {
         grid-template-columns: 1fr; /* Una columna en móvil */
     }
 }
-
-/* ==========================================================================
-   1. VARIABLES GLOBALES & RESET
-   ========================================================================== */
 :root {
-    /* Paleta de Colores Moderna */
     --primary-color: #3b82f6;
     --primary-hover: #2563eb;
     --bg-body: #f8fafc;       /* Fondo de la app */
@@ -998,16 +887,11 @@ section h4 {
     --text-light: #64748b;    /* Etiquetas */
     --border-color: #e2e8f0;
     --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    
-    /* Espaciado */
     --spacing-sm: 0.5rem;
     --spacing-md: 1rem;
     --spacing-lg: 1.5rem;
 }
 
-/* ==========================================================================
-   2. CONTENEDORES PRINCIPALES (Layout)
-   ========================================================================== */
 .ticket-page-container {
     display: flex;
     flex-direction: column;
@@ -1016,7 +900,6 @@ section h4 {
     font-family: 'Segoe UI', system-ui, sans-serif;
     overflow: hidden;
 }
-
 .ticket-content-flex {
     display: flex;
     gap: var(--spacing-md);
@@ -1024,8 +907,6 @@ section h4 {
     padding: var(--spacing-md);
     box-sizing: border-box;
 }
-
-/* Columna Izquierda (Lista) */
 .ticket-list-column {
     flex: 1;
     min-width: 320px;
@@ -1038,17 +919,11 @@ section h4 {
     flex-direction: column;
     overflow: hidden; /* El scroll va dentro de la lista */
 }
-
-/* Columna Derecha (Template/Detalle) */
 .ticket-template-column {
     flex: 3;
     min-width: 0; /* Previene desbordamiento de flex items */
     height: 100%;
 }
-
-/* ==========================================================================
-   3. COMPONENTE DE DETALLE MODERNO (El contenedor blanco)
-   ========================================================================== */
 .modern-service-container {
     background-color: var(--bg-surface);
     border-radius: 12px;
@@ -1072,7 +947,7 @@ section h4 {
 }
 
 .service-header.compact-header {
-    padding: 1rem 1.5rem; /* Header más delgado para pantallas densas */
+    padding: 1rem 1.5rem;
 }
 
 .service-title {
@@ -1099,8 +974,6 @@ section h4 {
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
-
-/* Tabs de Navegación */
 .modern-tabs {
     display: flex;
     padding: 0 2rem;
@@ -1126,8 +999,6 @@ section h4 {
     color: var(--primary-color);
     border-bottom-color: var(--primary-color);
 }
-
-/* Área de Contenido con Scroll */
 .service-content-area {
     padding: 2rem;
     overflow-y: auto;
@@ -1135,17 +1006,12 @@ section h4 {
 }
 
 .service-content-area.dense-content {
-    padding: 1.5rem; /* Menos padding para ver más datos */
+    padding: 1.5rem;
 }
 
-/* ==========================================================================
-   4. SISTEMA DE GRID (GRILLA) Y TARJETAS DE DATOS
-   ========================================================================== */
 .info-grid-wrapper {
     width: 100%;
 }
-
-/* Dashboard Layout para Estaciones (Tarjetas agrupadas) */
 .dashboard-row {
     display: flex;
     gap: 1rem;
@@ -1156,10 +1022,6 @@ section h4 {
     flex: 1;
     min-width: 300px;
     background-color: #ffffff;
-    /* Opcional: Borde sutil alrededor de grupos para separar visualmente */
-    /* border: 1px solid #f1f5f9; */
-    /* border-radius: 8px; */
-    /* padding: 1rem; */
 }
 
 .full-width-card {
@@ -1167,8 +1029,6 @@ section h4 {
 }
 
 .mt-2 { margin-top: 1.5rem; }
-
-/* Títulos de Sub-sección */
 .subsection-title {
     font-size: 0.8rem;
     text-transform: uppercase;
@@ -1178,8 +1038,6 @@ section h4 {
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 0.25rem;
 }
-
-/* Grillas Responsivas */
 .modern-grid-5 {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -1197,8 +1055,6 @@ section h4 {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 0.75rem 1rem;
 }
-
-/* Items de Información */
 .modern-info-item {
     display: flex;
     flex-direction: column;
@@ -1207,7 +1063,6 @@ section h4 {
 .modern-info-item.span-2 {
     grid-column: span 2;
 }
-
 .info-label {
     font-size: 0.7rem;
     text-transform: uppercase;
@@ -1216,7 +1071,6 @@ section h4 {
     font-weight: 600;
     margin-bottom: 2px;
 }
-
 .info-value {
     font-size: 0.95rem;
     color: var(--text-main);
@@ -1226,12 +1080,8 @@ section h4 {
 }
 
 .info-value.compact {
-    font-size: 0.9rem; /* Un poco más pequeño para alta densidad */
+    font-size: 0.9rem; 
 }
-
-/* ==========================================================================
-   5. BOTONES Y CONTROLES MODERNOS
-   ========================================================================== */
 .btn-modern {
     padding: 0.5rem 1rem;
     border-radius: 6px;
@@ -1287,15 +1137,9 @@ section h4 {
     border-radius: 4px;
 }
 .dropdown-item:hover { background-color: #f1f5f9; color: var(--primary-color); }
-
-/* Overlay Transparente para cerrar dropdowns */
 .dropdown-overlay {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 40;
 }
-
-/* ==========================================================================
-   6. UTILIDADES Y ANIMACIONES
-   ========================================================================== */
 .divider {
     height: 1px;
     background-color: var(--border-color);
@@ -1320,16 +1164,11 @@ section h4 {
     color: var(--text-light);
 }
 .no-data-icon { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.5; }
-
-/* Scrollbars personalizadas */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background-color: #94a3b8; }
 
-/* ==========================================================================
-   7. RESPONSIVE QUERIES
-   ========================================================================== */
 @media (max-width: 1024px) {
     .modern-grid-5, .modern-grid-4 {
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -1353,13 +1192,11 @@ section h4 {
         overflow: visible;
     }
 }
-
 @media (max-width: 640px) {
     .dashboard-row { flex-direction: column; }
     .modern-grid-3-dense { grid-template-columns: 1fr 1fr; }
     .span-2 { grid-column: span 1; } 
 }
-
 .description-box {
     background-color: #f8fafc; 
     border: 1px solid var(--border-color);
@@ -1370,25 +1207,17 @@ section h4 {
     font-size: 0.95rem;
     min-height: 80px; 
 }
-
 .modern-grid-3 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
 }
-
 @media (max-width: 768px) {
     .modern-grid-3 {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
 }
-
-/* ==========================================================================
-   ESTILOS ESPECÍFICOS PARA PERFIL
-   ========================================================================== */
-
-/* Wrapper para centrar la tarjeta de perfil en la pantalla */
 .profile-page-wrapper {
     display: flex;
     justify-content: center;
@@ -1398,8 +1227,6 @@ section h4 {
     background-color: var(--bg-body);
     overflow-y: auto;
 }
-
-/* Ajuste específico para la tarjeta de perfil */
 .profile-card {
     width: 100%;
     max-width: 800px; /* Ancho máximo para que no se estire demasiado */
@@ -1407,11 +1234,8 @@ section h4 {
     min-height: 500px;
     margin-bottom: 2rem;
 }
-
-/* Estilos modernos para Inputs (Reemplazando los antiguos) */
 .modern-input {
     width: 100%;
-    padding: 0.6rem 0.8rem;
     font-size: 0.95rem;
     border: 1px solid var(--border-color);
     border-radius: 6px;
@@ -1419,26 +1243,20 @@ section h4 {
     color: var(--text-main);
     transition: all 0.2s ease-in-out;
     outline: none;
-    box-sizing: border-box; /* Importante para padding */
+    box-sizing: border-box; 
 }
-
 .modern-input:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); /* Sombra azul suave */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
-
 .modern-input::placeholder {
     color: #cbd5e1;
 }
-
-/* Mensajes de Error en texto pequeño */
 .error-message-text {
     color: #ef4444;
     font-size: 0.8rem;
     margin-top: 0.25rem;
 }
-
-/* Alert Box para errores generales */
 .alert-box {
     padding: 1rem;
     border-radius: 6px;
@@ -1451,8 +1269,6 @@ section h4 {
     color: #991b1b;
     border: 1px solid #fecaca;
 }
-
-/* Loading State */
 .loading-state {
     display: flex;
     justify-content: center;
@@ -1461,6 +1277,64 @@ section h4 {
     font-size: 1.2rem;
     color: var(--text-light);
 }
+.form-card-large {
+    max-width: 900px; 
+}
 
-
-
+.upload-section-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    border: 2px dashed var(--border-color); 
+    border-radius: 8px;
+    align-items: center;
+    text-align: center;
+}
+.upload-guide-text {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    margin: 0;
+}
+.btn-success {
+    background-color: #10b981; /* Tailwind green-500 */
+    color: #fff;
+}
+.btn-success:hover {
+    background-color: #059669; /* Tailwind green-600 */
+}
+.alert-box.neutral {
+    background-color: #f7f9fc;
+    border: 1px solid #e0e7ff; /* Azul claro para neutralidad */
+}
+.summary-title {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+.summary-stats p {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.95rem;
+}
+.summary-detail-error, .summary-detail-warning {
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #eee;
+}
+.error-list, .warning-list {
+    max-height: 120px;
+    overflow-y: auto;
+    font-size: 0.85em;
+    padding-left: 20px;
+    margin-top: 0.5rem;
+}
+:root {
+    --error-color: #ef4444; /* Rojo */
+    --warning-color: #f59e0b; /* Amarillo/Naranja */
+    --success-color: #10b981; /* Verde */
+}
+.span-2 {
+    grid-column: span 2 / span 2;
+}

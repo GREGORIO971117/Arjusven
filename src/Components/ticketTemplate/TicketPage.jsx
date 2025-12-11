@@ -388,6 +388,7 @@ function TicketPage() {
 
     return (
         <>
+         <div className="ticket-page-container">
             <div className='ticket-content-flex'>
                 <div className="ticket-list-column">
                         <Lista
@@ -433,6 +434,7 @@ function TicketPage() {
                         </div>
                     )}
                 </div>
+            </div>
             </div>
         </>
     );
