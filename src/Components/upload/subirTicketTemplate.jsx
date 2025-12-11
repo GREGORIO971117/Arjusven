@@ -120,8 +120,9 @@ export default function SubirTicketTemplate({ showModal , closeModal,ModalTempla
 
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("idAdministrador", ADMIN_ID_DEFAULT);
-
+        if (ADMIN_ID_DEFAULT) { 
+             formData.append("idAdministrador", ADMIN_ID_DEFAULT);
+        }
         try {
             const uploadUrl = `http://localhost:8080/api/tickets/upload`; 
             const token = localStorage.getItem("jwtToken"); 

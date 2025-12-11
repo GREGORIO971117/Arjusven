@@ -4,6 +4,7 @@ export const ColumnConfig = [
     { accessorKey: 'incidencia', header: 'INCIDENCIA', filterType: 'text', size: 100 },
     { accessorKey: 'cliente', header: 'CLIENTE', filterType: 'select', size: 150 }, 
     { accessorKey: 'estadoGuia', header: 'ESTADO GUIA', filterType: 'select', size: 130 },
+    { accessorKey: 'statusPaqueteria', header: 'STATUS PAQUETERIA', filterType: 'select', size: 130 },
     { accessorKey: 'fechaDeEnvio', header: 'FECHA DE ENVIO PAQUETERIA', filterType: 'text', size: 130 },
     { accessorKey: 'fechaLlegada', header: 'FECHA LLEGADA', filterType: 'text', size: 110 },
     { accessorKey: 'merchantId', header: 'MERCHANT ID', filterType: 'text', size: 120 },
