@@ -1,6 +1,6 @@
 import React from 'react';
 import { inventarioConfig } from '../../assets/inventarioConfig';
-import './InventarioList.css'; // Usa los estilos modernos ya definidos
+import './InventarioList.css';
 
 export default function RenderDatosInventario({ data, onEdit, loadHistorial }) {
 

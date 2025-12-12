@@ -3,8 +3,9 @@ import Typography from '@mui/material/Typography';
 import { Box, Grid, Card, CardContent, FormControl, InputLabel, Select, MenuItem, TextField } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import EventBusyIcon from '@mui/icons-material/EventBusy'; // 👈 IMPORTANTE: Nuevo icono para "Sin datos"
+import EventBusyIcon from '@mui/icons-material/EventBusy'; 
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -89,10 +90,13 @@ function TablaTemplate() { // Capitalicé el nombre del componente (Convención 
     const totalTickets = supervisorTickets.length;
     const openTickets = supervisorTickets.filter(t => t.servicios.situacionActual === 'Abierta').length;
     const closedTickets = supervisorTickets.filter(t => t.servicios.situacionActual === 'Cerrado').length;
+    const cancelTickets = supervisorTickets.filter(t => t.servicios.situacionActual === 'Cancelada por PC').length;
+
     
     const chartData = [
         { name: 'Abiertos', value: openTickets, color: '#FF9800' },
         { name: 'Cerrados', value: closedTickets, color: '#4CAF50' },
+        { name: 'Cancelados', value: cancelTickets, color: '#F44336' },
     ];
     
     const cardStyle = {
@@ -159,7 +163,6 @@ function TablaTemplate() { // Capitalicé el nombre del componente (Convención 
                     Cargando información...
                 </Typography>
             ) : !hasData ? (
-                // 🎯 ESTADO VACÍO (Cuando no hay tickets en el rango)
                 <Box sx={{ 
                     display: 'flex', 
                     flexDirection: 'column', 
@@ -203,6 +206,15 @@ function TablaTemplate() { // Capitalicé el nombre del componente (Convención 
                                 <CardContent>
                                     <Typography variant="h6">Tickets Cerrados</Typography>
                                     <Typography variant="h4">{closedTickets}</Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={4}>
+                            <Card sx={{ ...cardStyle, borderColor: '#F44336' }}>
+                                <CancelOutlinedIcon sx={{ ...iconStyle, color: '#F44336' }} />
+                                <CardContent>
+                                    <Typography variant="h6">Tickets Cancelados</Typography>
+                                    <Typography variant="h4">{cancelTickets}</Typography>
                                 </CardContent>
                             </Card>
                         </Grid>
