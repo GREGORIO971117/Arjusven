@@ -14,34 +14,40 @@ import { apiRequest } from '../login/Api';
 import datos from '../../assets/datos.json';
 import { format } from 'date-fns';
 
-const API_BASE_URL = '/tickets';
+const API_BASE_URL = '/tickets/dashboard'; // Sugerencia: Usa un endpoint específico si puedes
 
-function TablaTemplate() { // Capitalicé el nombre del componente (Convención React)
+function TablaTemplate() { 
+    // MODIFICACIÓN 1: Ya no necesitamos dos estados separados para tickets.
+    // 'ticketsData' contendrá directamente los tickets filtrados del supervisor.
     const [ticketsData, setTicketsData] = useState([]);
-    const [supervisorTickets, setSupervisorTickets] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     
     const nameSup = datos.supervisores || []; 
     const today = new Date();
-    // Clona y resetea la hora para evitar problemas de zona horaria
     const startOfToday = new Date(today.setHours(0, 0, 0, 0)); 
     
     const [selectedSupervisor, setSelectedSupervisor] = useState(nameSup.length > 0 ? nameSup[0] : '');
     const [startDate, setStartDate] = useState(startOfToday); 
     const [endDate, setEndDate] = useState(startOfToday); 
 
+    // MODIFICACIÓN 2: fetchTickets ahora incluye 'selectedSupervisor' en la query
     const fetchTickets = useCallback(async () => {
+        // Si no hay supervisor seleccionado, no hacemos la petición (opcional)
+        if (!selectedSupervisor) return;
+
         setIsLoading(true);
         setError("");
 
-        // Validación para evitar errores si las fechas son nulas
         const startParam = startDate ? format(startDate, 'yyyy-MM-dd') : null;
         const endParam = endDate ? format(endDate, 'yyyy-MM-dd') : null;
         
         const queryParams = new URLSearchParams();
         if (startParam) queryParams.append('startDate', startParam); 
         if (endParam) queryParams.append('endDate', endParam);
+        
+        // AQUI AGREGAMOS EL SUPERVISOR A LA URL
+        if (selectedSupervisor) queryParams.append('supervisor', selectedSupervisor);
 
         const queryString = queryParams.toString();
         const finalURL = queryString ? `${API_BASE_URL}?${queryString}` : API_BASE_URL;
@@ -52,7 +58,7 @@ function TablaTemplate() { // Capitalicé el nombre del componente (Convención 
             }); 
             
             if (response.status === 204) {
-                 setTicketsData([]); // 204 significa "No Content", así que limpiamos array
+                 setTicketsData([]); 
                  return;
             }
 
@@ -71,34 +77,33 @@ function TablaTemplate() { // Capitalicé el nombre del componente (Convención 
         } finally {
             setIsLoading(false);
         }
-    }, [startDate, endDate]);
+    }, [startDate, endDate, selectedSupervisor]); // Agregamos selectedSupervisor a dependencias
 
     useEffect(() => {
         fetchTickets();
     }, [fetchTickets]); 
 
-    useEffect(() => {
-        const finalFilteredTickets = ticketsData.filter(t => t.servicios.supervisor === selectedSupervisor);
-        setSupervisorTickets(finalFilteredTickets);
-    }, [selectedSupervisor, ticketsData]); 
+    // MODIFICACIÓN 3: Eliminamos el useEffect que hacía el filtrado local.
+    // Ya no necesitamos 'supervisorTickets' ni 'handleSupervisorChange' complejo.
 
     const handleSupervisorChange = (event) => {
         setSelectedSupervisor(event.target.value);
+        // Al cambiar el estado, el useEffect de arriba detectará el cambio y disparará fetchTickets
     };
 
-    // Cálculos
-    const totalTickets = supervisorTickets.length;
-    const openTickets = supervisorTickets.filter(t => t.servicios.situacionActual === 'Abierta').length;
-    const closedTickets = supervisorTickets.filter(t => t.servicios.situacionActual === 'Cerrado').length;
-    const cancelTickets = supervisorTickets.filter(t => t.servicios.situacionActual === 'Cancelada por PC').length;
+    // Cálculos (Usamos ticketsData directamente porque ya viene filtrado del back)
+    const totalTickets = ticketsData.length;
+    const openTickets = ticketsData.filter(t => t.servicios.situacionActual === 'Abierta').length;
+    const closedTickets = ticketsData.filter(t => t.servicios.situacionActual === 'Cerrado').length;
+    const cancelTickets = ticketsData.filter(t => t.servicios.situacionActual === 'Cancelada por PC').length;
 
-    
     const chartData = [
         { name: 'Abiertos', value: openTickets, color: '#FF9800' },
         { name: 'Cerrados', value: closedTickets, color: '#4CAF50' },
         { name: 'Cancelados', value: cancelTickets, color: '#F44336' },
     ];
     
+    // Estilos...
     const cardStyle = {
         backgroundColor: '#f5f5f5',
         borderLeft: '5px solid',
@@ -127,35 +132,50 @@ function TablaTemplate() { // Capitalicé el nombre del componente (Convención 
         return 'Dashboard de Tickets';
     };
 
-    // 🎯 Lógica para detectar si hay datos
     const hasData = ticketsData.length > 0;
 
     if (error) return <Typography color="error" sx={{ p: 4 }}>Error al cargar: {error}</Typography>;
 
     return (
         <Box sx={{ p: 4 }}>
-            {/* 1. SECCIÓN DE FILTROS (Siempre visible) */}
+            {/* SECCIÓN DE FILTROS */}
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', mb: 4 }}>
                 <Typography variant="h4" sx={{ mb: 2, textAlign: 'center', color: '#333' }}>
                     {getTitle()}
                 </Typography>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                
+                {/* Contenedor de filtros: Fechas y Supervisor juntos */}
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                             label="Fecha de inicio"
                             value={startDate}
                             onChange={(newValue) => setStartDate(newValue)}
-                            renderInput={(params) => <TextField {...params} />}
+                            renderInput={(params) => <TextField {...params} size="small" />}
                         />
                         <Typography variant="body1">al</Typography>
                         <DatePicker
                             label="Fecha de fin"
                             value={endDate}
                             onChange={(newValue) => setEndDate(newValue)}
-                            renderInput={(params) => <TextField {...params} />}
+                            renderInput={(params) => <TextField {...params} size="small" />}
                         />
-                    </Box>
-                </LocalizationProvider>
+                    </LocalizationProvider>
+
+                    {/* MOVI EL SELECTOR DE SUPERVISOR AQUI ARRIBA PARA QUE SEA PARTE DEL FILTRO GENERAL */}
+                    <FormControl variant="outlined" sx={{ minWidth: 200 }} size="small">
+                        <InputLabel>Supervisor</InputLabel>
+                        <Select
+                            value={selectedSupervisor}
+                            onChange={handleSupervisorChange}
+                            label="Supervisor"
+                        >
+                            {nameSup.map((name) => (
+                                <MenuItem key={name} value={name}>{name}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Box>
             </Box>
                     
             {isLoading ? (
@@ -163,101 +183,75 @@ function TablaTemplate() { // Capitalicé el nombre del componente (Convención 
                     Cargando información...
                 </Typography>
             ) : !hasData ? (
-                <Box sx={{ 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    alignItems: 'center', 
-                    justifyContent: 'center', 
-                    mt: 8, 
-                    opacity: 0.7 
-                }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', mt: 8, opacity: 0.7 }}>
                     <EventBusyIcon sx={{ fontSize: 80, color: '#9e9e9e', mb: 2 }} />
                     <Typography variant="h5" color="textSecondary" gutterBottom>
                         No se encontraron tickets
                     </Typography>
                     <Typography variant="body1" color="textSecondary">
-                        No hay actividad registrada para el rango de fechas seleccionado.
+                        No hay tickets para {selectedSupervisor} en este rango de fechas.
                     </Typography>
                 </Box>
             ) : (
                 <>
+                    {/* TARJETAS KPI */}
                     <Grid container spacing={3} justifyContent="center">
-                        <Grid item xs={12} sm={6} md={4}>
+                        <Grid item xs={12} sm={6} md={3}>
                             <Card sx={{ ...cardStyle, borderColor: '#1976D2' }}>
                                 <DashboardIcon sx={{ ...iconStyle, color: '#1976D2' }} />
                                 <CardContent>
-                                    <Typography variant="h6">Tickets Totales</Typography>
+                                    <Typography variant="h6">Totales</Typography>
                                     <Typography variant="h4">{totalTickets}</Typography>
                                 </CardContent>
                             </Card>
                         </Grid>
-                        <Grid item xs={12} sm={6} md={4}>
+                        <Grid item xs={12} sm={6} md={3}>
                             <Card sx={{ ...cardStyle, borderColor: '#FF9800' }}>
                                 <AccessTimeIcon sx={{ ...iconStyle, color: '#FF9800' }} />
                                 <CardContent>
-                                    <Typography variant="h6">Tickets Abiertos</Typography>
+                                    <Typography variant="h6">Abiertos</Typography>
                                     <Typography variant="h4">{openTickets}</Typography>
                                 </CardContent>
                             </Card>
                         </Grid>
-                        <Grid item xs={12} sm={6} md={4}>
+                        <Grid item xs={12} sm={6} md={3}>
                             <Card sx={{ ...cardStyle, borderColor: '#4CAF50' }}>
                                 <CheckCircleOutlineIcon sx={{ ...iconStyle, color: '#4CAF50' }} />
                                 <CardContent>
-                                    <Typography variant="h6">Tickets Cerrados</Typography>
+                                    <Typography variant="h6">Cerrados</Typography>
                                     <Typography variant="h4">{closedTickets}</Typography>
                                 </CardContent>
                             </Card>
                         </Grid>
-                        <Grid item xs={12} sm={6} md={4}>
+                        <Grid item xs={12} sm={6} md={3}>
                             <Card sx={{ ...cardStyle, borderColor: '#F44336' }}>
                                 <CancelOutlinedIcon sx={{ ...iconStyle, color: '#F44336' }} />
                                 <CardContent>
-                                    <Typography variant="h6">Tickets Cancelados</Typography>
+                                    <Typography variant="h6">Cancelados</Typography>
                                     <Typography variant="h4">{cancelTickets}</Typography>
                                 </CardContent>
                             </Card>
                         </Grid>
                     </Grid>
 
+                    {/* GRAFICA */}
                     <Box sx={{ mt: 5, p: 3, backgroundColor: '#f9f9f9', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
-                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 2 }}>
-                            <Typography variant="h6" component="h2" sx={{ mr: 2 }}>
-                                Incidencias por supervisor:
-                            </Typography>
-                            <FormControl variant="outlined" sx={{ minWidth: 150 }}>
-                                <InputLabel>Supervisor</InputLabel>
-                                <Select
-                                    value={selectedSupervisor}
-                                    onChange={handleSupervisorChange}
-                                    label="Supervisor"
-                                >
-                                    {nameSup.map((name) => (
-                                        <MenuItem key={name} value={name}>{name}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Box>
+                        <Typography variant="h6" component="h2" sx={{ mb: 2, textAlign: 'center' }}>
+                             Incidencias: {selectedSupervisor}
+                        </Typography>
                         
-                        {/* Verificamos si el supervisor seleccionado tiene datos específicos */}
-                        {supervisorTickets.length > 0 ? (
-                            <ResponsiveContainer width="100%" height={300}>
-                                <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                                    <XAxis dataKey="name" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Bar dataKey="value">
-                                        {chartData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={entry.color} />
-                                        ))}
-                                    </Bar>
-                                </BarChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <Typography sx={{ textAlign: 'center', py: 5, color: '#666' }}>
-                                El supervisor {selectedSupervisor} no tiene tickets en estas fechas.
-                            </Typography>
-                        )}
+                        <ResponsiveContainer width="100%" height={300}>
+                            <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Bar dataKey="value">
+                                    {chartData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={entry.color} />
+                                    ))}
+                                </Bar>
+                            </BarChart>
+                        </ResponsiveContainer>
                     </Box>
                 </>
             )}
