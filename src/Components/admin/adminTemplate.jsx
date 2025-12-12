@@ -36,6 +36,7 @@ export default function AdminTemplate() {
             }
             
             const data = await response.json();
+            console.log("Usuarios obtenidos:", data);
             setUsers(Array.isArray(data) ? data : []); 
         } catch (err) {
             setError(err.message || "No se pudo conectar al servidor.");

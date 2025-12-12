@@ -7,7 +7,7 @@ import Home from './components/home/Home';
 import Inventario from './components/inventario/InventarioPage';
 import TicketPage from './components/ticketTemplate/TicketPage'; 
 import Upload from './components/upload/subirArchivos';
-import Admin from './components/admin/adminPage';
+import AdminPage from './components/admin/adminPage';
 import Perfil from './components/perfil/perfilPage';
 import Estaciones from './Components/estaciones/EstacionesPage';
 import PlaneacionPage from './Components/planeacion/planeacionPage';
@@ -16,25 +16,31 @@ import './App.css';
 function App() {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false); 
-    
+    const [userRole, setUserRole] = useState(null);
 
     useEffect(() => {
         const storedLogin = localStorage.getItem('isLoggedIn');        
+        const storedRole = localStorage.getItem('userRole'); 
+        
         if (storedLogin === 'true') {
             setIsLoggedIn(true);
-                }
+            setUserRole(storedRole); 
+        }
     }, []); 
 
-    const handleLoginSuccess = () => {
+    const handleLoginSuccess = (userName, role) => {
         setIsLoggedIn(true);
+        setUserRole(role); 
     };
     
     const handleLogout = () => {
         setIsLoggedIn(false);
+        setUserRole(null); // 🆕 Limpiamos el rol del estado
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('jwtToken');
         localStorage.removeItem('userName');
         localStorage.removeItem('idUsuario');
+        localStorage.removeItem('userRole'); // 🆕 Limpiamos el rol del storage
     };
 
     const location = useLocation();
@@ -53,11 +59,21 @@ function App() {
         {id: 8, text: "Planeación", url: "/Planeacion" }
     ];
 
+    const filteredLinks = links.filter(link => {
+        const adminPaths = ["/Planeacion", "/SubirIncidencias", "/Usuarios"]; 
+        
+        if (userRole === 'ADMINISTRADOR') {
+            return true; // Admin ve todo
+        } else {
+            return !adminPaths.includes(link.url); 
+        }
+    });
+
     return (
         <>
             {showNavbar && (
                 <NavBar 
-                    links={links} 
+                    links={filteredLinks} // 🆕 Pasamos la lista filtrada, no la completa
                     onLogout={handleLogout} 
                 />
             )} 
@@ -67,14 +83,22 @@ function App() {
                     path="/" 
                     element={isLoggedIn ? <Navigate to="/Home" replace /> : <Login onLoginSuccess={handleLoginSuccess} />} 
                 />
-                
-                <Route element={<ProtectedRoute isLoggedIn={isLoggedIn} />}>
+       
+                <Route element={<ProtectedRoute isLoggedIn={isLoggedIn} userRole={userRole} />}>
                     <Route path="/Home" element={<Home />} />
                     <Route path="/Ticket" element={<TicketPage/>} />
                     <Route path="/Inventario" element={<Inventario />} />
                     <Route path="/Estaciones" element={<Estaciones/>} />
-                    <Route path="/Usuarios" element={<Admin/>}/>
                     <Route path="/Perfil" element={<Perfil/>}/>
+                </Route>
+                <Route element={
+                    <ProtectedRoute 
+                        isLoggedIn={isLoggedIn} 
+                        userRole={userRole} 
+                        allowedRoles={['ADMINISTRADOR']} 
+                    />
+                }>
+                    <Route path="/Usuarios" element={<AdminPage/>}/>
                     <Route path="/SubirIncidencias" element={<Upload/>} />
                     <Route path="/Planeacion" element={<PlaneacionPage/>}/>
                 </Route>

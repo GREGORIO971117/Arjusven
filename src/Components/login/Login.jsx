@@ -76,6 +76,7 @@ function Login({ onLoginSuccess }) {
             localStorage.setItem('isLoggedIn', 'true'); 
             localStorage.setItem('userName', userNameForDisplay);
             localStorage.setItem('idUsuario', data.userId);
+            localStorage.setItem('userRole', data.rol);
             
             onLoginSuccess(userNameForDisplay); 
             navigate('/Home'); 
