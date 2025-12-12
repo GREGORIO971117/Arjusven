@@ -1,28 +1,40 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Typography from '@mui/material/Typography';
 import { Box, Grid, Card, CardContent, FormControl, InputLabel, Select, MenuItem, TextField } from '@mui/material';
+// Iconos
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import EventBusyIcon from '@mui/icons-material/EventBusy'; 
+// Gráficos
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+// Fechas
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { format } from 'date-fns';
+// API y Datos
 import { apiRequest } from '../login/Api';
 import datos from '../../assets/datos.json';
-import { format } from 'date-fns';
 
-const API_BASE_URL = '/tickets/dashboard'; // Sugerencia: Usa un endpoint específico si puedes
+const API_BASE_URL = '/tickets/dashboard';
 
 function TablaTemplate() { 
-    // MODIFICACIÓN 1: Ya no necesitamos dos estados separados para tickets.
-    // 'ticketsData' contendrá directamente los tickets filtrados del supervisor.
-    const [ticketsData, setTicketsData] = useState([]);
+    // 1. Estados para los datos
+    const [ticketsData, setTicketsData] = useState([]); // Lista de tickets (para tablas futuras)
+    const [stats, setStats] = useState({                // Estadísticas calculadas por el Backend
+        total: 0,
+        open: 0,
+        closed: 0,
+        canceled: 0
+    });
+
+    // 2. Estados de UI
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     
+    // 3. Estados de Filtros
     const nameSup = datos.supervisores || []; 
     const today = new Date();
     const startOfToday = new Date(today.setHours(0, 0, 0, 0)); 
@@ -31,79 +43,79 @@ function TablaTemplate() {
     const [startDate, setStartDate] = useState(startOfToday); 
     const [endDate, setEndDate] = useState(startOfToday); 
 
-    // MODIFICACIÓN 2: fetchTickets ahora incluye 'selectedSupervisor' en la query
+    // 4. Lógica de Petición al Backend
     const fetchTickets = useCallback(async () => {
-        // Si no hay supervisor seleccionado, no hacemos la petición (opcional)
         if (!selectedSupervisor) return;
 
         setIsLoading(true);
         setError("");
 
+        // Formatear fechas para Spring Boot (yyyy-MM-dd)
         const startParam = startDate ? format(startDate, 'yyyy-MM-dd') : null;
         const endParam = endDate ? format(endDate, 'yyyy-MM-dd') : null;
         
         const queryParams = new URLSearchParams();
         if (startParam) queryParams.append('startDate', startParam); 
         if (endParam) queryParams.append('endDate', endParam);
-        
-        // AQUI AGREGAMOS EL SUPERVISOR A LA URL
         if (selectedSupervisor) queryParams.append('supervisor', selectedSupervisor);
 
-        const queryString = queryParams.toString();
-        const finalURL = queryString ? `${API_BASE_URL}?${queryString}` : API_BASE_URL;
+        const finalURL = `${API_BASE_URL}?${queryParams.toString()}`;
 
         try {
-            const response = await apiRequest(finalURL, { 
-                method: 'GET'
-            }); 
+            const response = await apiRequest(finalURL, { method: 'GET' }); 
             
+            // Si es 204 No Content, limpiamos todo
             if (response.status === 204) {
                  setTicketsData([]); 
+                 setStats({ total: 0, open: 0, closed: 0, canceled: 0 });
                  return;
             }
 
             if (!response.ok) {
-                const errorBody = await response.text(); 
                 throw new Error(`Error ${response.status}: ${response.statusText}.`);
             }
             
+            // Recibimos el DTO { tickets: [], totalTickets: X, ... }
             const data = await response.json();
-            setTicketsData(Array.isArray(data) ? data : []); 
+            
+            // Guardamos la lista de tickets
+            setTicketsData(data.tickets || []);
+
+            // Guardamos las estadísticas que vienen del backend
+            setStats({
+                total: data.totalTickets || 0,
+                open: data.ticketsAbiertos || 0,
+                closed: data.ticketsCerrados || 0,
+                canceled: data.ticketsCancelados || 0
+            });
             
         } catch (err) {
-            console.error('Error al cargar los tickets:', err);
+            console.error('Error al cargar dashboard:', err);
             setError(err.message || "No se pudo conectar al servidor.");
             setTicketsData([]);
+            setStats({ total: 0, open: 0, closed: 0, canceled: 0 });
         } finally {
             setIsLoading(false);
         }
-    }, [startDate, endDate, selectedSupervisor]); // Agregamos selectedSupervisor a dependencias
+    }, [startDate, endDate, selectedSupervisor]);
 
+    // Disparar la búsqueda cuando cambian los filtros
     useEffect(() => {
         fetchTickets();
     }, [fetchTickets]); 
 
-    // MODIFICACIÓN 3: Eliminamos el useEffect que hacía el filtrado local.
-    // Ya no necesitamos 'supervisorTickets' ni 'handleSupervisorChange' complejo.
-
     const handleSupervisorChange = (event) => {
         setSelectedSupervisor(event.target.value);
-        // Al cambiar el estado, el useEffect de arriba detectará el cambio y disparará fetchTickets
     };
 
-    // Cálculos (Usamos ticketsData directamente porque ya viene filtrado del back)
-    const totalTickets = ticketsData.length;
-    const openTickets = ticketsData.filter(t => t.servicios.situacionActual === 'Abierta').length;
-    const closedTickets = ticketsData.filter(t => t.servicios.situacionActual === 'Cerrado').length;
-    const cancelTickets = ticketsData.filter(t => t.servicios.situacionActual === 'Cancelada por PC').length;
-
+    // 5. Configuración de la Gráfica usando el estado 'stats'
     const chartData = [
-        { name: 'Abiertos', value: openTickets, color: '#FF9800' },
-        { name: 'Cerrados', value: closedTickets, color: '#4CAF50' },
-        { name: 'Cancelados', value: cancelTickets, color: '#F44336' },
+        { name: 'Abiertos', value: stats.open, color: '#FF9800' },
+        { name: 'Cerrados', value: stats.closed, color: '#4CAF50' },
+        { name: 'Cancelados', value: stats.canceled, color: '#F44336' },
     ];
     
-    // Estilos...
+    // Estilos
     const cardStyle = {
         backgroundColor: '#f5f5f5',
         borderLeft: '5px solid',
@@ -124,27 +136,26 @@ function TablaTemplate() {
         if (startDate && endDate) {
             const startString = startDate.toLocaleDateString();
             const endString = endDate.toLocaleDateString();
-            if (startString === endString) {
-                return `Dashboard de Tickets del ${startString}`;
-            }
-            return `Dashboard de Tickets del ${startString} al ${endString}`;
+            return startString === endString 
+                ? `Dashboard del ${startString}` 
+                : `Dashboard del ${startString} al ${endString}`;
         }
         return 'Dashboard de Tickets';
     };
 
-    const hasData = ticketsData.length > 0;
+    // Verificación de datos basada en el total recibido del back
+    const hasData = stats.total > 0;
 
     if (error) return <Typography color="error" sx={{ p: 4 }}>Error al cargar: {error}</Typography>;
 
     return (
         <Box sx={{ p: 4 }}>
-            {/* SECCIÓN DE FILTROS */}
+            {/* --- SECCIÓN DE FILTROS --- */}
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', mb: 4 }}>
                 <Typography variant="h4" sx={{ mb: 2, textAlign: 'center', color: '#333' }}>
                     {getTitle()}
                 </Typography>
                 
-                {/* Contenedor de filtros: Fechas y Supervisor juntos */}
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
@@ -162,7 +173,6 @@ function TablaTemplate() {
                         />
                     </LocalizationProvider>
 
-                    {/* MOVI EL SELECTOR DE SUPERVISOR AQUI ARRIBA PARA QUE SEA PARTE DEL FILTRO GENERAL */}
                     <FormControl variant="outlined" sx={{ minWidth: 200 }} size="small">
                         <InputLabel>Supervisor</InputLabel>
                         <Select
@@ -178,6 +188,7 @@ function TablaTemplate() {
                 </Box>
             </Box>
                     
+            {/* --- CONTENIDO --- */}
             {isLoading ? (
                 <Typography sx={{ textAlign: 'center', mt: 4, color: '#666' }}>
                     Cargando información...
@@ -189,19 +200,19 @@ function TablaTemplate() {
                         No se encontraron tickets
                     </Typography>
                     <Typography variant="body1" color="textSecondary">
-                        No hay tickets para {selectedSupervisor} en este rango de fechas.
+                        No hay actividad registrada para {selectedSupervisor} en este rango.
                     </Typography>
                 </Box>
             ) : (
                 <>
-                    {/* TARJETAS KPI */}
+                    {/* TARJETAS KPI (Usando stats del Backend) */}
                     <Grid container spacing={3} justifyContent="center">
                         <Grid item xs={12} sm={6} md={3}>
                             <Card sx={{ ...cardStyle, borderColor: '#1976D2' }}>
                                 <DashboardIcon sx={{ ...iconStyle, color: '#1976D2' }} />
                                 <CardContent>
                                     <Typography variant="h6">Totales</Typography>
-                                    <Typography variant="h4">{totalTickets}</Typography>
+                                    <Typography variant="h4">{stats.total}</Typography>
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -210,7 +221,7 @@ function TablaTemplate() {
                                 <AccessTimeIcon sx={{ ...iconStyle, color: '#FF9800' }} />
                                 <CardContent>
                                     <Typography variant="h6">Abiertos</Typography>
-                                    <Typography variant="h4">{openTickets}</Typography>
+                                    <Typography variant="h4">{stats.open}</Typography>
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -219,7 +230,7 @@ function TablaTemplate() {
                                 <CheckCircleOutlineIcon sx={{ ...iconStyle, color: '#4CAF50' }} />
                                 <CardContent>
                                     <Typography variant="h6">Cerrados</Typography>
-                                    <Typography variant="h4">{closedTickets}</Typography>
+                                    <Typography variant="h4">{stats.closed}</Typography>
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -228,13 +239,13 @@ function TablaTemplate() {
                                 <CancelOutlinedIcon sx={{ ...iconStyle, color: '#F44336' }} />
                                 <CardContent>
                                     <Typography variant="h6">Cancelados</Typography>
-                                    <Typography variant="h4">{cancelTickets}</Typography>
+                                    <Typography variant="h4">{stats.canceled}</Typography>
                                 </CardContent>
                             </Card>
                         </Grid>
                     </Grid>
 
-                    {/* GRAFICA */}
+                    {/* GRÁFICA */}
                     <Box sx={{ mt: 5, p: 3, backgroundColor: '#f9f9f9', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
                         <Typography variant="h6" component="h2" sx={{ mb: 2, textAlign: 'center' }}>
                              Incidencias: {selectedSupervisor}
