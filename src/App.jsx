@@ -35,12 +35,12 @@ function App() {
     
     const handleLogout = () => {
         setIsLoggedIn(false);
-        setUserRole(null); // 🆕 Limpiamos el rol del estado
+        setUserRole(null);
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('jwtToken');
         localStorage.removeItem('userName');
         localStorage.removeItem('idUsuario');
-        localStorage.removeItem('userRole'); // 🆕 Limpiamos el rol del storage
+        localStorage.removeItem('userRole');
     };
 
     const location = useLocation();
@@ -63,7 +63,7 @@ function App() {
         const adminPaths = ["/Planeacion", "/SubirIncidencias", "/Usuarios"]; 
         
         if (userRole === 'ADMINISTRADOR') {
-            return true; // Admin ve todo
+            return true;
         } else {
             return !adminPaths.includes(link.url); 
         }
@@ -73,7 +73,7 @@ function App() {
         <>
             {showNavbar && (
                 <NavBar 
-                    links={filteredLinks} // 🆕 Pasamos la lista filtrada, no la completa
+                    links={filteredLinks} 
                     onLogout={handleLogout} 
                 />
             )} 

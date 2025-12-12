@@ -10,52 +10,44 @@ export default function EstacionesList ({
      searchQuery, 
      setSearchQuery, 
      currentPage,
-     setCurrentPage
+     totalPages,      
+     onPageChange     
      }) {
-
-    const itemsPerPage = 20;
-    const totalPages = Math.ceil(items.length / itemsPerPage);
-    const currentItems = items.slice(
-        currentPage * itemsPerPage,
-        (currentPage + 1) * itemsPerPage
-    );
+    const currentItems = items; 
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter' || event.keyCode === 13) {
             event.preventDefault(); 
             handleSearchSubmit();
-            setCurrentPage(0);
         }
     };
 
-    const handleEstacionClick = (items) => {
-        onSelectEstacion(items);
+    const handleEstacionClick = (item) => {
+        onSelectEstacion(item);
     };
 
     const handleNextPage = () => {
-        if (currentPage < totalPages - 1) setCurrentPage(prev => prev + 1);
+        if (currentPage < totalPages - 1) {
+            onPageChange(currentPage + 1);
+        }
     };
 
     const handlePrevPage = () => {
-        if (currentPage > 0) setCurrentPage(prev => prev - 1);
+        if (currentPage > 0) {
+            onPageChange(currentPage - 1);
+        }
     };
 
     const selectEncabezado = (items = []) => {
-    const first = items[0];
-    if (!first) return "";
+        const first = items[0];
+        if (!first) return "";
 
-    if (first.idMerchant != null) {
-        return "Id merchant | Nombre comercial";
-    }
-    if (first.idInventario != null) {
-        return "Número de serie | Equipo";
-    }
-    if (first.idTickets != null) {
-        return "Incidencia | Nombre de Ess";
-    }
+        if (first.idMerchant != null) return "Id merchant | Nombre comercial";
+        if (first.idInventario != null) return "Número de serie | Equipo";
+        if (first.idTickets != null) return "Incidencia | Nombre de Ess";
 
-    return "";
-};
+        return "";
+    };
 
     return (
         <div className="ticket-list">
@@ -80,25 +72,22 @@ export default function EstacionesList ({
                 <p>No hay datos disponibles o no coinciden con la búsqueda.</p>
             ) : (
                 <>
-
-                 <div className="list-header-row">
-                   
-                    <span className="header-column-title">
-                        {selectEncabezado(items)}
-                    </span>
-                </div>
+                    <div className="list-header-row">
+                        <span className="header-column-title">
+                            {selectEncabezado(items)}
+                        </span>
+                    </div>
+                    
                     <ul>
-                        {currentItems.map(items => (
+                        {currentItems.map(item => (
                             <li
-                                key={items.idMerchant || items.idInventario || items.idTickets}
+                                key={item.idMerchant || item.idInventario || item.idTickets}
                                 className={`ticket-item`}
-                                onClick={() => handleEstacionClick(items)}
+                                onClick={() => handleEstacionClick(item)}
                             >
                                 <div className="ticket-info">
-
-                                    <strong> {items.idMerchant || items.numeroDeSerie || items.servicios.incidencia}</strong> 
-                                    {items.nombreComercial || items.equipo || items.servicios.nombreDeEss || " "}
-
+                                    <strong> {item.idMerchant || item.numeroDeSerie || item.servicios?.incidencia}</strong> 
+                                    {item.nombreComercial || item.equipo || item.servicios?.nombreDeEss || " "}
                                 </div>
                             </li>
                         ))}
@@ -107,17 +96,19 @@ export default function EstacionesList ({
                     <div className="pagination-controls">
                         <button
                             onClick={handlePrevPage}
-                            disabled={currentPage === 0 || totalPages <= 1}
+                            disabled={currentPage === 0} 
                             className="pagination-button"
                         >
                             ← Anterior
                         </button>
+                        
                         <span className="page-indicator">
-                            Página {currentPage + 1}:{totalPages}
+                            Página {totalPages === 0 ? 0 : currentPage + 1} de {totalPages}
                         </span>
+                        
                         <button
                             onClick={handleNextPage}
-                            disabled={currentPage === totalPages - 1 || totalPages <= 1}
+                            disabled={currentPage >= totalPages - 1} 
                             className="pagination-button"
                         >
                             Siguiente →
