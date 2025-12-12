@@ -23,5 +23,7 @@ export const ColumnConfig = [
     { accessorKey: 'fechaCierre', header: 'FECHA CIERRE', filterType: 'none', size: 110 },
     { accessorKey: 'observacionImportante', header: 'OBSERVACION IMPORTANTE', filterType: 'none', size: 150 },
     { accessorKey: 'supervisor', header: 'SUPERVISOR', filterType: 'select', size: 110 },
-    { accessorKey: 'transporteEstimado', header: 'TRANSPORTE ESTIMADO', filterType:'none', size: 150 }
+    { accessorKey: 'transporteEstimado', header: 'TRANSPORTE ESTIMADO', filterType:'none', size: 150 },
+    { accessorKey: 'ejecutivo', header: 'EJECUTIVO', filterType:'select', size: 150 },
+
 ];

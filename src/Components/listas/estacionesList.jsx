@@ -97,7 +97,7 @@ export default function EstacionesList ({
                                 <div className="ticket-info">
 
                                     <strong> {items.idMerchant || items.numeroDeSerie || items.servicios.incidencia}</strong> 
-                                    {items.nombreComercial || items.equipo || items.servicios.nombreDeEss}
+                                    {items.nombreComercial || items.equipo || items.servicios.nombreDeEss || " "}
 
                                 </div>
                             </li>
